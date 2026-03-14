@@ -15,10 +15,15 @@
         .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; background: #f9f9f9; cursor: pointer; }
         .brand { font-weight: bold; font-size: 13px; text-transform: uppercase; margin-top: 10px; }
         .name { font-size: 12px; color: #666; min-height: 30px; margin: 5px 0; }
-        .price-ml { color: var(--main); font-weight: bold; font-size: 12px; margin-bottom: 8px; }
+        
+        /* СТИЛЬ ДЛЯ ЦІНИ ЗА 1 МЛ */
+        .price-info { font-size: 11px; color: var(--main); background: #f0f9f0; padding: 4px 8px; border-radius: 5px; margin-bottom: 8px; font-weight: bold; text-align: center; }
+        
         select { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; }
         .total { font-size: 18px; font-weight: 900; text-align: center; margin-bottom: 12px; }
-        .order-btn { background: #000; color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .order-btn { background: #000; color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .order-btn:active { transform: scale(0.95); }
+        
         .modal { display: none; position: fixed; z-index: 99; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
         .modal-content { background: #fff; padding: 25px; border-radius: 20px; width: 85%; max-width: 400px; }
     </style>
@@ -44,6 +49,7 @@
 
 <script>
     const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=339534482&single=true&output=csv';
+    const TEST_EMAIL = 'mysweetplanb@gmail.com';
 
     async function load() {
         try {
@@ -77,10 +83,10 @@
                     <img src="${img}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'" onclick="show('${brand} ${name}', '${desc}')">
                     <div class="brand">${brand}</div>
                     <div class="name">${name}</div>
-                    <div class="price-ml">${Math.round(price)} грн / мл</div>
+                    <div class="price-info">Ціна: ${Math.round(price)} грн / мл</div>
                     <select onchange="this.nextElementSibling.innerText = this.options[this.selectedIndex].getAttribute('data-p') + ' грн'">${options}</select>
                     <div class="total">${Math.round(min * price)} грн</div>
-                    <button class="order-btn" onclick="order('${brand} ${name}', this)">ЗАМОВИТИ</button>
+                    <button class="order-btn" onclick="sendOrder('${brand} ${name}', this)">ЗАМОВИТИ</button>
                 `;
                 container.appendChild(card);
             });
@@ -93,14 +99,18 @@
         document.getElementById('modal').style.display = 'flex';
     }
 
-    function order(item, btn) {
+    function sendOrder(item, btn) {
         const ml = btn.previousElementSibling.previousElementSibling.value;
         const sum = btn.previousElementSibling.innerText;
-        const msg = `🛍️ ЗАМОВЛЕННЯ:\n${item}\nОб'єм: ${ml} мл\nСума: ${sum}`;
-        navigator.clipboard.writeText(msg).then(() => {
-            window.location.href = "viber://chat?number=%2B380962178464";
-            alert("Скопійовано! Вставте текст у Viber.");
-        });
+        
+        const subject = `Замовлення парфуму: ${item}`;
+        const body = `🛍️ НОВЕ ЗАМОВЛЕННЯ\n\nАромат: ${item}\nОб'єм: ${ml} мл\nСума: ${sum}\n\nБудь ласка, зв'яжіться зі мною для уточнення деталей.`;
+        
+        // Формуємо посилання для пошти
+        const mailtoLink = `mailto:${TEST_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        
+        // Відкриваємо поштову програму
+        window.location.href = mailtoLink;
     }
 
     load();
