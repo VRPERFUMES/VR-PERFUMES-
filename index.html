@@ -7,46 +7,39 @@
     
     <meta property="og:title" content="VR-PERFUMES">
     <meta property="og:image" content="https://i.postimg.cc/CxkmFFJ3/logo.png">
-    <meta property="og:description" content="Ексклюзивний розпив парфумерії">
+    <meta property="og:description" content="Ексклюзивний розпив парфумерії у Хмельницькому">
 
     <style>
-        :root { --main: #449244; --viber: #7360f2; }
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 10px; background: #fff; color: #333; }
-        header { text-align: center; padding: 25px 0; }
-        .logo { width: 110px; height: auto; margin-bottom: 10px; }
-        .viber-btn { display: block; background: var(--viber); color: #fff; text-decoration: none; padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; margin: 15px 0; font-size: 14px; }
+        :root { --main: #449244; --viber: #7360f2; --bg: #f8f8f8; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 10px; background: var(--bg); color: #333; }
+        header { text-align: center; padding: 20px 0 10px; background: #fff; border-radius: 0 0 20px 20px; margin: -10px -10px 15px; }
+        .logo { width: 90px; height: auto; margin-bottom: 5px; }
         
-        #catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .card { border: 1px solid #f0f0f0; border-radius: 15px; padding: 12px; display: flex; flex-direction: column; background: #fff; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        /* Пошук */
+        .search-container { position: sticky; top: 10px; z-index: 50; margin-bottom: 20px; }
+        #searchInput { width: 100%; padding: 15px 45px 15px 20px; border-radius: 15px; border: 2px solid #eee; font-size: 16px; box-sizing: border-box; box-shadow: 0 4px 12px rgba(0,0,0,0.08); outline: none; transition: 0.3s; }
+        #searchInput:focus { border-color: var(--viber); }
+        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 20px; pointer-events: none; }
+
+        .viber-btn { display: block; background: var(--viber); color: #fff; text-decoration: none; padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; font-size: 14px; }
+        
+        #catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+        .card { border-radius: 15px; padding: 12px; display: flex; flex-direction: column; background: #fff; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: 0.2s; }
         .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; background: #f9f9f9; }
         
-        .brand { font-weight: bold; font-size: 13px; text-transform: uppercase; margin-top: 12px; }
+        .brand { font-weight: bold; font-size: 13px; text-transform: uppercase; margin-top: 12px; color: #000; }
         .name { font-size: 12px; color: #666; min-height: 32px; margin: 4px 0 10px; line-height: 1.3; }
-        .price-info { font-size: 11px; color: var(--main); background: #f0f9f0; padding: 6px; border-radius: 8px; margin-bottom: 12px; font-weight: bold; border: 1px solid #e0f0e0; }
+        .price-info { font-size: 11px; color: var(--main); background: #f0f9f0; padding: 6px; border-radius: 8px; margin-bottom: 12px; font-weight: bold; }
         
         select { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; background: #fff; font-size: 14px; }
-        .total { font-size: 22px; font-weight: 900; margin-bottom: 15px; color: #000; }
+        .total { font-size: 20px; font-weight: 900; margin-bottom: 15px; color: #000; }
         
-        .order-btn { background: #000; color: #fff; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 14px; transition: 0.2s; }
-        .order-btn:active { transform: scale(0.96); }
+        .order-btn { background: #000; color: #fff; border: none; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 13px; }
 
-        /* Яскраве сповіщення */
         #copyNotice {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            color: #000;
-            padding: 30px;
-            border-radius: 25px;
-            z-index: 1000;
-            text-align: center;
-            width: 80%;
-            max-width: 300px;
-            box-shadow: 0 0 0 2000px rgba(0,0,0,0.8), 0 10px 40px rgba(0,0,0,0.5);
-            border: 4px solid var(--viber);
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #fff; padding: 30px; border-radius: 25px; z-index: 1000; text-align: center;
+            width: 80%; max-width: 300px; box-shadow: 0 0 0 2000px rgba(0,0,0,0.8), 0 10px 40px rgba(0,0,0,0.5); border: 4px solid var(--viber);
         }
     </style>
 </head>
@@ -54,20 +47,25 @@
 
 <header>
     <img src="https://i.postimg.cc/CxkmFFJ3/logo.png" alt="VR-PERFUMES" class="logo">
-    <h1 style="font-size:24px; margin:0; letter-spacing: 1px;">VR-PERFUMES</h1>
-    <p style="font-size:12px; color:#888; margin:5px 0;">Ексклюзивний розпив • Хмельницький</p>
+    <h1 style="font-size:22px; margin:0;">VR-PERFUMES</h1>
+    <p style="font-size:11px; color:#888; margin:5px 0;">Ексклюзивний розпив • Хмельницький</p>
 </header>
+
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Пошук бренду або назви..." onkeyup="filterCatalog()">
+    <span class="search-icon">🔍</span>
+</div>
 
 <a href="https://invite.viber.com/?g2=AQBjzS%2BM5uBAeFRYT57vm5okC%2BGV00WHPJgDJBWE9ptyotTAmhAhpYNBmtPwZxQe" class="viber-btn">ПРИЄДНАТИСЬ ДО VIBER-КАНАЛУ</a>
 
-<div id="catalog">Завантаження ароматів...</div>
+<div id="catalog">Завантаження...</div>
 
 <div id="copyNotice">
     <div style="font-size: 50px; margin-bottom: 15px;">📋</div>
     <b style="font-size: 20px; display: block; margin-bottom: 10px; color: var(--viber);">СКОПІЙОВАНО!</b>
     <p style="margin: 0; line-height: 1.5; font-size: 16px;">
-        Дані замовлення вже у вас.<br><br>
-        Зараз відкриється Viber:<br>
+        Дані замовлення готові.<br><br>
+        Відкриваємо Viber:<br>
         натисніть там <b>"ВСТАВИТИ"</b>
     </p>
 </div>
@@ -94,7 +92,6 @@
                 let options = '';
                 [2, 5, 10].forEach(ml => {
                     if (ml >= min) {
-                        // ТУТ ПРЯМИЙ РОЗРАХУНОК: ціна * мл (БЕЗ ЗНИЖОК)
                         let sum = Math.round(ml * price);
                         options += `<option value="${ml}" data-p="${sum}">${ml} мл — ${sum} грн</option>`;
                     }
@@ -102,18 +99,28 @@
 
                 const card = document.createElement('div');
                 card.className = 'card';
+                card.setAttribute('data-search', (brand + ' ' + name).toLowerCase());
                 card.innerHTML = `
                     <img src="${img}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
                     <div class="brand">${brand}</div>
                     <div class="name">${name}</div>
-                    <div class="price-info">Ціна за 1 мл: ${Math.round(price)} грн</div>
+                    <div class="price-info">1 мл = ${Math.round(price)} грн</div>
                     <select onchange="this.nextElementSibling.innerText = this.options[this.selectedIndex].getAttribute('data-p') + ' грн'">${options}</select>
                     <div class="total">${Math.round(min * price)} грн</div>
-                    <button class="order-btn" onclick="sendToViber('${brand} ${name}', this)">ЗАМОВИТИ У VIBER</button>
+                    <button class="order-btn" onclick="sendToViber('${brand} ${name}', this)">ЗАМОВИТИ</button>
                 `;
                 container.appendChild(card);
             });
         } catch (e) { console.error(e); }
+    }
+
+    function filterCatalog() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            const text = card.getAttribute('data-search');
+            card.style.display = text.includes(query) ? 'flex' : 'none';
+        });
     }
 
     function sendToViber(item, btn) {
