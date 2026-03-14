@@ -10,7 +10,7 @@
         header { text-align: center; padding: 15px 0 5px; }
         .logo { width: 60px; height: 60px; background: #000; color: #fff; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 10px; line-height: 1.1; text-align: center; }
         h1 { font-size: 20px; margin: 10px 0 5px; letter-spacing: 1px; text-transform: uppercase; }
-        .viber-main { display: block; background: var(--viber-color); color: #fff; text-decoration: none; padding: 14px; border-radius: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; font-size: 14px; }
+        .viber-main { display: block; background: var(--viber-color); color: #fff; text-decoration: none; padding: 14px; border-radius: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; font-size: 14px; box-shadow: 0 4px 15px rgba(115, 96, 242, 0.3); }
         .zoom-box { background: #f2f2f2; padding: 8px 12px; border-radius: 10px; margin-bottom: 20px; font-size: 11px; color: #777; display: flex; align-items: center; gap: 10px; }
         #range { flex-grow: 1; accent-color: #000; }
         #catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 12px; }
@@ -34,7 +34,7 @@
     <p style="font-size:12px; color:#999; margin:0;">Ексклюзивний розпив • Хмельницький</p>
 </header>
 
-<a href="https://invite.viber.com/?g2=AQB0%2BuUuG9zVxlM2WvI8Wqf9S8J8z" class="viber-main">ПРИЄДНАТИСЬ ДО VIBER-КАНАЛУ</a>
+<a href="https://invite.viber.com/?g2=AQBjzS%2BM5uBAeFRYT57vm5okC%2BGV00WHPJgDJBWE9ptyotTAmhAhpYNBmtPwZxQe" target="_blank" class="viber-main">ПРИЄДНАТИСЬ ДО VIBER-КАНАЛУ</a>
 
 <div class="zoom-box">
     <span>МАСШТАБ:</span>
@@ -109,15 +109,14 @@
         const total = btn.previousElementSibling.innerText;
         const msg = `Вітаю! Хочу замовити ${item}, ${sel.value} мл.`;
         
-        // ВИПРАВЛЕНО: Використовуємо універсальний метод переходу до чату
-        // Це відкриє діалог з вами. Якщо автоматично текст не вставиться, 
-        // клієнт просто побачить чат і зможе написати.
+        // Найбільш надійний метод переходу для iPhone
+        // Спочатку намагаємося відкрити чат, якщо ні - просто відкриваємо Viber
         window.location.href = `viber://chat?number=%2B${PHONE}`;
         
-        // Підказка для клієнта
+        // Показуємо підказку з текстом, який треба надіслати
         setTimeout(() => {
-            alert("Напишіть у Viber: " + msg);
-        }, 500);
+            alert("Viber відкрився? Надішліть мені повідомлення:\n\n" + msg);
+        }, 1000);
     }
 
     document.getElementById('range').oninput = function() {
