@@ -18,6 +18,13 @@
             padding-bottom: 90px; -webkit-tap-highlight-color: transparent;
         }
 
+        /* Повертаємо допоміжну інформацію */
+        .tt-hint { 
+            background: #fff3cd; color: #856404; padding: 12px; border-radius: 12px; 
+            text-align: center; font-size: 13px; margin-bottom: 20px; 
+            border: 1px solid #ffeeba; line-height: 1.4;
+        }
+
         header { 
             display: flex; flex-direction: column; align-items: center; 
             padding: 20px 0; background: #000; margin: -12px -12px 20px -12px;
@@ -42,7 +49,6 @@
             margin-bottom: 12px; font-size: 14px;
         }
 
-        /* БІГУЧИЙ РЯДОК */
         .news-ticker {
             background: #000; color: #fff; margin: 0 -12px 25px -12px;
             padding: 10px 0; overflow: hidden; white-space: nowrap; border-bottom: 1px solid var(--gold);
@@ -56,7 +62,6 @@
         #catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
         .card { position: relative; border-radius: 15px; padding: 12px; display: flex; flex-direction: column; background: #fff; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #eee; }
         
-        /* ПОЗНАЧКА НОВИНКА */
         .new-badge { 
             position: absolute; top: 10px; right: 10px; background: #000; color: #fff; 
             padding: 4px 10px; border-radius: 5px; font-size: 9px; font-weight: 800; 
@@ -81,6 +86,11 @@
 </head>
 <body>
 
+<div class="tt-hint">
+    💡 <b>Не переходить у Telegram після натискання «Замовити»?</b><br>
+    Натисніть <b>(⋯)</b> вгорі справа та оберіть <b>«Відкрити у браузері»</b>.
+</div>
+
 <header>
     <img src="https://i.postimg.cc/CxkmFFJ3/logo.png" class="logo">
     <h1>VR PERFUMES</h1>
@@ -91,7 +101,7 @@
 </div>
 
 <a href="https://invite.viber.com/?g2=AQBjzS%2BM5uBAeFRYT57vm5okC%2BGV00WHPJgDJBWE9ptyotTAmhAhpYNBmtPwZxQe" class="viber-link">
-    <div style="padding:12px; background: var(--viber-color); border-radius:15px; color:#fff; width:100%; font-weight:700; text-align:center;">Viber-спільнота</div>
+    <div style="padding:12px; background: var(--viber-color); border-radius:15px; color:#fff; width:100%; font-weight:700; text-align:center;">Приєднатися до Viber-спільноти</div>
 </a>
 
 <div class="news-ticker">
@@ -129,7 +139,14 @@
                 document.getElementById('newsContent').innerText = rows[0][9];
             }
 
+            // Сортування: новіші (за датою в стовпці G) спочатку
             const catalogData = rows.slice(1).filter(c => c[0]);
+            catalogData.sort((a, b) => {
+                const dateA = new Date(a[6] || '2000-01-01');
+                const dateB = new Date(b[6] || '2000-01-01');
+                return dateB - dateA;
+            });
+
             const today = new Date();
             const container = document.getElementById('catalog');
             container.innerHTML = '';
@@ -143,8 +160,7 @@
                 let isNew = false;
                 if (dateStr) {
                     const itemDate = new Date(dateStr);
-                    const diffTime = today - itemDate;
-                    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+                    const diffDays = (today - itemDate) / (1000 * 60 * 60 * 24);
                     if (diffDays >= 0 && diffDays <= 14) isNew = true;
                 }
 
@@ -204,3 +220,4 @@
 </script>
 </body>
 </html>
+
