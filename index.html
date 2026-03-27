@@ -90,6 +90,16 @@
         .order-btn { background: #000; color: #fff; border: none; padding: 12px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; font-size: 11px; border-radius: 4px; transition: background 0.3s; }
         .order-btn:active { background: var(--gold); color: #000; }
 
+        /* РОЗДІЛ: ІНШІ ПРОЄКТИ */
+        .other-projects { padding: 30px 15px 15px; background: #fff; text-align: center; }
+        .other-projects h2 { font-size: 16px; letter-spacing: 3px; uppercase; color: #000; font-family: Georgia, serif; margin-bottom: 25px; }
+        .other-projects-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; center; scrollbar-width: none; }
+        .other-projects-container::-webkit-scrollbar { display: none; }
+        .other-project-item { flex: 0 0 130px; border-radius: 4px; overflow: hidden; background: #fff; border: 1px solid #eee; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 130px; }
+        .other-project-link { display: block; width: 100%; height: 100%; text-decoration: none; position: relative; }
+        .other-project-item img { display: block; width: 100%; height: 100%; object-fit: contain; padding: 0; margin: 0; }
+        
+        /* Модальні вікна */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { background: #fff; padding: 30px 25px; max-width: 400px; width: 100%; position: relative; text-align: center; max-height: 85vh; overflow-y: auto; border: 1px solid #eee; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
         .modal-content h3 { margin-top: 0; font-size: 18px; letter-spacing: 1px; text-transform: uppercase; font-family: Georgia, serif; }
@@ -122,7 +132,7 @@
     <div class="slide banner-top" onclick="navigateToCategory('top')">
         <div class="banner-content">
             <span class="banner-subtitle">Тренди 2026</span>
-            <span class="banner-title">Хіти<br>Tik-Tok</span>
+            <span class="banner-title">BEST<br>SELLER</span>
             <span class="banner-btn">Відкрити</span>
         </div>
     </div>
@@ -147,11 +157,27 @@
     <div class="tabs-container">
         <button class="tab-btn active" id="tab-all" onclick="setCategory('all', this)">Усі аромати</button>
         <button class="tab-btn" id="tab-new" onclick="setCategory('new', this)">Нові надходження</button>
-        <button class="tab-btn" id="tab-top" onclick="setCategory('top', this)">Бестселери сезону</button>
+        <button class="tab-btn" id="tab-top" onclick="setCategory('top', this)">Best Sellers</button>
     </div>
 </div>
 
 <div id="catalog">Завантаження каталогу...</div>
+
+<div class="other-projects">
+    <h2>ІНШІ ПРОЄКТИ</h2>
+    <div class="other-projects-container">
+        <div class="other-project-item">
+            <a href="https://www.instagram.com/mysweetplanb?igsh=M2djcXJhMTBuZXpz" class="other-project-link" target="_blank">
+                <img loading="lazy" src="https://i.postimg.cc/QdM5yG2D/sweet-plan-b.png" alt="Sweet Plan B Instagram">
+            </a>
+        </div>
+        <div class="other-project-item">
+            <a href="https://invite.viber.com/?g2=AQAhE1iZ%2B1uvKUgtymLfnM%2BRqfD3LHfLeTzxLtC2nlnXdK2yA0a2hXilbdMzlQ%2Fj" class="other-project-link" target="_blank">
+                <img loading="lazy" src="https://i.postimg.cc/wMsNqK6T/vr-shopping.png" alt="VR Shopping Viber">
+            </a>
+        </div>
+    </div>
+</div>
 
 <div class="fab-container">
     <a href="https://t.me/viktoriia_viktoriia_r" class="fab" style="background: var(--tg-color);"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png"></a>
@@ -190,7 +216,7 @@
         'baccarat', 'ganymede', 'tonka cola', 'wood sage', 'vanilla vibes', 'musk kashmir', 'blackberry', 'pomelo sorrento', 'soleil de capri', 'pear inc', 'this is her', 'fleur narcotique', 'lost cherry', 'tobacco vanille', 'delina', 'bianco latte', 'kirke', 'musc k'
     ];
 
-    // БРОНЕБІЙНА ФУНКЦІЯ ЧИТАННЯ ТАБЛИЦІ (Ніколи не зависає від лапок)
+    // БРОНЕБІЙНА ФУНКЦІЯ ЧИТАННЯ ТАБЛИЦІ
     function safeParseCSV(str) {
         let arr = [];
         let quote = false;
@@ -217,13 +243,11 @@
             const r = await fetch(SHEET_CSV + '&v=' + Date.now());
             const data = await r.text();
             
-            // Використовуємо нову безпечну функцію
             const rows = safeParseCSV(data);
             
-            // Захист від порожніх клітинок у 1-му рядку
             if(rows[0] && rows[0][9]) document.getElementById('newsTicker').innerText = rows[0][9];
 
-            const catalogData = rows.slice(1).filter(c => c[0]); // Фільтруємо пусті рядки
+            const catalogData = rows.slice(1).filter(c => c[0]); 
             globalCatalog = catalogData.map(c => ({brand: c[0]||'', name: c[1]||'', desc: c[4]||''}));
 
             let rawNews = (rows[0] && rows[0][10]) ? rows[0][10] : "Скоро тут з'являться наші новини! ✨";
@@ -251,7 +275,6 @@
             container.innerHTML = '';
             
             catalogData.forEach(c => {
-                // БЕЗПЕЧНЕ ЧИТАННЯ (якщо клітинка пуста, код не ламається)
                 const brand = c[0] || '';
                 const name = c[1] || '';
                 const priceStr = c[2] || '0';
@@ -295,7 +318,8 @@
 
                 let badgesHtml = '<div class="badges-container">';
                 if (isNew) badgesHtml += '<div class="badge badge-new">Новинка</div>';
-                if (isTop) badgesHtml += '<div class="badge badge-top">Хіт Tik-Tok</div>';
+                // ОНОВЛЕНО: Хіт Tik-Tok -> Best Seller
+                if (isTop) badgesHtml += '<div class="badge badge-top">Best Seller</div>';
                 badgesHtml += '</div>';
 
                 div.innerHTML = `
