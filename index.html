@@ -6,8 +6,12 @@
     <title>VR-PERFUMES | Premium Showcase</title>
     <style>
         :root { 
-            --bg: #ffffff; --gold: #d4af37; --tg-color: #0088cc; 
-            --viber-color: #7360f2; --text-dark: #111111; --gray-light: #f5f5f5;
+            --bg: #ffffff; 
+            --gold: #d4af37;
+            --tg-color: #0088cc; 
+            --viber-color: #7360f2;
+            --text-dark: #111111;
+            --gray-light: #f5f5f5;
         }
 
         body { 
@@ -17,13 +21,13 @@
         }
 
         .tt-hint { 
-            background: #fff; color: #333; padding: 10px; text-align: center; font-size: 11px; 
-            border-bottom: 1px solid #eee; line-height: 1.4; font-weight: 500; text-transform: uppercase;
+            background: #fff; color: #333; padding: 12px; text-align: center; font-size: 11px; 
+            border-bottom: 1px solid #eee; line-height: 1.5; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
         }
 
-        /* --- Герой-Слайдер (Компактніший) --- */
+        /* --- ГЕРОЙ-СЛАЙДЕР (КОМПАКТНІШИЙ) --- */
         .hero-carousel { position: relative; height: 140px; overflow: hidden; background: #000; border-bottom: 1px solid #1a1a1a; cursor: pointer; }
-        .slide { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1s; z-index: 1; pointer-events: none; }
+        .slide { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1s ease-in-out; z-index: 1; pointer-events: none; }
         .slide.active { opacity: 1; z-index: 2; pointer-events: auto; }
         .bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1; }
@@ -31,61 +35,82 @@
         .hero-carousel h1 { font-size: 13px; font-weight: 600; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; position: relative; z-index: 2; margin: 0; }
 
         .banner-content { text-align: left; padding: 15px 25px; width: 100%; box-sizing: border-box; color: #fff; position: relative; z-index: 2; }
-        .banner-subtitle { display: block; font-size: 9px; font-weight: 600; text-transform: uppercase; color: var(--gold); }
-        .banner-title { display: block; font-size: 22px; font-weight: 300; text-transform: uppercase; font-family: Georgia, serif; }
+        .banner-subtitle { display: block; font-size: 9px; font-weight: 600; text-transform: uppercase; color: var(--gold); margin-bottom: 3px; }
+        .banner-title { display: block; font-size: 22px; font-weight: 300; text-transform: uppercase; line-height: 1.1; margin-bottom: 8px; font-family: Georgia, serif; }
+        .banner-btn { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; padding: 5px 12px; border: 1px solid rgba(255,255,255,0.5); border-radius: 2px; background: rgba(0,0,0,0.3); }
 
         /* Бігучий рядок */
         .news-ticker { background: var(--gold); color: #000; padding: 8px 0; overflow: hidden; white-space: nowrap; }
         .news-ticker-content { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; font-size: 12px; font-weight: 600; text-transform: uppercase; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-        /* Контролі (Компактні кнопки в ряд) */
-        .controls-wrapper { padding: 10px 15px; position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #eee; }
+        /* КОНТРОЛІ (КНОПКИ В ОДИН РЯД) */
+        .controls-wrapper { padding: 10px 15px 5px; position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #eee; }
         .search-box { margin-bottom: 8px; }
         #searchInput { width: 100%; padding: 10px 15px; border: 1px solid #e0e0e0; background: var(--gray-light); font-size: 14px; outline: none; border-radius: 4px; box-sizing: border-box; }
         
         .action-buttons { display: flex; gap: 8px; margin-bottom: 10px; }
-        .viber-link, .news-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px; border-radius: 4px; text-align: center; font-weight: 600; font-size: 10px; text-transform: uppercase; text-decoration: none; }
+        .viber-link, .news-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px; border-radius: 4px; text-align: center; font-weight: 600; font-size: 10px; text-transform: uppercase; text-decoration: none; cursor: pointer; }
         .viber-link { background: var(--viber-color); color: #fff; }
         .news-btn { background: #fff; border: 1px solid #000; color: #000; }
 
         .tabs-container { display: flex; gap: 20px; overflow-x: auto; scrollbar-width: none; border-top: 1px solid #eee; padding-top: 10px; }
-        .tab-btn { background: none; border: none; font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; }
+        .tab-btn { background: none; border: none; font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase; padding: 5px 0; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; }
         .tab-btn.active { color: #000; border-bottom-color: var(--gold); }
 
-        /* БРЕНДИ (Все залишив!) */
+        /* СЛАЙДЕР БРЕНДІВ */
         .brand-slider-wrapper { background: #fff; border-bottom: 1px solid #eee; padding: 12px 0; }
         .brand-slider { display: flex; gap: 25px; overflow-x: auto; padding: 0 15px; scrollbar-width: none; align-items: center; }
-        .brand-btn { background: none; border: none; cursor: pointer; white-space: nowrap; opacity: 0.4; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #000; }
-        .brand-btn.active { opacity: 1; transform: scale(1.1); }
+        .brand-btn { background: none; border: none; cursor: pointer; white-space: nowrap; opacity: 0.4; transition: all 0.3s; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #000; }
+        .brand-btn.active { opacity: 1; transform: scale(1.05); }
 
-        /* ПАРФУМ ТИЖНЯ (Тонкий та компактний) */
+        /* ШРИФТИ БРЕНДІВ */
+        .brand-tf { font-family: 'Arial', sans-serif; font-weight: 900; letter-spacing: 1px; } 
+        .brand-jm { font-family: 'Times New Roman', Times, serif; font-weight: 400; letter-spacing: 3px; } 
+        .brand-creed { font-family: 'Georgia', serif; font-weight: 700; letter-spacing: 5px; border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 2px 0; font-size: 11px; } 
+        .brand-kilian { font-family: 'Georgia', serif; font-style: italic; text-transform: none; font-size: 17px; letter-spacing: 1px; } 
+        .brand-mm { font-family: 'Helvetica Neue', sans-serif; font-weight: 300; letter-spacing: 4px; } 
+        .brand-attar { font-family: 'Georgia', serif; font-variant: small-caps; letter-spacing: 2px; } 
+
+        /* ПАРФУМ ТИЖНЯ (КОМПАКТНИЙ ТА ГОРИЗОНТАЛЬНИЙ) */
         .week-card-container { display: none; padding: 10px 15px; }
-        .week-card { background: #0a0a0a; color: #fff; border-radius: 6px; display: flex; align-items: center; padding: 12px 15px; gap: 15px; border: 1px solid #222; cursor: pointer; }
-        .week-card-img { width: 50px; height: 50px; object-fit: contain; }
-        .week-card-info { flex: 1; }
+        .week-card { background: #0a0a0a; color: #fff; border-radius: 6px; display: flex; align-items: center; padding: 12px 15px; gap: 15px; position: relative; border: 1px solid #222; cursor: pointer; overflow: hidden; }
+        .week-card-img { width: 45px; height: 45px; object-fit: contain; z-index: 2; }
+        .week-card-info { flex: 1; z-index: 2; }
         .week-card-label { color: var(--gold); font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2px; display: block; }
-        .week-card-name { font-size: 15px; font-family: Georgia, serif; }
+        .week-card-name { font-size: 14px; font-family: Georgia, serif; }
+        .week-card-bg-blur { position: absolute; right: -30px; top: -30px; width: 110px; height: 110px; background-size: cover; filter: blur(20px) opacity(0.3); z-index: 1; }
 
-        /* Каталог (Картки ближче до верху) */
+        /* КАТАЛОГ */
         #catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .card { display: flex; flex-direction: column; background: #fff; text-align: center; }
+        .card { position: relative; display: flex; flex-direction: column; background: #fff; text-align: center; }
+        .badges-container { position: absolute; top: 6px; right: 6px; display: flex; flex-direction: column; gap: 3px; z-index: 10; }
+        .badge { padding: 3px 6px; font-size: 8px; font-weight: 700; text-transform: uppercase; border-radius: 2px; }
+        .badge-new { background: #000; color: #fff; }
+        .badge-top { background: var(--gold); color: #000; }
         .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; background: var(--gray-light); border-radius: 4px; }
         .brand { font-weight: 700; font-size: 9px; margin-top: 10px; text-transform: uppercase; color: #777; }
         .name { font-size: 12px; color: #111; height: 32px; margin: 4px 0 8px; overflow: hidden; line-height: 1.3; font-weight: 500; }
-        .order-btn-small { background: #000; color: #fff; border: none; padding: 12px; font-weight: 700; font-size: 10px; border-radius: 4px; text-transform: uppercase; }
+        .price-ml { font-size: 10px; color: #888; margin-bottom: 5px; }
+        .card select { width: 100%; padding: 8px; border: 1px solid #eee; margin-bottom: 8px; font-size: 12px; border-radius: 4px; outline: none; }
+        .total { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+        .order-btn { background: #000; color: #fff; border: none; padding: 10px; font-weight: 700; font-size: 10px; border-radius: 4px; text-transform: uppercase; }
 
-        /* Модальні вікна (Вибір об'єму) */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #fff; padding: 30px 25px; max-width: 400px; width: 100%; border-radius: 8px; max-height: 85vh; overflow-y: auto; }
-        .modal-ml-label { font-size: 10px; font-weight: 800; color: #888; text-transform: uppercase; display: block; margin: 25px 0 5px; }
-        .modal-ml-select { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 4px; font-size: 14px; outline: none; margin-bottom: 10px; }
-        .modal-order-btn { background: var(--gold); color: #000; padding: 15px; text-align: center; font-weight: 800; text-transform: uppercase; border-radius: 4px; text-decoration: none; display: block; font-size: 12px; }
-        .close-btn { width: 100%; padding: 12px; margin-top: 10px; background: #f5f5f5; border: none; font-weight: 600; cursor: pointer; }
+        /* МОДАЛЬНЕ ВІКНО */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; }
+        .modal-content { background: #fff; padding: 25px; max-width: 400px; width: 100%; border-radius: 8px; max-height: 85vh; overflow-y: auto; position: relative; }
+        .modal-content h3 { margin: 0; font-size: 18px; text-transform: uppercase; font-family: Georgia, serif; text-align: center; }
+        .modal-ml-label { font-size: 10px; font-weight: 800; color: #888; text-transform: uppercase; display: block; margin: 20px 0 5px; }
+        .modal-ml-select { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 4px; background: #fdfdfd; font-size: 14px; outline: none; margin-bottom: 10px; cursor: pointer; }
+        .modal-order-btn { background: var(--gold); color: #000; padding: 15px; text-align: center; font-weight: 800; text-transform: uppercase; border-radius: 4px; text-decoration: none; display: block; font-size: 12px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
+        .close-btn { width: 100%; padding: 12px; margin-top: 10px; background: #f5f5f5; border: none; border-radius: 4px; font-weight: 600; font-size: 12px; cursor: pointer; }
+        
+        .review-box { background: #f9f9f9; padding: 10px; border-left: 3px solid #ccc; margin-bottom: 10px; font-size: 12px; font-style: italic; }
+        .pos { border-color: #28a745; } .neu { border-color: #ffc107; } .neg { border-color: #dc3545; }
 
-        /* ПРО НАС та ПРОЄКТИ (Все на місці!) */
-        .about-section { background: var(--gray-light); padding: 40px 20px; text-align: center; }
-        .about-photo { width: 110px; height: 110px; border-radius: 50%; border: 2px solid var(--gold); margin-bottom: 20px; }
+        /* ПРО НАС ТА ІНШІ ПРОЄКТИ */
+        .about-section { background: var(--gray-light); padding: 40px 20px; text-align: center; border-top: 1px solid #eee; }
+        .about-photo { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--gold); margin-bottom: 15px; }
         .other-projects { padding: 40px 15px; background: #fff; text-align: center; border-top: 1px solid #eee; }
         .other-projects-container { display: flex; gap: 20px; justify-content: center; }
         .other-project-item img { width: 70px; height: 70px; border-radius: 50%; border: 1px solid #eee; }
@@ -93,12 +118,11 @@
         .fab-container { position: fixed; bottom: 20px; right: 15px; z-index: 999; }
         .fab { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--tg-color); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .fab img { width: 22px; filter: invert(1); }
-
-        .review-box { background: #f9f9f9; padding: 10px; border-left: 3px solid #ccc; margin-bottom: 10px; font-size: 12px; font-style: italic; }
-        .pos { border-color: #28a745; } .neu { border-color: #ffc107; } .neg { border-color: #dc3545; }
     </style>
 </head>
 <body>
+
+<div class="tt-hint">💡 Не переходить у Telegram? Натисніть <b>(⋯)</b> вгорі справа та оберіть <b>«Відкрити у браузері»</b>.</div>
 
 <div class="hero-carousel" id="heroCarousel">
     <div class="slide logo-slide active">
@@ -113,6 +137,7 @@
         <div class="banner-content">
             <span class="banner-subtitle">Вибір Вікторії</span>
             <span class="banner-title">ПАРФУМ ТИЖНЯ</span>
+            <span class="banner-btn">Читати опис</span>
         </div>
     </div>
 </div>
@@ -140,32 +165,25 @@
     <h2>ПРО НАС</h2>
     <img src="Screenshot_20260328-171201.png" class="about-photo" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
     <div class="about-content" style="max-width:600px; margin:0 auto; font-size:13px; line-height:1.6; text-align:left;">
-        <p><strong>Вітаю! Мене звати Вікторія.</strong></p>
-        <p>Я особисто відбираю кожен аромат, бо не вмію продавати те, що не люблю сама. Тільки 100% оригінальна нішева парфумерія на розпив.</p>
+        <p><strong>Вітаю всіх! Мене звати Вікторія.</strong></p>
+        <p>Чи любите ви парфуми так, як люблю їх я? Оригінальна нішева парфумерія на розпив від 2мл для знайомства з ароматами!</p>
     </div>
 </div>
 
 <div class="other-projects">
     <h2>ІНШІ ПРОЄКТИ</h2>
     <div class="other-projects-container">
-        <div class="other-project-item">
-            <a href="https://www.instagram.com/mysweetplanb?igsh=M2djcXJhMTBuZXpz" target="_blank">
-                <img src="Screenshot_20260327-220636.png" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
-            </a>
-        </div>
-        <div class="other-project-item">
-            <a href="https://invite.viber.com/?g2=AQAhE1iZ%2B1uvKUgtymLfnM%2BRqfD3LHfLeTzxLtC2nlnXdK2yA0a2hXilbdMzlQ%2Fj" target="_blank">
-                <img src="Screenshot_20260327-210532.png" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
-            </a>
-        </div>
+        <div class="other-project-item"><a href="https://www.instagram.com/mysweetplanb?igsh=M2djcXJhMTBuZXpz" target="_blank"><img src="Screenshot_20260327-220636.png" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'"></a></div>
+        <div class="other-project-item"><a href="https://invite.viber.com/?g2=AQAhE1iZ%2B1uvKUgtymLfnM%2BRqfD3LHfLeTzxLtC2nlnXdK2yA0a2hXilbdMzlQ%2Fj" target="_blank"><img src="Screenshot_20260327-210532.png" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'"></a></div>
     </div>
 </div>
 
 <div id="infoModal" class="modal" onclick="this.style.display='none'">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <h3 id="mB" style="text-align:center; margin:0;"></h3>
+        <h3 id="mB"></h3>
         <p id="mN" style="text-align:center; color:#888; font-size: 13px; margin:5px 0 20px;"></p>
-        <div id="mD" style="font-size:13px; line-height:1.6;"></div>
+        <div id="mD" style="font-size:13px; line-height:1.6; color: #333;"></div>
+        
         <label class="modal-ml-label">Оберіть об'єм для замовлення:</label>
         <select id="modalMlSelect" class="modal-ml-select" onchange="syncModalOrder()"></select>
         <a href="" id="modalOrderBtn" class="modal-order-btn" target="_blank">🛍️ Замовити</a>
@@ -181,9 +199,7 @@
     </div>
 </div>
 
-<div class="fab-container">
-    <a href="https://t.me/viktoriia_viktoriia_r" class="fab"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png"></a>
-</div>
+<div class="fab-container"><a href="https://t.me/viktoriia_viktoriia_r" class="fab"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png"></a></div>
 
 <script>
     const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=339534482&single=true&output=csv';
@@ -210,7 +226,7 @@
             const data = await r.text();
             const rows = safeParseCSV(data);
             if(rows[0][9]) document.getElementById('newsTicker').innerText = rows[0][9];
-            if(rows[0][10]) document.getElementById('newsModalContent').innerText = rows[0][10];
+            if(rows[0][10]) document.getElementById('newsModalContent').innerText = rows[0][10].replace(/\n/g, '<br>');
 
             const catalogData = rows.slice(1).filter(c => c[0]); 
             renderBrandSlider(catalogData);
@@ -218,25 +234,33 @@
             const container = document.getElementById('catalog');
             container.innerHTML = '';
             let weekPerfume = null;
+            const today = new Date();
 
             catalogData.forEach(c => {
                 const [brand, name, pStr, minStr, desc, img, date, top, sDesc] = c;
                 const price = parseFloat(pStr.replace(/,/g, '.')) || 0;
                 const isWeek = top && top.toLowerCase().includes('тиждень');
                 const cleanD = (isWeek && sDesc) ? sDesc : desc;
-                
+                const isNew = date && (today - new Date(date)) / 86400000 <= 14;
+
                 if (isWeek) weekPerfume = { brand, name, cleanD, img, price, min: parseInt(minStr)||2 };
 
                 const div = document.createElement('div');
                 div.className = 'card';
                 div.setAttribute('data-brand', brand);
-                div.setAttribute('data-new', (date && date.includes('2026')) ? 'true' : 'false');
-                div.setAttribute('data-top', (top && top.toLowerCase().includes('топ')) ? 'true' : 'false');
+                div.setAttribute('data-new', isNew);
+                div.setAttribute('data-top', top && top.toLowerCase().includes('топ'));
+
+                let options = '';
+                [2, 5, 10, 20].forEach(ml => { if(ml >= (parseInt(minStr)||2)) options += `<option value="${ml}">${ml} мл — ${Math.round(ml*price)} грн</option>`; });
+
                 div.innerHTML = `
+                    <div class="badges-container">${isNew ? '<div class="badge badge-new">Новинка</div>':''}${top.toLowerCase().includes('топ') ? '<div class="badge badge-top">Top</div>':''}</div>
                     <img src="${img}" onclick="showModal('${brand}', '${name}', '${cleanD.replace(/'/g, "\\'")}', ${price}, ${minStr})" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
-                    <div class="brand">${brand}</div>
-                    <div class="name">${name}</div>
-                    <button class="order-btn-small" onclick="showModal('${brand}', '${name}', '${cleanD.replace(/'/g, "\\'")}', ${price}, ${minStr})">Детальніше</button>`;
+                    <div class="brand">${brand}</div><div class="name">${name}</div>
+                    <select onchange="this.nextElementSibling.innerText=Math.round(this.value*${price})+' грн'">${options}</select>
+                    <div class="total">${Math.round((parseInt(minStr)||2)*price)} грн</div>
+                    <button class="order-btn" onclick="order('${brand} ${name}', this)">Замовити</button>`;
                 container.appendChild(div);
             });
 
@@ -246,12 +270,13 @@
                 const weekCont = document.getElementById('weekPerfumeContainer');
                 weekCont.innerHTML = `
                     <div class="week-card" onclick="showModal('${weekPerfume.brand}', '${weekPerfume.name}', '${weekPerfume.cleanD.replace(/'/g, "\\'")}', ${weekPerfume.price}, ${weekPerfume.min})">
+                        <div class="week-card-bg-blur" style="background-image: url('${weekPerfume.img}')"></div>
                         <img src="${weekPerfume.img}" class="week-card-img">
                         <div class="week-card-info">
                             <span class="week-card-label">Парфум тижня</span>
                             <div class="week-card-name">${weekPerfume.name}</div>
                         </div>
-                        <div style="color:var(--gold); font-size:18px;">→</div>
+                        <div style="color:var(--gold); font-size:18px; z-index:2;">→</div>
                     </div>`;
                 weekCont.style.display = 'block';
             }
@@ -263,8 +288,9 @@
         const brands = [...new Set(catalog.map(c => c[0]))].filter(b => b).sort();
         const slider = document.getElementById('brandSlider');
         slider.innerHTML = `<button class="brand-btn active" onclick="setBrand('', this)">Усі бренди</button>`;
-        brands.forEach(b => {
-            slider.innerHTML += `<button class="brand-btn" onclick="setBrand('${b}', this)">${b}</button>`;
+        brands.forEach(b => { 
+            let c = b.toLowerCase().includes('tom ford') ? 'brand-tf' : b.toLowerCase().includes('jo malone') ? 'brand-jm' : '';
+            slider.innerHTML += `<button class="brand-btn ${c}" onclick="setBrand('${b}', this)">${b}</button>`; 
         });
     }
 
@@ -280,14 +306,10 @@
 
         const sel = document.getElementById('modalMlSelect');
         sel.innerHTML = '';
-        [2, 5, 10, 20].forEach(ml => {
-            if (ml >= min) {
-                const opt = document.createElement('option');
-                opt.value = ml;
-                opt.innerText = `${ml} мл — ${Math.round(ml * p)} грн`;
-                sel.appendChild(opt);
-            }
-        });
+        [2, 5, 10, 20].forEach(ml => { if (ml >= min) {
+            const opt = document.createElement('option'); opt.value = ml;
+            opt.innerText = `${ml} мл — ${Math.round(ml * p)} грн`; sel.appendChild(opt);
+        }});
         syncModalOrder();
         document.getElementById('infoModal').style.display = 'flex';
     }
@@ -319,9 +341,7 @@
         const q = document.getElementById('searchInput').value.toLowerCase();
         document.querySelectorAll('.card').forEach(c => {
             const isMatch = c.innerText.toLowerCase().includes(q);
-            const isCat = (currentCategory === 'all') || 
-                          (currentCategory === 'new' && c.getAttribute('data-new') === 'true') ||
-                          (currentCategory === 'top' && c.getAttribute('data-top') === 'true');
+            const isCat = (currentCategory === 'all') || (currentCategory === 'new' && c.getAttribute('data-new') === 'true') || (currentCategory === 'top' && c.getAttribute('data-top') === 'true');
             const isBrand = (currentBrand === '' || c.getAttribute('data-brand') === currentBrand);
             c.style.display = (isMatch && isCat && isBrand) ? 'flex' : 'none';
         });
@@ -329,10 +349,12 @@
 
     function startHeroCarousel() {
         const slides = document.querySelectorAll('#heroCarousel .slide');
-        let cur = 0;
-        setInterval(() => {
-            slides[cur].classList.remove('active'); cur = (cur + 1) % slides.length; slides[cur].classList.add('active');
-        }, 5000);
+        let cur = 0; setInterval(() => { slides[cur].classList.remove('active'); cur = (cur + 1) % slides.length; slides[cur].classList.add('active'); }, 5000);
+    }
+    function order(item, btn) {
+        const ml = btn.previousElementSibling.previousElementSibling.value;
+        const total = btn.previousElementSibling.innerText;
+        window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ:\n' + item + '\nОб\'єм: ' + ml + ' мл\nСума: ' + total)}`, '_top');
     }
     function scrollToWeek() { document.getElementById('weekPerfumeContainer').scrollIntoView({behavior: 'smooth'}); }
 
