@@ -465,13 +465,13 @@
                         <div class="week-card-header">⭐ Парфум тижня ⭐</div>
                         <div class="week-card-body">
                             <div class="week-card-bg-blur" style="background-image: url('${weekPerfume.img}')"></div>
-                            <img src="${weekPerfume.img}" class="week-card-img" onclick="showModal('${weekPerfume.cleanB}', '${weekPerfume.cleanN}', '${weekPerfume.cleanD}')" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                            <img src="${weekPerfume.img}" class="week-card-img" onclick="showModal('${weekPerfume.cleanB}', '${weekPerfume.cleanN}', '${weekPerfume.cleanD}', true)" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
                             <div class="week-card-info">
                                 <div class="week-card-brand">${weekPerfume.brand}</div>
                                 <div class="week-card-name">${weekPerfume.name}</div>
                                 <div class="price-ml" style="color:#aaa;">Від <b>${Math.round(weekPerfume.price)} грн</b> / 1 мл</div>
                                 <div class="week-btn-group">
-                                    <button class="btn-week-desc" onclick="showModal('${weekPerfume.cleanB}', '${weekPerfume.cleanN}', '${weekPerfume.cleanD}')">📝 Опис та Відгуки</button>
+                                    <button class="btn-week-desc" onclick="showModal('${weekPerfume.cleanB}', '${weekPerfume.cleanN}', '${weekPerfume.cleanD}', true)">📝 Опис та Відгуки</button>
                                     <a href="${fragUrl}" target="_blank" class="btn-fragrantica">📖 Fragrantica Україна</a>
                                 </div>
                             </div>
@@ -566,7 +566,8 @@
         setInterval(() => { tooltip.classList.add('show'); setTimeout(() => tooltip.classList.remove('show'), 4000); }, 15000);
     }
 
-    function showModal(b, n, d) {
+    // Оновлена функція: додано параметр isWeek
+    function showModal(b, n, d, isWeek = false) {
         document.getElementById('mB').innerText = b;
         document.getElementById('mN').innerText = n;
         
@@ -589,10 +590,15 @@
 
         document.getElementById('mD').innerHTML = formattedDesc;
         
-        // Оновлюємо посилання для кнопки замовлення в модалці
-        const orderText = `🛍️ ЗАМОВЛЕННЯ:\n${b} ${n}\n\nБажаю уточнити наявність та замовити цей аромат.`;
+        // Логіка відображення жовтої кнопки замовлення
         const orderBtn = document.getElementById('modalOrderBtn');
-        orderBtn.href = `https://t.me/${TG_NICK}?text=${encodeURIComponent(orderText)}`;
+        if (isWeek) {
+            const orderText = `🛍️ ЗАМОВЛЕННЯ (Парфум тижня):\n${b} ${n}\n\nБажаю уточнити наявність та замовити цей особливий аромат. ✨`;
+            orderBtn.href = `https://t.me/${TG_NICK}?text=${encodeURIComponent(orderText)}`;
+            orderBtn.style.display = 'block';
+        } else {
+            orderBtn.style.display = 'none';
+        }
         
         document.getElementById('infoModal').style.display = 'flex';
     }
