@@ -89,11 +89,11 @@
         .brand-mm { font-family: 'Helvetica Neue', sans-serif; font-weight: 300; letter-spacing: 4px; } 
         .brand-attar { font-family: 'Georgia', serif; font-variant: small-caps; letter-spacing: 2px; } 
 
-        /* ПАРФУМ ТИЖНЯ (ЕЛЕГАНТНА СМУЖКА) */
+        /* ПАРФУМ ТИЖНЯ */
         .week-card-container { display: none; padding: 0 15px 25px; }
         .week-card { background: #0a0a0a; color: #fff; border-radius: 6px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .week-card-header { background: var(--gold); color: #000; text-align: center; padding: 6px; font-weight: 800; font-size: 10px; text-transform: uppercase; letter-spacing: 2.5px; }
-        .week-card-body { display: flex; padding: 15px; gap: 15px; align-items: center; position: relative; }
+        .week-card-body { display: flex; padding: 12px 15px; gap: 15px; align-items: center; position: relative; }
         .week-card-img { width: 85px; height: 85px; object-fit: contain; z-index: 2; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); cursor: pointer; }
         .week-card-info { flex: 1; z-index: 2; }
         .week-card-brand { color: var(--gold); font-size: 10px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
@@ -102,10 +102,11 @@
         .btn-week-desc { background: var(--gold); border: none; color: #000; padding: 10px; text-align: center; text-transform: uppercase; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; letter-spacing: 1px; }
         .week-card-bg-blur { position: absolute; right: -20px; top: -20px; width: 130px; height: 130px; background-size: cover; background-position: center; filter: blur(20px) opacity(0.4); z-index: 1; border-radius: 50%; }
 
-        /* Каталог та БЕЙДЖИКИ (ВИПРАВЛЕНО ФОН) */
+        /* Каталог та БЕЙДЖИКИ */
         #catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px 15px; padding: 0 15px 20px; }
         .card { position: relative; display: flex; flex-direction: column; background: #fff; text-align: center; }
         .badges-container { position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
+        
         .badge { padding: 4px 8px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .badge-new { background: #000 !important; color: #fff !important; }
         .badge-top { background: var(--gold) !important; color: #000 !important; }
@@ -284,11 +285,15 @@
         return arr.map(r => r.map(v => v.trim()));
     }
 
+    /* ФУНКЦІЯ АВТОПРОКРУТКИ (ВИПРАВЛЕНО) */
     function scrollAfterFilter() {
-        const offset = 10;
-        const element = document.getElementById('stickyControls');
-        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset - offset;
-        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        setTimeout(() => {
+            const element = document.getElementById('stickyControls');
+            if(element) {
+                const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({ top: elementPosition - 10, behavior: "smooth" });
+            }
+        }, 100); 
     }
 
     async function load() {
@@ -423,7 +428,12 @@
     function order(item, btn) { window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ:\n'+item+'\nОб\'єм: '+btn.previousElementSibling.previousElementSibling.value+' мл\nСума: '+btn.previousElementSibling.innerText)}`, '_top'); }
     function orderPerfumeFromNews(q) { window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ (з Новин):\nАромат: '+q)}`, '_top'); }
     function scrollToWeek() { document.getElementById('weekPerfumeContainer').scrollIntoView({behavior: 'smooth'}); }
-    function navigateToCategory(c) { const b = document.getElementById('tab-'+c); if(b) setCategory(c, b); }
+    function navigateToCategory(c) { 
+        const b = document.getElementById('tab-'+c); 
+        if(b) {
+            setCategory(c, b);
+        }
+    }
     load();
 </script>
 </body>
