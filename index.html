@@ -36,19 +36,22 @@
         }
         .slide.active { opacity: 1; z-index: 2; pointer-events: auto; }
 
-        /* ВІДЕО-БАНЕР */
+        /* ВІДЕО-БАНЕР ТА БАНЕР ТИЖНЯ */
         .logo-slide { background: #000; }
         .bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1; }
         .logo-slide .logo, .logo-slide h1 { position: relative; z-index: 2; }
+        
+        .week-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; z-index: 0; filter: blur(2px) brightness(0.6); transform: scale(1.1); }
+        .week-bottle { position: absolute; height: 130%; right: -10%; bottom: -15%; z-index: 1; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); object-fit: contain; }
 
         .logo { width: 65px; height: auto; margin-bottom: 10px; }
         .hero-carousel h1 { font-size: 14px; font-weight: 600; letter-spacing: 5px; margin: 0; color: var(--gold); text-transform: uppercase; }
 
-        .banner-content { text-align: left; padding: 20px 30px; width: 100%; box-sizing: border-box; color: #fff; }
-        .banner-subtitle { display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 5px; }
-        .banner-title { display: block; font-size: 26px; font-weight: 300; text-transform: uppercase; letter-spacing: 1px; line-height: 1.1; margin-bottom: 12px; font-family: Georgia, 'Times New Roman', Times, serif; }
-        .banner-btn { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 6px 15px; border: 1px solid rgba(255,255,255,0.3); border-radius: 2px; transition: all 0.3s; }
+        .banner-content { text-align: left; padding: 20px 30px; width: 100%; box-sizing: border-box; color: #fff; position: relative; z-index: 2; }
+        .banner-subtitle { display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .banner-title { display: block; font-size: 26px; font-weight: 300; text-transform: uppercase; letter-spacing: 1px; line-height: 1.1; margin-bottom: 12px; font-family: Georgia, serif; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .banner-btn { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 6px 15px; border: 1px solid rgba(255,255,255,0.5); border-radius: 2px; transition: all 0.3s; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); }
         .slide:active .banner-btn { background: #fff; color: #000; border-color: #fff; }
 
         .banner-new { background: linear-gradient(135deg, #000000 0%, #0d1a0d 100%); }
@@ -80,11 +83,7 @@
         .brand-slider { display: flex; gap: 30px; overflow-x: auto; padding: 0 20px; scrollbar-width: none; align-items: center; }
         .brand-slider::-webkit-scrollbar { display: none; }
         
-        .brand-btn { 
-            background: none; border: none; cursor: pointer; white-space: nowrap; opacity: 0.4; 
-            transition: all 0.3s; font-family: 'Helvetica Neue', Arial, sans-serif; 
-            font-size: 13px; font-weight: 600; text-transform: uppercase; color: #000; padding: 5px 0;
-        }
+        .brand-btn { background: none; border: none; cursor: pointer; white-space: nowrap; opacity: 0.4; transition: all 0.3s; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; font-weight: 600; text-transform: uppercase; color: #000; padding: 5px 0; }
         .brand-btn.active, .brand-btn:hover { opacity: 1; transform: scale(1.05); }
 
         .brand-tf { font-family: 'Arial', sans-serif; font-weight: 900; letter-spacing: 1px; } 
@@ -94,39 +93,43 @@
         .brand-mm { font-family: 'Helvetica Neue', sans-serif; font-weight: 300; letter-spacing: 4px; } 
         .brand-attar { font-family: 'Georgia', serif; font-variant: small-caps; letter-spacing: 2px; } 
 
-        /* Хмарка новин */
-        .news-tooltip { position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: var(--gold); color: #000; padding: 8px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; line-height: 1.3; width: max-content; max-width: 150px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); opacity: 0; visibility: hidden; transition: all 0.4s ease; z-index: 100; pointer-events: none; }
-        .news-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--gold) transparent transparent transparent; }
-        .news-tooltip.show { opacity: 1; visibility: visible; bottom: 135%; }
+        /* ПАРФУМ ТИЖНЯ (КАРТКА) */
+        .week-card-container { display: none; padding: 0 15px 25px; }
+        .week-card { background: #0a0a0a; color: #fff; border-radius: 6px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .week-card-header { background: var(--gold); color: #000; text-align: center; padding: 8px; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 3px; }
+        .week-card-body { display: flex; padding: 20px; gap: 15px; align-items: center; position: relative; }
+        .week-card-img { width: 100px; height: 100px; object-fit: contain; z-index: 2; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
+        .week-card-info { flex: 1; z-index: 2; }
+        .week-card-brand { color: var(--gold); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; }
+        .week-card-name { font-size: 17px; font-family: Georgia, serif; margin-bottom: 8px; line-height: 1.2; letter-spacing: 0.5px; }
+        .week-btn-group { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
+        .btn-fragrantica { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 8px; text-align: center; text-transform: uppercase; font-size: 9px; font-weight: bold; text-decoration: none; border-radius: 4px; letter-spacing: 1px; }
+        .btn-week-desc { background: var(--gold); border: none; color: #000; padding: 10px; text-align: center; text-transform: uppercase; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; letter-spacing: 1px; }
+        .week-card-bg-blur { position: absolute; right: -20px; top: -20px; width: 150px; height: 150px; background-size: cover; background-position: center; filter: blur(20px) opacity(0.4); z-index: 1; border-radius: 50%; }
 
         /* Каталог */
         #catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px 15px; padding: 0 15px 20px; }
         .card { position: relative; display: flex; flex-direction: column; background: #fff; text-align: center; }
-        
         .badges-container { position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
         .badge { padding: 4px 8px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px; }
         .badge-new { background: #000; color: #fff; }
         .badge-top { background: var(--gold); color: #000; }
-
         .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; background: var(--gray-light); }
         .brand { font-weight: 700; font-size: 10px; margin-top: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #777; }
         .name { font-size: 13px; color: #111; height: 34px; margin: 6px 0 10px; overflow: hidden; line-height: 1.3; font-weight: 500; }
         .price-ml { font-size: 11px; color: #888; margin-bottom: 8px; }
-        
         select { width: 100%; padding: 8px 10px; border: 1px solid #eee; margin-bottom: 12px; background: #fff; outline: none; font-size: 13px; border-radius: 4px; color: #333; box-sizing: border-box; }
         .total { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: #000; }
         .order-btn { background: #000; color: #fff; border: none; padding: 12px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; font-size: 11px; border-radius: 4px; transition: background 0.3s; }
         .order-btn:active { background: var(--gold); color: #000; }
 
-        /* --- РОЗДІЛ: ПРО НАС --- */
+        /* ПРО НАС */
         .about-section { background: var(--gray-light); padding: 40px 20px; text-align: center; border-top: 1px solid #eee; }
         .about-section h2 { font-size: 14px; letter-spacing: 2.5px; color: #111; font-weight: 600; font-family: Georgia, serif; margin: 0 0 25px; text-transform: uppercase; }
         .about-photo { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; margin: 0 auto 20px; display: block; border: 2px solid var(--gold); padding: 3px; background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .about-content { max-width: 600px; margin: 0 auto; text-align: left; font-size: 13px; line-height: 1.6; color: #444; }
         .about-content p { margin-bottom: 12px; }
         .about-quote { font-family: Georgia, serif; font-style: italic; font-size: 14px; text-align: center; margin: 25px 0; padding: 15px 10px; border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); color: #000; line-height: 1.5; }
-        
-        /* Кнопки зв'язку в розділі Про нас */
         .about-contacts { display: flex; gap: 10px; justify-content: center; margin-top: 25px; }
         .about-contact-btn { display: flex; align-items: center; justify-content: center; gap: 8px; flex: 1; padding: 12px 10px; border-radius: 4px; text-decoration: none; color: #fff; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; max-width: 150px; }
         .btn-tg { background: var(--tg-color); }
@@ -136,26 +139,27 @@
         /* ІНШІ ПРОЄКТИ */
         .other-projects { padding: 40px 15px 30px; background: #fff; text-align: center; border-top: 1px solid #eee; }
         .other-projects h2 { font-size: 14px; letter-spacing: 2.5px; color: #111; font-weight: 600; font-family: Georgia, serif; margin: 0 0 30px; text-transform: uppercase; }
-        
         .other-projects-container { display: flex; gap: 20px; justify-content: center; }
-        
-        .other-project-item { 
-            flex: 0 0 70px; width: 70px; height: 70px; border-radius: 50%; overflow: hidden; 
-            background-color: #fff; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.06); 
-            text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            box-sizing: border-box; transition: all 0.3s;
-        }
+        .other-project-item { flex: 0 0 70px; width: 70px; height: 70px; border-radius: 50%; overflow: hidden; background-color: #fff; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; transition: all 0.3s; }
         .other-project-item:active { transform: scale(1.05); }
-
         .other-project-link { display: block; width: 100%; height: 100%; text-decoration: none; position: relative; border-radius: 50%; }
         .other-project-item img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; padding: 0; margin: 0; border-radius: 50%; }
         
         /* Модальні вікна */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: #fff; padding: 30px 25px; max-width: 400px; width: 100%; position: relative; text-align: center; max-height: 85vh; overflow-y: auto; border: 1px solid #eee; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
-        .modal-content h3 { margin-top: 0; font-size: 18px; letter-spacing: 1px; text-transform: uppercase; font-family: Georgia, serif; }
+        .modal-content { background: #fff; padding: 30px 25px; max-width: 400px; width: 100%; position: relative; text-align: left; max-height: 85vh; overflow-y: auto; border: 1px solid #eee; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+        .modal-content h3 { margin-top: 0; font-size: 18px; letter-spacing: 1px; text-transform: uppercase; font-family: Georgia, serif; text-align: center; }
         .news-link { color: #000; font-weight: 700; text-decoration: underline; cursor: pointer; text-decoration-color: var(--gold); text-decoration-thickness: 2px; }
-        .close-btn { background: #fff; border: 1px solid #000; color: #000; padding: 12px; width: 100%; margin-top: 25px; cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; border-radius: 4px; }
+        .close-btn { background: #fff; border: 1px solid #000; color: #000; padding: 12px; width: 100%; margin-top: 25px; cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; border-radius: 4px; display: block; text-align: center;}
+
+        /* Спеціальний стиль для відгуків у модалці */
+        .review-positive { color: #1e7e34; }
+        .review-neutral { color: #d39e00; }
+        .review-negative { color: #c82333; }
+        .review-box { background: #f9f9f9; padding: 10px 15px; border-radius: 6px; margin-bottom: 10px; border-left: 3px solid #ccc; font-style: italic; font-size: 12px;}
+        .review-box.pos { border-color: #28a745; }
+        .review-box.neu { border-color: #ffc107; }
+        .review-box.neg { border-color: #dc3545; }
 
         .fab-container { position: fixed; bottom: 20px; right: 15px; display: flex; flex-direction: column; gap: 10px; z-index: 999; }
         .fab { width: 50px; height: 50px; border-radius: 25px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
@@ -178,6 +182,17 @@
         <h1>VR PERFUMES</h1>
     </div>
     
+    <div class="slide banner-week" id="weekSlide" onclick="scrollToWeek()" style="display:none; background: #000;">
+        <div class="week-bg" id="weekSlideBg"></div>
+        <div class="video-overlay" style="background: rgba(0,0,0,0.65);"></div>
+        <img src="" id="weekSlideBottle" class="week-bottle">
+        <div class="banner-content">
+            <span class="banner-subtitle">Вибір Вікторії</span>
+            <span class="banner-title">ПАРФУМ<br>ТИЖНЯ</span>
+            <span class="banner-btn">Дізнатись більше</span>
+        </div>
+    </div>
+
     <div class="slide banner-new" onclick="navigateToCategory('new')">
         <div class="banner-content">
             <span class="banner-subtitle">Зустрічай весну</span>
@@ -221,21 +236,17 @@
     <div class="brand-slider" id="brandSlider"></div>
 </div>
 
+<div class="week-card-container" id="weekPerfumeContainer"></div>
+
 <div id="catalog">Завантаження каталогу...</div>
 
 <div class="about-section">
     <h2>ПРО НАС</h2>
-    
     <img src="Screenshot_20260328-171201.png" alt="Вікторія" class="about-photo" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
-    
     <div class="about-content">
         <p><strong>Вітаю всіх в нашому парфумерному барі! Мене звати Вікторія.</strong></p>
-        <p>Чи любите ви парфуми так, як люблю їх я? Вони зі мною у кожен момент життя, завжди маю багато різних аромати і одягаю їх залежно від настрою.</p>
-        
-        <div class="about-quote">
-            Кажуть, що жінка може мовчати, але її парфуми все скажуть за неї.
-        </div>
-        
+        <p>Чи любите ви парфуми так, як люблю їх я? Вони зі мною у кожен момент життя, завжди маю багато різних ароматів і одягаю їх залежно від настрою.</p>
+        <div class="about-quote">Кажуть, що жінка може мовчати, але її парфуми все скажуть за неї.</div>
         <p>Парфуми — моя особлива любов, завжди слідкую за трендами і багато ароматів купляю спочатку у пробніках перш, ніж замовити флакон і запропонувати Вам. Бо я просто не вмію продавати те, що мені особисто не подобається.</p>
         <p>✨ Оригінальна нішева парфумерія на розпив від 2мл для знайомства з ароматами!</p>
         <p>💯 Всі парфуми оригінальні, викупляються на складі в Європі моєю колегою з Німеччини.</p>
@@ -276,9 +287,9 @@
 <div id="infoModal" class="modal" onclick="this.style.display='none'">
     <div class="modal-content" onclick="event.stopPropagation()">
         <h3 id="mB" style="margin-bottom: 5px;"></h3>
-        <p id="mN" style="color:#666; font-size: 14px; margin-top: 0;"></p>
+        <p id="mN" style="color:#666; font-size: 14px; margin-top: 0; text-align: center;"></p>
         <hr style="border:0; height:1px; background:#eee; margin:20px 0;">
-        <p id="mD" style="text-align:left; font-size:13px; line-height:1.6; color: #444; margin-top: 15px;"></p>
+        <p id="mD" style="font-size:13px; line-height:1.6; color: #333; margin-top: 15px;"></p>
         <button class="close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button>
     </div>
 </div>
@@ -344,7 +355,6 @@
             document.getElementById('newsTooltip').innerText = tooltipPreview;
             
             startNewsTooltipAnimation();
-            startHeroCarousel(); 
 
             let formattedNews = rawNews.replace(/\n/g, '<br>'); 
             const processedNews = formattedNews.replace(/\{(.*?)\}/g, (match, perfumeName) => {
@@ -362,6 +372,8 @@
             const container = document.getElementById('catalog');
             container.innerHTML = '';
             
+            let weekPerfume = null;
+
             catalogData.forEach(c => {
                 const brand = c[0] || '';
                 const name = c[1] || '';
@@ -371,6 +383,9 @@
                 const img = c[5] || '';
                 const dateStr = c[6] || '';
                 const customTop = c[7] || '';
+                
+                // Читаємо розширений опис з нової колонки I (індекс 8)
+                const specialDesc = c[8] || '';
 
                 const price = parseFloat(priceStr.replace(/,/g, '.')) || 0;
                 const min = parseInt(minStr) || 2;
@@ -385,13 +400,28 @@
                 }
 
                 let isTop = false;
+                let isWeek = false;
+                
                 const fullNameLower = (brand + ' ' + name).toLowerCase();
                 if (TRENDS.some(trend => fullNameLower.includes(trend))) isTop = true;
                 if (customTop && customTop.toLowerCase().includes('топ')) isTop = true;
+                
+                // Перевірка на Парфум Тижня (якщо так, він також стає "Хітом сезону")
+                if (customTop && customTop.toLowerCase().includes('тиждень')) {
+                    isWeek = true;
+                    isTop = true;
+                }
 
-                let cleanD = desc ? desc.replace(/'/g, "’").replace(/"/g, "&quot;").replace(/\n/g, '<br>').replace(/\r/g, '') : "Опис скоро з’явиться...";
+                // Вибираємо, який текст показувати: розширений чи звичайний
+                let rawDescToUse = (isWeek && specialDesc.trim() !== '') ? specialDesc : desc;
+                
+                let cleanD = rawDescToUse ? rawDescToUse.replace(/'/g, "’").replace(/"/g, "&quot;").replace(/\n/g, '<br>').replace(/\r/g, '') : "Опис скоро з’явиться...";
                 const cleanB = brand.replace(/'/g, "’");
                 const cleanN = name.replace(/'/g, "’");
+
+                if (isWeek) {
+                    weekPerfume = { brand, name, cleanB, cleanN, cleanD, img, price, min };
+                }
 
                 const div = document.createElement('div');
                 div.className = 'card';
@@ -422,6 +452,42 @@
                 `;
                 container.appendChild(div);
             });
+
+            // МАГІЯ ПАРФУМУ ТИЖНЯ
+            if (weekPerfume) {
+                document.getElementById('weekSlideBg').style.backgroundImage = `url('${weekPerfume.img}')`;
+                document.getElementById('weekSlideBottle').src = weekPerfume.img;
+                document.getElementById('weekSlide').style.display = 'flex';
+                
+                const fragUrl = `https://www.fragrantica.ua/search/?query=${encodeURIComponent(weekPerfume.brand + ' ' + weekPerfume.name)}`;
+                
+                const weekContainer = document.getElementById('weekPerfumeContainer');
+                weekContainer.innerHTML = `
+                    <div class="week-card">
+                        <div class="week-card-header">⭐ Парфум тижня ⭐</div>
+                        <div class="week-card-body">
+                            <div class="week-card-bg-blur" style="background-image: url('${weekPerfume.img}')"></div>
+                            <img src="${weekPerfume.img}" class="week-card-img" onclick="showModal('${weekPerfume.cleanB}', '${weekPerfume.cleanN}', '${weekPerfume.cleanD}')" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                            <div class="week-card-info">
+                                <div class="week-card-brand">${weekPerfume.brand}</div>
+                                <div class="week-card-name">${weekPerfume.name}</div>
+                                <div class="price-ml" style="color:#aaa;">Від <b>${Math.round(weekPerfume.price)} грн</b> / 1 мл</div>
+                                <div class="week-btn-group">
+                                    <button class="btn-week-desc" onclick="showModal('${weekPerfume.cleanB}', '${weekPerfume.cleanN}', '${weekPerfume.cleanD}')">📝 Опис та Відгуки</button>
+                                    <a href="${fragUrl}" target="_blank" class="btn-fragrantica">📖 Fragrantica Україна</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                weekContainer.style.display = 'block';
+            } else {
+                document.getElementById('weekSlide').remove();
+            }
+
+            // Запускаємо слайдер після перевірки на Парфум Тижня
+            startHeroCarousel();
+
         } catch (e) { 
             console.error(e); 
             document.getElementById('catalog').innerHTML = "Помилка завантаження даних. Будь ласка, оновіть сторінку.";
@@ -454,7 +520,9 @@
 
     function startHeroCarousel() {
         const slides = document.querySelectorAll('#heroCarousel .slide');
+        if(slides.length === 0) return;
         let currentSlide = 0;
+        slides[0].classList.add('active');
         setInterval(() => {
             slides[currentSlide].classList.remove('active'); 
             currentSlide = (currentSlide + 1) % slides.length; 
@@ -468,6 +536,11 @@
             setCategory(category, tabBtn); 
             window.scrollTo({ top: document.querySelector('.controls-wrapper').offsetTop, behavior: 'smooth' });
         }
+    }
+
+    function scrollToWeek() {
+        const el = document.getElementById('weekPerfumeContainer');
+        if(el) { el.scrollIntoView({behavior: 'smooth', block: 'start'}); }
     }
 
     function setCategory(category, btnElement) {
@@ -501,12 +574,19 @@
         document.getElementById('mN').innerText = n;
         
         let formattedDesc = d;
+        // Стандартне форматування нот
         formattedDesc = formattedDesc.replace(/(Стиль:)/gi, '<br><br><b>$1</b>');
         formattedDesc = formattedDesc.replace(/(Піраміда аромату:)/gi, '<br><br><b>$1</b>');
         formattedDesc = formattedDesc.replace(/(Верхні ноти:)/gi, '<br>• <b>$1</b>');
         formattedDesc = formattedDesc.replace(/(Ноти серця:)/gi, '<br>• <b>$1</b>');
         formattedDesc = formattedDesc.replace(/(Базові ноти:)/gi, '<br>• <b>$1</b>');
         formattedDesc = formattedDesc.replace(/(Основні акорди:)/gi, '<br><br><b>$1</b>');
+        
+        // ФОРМАТУВАННЯ ВІДГУКІВ
+        formattedDesc = formattedDesc.replace(/(Відгуки:)/gi, '<br><br><h4 style="color:var(--gold); margin:0 0 10px; font-family: Georgia, serif; font-size: 15px; text-transform: uppercase;">💬 Відгуки покупців:</h4>');
+        formattedDesc = formattedDesc.replace(/\[\+\](.*?)(?=<br>|\[\=\]|\[\-\]|$)/g, '<div class="review-box pos"><span class="review-positive"><b>🟢 Позитивний:</b></span> $1</div>');
+        formattedDesc = formattedDesc.replace(/\[\=\](.*?)(?=<br>|\[\+\]|\[\-\]|$)/g, '<div class="review-box neu"><span class="review-neutral"><b>🟡 Нейтральний:</b></span> $1</div>');
+        formattedDesc = formattedDesc.replace(/\[\-\](.*?)(?=<br>|\[\+\]|\[\=\]|$)/g, '<div class="review-box neg"><span class="review-negative"><b>🔴 Суперечливий:</b></span> $1</div>');
         
         formattedDesc = formattedDesc.replace(/(<br>\s*){3,}/g, '<br><br>');
         if(formattedDesc.startsWith('<br>')) formattedDesc = formattedDesc.substring(4);
