@@ -102,8 +102,8 @@
         .week-card-container { display: none; padding: 0 15px 25px; }
         .week-card { background: #0a0a0a; color: #fff; border-radius: 6px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .week-card-header { background: var(--gold); color: #000; text-align: center; padding: 6px; font-weight: 800; font-size: 10px; text-transform: uppercase; letter-spacing: 3px; }
-        .week-card-body { display: flex; padding: 12px 15px; gap: 15px; align-items: center; position: relative; }
-        .week-card-img { width: 80px; height: 80px; object-fit: contain; z-index: 2; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
+        .week-card-body { display: flex; padding: 15px; gap: 15px; align-items: center; position: relative; }
+        .week-card-img { width: 80px; height: 80px; object-fit: contain; z-index: 2; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); cursor: pointer; }
         .week-card-info { flex: 1; z-index: 2; }
         .week-card-brand { color: var(--gold); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; }
         .week-card-name { font-size: 16px; font-family: Georgia, serif; margin-bottom: 8px; line-height: 1.2; letter-spacing: 0.5px; }
@@ -159,6 +159,7 @@
         /* КНОПКА ЗАМОВИТИ ЗА ЗАМОВЧУВАННЯМ ПРИХОВАНА */
         .modal-order-btn { background: var(--gold); color: #000; border: none; padding: 14px; width: 100%; margin-top: 25px; cursor: pointer; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; border-radius: 4px; display: none; text-align: center; text-decoration: none; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
 
+        /* СТИЛІ ВІДГУКІВ */
         .review-positive { color: #1e7e34; }
         .review-neutral { color: #d39e00; }
         .review-negative { color: #c82333; }
@@ -211,7 +212,9 @@
     </div>
 </div>
 
-<div class="news-ticker"><div class="news-ticker-content" id="newsTicker">ЗАВАНТАЖЕННЯ... ✨</div></div>
+<div class="news-ticker">
+    <div class="news-ticker-content" id="newsTicker">ЗАВАНТАЖЕННЯ... ✨</div>
+</div>
 
 <div class="controls-wrapper" id="stickyControls">
     <div class="search-box">
@@ -307,11 +310,7 @@
 <script>
     const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=339534482&single=true&output=csv';
     const TG_NICK = 'viktoriia_viktoriia_r'; 
-    
-    let globalCatalog = []; 
-    let currentCategory = 'all'; 
-    let currentBrand = ''; 
-
+    let globalCatalog = [], currentCategory = 'all', currentBrand = ''; 
     const TRENDS = ['baccarat', 'ganymede', 'tonka cola', 'wood sage', 'vanilla vibes', 'musk kashmir', 'blackberry', 'pomelo sorrento', 'soleil de capri', 'pear inc', 'this is her', 'fleur narcotique', 'lost cherry', 'tobacco vanille', 'delina', 'bianco latte', 'kirke', 'musc k'];
 
     function safeParseCSV(str) {
@@ -372,22 +371,27 @@
                 let isNew = dateStr && (today - new Date(dateStr)) / (1000 * 60 * 60 * 24) <= 14;
                 let isTop = TRENDS.some(t => (brand + ' ' + name).toLowerCase().includes(t)) || (top && top.toLowerCase().includes('топ'));
                 let isWeek = top && top.toLowerCase().includes('тиждень');
-                if (isWeek) { isTop = true; weekPerfume = { brand, name, cleanB: brand.replace(/'/g,"’"), cleanN: name.replace(/'/g,"’"), cleanD: (sDesc && sDesc.trim()!=='')?sDesc.replace(/'/g,"’").replace(/\n/g,'<br>'):desc.replace(/'/g,"’").replace(/\n/g,'<br>'), img, price, min }; }
+
+                /* ПРАВКА: ТЕПЕР ТЕКСТ ОБРОБЛЯЄТЬСЯ JSON.stringify ДЛЯ КНОПОК */
+                const cleanB = brand.replace(/'/g,"’");
+                const cleanN = name.replace(/'/g,"’");
+                const cleanD = (isWeek && sDesc && sDesc.trim()!=='') ? sDesc.replace(/'/g,"’").replace(/\n/g,'<br>') : desc.replace(/'/g,"’").replace(/\n/g,'<br>');
+
+                if (isWeek) { isTop = true; weekPerfume = { brand, name, cleanB, cleanN, cleanD, img, price, min }; }
 
                 const div = document.createElement('div');
                 div.className = 'card';
                 div.setAttribute('data-search', (brand + ' ' + name).toLowerCase());
                 div.setAttribute('data-new', isNew); div.setAttribute('data-top', isTop); div.setAttribute('data-brand', brand);
                 
-                let optionsHtml = '';
-                [2, 5, 10, 20].forEach(ml => { if (ml >= min) optionsHtml += `<option value="${ml}">${ml} мл — ${Math.round(ml * price)} грн</option>`; });
+                let opts = ''; [2, 5, 10, 20].forEach(ml => { if (ml >= min) opts += `<option value="${ml}">${ml} мл — ${Math.round(ml * price)} грн</option>`; });
 
                 div.innerHTML = `
                     <div class="badges-container">${isNew?'<div class="badge badge-new">Новинка</div>':''}${isTop?'<div class="badge badge-top">Best Seller</div>':''}</div>
-                    <img loading="lazy" src="${img}" onclick="showModal('${brand.replace(/'/g,"’")}', '${name.replace(/'/g,"’")}', '${desc.replace(/'/g,"’").replace(/\n/g,'<br>')}')" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                    <img loading="lazy" src="${img}" onclick='showModal(${JSON.stringify(cleanB)}, ${JSON.stringify(cleanN)}, ${JSON.stringify(cleanD)})' onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
                     <div class="brand">${brand}</div><div class="name">${name}</div>
                     <div class="price-ml">1 мл: <b>${Math.round(price)} грн</b></div>
-                    <select onchange="updatePrice(this, ${price})">${optionsHtml}</select>
+                    <select onchange="updatePrice(this, ${price})">${opts}</select>
                     <div class="total">${Math.round(min * price)} грн</div>
                     <button class="order-btn" onclick="order('${brand} ${name}', this)">ЗАМОВИТИ</button>`;
                 container.appendChild(div);
@@ -403,13 +407,13 @@
                         <div class="week-card-header">⭐ Парфум тижня ⭐</div>
                         <div class="week-card-body">
                             <div class="week-card-bg-blur" style="background-image: url('${weekPerfume.img}')"></div>
-                            <img src="${weekPerfume.img}" class="week-card-img" onclick="showModal('${weekPerfume.cleanB}', '${weekPerfume.cleanN}', '${weekPerfume.cleanD}', true)" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                            <img src="${weekPerfume.img}" class="week-card-img" onclick='showModal(${JSON.stringify(weekPerfume.cleanB)}, ${JSON.stringify(weekPerfume.cleanN)}, ${JSON.stringify(weekPerfume.cleanD)}, true)' onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
                             <div class="week-card-info">
                                 <div class="week-card-brand">${weekPerfume.brand}</div>
                                 <div class="week-card-name">${weekPerfume.name}</div>
                                 <div class="price-ml" style="color:#aaa;">Від <b>${Math.round(weekPerfume.price)} грн</b> / 1 мл</div>
                                 <div class="week-btn-group">
-                                    <button class="btn-week-desc" onclick="showModal('${weekPerfume.cleanB}', '${weekPerfume.cleanN}', '${weekPerfume.cleanD}', true)">📝 Опис та Відгуки</button>
+                                    <button class="btn-week-desc" onclick='showModal(${JSON.stringify(weekPerfume.cleanB)}, ${JSON.stringify(weekPerfume.cleanN)}, ${JSON.stringify(weekPerfume.cleanD)}, true)'>📝 Опис та Відгуки</button>
                                     <a href="${fragUrl}" target="_blank" class="btn-fragrantica">📖 Fragrantica Україна</a>
                                 </div>
                             </div>
@@ -421,11 +425,11 @@
         } catch (e) { console.error(e); }
     }
 
-    function renderBrandSlider(catalog) {
-        const brands = [...new Set(catalog.map(c => c.brand))].filter(b => b.trim() !== '').sort();
+    function renderBrandSlider(cat) {
+        const brs = [...new Set(cat.map(c => c.brand))].filter(b => b.trim() !== '').sort();
         const slider = document.getElementById('brandSlider');
         slider.innerHTML = `<button class="brand-btn active" onclick="setBrand('', this)" style="opacity: 1; font-weight: 800;">УСІ БРЕНДИ</button>`;
-        brands.forEach(b => {
+        brs.forEach(b => {
             let customClass = ''; const lowerB = b.toLowerCase();
             if(lowerB.includes('tom ford')) customClass = 'brand-tf';
             else if(lowerB.includes('jo malone')) customClass = 'brand-jm';
@@ -456,34 +460,31 @@
     function filterCatalog() {
         const q = document.getElementById('searchInput').value.toLowerCase();
         document.querySelectorAll('.card').forEach(c => {
-            const matchesSearch = c.getAttribute('data-search').includes(q);
-            let matchesCategory = true;
-            if (currentCategory === 'new') matchesCategory = c.getAttribute('data-new') === 'true';
-            else if (currentCategory === 'top') matchesCategory = c.getAttribute('data-top') === 'true';
-            const cardBrand = c.getAttribute('data-brand');
-            const matchesBrand = (currentBrand === '' || cardBrand === currentBrand);
-            c.style.display = (matchesSearch && matchesCategory && matchesBrand) ? 'flex' : 'none';
+            const mS = c.getAttribute('data-search').includes(q);
+            const mC = (currentCategory === 'all') || (currentCategory === 'new' && c.getAttribute('data-new') === 'true') || (currentCategory === 'top' && c.getAttribute('data-top') === 'true');
+            c.style.display = (mS && mC && (currentBrand === '' || c.getAttribute('data-brand') === currentBrand)) ? 'flex' : 'none';
         });
     }
 
     function startNewsTooltipAnimation() {
-        const tooltip = document.getElementById('newsTooltip');
-        setTimeout(() => { tooltip.classList.add('show'); setTimeout(() => tooltip.classList.remove('show'), 4000); }, 3000);
-        setInterval(() => { tooltip.classList.add('show'); setTimeout(() => tooltip.classList.remove('show'), 4000); }, 15000);
+        const t = document.getElementById('newsTooltip');
+        setTimeout(() => { t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 4000); }, 3000);
+        setInterval(() => { t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 4000); }, 15000);
     }
 
+    /* ФУНКЦІЯ ШОУ-МОДАЛ: ПРАЦЮЄ З JSON ТЕКСТОМ */
     function showModal(b, n, d, isWeek = false) {
         document.getElementById('mB').innerText = b; document.getElementById('mN').innerText = n;
-        let formattedDesc = d;
-        formattedDesc = formattedDesc.replace(/(Стиль:)/gi, '<br><br><b>$1</b>').replace(/(Піраміда аромату:)/gi, '<br><br><b>$1</b>').replace(/(Верхні ноти:)/gi, '<br>• <b>$1</b>').replace(/(Ноти серця:)/gi, '<br>• <b>$1</b>').replace(/(Базові ноти:)/gi, '<br>• <b>$1</b>').replace(/(Основні акорди:)/gi, '<br><br><b>$1</b>');
-        formattedDesc = formattedDesc.replace(/(Відгуки:)/gi, '<br><br><h4 style="color:var(--gold); margin:0 0 10px; font-family: Georgia, serif; font-size: 15px; text-transform: uppercase;">💬 Відгуки покупців:</h4>');
-        formattedDesc = formattedDesc.replace(/\[\+\](.*?)(?=<br>|\[\=\]|\[\-\]|$)/g, '<div class="review-box pos"><span class="review-positive"><b>🟢 Позитивний:</b></span> $1</div>').replace(/\[\=\ Brooklyn(.*?)(?=<br>|\[\+\]|\[\-\]|$)/g, '<div class="review-box neu"><span class="review-neutral"><b>🟡 Нейтральний:</b></span> $1</div>').replace(/\[\-\](.*?)(?=<br>|\[\+\]|\[\=\]|$)/g, '<div class="review-box neg"><span class="review-negative"><b>🔴 Суперечливий:</b></span> $1</div>');
-        document.getElementById('mD').innerHTML = formattedDesc;
-        const orderBtn = document.getElementById('modalOrderBtn');
+        let f = d;
+        f = f.replace(/(Стиль:)/gi, '<br><br><b>$1</b>').replace(/(Піраміда аромату:)/gi, '<br><br><b>$1</b>').replace(/(Верхні ноти:)/gi, '<br>• <b>$1</b>').replace(/(Ноти серця:)/gi, '<br>• <b>$1</b>').replace(/(Базові ноти:)/gi, '<br>• <b>$1</b>').replace(/(Основні акорди:)/gi, '<br><br><b>$1</b>');
+        f = f.replace(/(Відгуки:)/gi, '<br><br><h4 style="color:var(--gold); margin:0 0 10px; font-family: Georgia, serif; font-size: 15px; text-transform: uppercase;">💬 Відгуки покупців:</h4>');
+        f = f.replace(/\[\+\](.*?)(?=<br>|\[\=\]|\[\-\]|$)/g, '<div class="review-box pos"><span class="review-positive"><b>🟢 Позитивний:</b></span> $1</div>').replace(/\[\=\](.*?)(?=<br>|\[\+\]|\[\-\]|$)/g, '<div class="review-box neu"><span class="review-neutral"><b>🟡 Нейтральний:</b></span> $1</div>').replace(/\[\-\](.*?)(?=<br>|\[\+\]|\[\=\]|$)/g, '<div class="review-box neg"><span class="review-negative"><b>🔴 Суперечливий:</b></span> $1</div>');
+        document.getElementById('mD').innerHTML = f;
+        const btn = document.getElementById('modalOrderBtn');
         if (isWeek) {
-            orderBtn.href = `https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ (Парфум тижня):\n'+b+' '+n+'\n\nВікторіє, доброго дня! Бажаю замовити цей аромат! ✨')}`;
-            orderBtn.style.display = 'block';
-        } else { orderBtn.style.display = 'none'; }
+            btn.href = `https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ (Парфум тижня):\n'+b+' '+n+'\n\nВікторіє, доброго дня! Бажаю замовити цей аромат! ✨')}`;
+            btn.style.display = 'block';
+        } else { btn.style.display = 'none'; }
         document.getElementById('infoModal').style.display = 'flex';
     }
 
@@ -494,7 +495,7 @@
     }
     function updatePrice(sel, p) { sel.nextElementSibling.innerText = Math.round(sel.value * p) + ' грн'; }
     function order(item, btn) { window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ:\n'+item+'\nОб\'єм: '+btn.previousElementSibling.previousElementSibling.value+' мл\nСума: '+btn.previousElementSibling.innerText)}`, '_top'); }
-    function orderPerfumeFromNews(q) { window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ (з Новин):\nАромат: '+q+'\n\nВікторіє, які об\'єми доступні?')}`, '_top'); }
+    function orderPerfumeFromNews(q) { window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ (з Новин):\nАромат: '+q)}`, '_top'); }
     function scrollToWeek() { document.getElementById('weekPerfumeContainer').scrollIntoView({behavior: 'smooth'}); }
     function navigateToCategory(c) { const b = document.getElementById('tab-'+c); if(b) setCategory(c, b); }
     load();
