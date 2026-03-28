@@ -150,7 +150,10 @@
         .modal-content { background: #fff; padding: 30px 25px; max-width: 400px; width: 100%; position: relative; text-align: left; max-height: 85vh; overflow-y: auto; border: 1px solid #eee; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
         .modal-content h3 { margin-top: 0; font-size: 18px; letter-spacing: 1px; text-transform: uppercase; font-family: Georgia, serif; text-align: center; }
         .news-link { color: #000; font-weight: 700; text-decoration: underline; cursor: pointer; text-decoration-color: var(--gold); text-decoration-thickness: 2px; }
-        .close-btn { background: #fff; border: 1px solid #000; color: #000; padding: 12px; width: 100%; margin-top: 25px; cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; border-radius: 4px; display: block; text-align: center;}
+        .close-btn { background: #fff; border: 1px solid #000; color: #000; padding: 12px; width: 100%; margin-top: 15px; cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; border-radius: 4px; display: block; text-align: center;}
+        
+        /* КНОПКА ЗАМОВИТИ В МОДАЛЦІ */
+        .modal-order-btn { background: var(--gold); color: #000; border: none; padding: 14px; width: 100%; margin-top: 25px; cursor: pointer; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; border-radius: 4px; display: block; text-align: center; text-decoration: none; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
 
         /* Спеціальний стиль для відгуків у модалці */
         .review-positive { color: #1e7e34; }
@@ -289,7 +292,9 @@
         <h3 id="mB" style="margin-bottom: 5px;"></h3>
         <p id="mN" style="color:#666; font-size: 14px; margin-top: 0; text-align: center;"></p>
         <hr style="border:0; height:1px; background:#eee; margin:20px 0;">
-        <p id="mD" style="font-size:13px; line-height:1.6; color: #333; margin-top: 15px;"></p>
+        <div id="mD" style="font-size:13px; line-height:1.6; color: #333; margin-top: 15px;"></div>
+        
+        <a href="" id="modalOrderBtn" class="modal-order-btn" target="_blank">🛍️ Замовити цей аромат</a>
         <button class="close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button>
     </div>
 </div>
@@ -383,8 +388,6 @@
                 const img = c[5] || '';
                 const dateStr = c[6] || '';
                 const customTop = c[7] || '';
-                
-                // Читаємо розширений опис з нової колонки I (індекс 8)
                 const specialDesc = c[8] || '';
 
                 const price = parseFloat(priceStr.replace(/,/g, '.')) || 0;
@@ -405,16 +408,12 @@
                 const fullNameLower = (brand + ' ' + name).toLowerCase();
                 if (TRENDS.some(trend => fullNameLower.includes(trend))) isTop = true;
                 if (customTop && customTop.toLowerCase().includes('топ')) isTop = true;
-                
-                // Перевірка на Парфум Тижня (якщо так, він також стає "Хітом сезону")
                 if (customTop && customTop.toLowerCase().includes('тиждень')) {
                     isWeek = true;
                     isTop = true;
                 }
 
-                // Вибираємо, який текст показувати: розширений чи звичайний
                 let rawDescToUse = (isWeek && specialDesc.trim() !== '') ? specialDesc : desc;
-                
                 let cleanD = rawDescToUse ? rawDescToUse.replace(/'/g, "’").replace(/"/g, "&quot;").replace(/\n/g, '<br>').replace(/\r/g, '') : "Опис скоро з’явиться...";
                 const cleanB = brand.replace(/'/g, "’");
                 const cleanN = name.replace(/'/g, "’");
@@ -453,7 +452,6 @@
                 container.appendChild(div);
             });
 
-            // МАГІЯ ПАРФУМУ ТИЖНЯ
             if (weekPerfume) {
                 document.getElementById('weekSlideBg').style.backgroundImage = `url('${weekPerfume.img}')`;
                 document.getElementById('weekSlideBottle').src = weekPerfume.img;
@@ -482,10 +480,9 @@
                 `;
                 weekContainer.style.display = 'block';
             } else {
-                document.getElementById('weekSlide').remove();
+                if(document.getElementById('weekSlide')) document.getElementById('weekSlide').remove();
             }
 
-            // Запускаємо слайдер після перевірки на Парфум Тижня
             startHeroCarousel();
 
         } catch (e) { 
@@ -574,7 +571,6 @@
         document.getElementById('mN').innerText = n;
         
         let formattedDesc = d;
-        // Стандартне форматування нот
         formattedDesc = formattedDesc.replace(/(Стиль:)/gi, '<br><br><b>$1</b>');
         formattedDesc = formattedDesc.replace(/(Піраміда аромату:)/gi, '<br><br><b>$1</b>');
         formattedDesc = formattedDesc.replace(/(Верхні ноти:)/gi, '<br>• <b>$1</b>');
@@ -582,7 +578,6 @@
         formattedDesc = formattedDesc.replace(/(Базові ноти:)/gi, '<br>• <b>$1</b>');
         formattedDesc = formattedDesc.replace(/(Основні акорди:)/gi, '<br><br><b>$1</b>');
         
-        // ФОРМАТУВАННЯ ВІДГУКІВ
         formattedDesc = formattedDesc.replace(/(Відгуки:)/gi, '<br><br><h4 style="color:var(--gold); margin:0 0 10px; font-family: Georgia, serif; font-size: 15px; text-transform: uppercase;">💬 Відгуки покупців:</h4>');
         formattedDesc = formattedDesc.replace(/\[\+\](.*?)(?=<br>|\[\=\]|\[\-\]|$)/g, '<div class="review-box pos"><span class="review-positive"><b>🟢 Позитивний:</b></span> $1</div>');
         formattedDesc = formattedDesc.replace(/\[\=\](.*?)(?=<br>|\[\+\]|\[\-\]|$)/g, '<div class="review-box neu"><span class="review-neutral"><b>🟡 Нейтральний:</b></span> $1</div>');
@@ -593,6 +588,12 @@
         if(formattedDesc.startsWith('<br><br>')) formattedDesc = formattedDesc.substring(8);
 
         document.getElementById('mD').innerHTML = formattedDesc;
+        
+        // Оновлюємо посилання для кнопки замовлення в модалці
+        const orderText = `🛍️ ЗАМОВЛЕННЯ:\n${b} ${n}\n\nБажаю уточнити наявність та замовити цей аромат.`;
+        const orderBtn = document.getElementById('modalOrderBtn');
+        orderBtn.href = `https://t.me/${TG_NICK}?text=${encodeURIComponent(orderText)}`;
+        
         document.getElementById('infoModal').style.display = 'flex';
     }
 
