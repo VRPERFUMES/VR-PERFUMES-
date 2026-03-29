@@ -339,7 +339,13 @@
             }
 
             const catalogData = rows.slice(1).filter(c => c[0]); 
-            globalCatalog = catalogData.map(c => ({brand: c[0]||'', name: c[1]||'', desc: c[4]||''}));
+            
+            // Захист від апострофів: очищаємо їх одразу при зчитуванні для бренду та назви
+            globalCatalog = catalogData.map(c => ({
+                brand: (c[0]||'').replace(/'/g,"’"), 
+                name: (c[1]||'').replace(/'/g,"’"), 
+                desc: c[4]||''
+            }));
             
             renderBrandSlider(globalCatalog);
 
@@ -359,16 +365,16 @@
             let promoPerfumes = [];
 
             catalogData.forEach(c => {
-                const brand = c[0] || '';
-                const name = c[1] || '';
+                // Очищаємо всі прямі апострофи, щоб вони не ламали HTML кнопки
+                const brand = (c[0] || '').replace(/'/g,"’");
+                const name = (c[1] || '').replace(/'/g,"’");
                 const pStr = c[2] || '0';
                 const minStr = c[3] || '2';
-                const desc = c[4] || '';
+                const desc = (c[4] || '').replace(/'/g,"’");
                 const img = c[5] || '';
                 const dateStr = c[6] || '';
                 const top = c[7] || '';
-                const sDesc = c[8] || '';
-                
+                const sDesc = (c[8] || '').replace(/'/g,"’");
                 const promoImg = c[11] || ''; 
                 
                 const price = parseFloat(pStr.replace(/,/g, '.')) || 0;
@@ -379,13 +385,11 @@
                 let isWeek = top && top.toLowerCase().includes('тиждень');
                 let isPromo = top && top.toLowerCase().includes('промо');
                 
-                const cleanB = brand.replace(/'/g,"’");
-                const cleanN = name.replace(/'/g,"’");
-                const cleanD = (isWeek && sDesc && sDesc.trim()!=='') ? sDesc.replace(/'/g,"’").replace(/\n/g,'<br>') : desc.replace(/'/g,"’").replace(/\n/g,'<br>');
+                const finalDesc = (isWeek && sDesc && sDesc.trim()!=='') ? sDesc.replace(/\n/g,'<br>') : desc.replace(/\n/g,'<br>');
 
                 if (isWeek) { 
                     isTop = true; 
-                    weekPerfume = { brand, name, cleanB, cleanN, cleanD, img, price, min }; 
+                    weekPerfume = { brand, name, desc: finalDesc, img, price, min }; 
                 }
                 
                 if (isPromo) { 
@@ -411,7 +415,7 @@
                         ${isNew ? '<div class="badge badge-new">Новинка</div>' : ''}
                         ${isTop ? '<div class="badge badge-top">Best Seller</div>' : ''}
                     </div>
-                    <img loading="lazy" src="${img}" onclick='showModal(${JSON.stringify(cleanB)}, ${JSON.stringify(cleanN)}, ${JSON.stringify(cleanD)})' onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                    <img loading="lazy" src="${img}" onclick='showModal(${JSON.stringify(brand)}, ${JSON.stringify(name)}, ${JSON.stringify(finalDesc)})' onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
                     <div class="brand">${brand}</div>
                     <div class="name">${name}</div>
                     <div class="price-ml">1 мл: <b>${Math.round(price)} грн</b></div>
@@ -444,13 +448,13 @@
                         <div class="week-card-header">⭐ Парфум тижня ⭐</div>
                         <div class="week-card-body">
                             <div class="week-card-bg-blur" style="background-image: url('${weekPerfume.img}')"></div>
-                            <img src="${weekPerfume.img}" class="week-card-img" onclick='showModal(${JSON.stringify(weekPerfume.cleanB)}, ${JSON.stringify(weekPerfume.cleanN)}, ${JSON.stringify(weekPerfume.cleanD)}, true)'>
+                            <img src="${weekPerfume.img}" class="week-card-img" onclick='showModal(${JSON.stringify(weekPerfume.brand)}, ${JSON.stringify(weekPerfume.name)}, ${JSON.stringify(weekPerfume.desc)}, true)'>
                             <div class="week-card-info">
                                 <div class="week-card-brand">${weekPerfume.brand}</div>
                                 <div class="week-card-name">${weekPerfume.name}</div>
                                 <div class="price-ml" style="color:#aaa;">Від <b>${Math.round(weekPerfume.price)} грн</b> / 1 мл</div>
                                 <div class="week-btn-group">
-                                    <button class="btn-week-desc" onclick='showModal(${JSON.stringify(weekPerfume.cleanB)}, ${JSON.stringify(weekPerfume.cleanN)}, ${JSON.stringify(weekPerfume.cleanD)}, true)'>📝 Опис та Відгуки</button>
+                                    <button class="btn-week-desc" onclick='showModal(${JSON.stringify(weekPerfume.brand)}, ${JSON.stringify(weekPerfume.name)}, ${JSON.stringify(weekPerfume.desc)}, true)'>📝 Опис та Відгуки</button>
                                 </div>
                             </div>
                         </div>
@@ -481,7 +485,6 @@
                     (lb.includes('mancera') || lb.includes('montale')) ? 'brand-mm' : 
                     lb.includes('attar') ? 'brand-attar' : '';
             
-            // ПОВЕРНУТО ЯК БУЛО ДО ЦЬОГО
             s.innerHTML += `<button class="brand-btn ${c}" onclick="setBrand('${b}', this)">${b}</button>`;
         });
     }
@@ -501,16 +504,9 @@
         scrollAfterFilter(); 
     }
 
-    function setCategory(cat, btn) { 
-        currentCategory = cat; 
-        document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active')); 
-        btn.classList.add('active'); 
-        filterCatalog(); 
-        scrollAfterFilter(); 
-    }
-
     function filterCatalog() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
+        // Захист від того, якщо клієнт введе прямий апостроф у рядок пошуку
+        const q = document.getElementById('searchInput').value.toLowerCase().replace(/'/g,"’");
         
         document.querySelectorAll('.card').forEach(c => {
             const mS = c.getAttribute('data-search').includes(q);
