@@ -25,9 +25,9 @@
             border-bottom: 1px solid #eee; line-height: 1.5; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
         }
 
-        /* --- ГЕРОЙ-КАРУСЕЛЬ (Висота 280px + Slide Анімація) --- */
+        /* --- ГЕРОЙ-КАРУСЕЛЬ (Висота 280px) --- */
         .hero-carousel {
-            position: relative; height: 280px; overflow: hidden; background: #000; border-bottom: 1px solid #1a1a1a; cursor: pointer;
+            position: relative; height: 280px; overflow: hidden; background: #000; border-bottom: 1px solid #1a1a1a;
         }
         .slide {
             position: absolute; width: 100%; height: 100%; top: 0; left: 0;
@@ -50,6 +50,18 @@
         .banner-subtitle { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         .banner-title { display: block; font-size: 28px; font-weight: 300; text-transform: uppercase; letter-spacing: 1px; line-height: 1.1; margin-bottom: 15px; font-family: Georgia, serif; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         .banner-btn { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 8px 18px; border: 1px solid rgba(255,255,255,0.5); border-radius: 2px; background: rgba(0,0,0,0.3); backdrop-filter: blur(2px); }
+
+        /* --- PAGINATION DOTS --- */
+        .carousel-dots {
+            position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px; z-index: 10;
+        }
+        .dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            border: 1.5px solid var(--gold); background: transparent;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .dot.active { background: var(--gold); }
 
         .news-ticker { background: var(--gold); color: #000; padding: 8px 0; overflow: hidden; white-space: nowrap; }
         .news-ticker-content { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
@@ -95,24 +107,15 @@
         }
 
         .card { position: relative; display: flex; flex-direction: column; background: #fff; text-align: center; }
-        
-        .badges-container { 
-            position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 10; 
-        }
-        .badge { 
-            padding: 4px 8px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
-        }
+        .badges-container { position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
+        .badge { padding: 4px 8px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .badge-new { background: #000 !important; color: #fff !important; }
         .badge-top { background: var(--gold) !important; color: #000 !important; }
-
-        .card img { 
-            width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 4px; background: var(--gray-light); cursor: pointer; 
-        }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 4px; background: var(--gray-light); cursor: pointer; }
 
         .brand { font-weight: 700; font-size: 9px; margin-top: 10px; text-transform: uppercase; color: #777; letter-spacing: 1px; }
         .name { font-size: 12px; color: #111; height: 32px; margin: 5px 0 8px; overflow: hidden; line-height: 1.3; font-weight: 500; }
         .price-ml { font-size: 10px; color: #888; margin-bottom: 5px; }
-        
         select { width: 100%; padding: 6px; border: 1px solid #eee; margin-bottom: 8px; font-size: 12px; border-radius: 4px; background: #fff; }
         .total { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #000; }
         .order-btn { background: #000; color: #fff; border: none; padding: 10px; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 10px; border-radius: 4px; }
@@ -163,7 +166,7 @@
         <h1>VR PERFUMES</h1>
     </div>
     
-    <div class="slide banner-promo" onclick="navigateToPerfume('BOIS 1920', 'GABA')">
+    <div class="slide banner-promo" id="promoGaba" onclick="navigateToPerfume('BOIS 1920', 'GABA')">
         <div class="banner-bg-img" style="background-image: url('Images/1774813252917~2.png')"></div>
         <div class="video-overlay" style="background: rgba(0,0,0,0.1);"></div>
         <div class="banner-content">
@@ -173,18 +176,20 @@
         </div>
     </div>
 
-    <div class="slide" id="weekSlide" onclick="scrollToWeek()" style="display:none;">
+    <div class="slide" id="weekSlide">
         <div class="banner-bg-img" id="weekSlideBg"></div>
         <div class="video-overlay" style="background:rgba(0,0,0,0.4)"></div>
         <div class="banner-content">
             <span class="banner-subtitle">Вибір Вікторії</span>
             <span class="banner-title">ПАРФУМ<br>ТИЖНЯ</span>
-            <span class="banner-btn">Дізнатись більше</span>
+            <span class="banner-btn">Опис та Відгуки</span>
         </div>
     </div>
 
     <div class="slide" onclick="navigateToCategory('new')"><div class="banner-content"><span class="banner-subtitle">Зустрічай весну</span><span class="banner-title">Нові<br>Надходження</span><span class="banner-btn">Дивитись</span></div></div>
     <div class="slide" onclick="navigateToCategory('top')"><div class="banner-content"><span class="banner-subtitle">Тренди 2026</span><span class="banner-title">ХІТИ<br>СЕЗОНУ</span><span class="banner-btn">Відкрити</span></div></div>
+    
+    <div class="carousel-dots" id="carouselDots"></div>
 </div>
 
 <div class="news-ticker"><div class="news-ticker-content" id="newsTicker">ЗАВАНТАЖЕННЯ... ✨</div></div>
@@ -211,9 +216,8 @@
     <img src="Screenshot_20260328-171201.png" alt="Вікторія" class="about-photo" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
     <div class="about-content">
         <p><strong>Вітаю всіх в нашому парфумерному барі! Мене звати Вікторія.</strong></p>
-        <p>Чи любите ви парфуми так, як люблю їх я? Вони зі мною у кожен момент життя, завжди маю багато різних ароматів і одягаю їх залежно від настрою.</p>
+        <p>Чи любите ви парфуми так, як люблю їх я? Вони зі мною у кожен момент життя.</p>
         <div class="about-quote">Кажуть, що жінка може мовчати, але її парфуми все скажуть за неї.</div>
-        <p>✨ Оригінальна нішева парфумерія на розпив від 2мл для знайомства з ароматами!</p>
         <p>💯 Всі парфуми оригінальні, купуються в магазинах Європи та США.</p>
         <div class="about-contacts">
             <a href="https://t.me/viktoriia_viktoriia_r" class="about-contact-btn btn-tg">Telegram</a>
@@ -242,6 +246,10 @@
     let currentCategory = 'all';
     let currentBrand = ''; 
     const TRENDS = ['baccarat', 'ganymede', 'tonka cola', 'wood sage', 'vanilla vibes', 'musk kashmir', 'blackberry', 'pomelo sorrento', 'soleil de capri', 'pear inc', 'this is her', 'fleur narcotique', 'lost cherry', 'tobacco vanille', 'delina', 'bianco latte', 'kirke', 'musc k'];
+
+    let carouselIndex = 0;
+    let carouselInterval;
+    let startX = 0;
 
     function parseDate(d) {
         if(!d) return new Date('2000-01-01');
@@ -273,14 +281,11 @@
         }, 100); 
     }
 
-    /* ФУНКЦІЯ НАВІГАЦІЇ: Примусове скидання фільтрів та показ потрібного товару */
     function navigateToPerfume(brand, name) {
         currentBrand = ''; currentCategory = 'all';
         document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
         document.getElementById('tab-all').classList.add('active');
-        const brandAll = document.querySelector('.brand-btn');
-        if(brandAll) brandAll.classList.add('active');
         document.getElementById('searchInput').value = name; 
         filterCatalog();
         scrollAfterFilter();
@@ -292,18 +297,54 @@
         setCategory(c, document.getElementById('tab-' + c));
     }
 
-    /* ВИПРАВЛЕНО: Плавна прокрутка до блоку тижня з врахуванням меню */
-    function scrollToWeek() { 
-        const el = document.getElementById('weekPerfumeContainer');
-        if (el) {
-            const offset = 80; 
-            const bodyRect = document.body.getBoundingClientRect().top;
-            const elementRect = el.getBoundingClientRect().top;
-            const elementPosition = elementRect - bodyRect;
-            const offsetPosition = elementPosition - offset;
+    /* КАРУСЕЛЬ: ІНІЦІАЛІЗАЦІЯ (3 СЕКУНДИ) */
+    function initCarousel() {
+        const slides = Array.from(document.querySelectorAll('#heroCarousel .slide')).filter(s => s.style.display !== 'none');
+        const dotsContainer = document.getElementById('carouselDots');
+        dotsContainer.innerHTML = '';
+        
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        });
 
-            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-        }
+        const hero = document.getElementById('heroCarousel');
+        hero.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
+        hero.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            if (startX - endX > 50) goToSlide((carouselIndex + 1) % slides.length);
+            if (endX - startX > 50) goToSlide((carouselIndex - 1 + slides.length) % slides.length);
+        });
+
+        startInterval();
+    }
+
+    function startInterval() {
+        clearInterval(carouselInterval);
+        carouselInterval = setInterval(() => {
+            const slides = Array.from(document.querySelectorAll('#heroCarousel .slide')).filter(s => s.style.display !== 'none');
+            goToSlide((carouselIndex + 1) % slides.length);
+        }, 3000); // ВИПРАВЛЕНО НА 3 СЕКУНДИ
+    }
+
+    function goToSlide(index) {
+        const slides = Array.from(document.querySelectorAll('#heroCarousel .slide')).filter(s => s.style.display !== 'none');
+        const dots = document.querySelectorAll('.dot');
+        if(!slides[index]) return;
+
+        slides[carouselIndex].classList.remove('active');
+        slides[carouselIndex].classList.add('prev');
+        dots[carouselIndex]?.classList.remove('active');
+
+        carouselIndex = index;
+
+        slides[carouselIndex].classList.remove('prev');
+        slides[carouselIndex].classList.add('active');
+        dots[carouselIndex]?.classList.add('active');
+        
+        startInterval();
     }
 
     async function load() {
@@ -351,7 +392,10 @@
                 
                 const finalDesc = (isWeek && sDesc && sDesc.trim()!=='') ? sDesc.replace(/\n/g,'<br>') : desc.replace(/\n/g,'<br>');
 
-                if (isWeek) { weekPerfume = { brand, name, desc: finalDesc, img, price, min }; }
+                if (isWeek) { 
+                    weekPerfume = { brand, name, desc: finalDesc, img, price, min }; 
+                    document.getElementById('weekSlide').onclick = () => showModal(brand, name, finalDesc, true);
+                }
                 if (isPromo) { promoPerfumes.push({ brand, name, img: promoImg || img }); }
 
                 const div = document.createElement('div');
@@ -401,7 +445,7 @@
                 `;
                 document.getElementById('weekPerfumeContainer').style.display = 'block';
             }
-            startHeroCarousel();
+            initCarousel();
         } catch (e) { console.error(e); }
     }
 
@@ -451,12 +495,6 @@
         document.getElementById('infoModal').style.display = 'flex';
     }
 
-    function startHeroCarousel() {
-        const slides = Array.from(document.querySelectorAll('#heroCarousel .slide')).filter(s => s.style.display !== 'none');
-        let cur = 0; if(slides.length <= 1) return;
-        setInterval(() => { slides.forEach(s => s.classList.remove('prev')); slides[cur].classList.add('prev'); slides[cur].classList.remove('active'); cur = (cur + 1) % slides.length; slides[cur].classList.add('active'); }, 3000);
-    }
-    
     function updatePrice(sel, p) { sel.nextElementSibling.innerText = Math.round(sel.value * p) + ' грн'; }
     function order(item, btn) { window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ:\n'+item+'\nОб\'єм: '+btn.previousElementSibling.previousElementSibling.value+' мл\nСума: '+btn.previousElementSibling.innerText)}`, '_top'); }
     load();
