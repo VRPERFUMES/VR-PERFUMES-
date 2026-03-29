@@ -213,7 +213,7 @@
         <p><strong>Вітаю всіх в нашому парфумерному барі! Мене звати Вікторія.</strong></p>
         <p>Чи любите ви парфуми так, як люблю їх я? Вони зі мною у кожен момент життя, завжди маю багато різних ароматів і одягаю їх залежно від настрою.</p>
         <div class="about-quote">Кажуть, що жінка може мовчати, але її парфуми все скажуть за неї.</div>
-        <p>Парфуми — моя особлива любов, завжди слідкую за трендами і багато ароматів купляю спочатку у пробніках перш, ніж замовити флакон і запропонувати Вам. Бо я просто не вмію продавати те, що мені особисто не подобається.</p>
+        <p>Парфуми — моя особлива любов, завжди слідкую за трендами і багато ароматів купляю спочатку у пробніках перш, ніж замовити флакон і запропонувати Вам. Бо я інколи просто не вмію продавати те, що мені особисто не подобається.</p>
         <p>✨ Оригінальна нішева парфумерія на розпив від 2мл для знайомства з ароматами!</p>
         <p>💯 Всі парфуми оригінальні, купуються в магазинах Європи та США.</p>
         <p>🛍️ Також під замовлення привезу повним флаконом будь-який інший аромат за Вашим побажанням — уточнюйте наявність, терміни та ціну в особисті повідомлення.</p>
@@ -310,22 +310,49 @@
         return arr.map(r => r.map(v => v.trim()));
     }
 
+    // --- ПОКРАЩЕНИЙ СКРОЛ: ТЕПЕР ТОЧНО КИДАЄ НА КАТАЛОГ ---
     function scrollAfterFilter() {
         setTimeout(() => {
             const element = document.getElementById('stickyControls');
             if(element) {
                 const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-                window.scrollTo({ top: elementPosition - 10, behavior: "smooth" });
+                window.scrollTo({ top: elementPosition, behavior: "smooth" });
             }
-        }, 150); 
+        }, 100); 
     }
 
+    // --- ЖОРСТКЕ СКИДАННЯ ПРИ КЛІКУ НА ПРОМО-БАНЕР ---
     function navigateToPerfume(brand, name) {
         const input = document.getElementById('searchInput');
         const tabAll = document.getElementById('tab-all');
         
+        // 1. Очищаємо вибраний бренд
+        currentBrand = '';
+        document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active'));
+        const firstBrandBtn = document.querySelector('.brand-btn');
+        if(firstBrandBtn) firstBrandBtn.classList.add('active'); // Підсвічуємо "Усі бренди"
+
+        // 2. Вставляємо назву в пошук і фільтруємо
         input.value = brand + ' ' + name;
         setCategory('all', tabAll); 
+    }
+
+    // --- ЖОРСТКЕ СКИДАННЯ ПРИ КЛІКУ НА БАНЕРИ (Нові/Хіти) ---
+    function navigateToCategory(c) { 
+        const b = document.getElementById('tab-'+c); 
+        if(b) {
+            // 1. Повністю очищаємо рядок пошуку
+            document.getElementById('searchInput').value = '';
+            
+            // 2. Очищаємо вибраний бренд
+            currentBrand = '';
+            document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active'));
+            const firstBrandBtn = document.querySelector('.brand-btn');
+            if(firstBrandBtn) firstBrandBtn.classList.add('active'); // Підсвічуємо "Усі бренди"
+
+            // 3. Переходимо в потрібну категорію
+            setCategory(c, b);
+        }
     }
 
     async function load() {
@@ -340,7 +367,6 @@
 
             const catalogData = rows.slice(1).filter(c => c[0]); 
             
-            // Захист від апострофів: очищаємо їх одразу при зчитуванні для бренду та назви
             globalCatalog = catalogData.map(c => ({
                 brand: (c[0]||'').replace(/'/g,"’"), 
                 name: (c[1]||'').replace(/'/g,"’"), 
@@ -365,7 +391,6 @@
             let promoPerfumes = [];
 
             catalogData.forEach(c => {
-                // Очищаємо всі прямі апострофи, щоб вони не ламали HTML кнопки
                 const brand = (c[0] || '').replace(/'/g,"’");
                 const name = (c[1] || '').replace(/'/g,"’");
                 const pStr = c[2] || '0';
@@ -494,7 +519,6 @@
         document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active')); 
         btn.classList.add('active'); 
         
-        // Скидання на "Усі аромати", щоб відображались усі парфуми обраного бренду
         currentCategory = 'all';
         document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
         const tabAll = document.getElementById('tab-all');
@@ -504,8 +528,15 @@
         scrollAfterFilter(); 
     }
 
+    function setCategory(cat, btn) { 
+        currentCategory = cat; 
+        document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active')); 
+        btn.classList.add('active'); 
+        filterCatalog(); 
+        scrollAfterFilter(); 
+    }
+
     function filterCatalog() {
-        // Захист від того, якщо клієнт введе прямий апостроф у рядок пошуку
         const q = document.getElementById('searchInput').value.toLowerCase().replace(/'/g,"’");
         
         document.querySelectorAll('.card').forEach(c => {
@@ -589,13 +620,6 @@
     
     function scrollToWeek() { 
         document.getElementById('weekPerfumeContainer').scrollIntoView({behavior: 'smooth'}); 
-    }
-    
-    function navigateToCategory(c) { 
-        const b = document.getElementById('tab-'+c); 
-        if(b) {
-            setCategory(c, b);
-        }
     }
     
     load();
