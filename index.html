@@ -22,7 +22,7 @@
             line-height: 1.6;
         }
 
-        /* Естетична пам'ятка Telegram */
+        /* Пам'ятка */
         .tt-hint { 
             background: #fff; color: #555; padding: 12px; text-align: center; font-size: 11px; 
             border-bottom: 1px solid #f0f0f0; line-height: 1.5; font-weight: 400; 
@@ -46,7 +46,7 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             background-size: contain; background-repeat: no-repeat; background-position: center; z-index: 0; 
         }
-        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); z-index: 1; }
+        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.15); z-index: 1; }
         
         .logo { width: 75px; height: auto; margin-bottom: 20px; position: relative; z-index: 2; }
         .hero-carousel h1 { font-family: var(--serif); font-size: 22px; font-weight: 400; letter-spacing: 10px; margin: 0; color: #fff; text-transform: uppercase; z-index: 2; }
@@ -60,7 +60,7 @@
         .dot { width: 5px; height: 5px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.6); background: transparent; cursor: pointer; transition: 0.3s; }
         .dot.active { background: #fff; border-color: #fff; transform: scale(1.3); }
 
-        /* БІГУЧИЙ РЯДОК - ФІКС ГОРИЗОНТАЛІ */
+        /* Бігучий рядок */
         .news-ticker { background: var(--gray-light); color: var(--text-dark); padding: 8px 0; border-bottom: 1px solid #eee; overflow: hidden; white-space: nowrap; }
         .news-ticker-content { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
@@ -114,8 +114,8 @@
         .order-btn { border: 1px solid var(--text-dark); background: transparent; color: var(--text-dark); padding: 12px; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 9px; letter-spacing: 2px; transition: 0.3s; }
         .order-btn:hover { background: #1a1a1a; color: #fff; }
 
-        /* ПАРФУМ ТИЖНЯ (ФІКС КНОПОК) */
-        .week-card-btn { flex: 1; padding: 12px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; border: 1px solid var(--text-dark); cursor: pointer; transition: 0.3s; height: 40px; display: flex; align-items: center; justify-content: center; }
+        /* ПАРФУМ ТИЖНЯ КНОПКИ */
+        .week-card-btn { flex: 1; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--text-dark); cursor: pointer; transition: 0.3s; background: transparent; }
 
         /* ПРО НАС */
         .about-section { background: #fafafa; padding: 80px 25px; text-align: center; border-top: 1px solid #f2f2f2; }
@@ -128,13 +128,16 @@
         /* МОДАЛЬНЕ ВІКНО */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { background: #fff; padding: 40px 30px; max-width: 450px; width: 100%; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
-        .modal-order-btn { display: block; background: var(--gold); color: #fff; border: none; padding: 16px; width: 100%; margin-top: 20px; cursor: pointer; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; text-align: center; text-decoration: none; }
-        .close-btn { background: #1a1a1a; color: #fff; border: none; padding: 16px; width: 100%; margin-top: 15px; cursor: pointer; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; }
         
-        /* НОВИНИ - СТИЛЬНИЙ ФОРМАТ */
-        .news-item { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; }
-        .news-title { font-family: var(--serif); font-size: 18px; color: var(--gold); margin-bottom: 10px; display: block; font-weight: 400; }
-        .news-text { font-size: 13px; line-height: 1.7; color: #444; }
+        /* Уніфіковані кнопки модалки */
+        .modal-btn-full { display: block; width: 100%; box-sizing: border-box; padding: 16px; margin-top: 15px; cursor: pointer; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; text-align: center; text-decoration: none; border: none; }
+        .modal-order-btn { background: var(--gold); color: #fff; }
+        .close-btn { background: #1a1a1a; color: #fff; }
+
+        /* НОВИНИ - ФОРМАТУВАННЯ */
+        .news-item { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #f2f2f2; }
+        .news-title { font-family: var(--serif); font-size: 16px; color: var(--gold); margin-bottom: 8px; display: block; }
+        .news-text { font-size: 13px; line-height: 1.6; color: #444; }
 
         .review-box { border-left: 2px solid var(--gold); background: #fdfdfd; font-size: 12px; padding: 15px; margin-bottom: 15px; font-style: italic; color: #444; line-height: 1.5; }
         .review-title { font-weight: 700; text-transform: uppercase; font-size: 11px; margin-bottom: 10px; display: block; letter-spacing: 1px; }
@@ -209,6 +212,10 @@
             <a href="viber://chat?number=%2B380962178464" class="about-contact-btn">Viber</a>
         </div>
     </div>
+</div>
+
+<div class="fab-container">
+    <a href="https://t.me/viktoriia_viktoriia_r" class="fab"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png"></a>
 </div>
 
 <script>
@@ -294,7 +301,7 @@
 
             renderBrandSlider(catalogDataRaw);
 
-            // Стильне заповнення новин
+            // ФОРМУВАННЯ НОВИН
             let rawNews = (rows[0] && rows[0][10]) ? rows[0][10] : "Ласкаво просимо! ✨";
             let newsHTML = '';
             rawNews.split('\n\n').forEach(block => {
@@ -402,7 +409,7 @@
     function showModal(b, n, d, isWeek, price, min) {
         document.getElementById('mB').innerText = b; document.getElementById('mN').innerText = n;
         
-        // Покращене форматування піраміди та описів
+        // Форматування описів
         let f = d.replace(/(Опис:|Стиль:|Піраміда:|Верхні ноти:|Верхні:|Ноти серця:|Серце:|Базові ноти:|Базові:|Base notes:|Base:|Акорди:)/gi, '<br><b style="color:#000; text-transform:uppercase; font-size:10px; letter-spacing:1px; display:block; margin-top:10px;">$1</b>');
         
         // Форматування відгуків
@@ -413,12 +420,11 @@
 
         document.getElementById('mD').innerHTML = f;
         
-        // Кнопка замовлення тільки для Парфуму Тижня
+        // Кнопка замовлення в модалці (ТІЛЬКИ ДЛЯ ТИЖНЯ)
         const btn = document.getElementById('modalOrderBtn');
         if (isWeek) {
             btn.style.display = 'block';
-            const orderText = `🛍️ ЗАМОВЛЕННЯ (Парфум тижня):\n${b} ${n}`;
-            btn.href = `https://t.me/${TG_NICK}?text=${encodeURIComponent(orderText)}`;
+            btn.href = `https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ:\n'+b+' '+n)}`;
         } else {
             btn.style.display = 'none';
         }
@@ -445,7 +451,11 @@
     }
 
     function updatePrice(sel, p) { sel.nextElementSibling.innerText = Math.round(sel.value * p) + ' грн'; }
-    function order(item, btn) { window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ:\n'+item+'\nОб\'єм: '+(btn.previousElementSibling?.previousElementSibling?.value || '2')+' мл')}`, '_top'); }
+    function order(item, btn) { 
+        let ml = btn.previousElementSibling?.previousElementSibling?.value || '2';
+        let priceText = btn.previousElementSibling?.innerText || '';
+        window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ:\n'+item+' | '+ml+' мл | '+priceText)}`, '_top'); 
+    }
     load();
 </script>
 
@@ -454,15 +464,17 @@
         <h3 id="mB" style="text-align:center; font-family:var(--serif); margin-bottom:5px;"></h3>
         <p id="mN" style="text-align:center; font-size:11px; color:#888; text-transform:uppercase; letter-spacing:1px; margin-bottom:20px;"></p>
         <div id="mD" style="font-size:13px; color:#333;"></div>
-        <a id="modalOrderBtn" href="#" class="modal-order-btn" target="_blank">Замовити аромат</a>
-        <button class="close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button>
+        
+        <a id="modalOrderBtn" href="#" class="modal-btn-full modal-order-btn" target="_blank">Замовити аромат</a>
+        <button class="modal-btn-full close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button>
     </div>
 </div>
 
 <div id="newsModalWindow" class="modal" onclick="this.style.display='none'">
     <div class="modal-content" onclick="event.stopPropagation()">
         <h3 style="font-family:var(--serif); text-align:center;">НОВИНИ</h3><hr style="border:0; height:1px; background:#f0f0f0; margin:20px 0;">
-        <div id="newsModalContent"></div><button class="close-btn" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button>
+        <div id="newsModalContent"></div>
+        <button class="modal-btn-full close-btn" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button>
     </div>
 </div>
 
