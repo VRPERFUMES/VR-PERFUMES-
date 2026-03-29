@@ -8,8 +8,8 @@
         :root { 
             --bg: #ffffff; 
             --gold: #c5a059;
-            --text-dark: #1a1a1a;
-            --text-gray: #757575;
+            --text-dark: #000000;
+            --text-gray: #555555;
             --gray-light: #fbfbfb;
             --serif: "Georgia", serif;
             --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
@@ -22,9 +22,9 @@
             line-height: 1.6;
         }
 
-        /* Пам'ятка */
+        /* Пам'ятка про Telegram */
         .tt-hint { 
-            background: #fff; color: #555; padding: 12px; text-align: center; font-size: 11px; 
+            background: #fff; color: #333; padding: 14px; text-align: center; font-size: 11px; 
             border-bottom: 1px solid #f0f0f0; line-height: 1.5; font-weight: 400; 
             letter-spacing: 0.5px; position: relative; z-index: 1001;
         }
@@ -51,17 +51,8 @@
         .logo { width: 75px; height: auto; margin-bottom: 20px; position: relative; z-index: 2; }
         .hero-carousel h1 { font-family: var(--serif); font-size: 22px; font-weight: 400; letter-spacing: 10px; margin: 0; color: #fff; text-transform: uppercase; z-index: 2; }
 
-        .banner-content { text-align: center; padding: 25px; width: 100%; color: #fff; position: relative; z-index: 2; }
-        .banner-subtitle { display: block; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 4px; color: var(--gold); margin-bottom: 12px; }
-        .banner-title { display: block; font-size: 26px; font-weight: 300; text-transform: uppercase; letter-spacing: 2px; line-height: 1.1; margin-bottom: 25px; font-family: var(--serif); text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .banner-btn { display: inline-block; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; padding: 12px 28px; border: 1px solid #fff; background: transparent; transition: 0.3s; }
-
-        .carousel-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
-        .dot { width: 5px; height: 5px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.6); background: transparent; cursor: pointer; transition: 0.3s; }
-        .dot.active { background: #fff; border-color: #fff; transform: scale(1.3); }
-
         /* Бігучий рядок */
-        .news-ticker { background: var(--gray-light); color: var(--text-dark); padding: 8px 0; border-bottom: 1px solid #eee; overflow: hidden; white-space: nowrap; }
+        .news-ticker { background: var(--gray-light); color: #000; padding: 10px 0; border-bottom: 1px solid #eee; overflow: hidden; white-space: nowrap; }
         .news-ticker-content { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
@@ -71,80 +62,64 @@
         .viber-link, .news-btn { 
             flex: 1; display: flex; align-items: center; justify-content: center; 
             padding: 12px; font-size: 10px; cursor: pointer; text-transform: uppercase; 
-            text-decoration: none; letter-spacing: 2px; border: 1px solid #eee; 
-            color: var(--text-dark); background: transparent; transition: 0.3s;
+            text-decoration: none; border: 1px solid #eee; color: #000; background: transparent; letter-spacing: 1px;
         }
 
         .sticky-active { 
             position: sticky; top: 0; z-index: 1000; 
-            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); 
+            background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); 
             box-shadow: 0 2px 10px rgba(0,0,0,0.03); padding-top: 10px; 
         }
         
         #searchInput { 
             width: 100%; padding: 14px; border: 1px solid #f0f0f0; background: #fafafa; 
-            font-size: 13px; outline: none; box-sizing: border-box; font-family: var(--sans);
+            font-size: 13px; outline: none; box-sizing: border-box;
         }
         
         .brand-slider-wrapper { background: transparent; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
         .brand-slider { display: flex; gap: 30px; overflow-x: auto; padding: 0 20px; scrollbar-width: none; align-items: center; }
-        .brand-btn { background: none; border: none; cursor: pointer; opacity: 0.35; font-size: 11px; font-weight: 500; text-transform: uppercase; white-space: nowrap; letter-spacing: 1px; transition: 0.3s; }
-        .brand-btn.active { opacity: 1; color: var(--gold); }
+        .brand-btn { background: none; border: none; cursor: pointer; opacity: 0.4; font-size: 11px; font-weight: 500; text-transform: uppercase; white-space: nowrap; transition: 0.3s; }
+        .brand-btn.active { opacity: 1; color: var(--gold); font-weight: 700; }
 
         .tabs-container { display: flex; gap: 25px; overflow-x: auto; padding: 10px 0 15px; scrollbar-width: none; justify-content: center; }
-        .tab-btn { background: none; border: none; font-size: 10px; font-weight: 600; color: #bbb; text-transform: uppercase; letter-spacing: 1.5px; padding: 8px 0; cursor: pointer; white-space: nowrap; border-bottom: 1px solid transparent; transition: 0.3s; }
-        .tab-btn.active { color: var(--text-dark); border-bottom-color: var(--gold); }
+        .tab-btn { background: none; border: none; font-size: 10px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 1.5px; padding: 8px 0; cursor: pointer; border-bottom: 1px solid transparent; }
+        .tab-btn.active { color: #000; border-bottom-color: var(--gold); }
 
         /* КАТАЛОГ */
         #catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 35px 15px; padding: 20px 15px 40px; }
         .card { position: relative; display: flex; flex-direction: column; background: #fff; }
         .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #fdfdfd; cursor: pointer; }
 
-        .badges-container { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 5px; z-index: 10; }
-        .badge { padding: 4px 10px; font-size: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
-        .badge-new { background: #1a1a1a; color: #fff; }
-        .badge-top { background: var(--gold); color: #fff; }
-
-        .brand { font-family: var(--serif); font-size: 10px; margin-top: 15px; text-transform: uppercase; color: var(--text-gray); letter-spacing: 2px; }
-        .name { font-family: var(--serif); font-size: 14px; color: var(--text-dark); margin: 4px 0 10px; font-weight: 400; line-height: 1.3; min-height: 36px; }
-        .price-ml { font-size: 10px; color: var(--text-gray); margin-bottom: 12px; }
+        .brand { font-family: var(--serif); font-size: 10px; margin-top: 15px; text-transform: uppercase; color: #777; letter-spacing: 2px; }
+        .name { font-family: var(--serif); font-size: 14px; color: #000; margin: 4px 0 10px; min-height: 36px; line-height: 1.3; }
         
-        select { width: 100%; padding: 8px; border: 1px solid #f0f0f0; margin-bottom: 12px; font-size: 11px; background: #fff; outline: none; }
-        .total { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: #000; }
-        .order-btn { border: 1px solid var(--text-dark); background: transparent; color: var(--text-dark); padding: 12px; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 9px; letter-spacing: 2px; transition: 0.3s; }
-        .order-btn:hover { background: #1a1a1a; color: #fff; }
+        select { width: 100%; padding: 8px; border: 1px solid #f0f0f0; margin-bottom: 12px; font-size: 11px; background: #fff; }
+        .total { font-size: 13px; font-weight: 700; margin-bottom: 12px; color: #000; }
+        .order-btn { border: 1px solid #000; background: transparent; color: #000; padding: 12px; font-weight: 600; text-transform: uppercase; font-size: 9px; cursor: pointer; letter-spacing: 1px; }
 
-        /* ПАРФУМ ТИЖНЯ КНОПКИ */
-        .week-card-btn { flex: 1; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--text-dark); cursor: pointer; transition: 0.3s; background: transparent; }
+        /* ПАРФУМ ТИЖНЯ */
+        .week-card-btn { flex: 1; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; text-transform: uppercase; border: 1px solid #000; background: transparent; cursor: pointer; box-sizing: border-box; }
 
         /* ПРО НАС */
         .about-section { background: #fafafa; padding: 80px 25px; text-align: center; border-top: 1px solid #f2f2f2; }
         .about-photo { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; margin: 0 auto 30px; border: 1px solid #eee; padding: 5px; background: #fff; }
         .about-content { max-width: 550px; margin: 0 auto; font-family: var(--serif); font-size: 15px; line-height: 1.8; color: #333; text-align: left; }
-        .about-quote { font-style: italic; font-size: 17px; margin: 40px 0; color: var(--text-dark); text-align: center; font-weight: 300; }
-        .about-contacts { display: flex; gap: 15px; justify-content: center; margin-top: 40px; }
-        .about-contact-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 14px; border: 1px solid #ddd; text-decoration: none; color: #1a1a1a; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
 
         /* МОДАЛЬНЕ ВІКНО */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: #fff; padding: 40px 30px; max-width: 450px; width: 100%; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
+        .modal-content { background: #fff; padding: 40px 30px; max-width: 450px; width: 100%; position: relative; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
         
-        /* Уніфіковані кнопки модалки */
-        .modal-btn-full { display: block; width: 100%; box-sizing: border-box; padding: 16px; margin-top: 15px; cursor: pointer; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; text-align: center; text-decoration: none; border: none; }
+        .modal-btn-full { display: block; width: 100%; padding: 16px; margin-top: 12px; cursor: pointer; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; text-align: center; text-decoration: none; border: none; box-sizing: border-box; }
         .modal-order-btn { background: var(--gold); color: #fff; }
-        .close-btn { background: #1a1a1a; color: #fff; }
+        .close-btn { background: #000; color: #fff; }
 
-        /* НОВИНИ - ФОРМАТУВАННЯ */
+        /* НОВИНИ */
         .news-item { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #f2f2f2; }
-        .news-title { font-family: var(--serif); font-size: 16px; color: var(--gold); margin-bottom: 8px; display: block; }
-        .news-text { font-size: 13px; line-height: 1.6; color: #444; }
+        .news-title { font-family: var(--serif); font-size: 16px; color: var(--gold); margin-bottom: 8px; display: block; font-weight: 700; }
+        .news-text { font-size: 13px; line-height: 1.6; color: #000; text-align: left; }
+        .news-perfume-link { color: var(--gold); text-decoration: underline; font-weight: 700; cursor: pointer; }
 
-        .review-box { border-left: 2px solid var(--gold); background: #fdfdfd; font-size: 12px; padding: 15px; margin-bottom: 15px; font-style: italic; color: #444; line-height: 1.5; }
-        .review-title { font-weight: 700; text-transform: uppercase; font-size: 11px; margin-bottom: 10px; display: block; letter-spacing: 1px; }
-
-        .fab-container { position: fixed; bottom: 25px; right: 25px; z-index: 999; }
-        .fab { width: 45px; height: 45px; background: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .fab img { width: 20px; height: 20px; filter: brightness(0) invert(1); }
+        .review-box { border-left: 2px solid var(--gold); background: #fdfdfd; font-size: 12px; padding: 15px; margin-bottom: 15px; font-style: italic; color: #333; }
     </style>
 </head>
 <body>
@@ -203,28 +178,22 @@
     <div class="about-content">
         <p><strong>Вітаю всіх в нашому парфумерному барі! Мене звати Вікторія.</strong></p>
         <p>Чи любите ви парфуми так, як люблю їх я? Вони зі мною у кожен момент життя, завжди маю багато різних ароматів і одягаю їх залежно від настрою.</p>
-        <div class="about-quote">Кажуть, що жінка може мовчати, але її парфуми все скажуть за неї.</div>
+        <p><i>Кажуть, що жінка може мовчати, але її парфуми все скажуть за неї.</i></p>
         <p>Парфуми — моя особлива любов, завжди слідкую за трендами і багато ароматів купляю спочатку у пробніках перш, ніж замовити флакон і запропонувати Вам.</p>
         <p>✨ Оригінальна нішева парфумерія на розпив від 2мл для знайомства з ароматами!</p>
         <p>💯 Всі парфуми оригінальні, купуються в магазинах Європи та США.</p>
         <div class="about-contacts">
-            <a href="https://t.me/viktoriia_viktoriia_r" class="about-contact-btn">Telegram</a>
-            <a href="viber://chat?number=%2B380962178464" class="about-contact-btn">Viber</a>
+            <a href="https://t.me/viktoriia_viktoriia_r" class="about-contact-btn" style="text-decoration:none; color:#000; border:1px solid #ddd; padding:10px; flex:1; display:block;">Telegram</a>
+            <a href="viber://chat?number=%2B380962178464" class="about-contact-btn" style="text-decoration:none; color:#000; border:1px solid #ddd; padding:10px; flex:1; display:block;">Viber</a>
         </div>
     </div>
-</div>
-
-<div class="fab-container">
-    <a href="https://t.me/viktoriia_viktoriia_r" class="fab"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png"></a>
 </div>
 
 <script>
     const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=339534482&single=true&output=csv';
     const TG_NICK = 'viktoriia_viktoriia_r'; 
     let globalCatalog = [];
-    let carouselIndex = 0;
-    let carouselInterval;
-    let startX = 0;
+    let carouselIndex = 0, carouselInterval;
 
     function parseDate(d) {
         if(!d) return new Date('2000-01-01');
@@ -240,9 +209,7 @@
             if (cc == '"' && quote && nc == '"') { arr[row][col] += cc; ++c; continue; }
             if (cc == '"') { quote = !quote; continue; }
             if (cc == ',' && !quote) { ++col; continue; }
-            if (cc == '\r' && nc == '\n' && !quote) { ++row; col = 0; ++c; continue; }
             if (cc == '\n' && !quote) { ++row; col = 0; continue; }
-            if (cc == '\r' && !quote) { ++row; col = 0; continue; }
             arr[row][col] += cc;
         }
         return arr.map(r => r.map(v => v.trim()));
@@ -258,13 +225,6 @@
             dot.className = `dot ${i === 0 ? 'active' : ''}`;
             dot.onclick = () => goToSlide(i);
             dotsContainer.appendChild(dot);
-        });
-        const hero = document.getElementById('heroCarousel');
-        hero.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
-        hero.addEventListener('touchend', (e) => {
-            const endX = e.changedTouches[0].clientX;
-            if (startX - endX > 50) goToSlide((carouselIndex + 1) % slides.length);
-            if (endX - startX > 50) goToSlide((carouselIndex - 1 + slides.length) % slides.length);
         });
         startInterval();
     }
@@ -298,16 +258,15 @@
             
             let catalogDataRaw = rows.slice(1).filter(c => c[0]);
             catalogDataRaw.sort((a, b) => parseDate(b[6]) - parseDate(a[6]));
-
             renderBrandSlider(catalogDataRaw);
 
-            // ФОРМУВАННЯ НОВИН
-            let rawNews = (rows[0] && rows[0][10]) ? rows[0][10] : "Ласкаво просимо! ✨";
+            // НОВИНИ ПАРСИНГ
+            let rawNews = (rows[0] && rows[0][10]) ? rows[0][10] : "Вітаємо! ✨";
             let newsHTML = '';
             rawNews.split('\n\n').forEach(block => {
                 let lines = block.split('\n');
                 let title = lines[0];
-                let text = lines.slice(1).join('<br>').replace(/\{(.*?)\}/g, (match, p) => `<span style="color:var(--gold);cursor:pointer;font-weight:700;" onclick="navigateToPerfume('','${p}')">${p}</span>`);
+                let text = lines.slice(1).join('<br>').replace(/\{(.*?)\}/g, (match, p) => `<span class="news-perfume-link" onclick="navigateToPerfume('','${p}')">${p}</span>`);
                 newsHTML += `<div class="news-item"><span class="news-title">${title}</span><div class="news-text">${text}</div></div>`;
             });
             document.getElementById('newsModalContent').innerHTML = newsHTML;
@@ -315,9 +274,7 @@
             const today = new Date();
             const container = document.getElementById('catalog');
             container.innerHTML = '';
-            
-            let weekPerfume = null;
-            let promoPerfumes = [];
+            let weekPerfume = null; let promoPerfumes = [];
 
             catalogDataRaw.forEach(c => {
                 const brand = c[0].replace(/'/g,"’"), name = c[1].replace(/'/g,"’"), price = parseFloat(c[2].replace(/,/g, '.')) || 0, min = parseInt(c[3]) || 2, desc = c[4], img = c[5], dateStr = c[6], top = c[7], sDesc = c[8], promoImg = c[11];
@@ -325,18 +282,14 @@
                 let isTop = (top && top.toLowerCase().includes('топ'));
                 let isWeek = (top && top.toLowerCase().includes('тиждень'));
                 let isPromo = (top && top.toLowerCase().includes('промо'));
-                
                 const finalDesc = (isWeek && sDesc) ? sDesc : desc;
                 if (isWeek) { weekPerfume = { brand, name, desc: finalDesc, img, price, min }; document.getElementById('weekSlide').onclick = () => showModal(brand, name, finalDesc, true, price, min); }
                 if (isPromo) { promoPerfumes.push({ brand, name, img: promoImg || img }); }
-
                 const div = document.createElement('div');
                 div.className = 'card';
                 div.setAttribute('data-search', (brand + ' ' + name).toLowerCase());
                 div.setAttribute('data-new', isNew); div.setAttribute('data-top', isTop); div.setAttribute('data-brand', brand);
-                
                 let opts = ''; [2, 5, 10, 20].forEach(ml => { if (ml >= min) opts += `<option value="${ml}">${ml} мл — ${Math.round(ml * price)} грн</option>`; });
-
                 div.innerHTML = `
                     <div class="badges-container">${isNew ? '<div class="badge badge-new">Новинка</div>' : ''}${isTop ? '<div class="badge badge-top">Хіт</div>' : ''}</div>
                     <img loading="lazy" src="${img}" onclick='showModal(${JSON.stringify(brand)}, ${JSON.stringify(name)}, ${JSON.stringify(finalDesc)}, false, ${price}, ${min})'>
@@ -348,8 +301,7 @@
             });
 
             promoPerfumes.forEach(promo => {
-                const slide = document.createElement('div');
-                slide.className = 'slide';
+                const slide = document.createElement('div'); slide.className = 'slide';
                 slide.innerHTML = `<div class="banner-bg-img" style="background-image: url('${promo.img}')"></div>`;
                 slide.onclick = () => navigateToPerfume(promo.brand, promo.name);
                 document.getElementById('heroCarousel').insertBefore(slide, document.getElementById('weekSlide'));
@@ -408,27 +360,19 @@
 
     function showModal(b, n, d, isWeek, price, min) {
         document.getElementById('mB').innerText = b; document.getElementById('mN').innerText = n;
-        
-        // Форматування описів
         let f = d.replace(/(Опис:|Стиль:|Піраміда:|Верхні ноти:|Верхні:|Ноти серця:|Серце:|Базові ноти:|Базові:|Base notes:|Base:|Акорди:)/gi, '<br><b style="color:#000; text-transform:uppercase; font-size:10px; letter-spacing:1px; display:block; margin-top:10px;">$1</b>');
-        
-        // Форматування відгуків
         f = f.replace(/(Відгуки:)/gi, '<br><br><span class="review-title">💬 Відгуки клієнтів:</span>');
         f = f.replace(/\[\+\](.*?)(?=<br>|\[\=\]|\[\-\]|$)/g, '<div class="review-box">🟢 $1</div>');
         f = f.replace(/\[\=\](.*?)(?=<br>|\[\+\]|\[\-\]|$)/g, '<div class="review-box">🟡 $1</div>');
         f = f.replace(/\[\-\](.*?)(?=<br>|\[\+\]|\[\=\]|$)/g, '<div class="review-box">🔴 $1</div>');
-
         document.getElementById('mD').innerHTML = f;
-        
-        // Кнопка замовлення в модалці (ТІЛЬКИ ДЛЯ ТИЖНЯ)
         const btn = document.getElementById('modalOrderBtn');
         if (isWeek) {
             btn.style.display = 'block';
-            btn.href = `https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ:\n'+b+' '+n)}`;
+            btn.onclick = () => { window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('Добрий день, Вікторіє! Хочу замовити аромат тижня:\n'+b+' '+n)}`, '_top'); };
         } else {
             btn.style.display = 'none';
         }
-        
         document.getElementById('infoModal').style.display = 'flex';
     }
 
@@ -439,7 +383,7 @@
         document.getElementById('tab-all').classList.add('active');
         document.getElementById('searchInput').value = name; 
         filterCatalog();
-        document.getElementById('newsModalWindow').style.display = 'none'; // Закриваємо новини
+        document.getElementById('newsModalWindow').style.display = 'none';
         window.scrollTo({ top: document.getElementById('stickyControls').offsetTop - 20, behavior: 'smooth' });
     }
 
@@ -453,8 +397,8 @@
     function updatePrice(sel, p) { sel.nextElementSibling.innerText = Math.round(sel.value * p) + ' грн'; }
     function order(item, btn) { 
         let ml = btn.previousElementSibling?.previousElementSibling?.value || '2';
-        let priceText = btn.previousElementSibling?.innerText || '';
-        window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('🛍️ ЗАМОВЛЕННЯ:\n'+item+' | '+ml+' мл | '+priceText)}`, '_top'); 
+        let sum = btn.previousElementSibling?.innerText || '';
+        window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent('Добрий день, Вікторіє! Хочу замовити аромат:\n'+item+' | '+ml+' мл | '+sum)}`, '_top'); 
     }
     load();
 </script>
@@ -463,9 +407,8 @@
     <div class="modal-content" onclick="event.stopPropagation()">
         <h3 id="mB" style="text-align:center; font-family:var(--serif); margin-bottom:5px;"></h3>
         <p id="mN" style="text-align:center; font-size:11px; color:#888; text-transform:uppercase; letter-spacing:1px; margin-bottom:20px;"></p>
-        <div id="mD" style="font-size:13px; color:#333;"></div>
-        
-        <a id="modalOrderBtn" href="#" class="modal-btn-full modal-order-btn" target="_blank">Замовити аромат</a>
+        <div id="mD" style="font-size:13px; color:#000;"></div>
+        <button id="modalOrderBtn" class="modal-btn-full modal-order-btn">Замовити аромат</button>
         <button class="modal-btn-full close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button>
     </div>
 </div>
