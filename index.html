@@ -481,9 +481,8 @@
                     (lb.includes('mancera') || lb.includes('montale')) ? 'brand-mm' : 
                     lb.includes('attar') ? 'brand-attar' : '';
             
-            // Захист від апострофів у назвах брендів
-            const safeB = b.replace(/'/g, "\\'");
-            s.innerHTML += `<button class="brand-btn ${c}" onclick="setBrand('${safeB}', this)">${b}</button>`;
+            // ПОВЕРНУТО ЯК БУЛО ДО ЦЬОГО
+            s.innerHTML += `<button class="brand-btn ${c}" onclick="setBrand('${b}', this)">${b}</button>`;
         });
     }
 
@@ -492,12 +491,11 @@
         document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active')); 
         btn.classList.add('active'); 
         
-        // --- ДОДАНО: Скидання на "Усі аромати", щоб точно показати всі парфуми бренду ---
+        // Скидання на "Усі аромати", щоб відображались усі парфуми обраного бренду
         currentCategory = 'all';
         document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
         const tabAll = document.getElementById('tab-all');
         if (tabAll) tabAll.classList.add('active');
-        // ---------------------------------------------------------------------------------
 
         filterCatalog(); 
         scrollAfterFilter(); 
