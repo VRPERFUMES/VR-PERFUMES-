@@ -29,7 +29,7 @@
         .banner-title { font-size: 24px; font-family: var(--serif); font-weight: 300; display: block; margin-bottom: 25px; letter-spacing: 2px; }
         .banner-btn { display: inline-block; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; padding: 12px 30px; border: 1px solid #fff; color: #fff; text-decoration: none; cursor: pointer; }
 
-        /* ЕКСКЛЮЗИВ ТИЖНЯ (КОМПАКТНИЙ) */
+        /* SPOTLIGHT (ЕКСКЛЮЗИВ ТИЖНЯ) */
         .week-spotlight { padding: 40px 15px; background: #fafafa; margin: 20px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; text-align: center; }
         .week-label { font-size: 10px; text-transform: uppercase; letter-spacing: 5px; color: var(--gold); margin-bottom: 25px; display: block; font-weight: 600; }
         .week-img { max-height: 240px; width: auto; max-width: 90%; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.06)); cursor: pointer; }
@@ -37,7 +37,7 @@
         .week-card-btn { flex: 1; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; background: transparent; text-decoration: none; color: #000; }
         .week-card-btn.primary { background: #1a1a1a; color: #fff; }
 
-        /* NAVIGATION & UI */
+        /* UI ELEMENTS */
         .carousel-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
         .dot { width: 6px; height: 6px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.5); cursor: pointer; transition: 0.3s; }
         .dot.active { background: #fff; transform: scale(1.2); }
@@ -55,19 +55,20 @@
         .tab-btn { background: none; border: none; font-size: 10px; font-weight: 600; color: #ccc; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; border-bottom: 1px solid transparent; }
         .tab-btn.active { color: #000; border-bottom-color: var(--gold); }
 
-        /* CATALOG & CARDS */
+        /* CATALOG */
         #catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 15px; padding: 20px; }
         .card { position: relative; display: flex; flex-direction: column; background: #fff; }
         .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f9f9f9; cursor: pointer; }
+        .card-price { font-size: 12px; color: var(--gold); margin: 8px 0 2px; font-weight: 600; text-align: center; }
         .badge { position: absolute; left: 10px; padding: 3px 9px; font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px; z-index: 5; font-weight: 700; }
         .card .badge-new { top: 10px; background: var(--badge-new-bg); color: #fff; }
         .card .badge-top { top: 10px; color: var(--gold); border: 1px solid var(--gold); background: #fff; }
         .card .badge-new + .badge-top { top: 35px; }
-        .brand { font-family: var(--serif); font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-top: 12px; letter-spacing: 1px; }
-        .name { font-family: var(--serif); font-size: 15px; margin: 5px 0 10px; min-height: 40px; }
+        .brand { font-family: var(--serif); font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; text-align: center; }
+        .name { font-family: var(--serif); font-size: 14px; margin: 2px 0 10px; min-height: 35px; text-align: center; }
         .order-btn { border: 1px solid #000; background: transparent; padding: 12px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; cursor: pointer; }
 
-        /* MODAL CONTENT STYLES */
+        /* MODAL CONTENT */
         .vol-container { margin: 20px 0; border-top: 1px solid #f0f0f0; padding-top: 15px; }
         .vol-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; display: block; margin-bottom: 10px; }
         .vol-grid { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -207,6 +208,7 @@
                 const [brand, name, price, , desc, img, dateStr, top] = c;
                 const pDate = new Date(dateStr), isNew = (new Date() - pDate) / (1000*60*60*24) <= 10;
                 const isTop = top.toLowerCase().includes('топ'), isPromo = top.toLowerCase().includes('промо'), isWeek = top.toLowerCase().includes('тиждень');
+                const minP = calculatePrice(price, '2 мл');
 
                 if (isPromo || isWeek) {
                     promoSlidesHTML += `<div class="slide"><div class="banner-bg-img" style="background-image:url('${img}')" onclick='showModal(${JSON.stringify(c)})'></div><div class="video-overlay"></div><div class="banner-content"><span class="banner-subtitle">${isWeek?'WEEKLY PICK':'PROMO'}</span><span class="banner-title">${name}</span><span class="banner-btn" onclick='showModal(${JSON.stringify(c)})'>ДЕТАЛЬНІШЕ</span></div></div>`;
@@ -217,7 +219,7 @@
 
                 const div = document.createElement('div');
                 div.className = 'card'; div.setAttribute('data-brand', brand); div.setAttribute('data-category', (isNew ? 'new ' : '') + top.toLowerCase());
-                div.innerHTML = `${isNew?'<div class="badge badge-new">New</div>':''}${isTop?'<div class="badge badge-top">Hit</div>':''}<img loading="lazy" src="${img}" onclick='showModal(${JSON.stringify(c)})'><div class="brand">${brand}</div><div class="name">${name}</div><button class="order-btn" onclick='showModal(${JSON.stringify(c)})'>Детальніше</button>`;
+                div.innerHTML = `${isNew?'<div class="badge badge-new">New</div>':''}${isTop?'<div class="badge badge-top">Hit</div>':''}<img loading="lazy" src="${img}" onclick='showModal(${JSON.stringify(c)})'><div class="card-price">від ${minP}</div><div class="brand">${brand}</div><div class="name">${name}</div><button class="order-btn" onclick='showModal(${JSON.stringify(c)})'>Детальніше</button>`;
                 container.appendChild(div);
             });
 
@@ -313,7 +315,7 @@
     load();
 </script>
 
-<div id="infoModal" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><h3 id="mB" style="text-align:center;font-family:var(--serif);margin-bottom:5px;"></h3><p id="mN" style="text-align:center;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;"></p><div id="mD" style="font-size:13px;"></div><button id="modalOrderBtn" class="modal-btn-full modal-order-btn">Замовити аромат</button><button class="modal-btn-full close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button></div></div>
-<div id="newsModalWindow" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><h3 style="font-family:var(--serif);text-align:center;text-transform:uppercase;letter-spacing:1px;">Новини та акції</h3><hr style="border:0;height:1px;background:#eee;margin:15px 0;"><div id="newsModalContent"></div><button class="modal-btn-full close-btn" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button></div></div>
+<div id="infoModal" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><h3 id="mB" style="text-align:center;font-family:var(--serif);margin-bottom:5px;"></h3><p id="mN" style="text-align:center;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;"></p><div id="mD" style="font-size:13.5px;"></div><button id="modalOrderBtn" class="modal-btn-full modal-order-btn">Замовити аромат</button><button class="modal-btn-full close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button></div></div>
+<div id="newsModalWindow" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><h3 style="font-family:var(--serif);text-align:center;text-transform:uppercase;letter-spacing:1px;">Новини та акції</h3><hr style="border:0;height:1px;background:#f0f0f0;margin:20px 0;"><div id="newsModalContent"></div><button class="modal-btn-full close-btn" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button></div></div>
 </body>
 </html>
