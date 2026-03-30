@@ -29,12 +29,12 @@
         .banner-title { font-size: 24px; font-family: var(--serif); font-weight: 300; display: block; margin-bottom: 25px; letter-spacing: 2px; }
         .banner-btn { display: inline-block; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; padding: 12px 30px; border: 1px solid #fff; color: #fff; text-decoration: none; cursor: pointer; }
 
-        /* SPOTLIGHT (ЕКСКЛЮЗИВ ТИЖНЯ) */
-        .week-spotlight { padding: 40px 15px; background: #fafafa; margin: 20px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; text-align: center; }
-        .week-label { font-size: 10px; text-transform: uppercase; letter-spacing: 5px; color: var(--gold); margin-bottom: 25px; display: block; font-weight: 600; }
-        .week-img { max-height: 240px; width: auto; max-width: 90%; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.06)); cursor: pointer; }
-        .week-btn-container { display: flex; gap: 10px; max-width: 320px; margin: 0 auto; }
-        .week-card-btn { flex: 1; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; background: transparent; text-decoration: none; color: #000; }
+        /* ЗМЕНШЕНИЙ SPOTLIGHT (ЕКСКЛЮЗИВ ТИЖНЯ) */
+        .week-spotlight { padding: 25px 15px; background: #fafafa; margin: 15px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; text-align: center; position: relative; }
+        .week-label { font-size: 9px; text-transform: uppercase; letter-spacing: 4px; color: var(--gold); margin-bottom: 15px; display: block; font-weight: 600; }
+        .week-img { max-height: 180px; width: auto; max-width: 90%; object-fit: contain; margin-bottom: 15px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.06)); cursor: pointer; position: relative; z-index: 5; }
+        .week-btn-container { display: flex; gap: 8px; max-width: 280px; margin: 0 auto; position: relative; z-index: 10; }
+        .week-card-btn { flex: 1; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; background: transparent; text-decoration: none; color: #000; }
         .week-card-btn.primary { background: #1a1a1a; color: #fff; }
 
         /* UI ELEMENTS & TICKER */
@@ -59,12 +59,12 @@
         /* CATALOG */
         #catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 15px; padding: 20px; }
         .card { position: relative; display: flex; flex-direction: column; background: #fff; }
-        .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f9f9f9; cursor: pointer; }
+        .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f9f9f9; cursor: pointer; position: relative; z-index: 5; }
         .card-price-label { font-size: 12px; color: var(--gold); font-weight: 700; margin: 10px 0 2px; text-align: center; }
         .brand { font-family: var(--serif); font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; text-align: center; }
         .name { font-family: var(--serif); font-size: 14px; margin: 2px 0 10px; min-height: 35px; text-align: center; line-height: 1.2; }
-        .order-btn { border: 1px solid #000; background: transparent; padding: 12px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; cursor: pointer; }
-        .badge { position: absolute; left: 10px; padding: 3px 9px; font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px; z-index: 5; font-weight: 700; }
+        .order-btn { border: 1px solid #000; background: transparent; padding: 12px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; cursor: pointer; position: relative; z-index: 10; }
+        .badge { position: absolute; left: 10px; padding: 3px 9px; font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px; z-index: 10; font-weight: 700; }
         .card .badge-new { top: 10px; background: var(--badge-new-bg); color: #fff; }
         .card .badge-top { top: 10px; color: var(--gold); border: 1px solid var(--gold); background: #fff; }
         .card .badge-new + .badge-top { top: 35px; }
@@ -203,6 +203,13 @@
         return Math.round(base * v) + " грн";
     }
 
+    // АВТОПРОКРУТКА
+    function scrollToFirstCards() {
+        const stickyH = document.getElementById('stickyControls').offsetHeight;
+        const catTop = document.getElementById('catalog').offsetTop;
+        window.scrollTo({top: catTop - stickyH - 15, behavior: 'smooth'});
+    }
+
     async function load() {
         try {
             const r = await fetch(SHEET_CSV + '&v=' + Date.now()), data = await r.text(), rows = safeParseCSV(data);
@@ -216,15 +223,15 @@
             catalogData.sort((a, b) => new Date(b[6]) - new Date(a[6]));
 
             catalogData.forEach(c => {
-                // Зверни увагу: я додав зчитування 4-ї колонки (minVol)
                 const [brand, name, price, minVol, desc, img, dateStr, top, weekText] = c;
                 const pDate = new Date(dateStr), isNew = (new Date() - pDate) / (1000*60*60*24) <= 10;
                 const isTop = top && top.toLowerCase().includes('топ'), isPromo = top && top.toLowerCase().includes('промо'), isWeek = top && top.toLowerCase().includes('тиждень');
                 
-                // Якщо в 4-й колонці є цифра 5, розпив стартує з 5 мл
+                // ЛОГІКА БЛОКУВАННЯ 2 МЛ ДЛЯ КАРТОК
                 const startsFrom5 = minVol && String(minVol).includes('5');
                 const minPriceLabel = calculatePrice(price, startsFrom5 ? '5 мл' : '2 мл');
 
+                // ФІКС ЛАПОК ТА АПОСТРОФІВ
                 const safeData = JSON.stringify(c).replace(/'/g, "&#39;");
 
                 if (isPromo || isWeek) {
@@ -236,6 +243,7 @@
 
                 const div = document.createElement('div');
                 div.className = 'card'; div.setAttribute('data-brand', brand); 
+                // ФІКС ВІДОБРАЖЕННЯ КАРТОК У ВКЛАДЦІ "ХІТИ"
                 div.setAttribute('data-category', (isNew ? 'new ' : '') + (isTop ? 'top ' : '') + (top ? top.toLowerCase() : ''));
                 div.innerHTML = `${isNew?'<div class="badge badge-new">New</div>':''}${isTop?'<div class="badge badge-top">Hit</div>':''}<img loading="lazy" src="${img}" onclick='showModal(${safeData})'><div class="card-price-label">від ${minPriceLabel}</div><div class="brand">${brand}</div><div class="name">${name}</div><button class="order-btn" onclick='showModal(${safeData})'>Детальніше</button>`;
                 container.appendChild(div);
@@ -261,7 +269,6 @@
     }
 
     function showModal(pArr, isWeekly = false) {
-        // Зверни увагу: тут теж додано зчитування 4-ї колонки
         const [brand, name, price, minVol, desc, img, , , weekText] = pArr;
         currentBasePrice = price; selectedVol = "5 мл";
         document.getElementById('mB').innerText = brand; document.getElementById('mN').innerText = name;
@@ -276,7 +283,7 @@
         f = f.replace(/\[-\](.*?)(?=<br>|$)/g, '<div class="review-box review-neg">$1</div>');
         f = f.replace(/\[=\](.*?)(?=<br>|$)/g, '<div class="review-box">$1</div>');
         
-        // Логіка перевірки: чи блокувати кнопку 2 мл?
+        // ПЕРЕВІРКА: ЧИ БЛОКУВАТИ КНОПКУ 2 МЛ?
         const disable2ml = minVol && String(minVol).includes('5');
 
         const volHTML = `
@@ -298,6 +305,7 @@
     }
 
     function selectVol(el, vol) {
+        if (el.classList.contains('disabled')) return; // ЗАХИСТ ВІД КЛІКІВ НА 2 МЛ
         selectedVol = vol; document.querySelectorAll('.vol-chip').forEach(c => c.classList.remove('active'));
         el.classList.add('active'); 
         document.getElementById('modalPrice').innerText = "Ціна: " + calculatePrice(currentBasePrice, vol);
@@ -309,9 +317,9 @@
         window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent(msg)}`, '_top');
     }
 
-    function navigateToPerfume(n) { document.getElementById('searchInput').value = n; filterCatalog(); document.getElementById('newsModalWindow').style.display='none'; window.scrollTo({top:document.getElementById('stickyControls').offsetTop-10, behavior:'smooth'}); }
-    function setCategory(c, b) { document.getElementById('searchInput').value = ''; currentCategory = c; document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); filterCatalog(); window.scrollTo({top:document.getElementById('stickyControls').offsetTop-10, behavior:'smooth'}); }
-    function setBrand(b, btn) { document.getElementById('searchInput').value = ''; currentBrand = b; document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active')); btn.classList.add('active'); filterCatalog(); window.scrollTo({top:document.getElementById('stickyControls').offsetTop-10, behavior:'smooth'}); }
+    function navigateToPerfume(n) { document.getElementById('searchInput').value = n; filterCatalog(); document.getElementById('newsModalWindow').style.display='none'; scrollToFirstCards(); }
+    function setCategory(c, b) { document.getElementById('searchInput').value = ''; currentCategory = c; document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); filterCatalog(); scrollToFirstCards(); }
+    function setBrand(b, btn) { document.getElementById('searchInput').value = ''; currentBrand = b; document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active')); btn.classList.add('active'); filterCatalog(); scrollToFirstCards(); }
     
     function filterCatalog() {
         const q = document.getElementById('searchInput').value.toLowerCase();
