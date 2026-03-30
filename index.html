@@ -440,7 +440,7 @@
         if(!d) return; d.innerHTML = '';
         s.forEach((_, i) => { const dot = document.createElement('div'); dot.className = `dot ${i===0?'active':''}`; dot.onclick = () => goToSlide(i); d.appendChild(dot); });
         clearInterval(carouselInterval); 
-        carouselInterval = setInterval(() => goToSlide((carouselIndex+1)%s.length), 4000);
+        carouselInterval = setInterval(() => goToSlide((carouselIndex+1)%s.length), 3000);
     }
     
     function goToSlide(i) {
