@@ -25,7 +25,7 @@
         .logo { width: 80px; position: relative; z-index: 2; margin-bottom: 20px; }
         .hero-carousel h1 { font-family: var(--serif); font-size: 22px; letter-spacing: 10px; color: #fff; text-transform: uppercase; z-index: 2; margin: 0; }
         
-        /* --- ОНОВЛЕНИЙ ДИЗАЙН БАНЕРІВ (як на референсах) --- */
+        /* ДИЗАЙН БАНЕРІВ */
         .banner-content { text-align: center; padding: 20px; color: #fff; position: relative; z-index: 2; width: 100%; box-sizing: border-box; margin-top: -15px; }
         
         .banner-brand { 
@@ -39,12 +39,12 @@
         }
         
         .banner-title { 
-            font-size: 42px; /* Величезний шрифт */
+            font-size: 42px; 
             font-family: var(--sans); 
-            font-weight: 900; /* Максимально жирний */
+            font-weight: 900; 
             display: block; 
             margin-bottom: 12px; 
-            letter-spacing: -1.5px; /* Щільний міжлітерний інтервал */
+            letter-spacing: -1.5px; 
             text-transform: uppercase; 
             line-height: 0.95; 
         }
@@ -69,16 +69,15 @@
             letter-spacing: 1.5px; 
             padding: 14px 35px; 
             border: 1px solid rgba(255,255,255,0.5); 
-            border-radius: 4px; /* Легке заокруглення */
+            border-radius: 4px; 
             color: #fff; 
             text-decoration: none; 
             cursor: pointer; 
             background: rgba(0,0,0,0.1); 
-            backdrop-filter: blur(2px); /* Ефект матового скла */
+            backdrop-filter: blur(2px); 
         }
-        /* ---------------------------------------------------- */
 
-        /* ЗМЕНШЕНИЙ SPOTLIGHT (ЕКСКЛЮЗИВ ТИЖНЯ) */
+        /* SPOTLIGHT (ЕКСКЛЮЗИВ ТИЖНЯ) */
         .week-spotlight { padding: 25px 15px; background: #fafafa; margin: 15px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; text-align: center; position: relative; }
         .week-label { font-size: 9px; text-transform: uppercase; letter-spacing: 4px; color: var(--gold); margin-bottom: 15px; display: block; font-weight: 600; }
         .week-img { max-height: 180px; width: auto; max-width: 90%; object-fit: contain; margin-bottom: 15px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.06)); cursor: pointer; position: relative; z-index: 5; }
@@ -255,6 +254,12 @@
         window.scrollTo({top: catTop - stickyH - 15, behavior: 'smooth'});
     }
 
+    // НОВА БЕЗПЕЧНА ФУНКЦІЯ ВІДКРИТТЯ ВІКНА
+    function showModalEncoded(encData, isWeekly = false) {
+        const data = JSON.parse(decodeURIComponent(encData));
+        showModal(data, isWeekly);
+    }
+
     async function load() {
         try {
             const r = await fetch(SHEET_CSV + '&v=' + Date.now()), data = await r.text(), rows = safeParseCSV(data);
@@ -273,59 +278,58 @@
                 
                 const startsFrom5 = minVol && String(minVol).includes('5');
                 const minPriceLabel = calculatePrice(price, startsFrom5 ? '5 мл' : '2 мл');
-                const safeData = JSON.stringify(c).replace(/'/g, "&#39;");
+                
+                // ЗАЛІЗОБЕТОННЕ КОДУВАННЯ (без лапок у HTML)
+                const encData = encodeURIComponent(JSON.stringify(c));
 
                 if (isPromo || isWeek) {
                     let catchyHeading = ""; 
 
                     if (isPromo && !isWeek && desc) {
-                        // 1. Очищаємо текст від HTML та міток відгуків
                         let cleanDesc = desc.replace(/<[^>]+>/g, ' ').replace(/\[[+\-=]\]/g, '');
-                        // 2. Видаляємо технічні слова
                         cleanDesc = cleanDesc.replace(/(Опис:|Стиль:|Напрямок:|Піраміда:|Верхні ноти:|Ноти серця:|Серце:|Середні ноти:|Базові ноти:|Ноти бази:|Акорди:|Відгуки:)/gi, '');
-                        // 3. Забираємо зайві пробіли
+                        // ВИРІЗАЄМО РОКИ (2024, 2024р, тощо)
+                        cleanDesc = cleanDesc.replace(/\b20\d{2}\s*р?\.?\b/gi, ''); 
                         cleanDesc = cleanDesc.replace(/\s+/g, ' ').trim();
                         
-                        // 4. Беремо перше речення
-                        let firstSentence = cleanDesc.split('.')[0];
-                        
-                        if (firstSentence && firstSentence.length > 5) {
-                            if (firstSentence.length > 70) {
-                                catchyHeading = firstSentence.substring(0, 70).trim() + '...';
-                            } else {
-                                catchyHeading = firstSentence.trim();
+                        // РОЗБИВАЄМО НА РЕЧЕННЯ І ШУКАЄМО ТЕ, ДЕ Є СЛОВА
+                        let sentences = cleanDesc.split(/[.!?<]/);
+                        for (let s of sentences) {
+                            let candidate = s.trim();
+                            // Речення має бути довшим за 15 символів і містити хоча б одне слово з 4+ букв
+                            if (candidate.length > 15 && /[а-яіїєґa-z]{4,}/i.test(candidate)) {
+                                catchyHeading = candidate.length > 60 ? candidate.substring(0, 60).trim() + '...' : candidate;
+                                break;
                             }
-                        } else {
-                            catchyHeading = "Розкішний аромат для вашого образу";
                         }
+                        if (!catchyHeading) catchyHeading = "Розкішний аромат для вашого образу";
                     } else if (isWeek) {
                         catchyHeading = "Ексклюзивна пропозиція цього тижня";
                     }
 
-                    // Для промо-банерів робимо фон трохи темнішим (0.5), щоб текст краще читався
                     let overlayOpacity = isPromo ? '0.5' : '0.3';
 
                     promoSlidesHTML += `
                     <div class="slide">
-                        <div class="banner-bg-img" style="background-image:url('${img}')" onclick="showModal(${safeData}, ${isWeek})"></div>
+                        <div class="banner-bg-img" style="background-image:url('${img}')" onclick="showModalEncoded('${encData}', ${isWeek})"></div>
                         <div class="video-overlay" style="background:rgba(0,0,0,${overlayOpacity})"></div>
                         <div class="banner-content">
                             <span class="banner-brand">${isWeek ? 'WEEKLY PICK' : brand}</span>
                             <span class="banner-title">${name}</span>
                             <span class="banner-catchy">${catchyHeading}</span>
-                            <span class="banner-btn" onclick="showModal(${safeData}, ${isWeek})">СПРОБУВАТИ АРОМАТ</span>
+                            <span class="banner-btn" onclick="showModalEncoded('${encData}', ${isWeek})">СПРОБУВАТИ АРОМАТ</span>
                         </div>
                     </div>`;
                 }
                 
                 if (isWeek) {
-                    document.getElementById('weekPerfumeContainer').innerHTML = `<div class="week-spotlight"><span class="week-label">Ексклюзив тижня</span><img src="${img}" class="week-img" onclick="showModal(${safeData}, true)"><div class="brand">${brand}</div><div class="name">${name}</div><div class="week-btn-container"><button class="week-card-btn" onclick="showModal(${safeData}, true)">Опис</button><button class="week-card-btn primary" onclick="showModal(${safeData}, true)">Замовити</button></div></div>`;
+                    document.getElementById('weekPerfumeContainer').innerHTML = `<div class="week-spotlight"><span class="week-label">Ексклюзив тижня</span><img src="${img}" class="week-img" onclick="showModalEncoded('${encData}', true)"><div class="brand">${brand}</div><div class="name">${name}</div><div class="week-btn-container"><button class="week-card-btn" onclick="showModalEncoded('${encData}', true)">Опис</button><button class="week-card-btn primary" onclick="showModalEncoded('${encData}', true)">Замовити</button></div></div>`;
                 }
 
                 const div = document.createElement('div');
                 div.className = 'card'; div.setAttribute('data-brand', brand); 
                 div.setAttribute('data-category', (isNew ? 'new ' : '') + (isTop ? 'top ' : '') + (top ? top.toLowerCase() : ''));
-                div.innerHTML = `${isNew?'<div class="badge badge-new">New</div>':''}${isTop?'<div class="badge badge-top">Hit</div>':''}<img loading="lazy" src="${img}" onclick="showModal(${safeData})"><div class="card-price-label">від ${minPriceLabel}</div><div class="brand">${brand}</div><div class="name">${name}</div><button class="order-btn" onclick="showModal(${safeData})">Детальніше</button>`;
+                div.innerHTML = `${isNew?'<div class="badge badge-new">New</div>':''}${isTop?'<div class="badge badge-top">Hit</div>':''}<img loading="lazy" src="${img}" onclick="showModalEncoded('${encData}')"><div class="card-price-label">від ${minPriceLabel}</div><div class="brand">${brand}</div><div class="name">${name}</div><button class="order-btn" onclick="showModalEncoded('${encData}')">Детальніше</button>`;
                 container.appendChild(div);
             });
 
