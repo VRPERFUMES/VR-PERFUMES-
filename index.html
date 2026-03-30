@@ -158,6 +158,20 @@
         .modal-btn-full { display: flex; width: 100%; height: 50px; margin-top: 10px; align-items: center; justify-content: center; font-size: 10px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; text-decoration: none; border: none; cursor: pointer; }
         .modal-order-btn { background: var(--gold); color: #fff; }
         .close-btn { background: #000; color: #fff; }
+        /* БЛОК НАШІ ПРОЄКТИ (МЕДАЛЬЙОНИ) */
+.other-projects { padding: 40px 20px; text-align: center; background: #fff; border-top: 1px solid #f2f2f2; }
+.projects-title { font-size: 9px; text-transform: uppercase; letter-spacing: 3px; color: #bbb; margin-bottom: 30px; display: block; font-weight: 600; }
+.projects-flex { display: flex; gap: 45px; justify-content: center; }
+.project-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #1a1a1a; transition: 0.3s; width: 80px; }
+.project-circle { 
+    width: 65px; height: 65px; border-radius: 50%; border: 1px solid var(--gold); 
+    margin-bottom: 12px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; 
+}
+.project-circle img { width: 100%; height: 100%; object-fit: cover; }
+.project-name { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #444; text-align: center; line-height: 1.2; }
+.project-item:active .project-circle { transform: scale(0.9); border-color: #000; }
+
     </style>
 </head>
 <body>
@@ -208,6 +222,24 @@
             <a href="https://t.me/viktoriia_viktoriia_r" class="contact-btn">Telegram</a>
             <a href="viber://chat?number=%2B380962178464" class="contact-btn">Viber</a>
         </div>
+    </div>
+</div>
+<div class="other-projects">
+    <span class="projects-title">Компанія VR</span>
+    <div class="projects-flex">
+        <a href="https://www.instagram.com/sweet_plan_b/" class="project-item" target="_blank">
+            <div class="project-circle">
+                <img src="sweet-plan-b.jpg" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+            </div>
+            <span class="project-name">Sweet<br>Plan B</span>
+        </a>
+        
+        <a href="https://invite.viber.com/?g2=AQA6W7r5W8YpG0p%2B6y2yD7y8Xp7Jp6Jp" class="project-item" target="_blank">
+            <div class="project-circle">
+                <img src="vr-shopping.jpg" onerror="this.src='https://i.postimg.cc/mD8z4qW0/vr-shopping.jpg'">
+            </div>
+            <span class="project-name">VR<br>Shopping</span>
+        </a>
     </div>
 </div>
 
