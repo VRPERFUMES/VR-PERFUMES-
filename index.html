@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VR-PERFUMES | Premium Showcase</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16525383566"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-16525383566');
+</script>
+
     <style>
         :root { 
             --bg: #ffffff; --gold: #c5a059; --text-dark: #1a1a1a;
@@ -416,6 +424,8 @@
     }
 
     function order(b, n) {
+        gtag('event', 'conversion', {'send_to': 'AW-16525383566/vI-KCN_Yw70ZEM6lyuU9'});
+
         const p = document.getElementById('modalPrice').innerText;
         const msg = `🛍️ ЗАМОВЛЕННЯ:\n${b} ${n}\nОб'єм: ${selectedVol}\n${p}`;
         window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent(msg)}`, '_top');
