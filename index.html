@@ -339,7 +339,8 @@
         const m = document.getElementById('aboutMore'), b = document.getElementById('toggleBtn');
         let isVis = m.style.display === "block";
         m.style.display = isVis ? "none" : "block";
-        b.innerText = isVis ? "Згорнути ↑" : "Наша історія ↓";
+        // ВИПРАВЛЕНА ЛОГІКА:
+        b.innerText = isVis ? "Наша історія ↓" : "Згорнути ↑";
     }
 
     function toggleFaq(el) {
@@ -360,7 +361,7 @@
         }
     }
 
-    // НОВА ФУНКЦІЯ: Відправка відгуку в Telegram
+    // Відправка відгуку в Telegram
     function submitReview(b, n) {
         const text = document.getElementById('reviewText').value.trim();
         const rating = document.querySelector('input[name="rating"]:checked');
