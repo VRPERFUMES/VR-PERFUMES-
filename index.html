@@ -12,7 +12,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'AW-16525383566');
+      gtag('config', 'AW-16525383566'); // Основний тег відстеження
     </script>
 
     <style>
@@ -50,7 +50,7 @@
         .bg-video, .banner-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; background-size: cover; background-position: center; z-index: 0; }
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 1; }
 
-        /* ОНОВЛЕНИЙ ЛОГОТИП І ТЕКСТ */
+        /* ОНОВЛЕНИЙ ЛОГОТИП І ТЕКСТ (ЗБІЛЬШЕНО, ЗОЛОТЕ, БЕЗ ФОНУ) */
         .logo { width: 120px; position: relative; z-index: 2; margin-bottom: 15px; mix-blend-mode: screen; }
         .hero-carousel h1 { font-family: var(--serif); font-size: 22px; letter-spacing: 12px; color: var(--gold); text-transform: uppercase; z-index: 2; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
         
@@ -130,7 +130,7 @@
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { background: #fff; padding: 30px 20px; max-width: 450px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.1); position: relative; }
         
-        /* Хрестик закриття зліва зверху */
+        /* Хрестик закриття модалки зліва зверху */
         .modal-close-x { position: absolute; top: 15px; left: 15px; font-size: 20px; color: #999; background: none; border: none; cursor: pointer; padding: 5px; z-index: 20; transition: 0.3s; }
         .modal-close-x:hover { color: #000; }
 
@@ -209,6 +209,16 @@
         .project-circle img { width: 100%; height: 100%; object-fit: cover; }
         .project-name { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #444; text-align: center; line-height: 1.2; }
         .project-item:active .project-circle { transform: scale(0.9); border-color: #000; }
+
+        /* TG CHAT BUBBLE (НОВЕ) */
+        .tg-chat-bubble { position: fixed; bottom: 85px; right: 25px; background: #fff; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.15); padding: 12px 15px 12px 12px; display: flex; align-items: center; gap: 12px; z-index: 1499; opacity: 0; transform: translateY(20px) scale(0.9); pointer-events: none; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f0f0f0; width: 240px; box-sizing: border-box; }
+        .tg-chat-bubble.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .tg-chat-bubble::after { content: ''; position: absolute; bottom: -6px; right: 15px; width: 12px; height: 12px; background: #fff; transform: rotate(45deg); border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; }
+        .tg-chat-bubble img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
+        .bubble-text { font-size: 11px; line-height: 1.4; color: #555; }
+        .bubble-text b { color: var(--text-dark); font-size: 12px; display: inline-block; margin-bottom: 2px; }
+        .bubble-close { position: absolute; top: 6px; right: 10px; font-size: 12px; color: #ccc; cursor: pointer; transition: 0.2s; padding: 2px; }
+        .bubble-close:hover { color: #000; }
 
     </style>
 </head>
@@ -313,6 +323,14 @@
     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.13-.31-1.08-.66.02-.18.27-.36.74-.55 2.91-1.27 4.85-2.11 5.81-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
 </a>
 
+<div id="tgChatBubble" class="tg-chat-bubble">
+    <span class="bubble-close" onclick="document.getElementById('tgChatBubble').classList.remove('show')">✕</span>
+    <img src="Screenshot_20260328-171201.png" alt="Вікторія" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+    <div class="bubble-text">
+        <b>Потрібна консультація?</b><br>Я на зв'язку в Telegram ✨
+    </div>
+</div>
+
 <button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
 
 <script>
@@ -321,10 +339,8 @@
     let carouselIndex = 0, carouselInterval, currentCategory = 'all', currentBrand = '', touchstartX = 0, touchendX = 0;
     let selectedVol = "5 мл", currentBasePrice = 0;
     
-    // Зберігаємо глобальну базу даних для живого пошуку
     let globalCatalogData = []; 
 
-    // Логіка для кнопки "Вгору"
     window.onscroll = function() {
         const btn = document.getElementById("scrollTopBtn");
         if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
@@ -365,12 +381,10 @@
         }
     }
 
-    // Показує поле відгуку після кліку на зірочку
     function showReviewFields() {
         document.getElementById('reviewHiddenParts').style.display = 'block';
     }
 
-    // Відправка відгуку в Telegram
     function submitReview(b, n) {
         const text = document.getElementById('reviewText').value.trim();
         const rating = document.querySelector('input[name="rating"]:checked');
@@ -381,10 +395,8 @@
         const stars = rating.value;
         const msg = `📝 НОВИЙ ВІДГУК:\n${b} ${n}\nОцінка: ${stars}⭐\nТекст: ${text}`;
         
-        // Відправляємо в телеграм
         window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent(msg)}`, '_blank');
         
-        // Очищуємо форму та дякуємо
         document.getElementById('reviewText').value = '';
         document.querySelector('.review-form-container').innerHTML = '<div style="text-align:center; padding: 20px 0; color: #4CAF50; font-weight: 600; font-size: 13px;">Дякуємо! Ваш відгук відправлено на модерацію ✨</div>';
     }
@@ -426,7 +438,7 @@
             const wContainer = document.getElementById('weekPerfumeContainer');
             let catalogData = rows.slice(1).filter(c => c[0]);
             
-            globalCatalogData = catalogData; // Зберігаємо дані для пошуку
+            globalCatalogData = catalogData;
 
             const logoSlide = carousel.querySelector('.logo-slide').cloneNode(true);
             carousel.innerHTML = '';
@@ -441,7 +453,6 @@
                 const pDate = new Date(dateStr), isNew = (new Date() - pDate) / (1000*60*60*24) <= 10;
                 const isTop = top && top.toLowerCase().includes('топ'), isPromo = top && top.toLowerCase().includes('промо'), isWeek = top && top.toLowerCase().includes('тиждень');
                 
-                // ЛОГІКА 2 МЛ - ПЕРЕВІРКА МІНІМУМУ
                 const startsFrom5 = minVol && String(minVol).includes('5');
                 const minPriceLabel = calculatePrice(price, startsFrom5 ? '5 мл' : '2 мл');
                 const safeImg = img.replace(/'/g, "%27");
@@ -472,7 +483,6 @@
 
                     const slide = document.createElement('div');
                     slide.className = 'slide';
-                    // ДОДАНО ЦІНУ ЗА 1 МЛ В БАНЕР
                     slide.innerHTML = `<div class="banner-bg-img" style="background-image:url('${safeImg}')"></div><div class="video-overlay" style="background:rgba(0,0,0,${overlayOpacity})"></div><div class="banner-content"><span class="banner-brand">${isWeek ? 'WEEKLY PICK' : brand}</span><span class="banner-title">${name}</span><span class="banner-catchy">${catchyHeading}</span><span class="banner-btn">СПРОБУВАТИ АРОМАТ</span><span class="banner-price-sub">${price} грн / 1 мл</span></div>`;
                     
                     slide.querySelector('.banner-bg-img').onclick = () => showModal(c, isWeek);
@@ -535,7 +545,6 @@
         let rawText = (isWeekly && weekText) ? weekText : desc;
         let f = rawText;
         
-        // Перевірка на "старі" описи (без маркерів)
         const hasTags = /(Стиль:|Напрямок:|Опис:|Піраміда:|Верхні ноти:|Ноти серця:|Серце:|Середні ноти:|Базові ноти:|Ноти бази:|Акорди:)/i.test(f);
         
         if (!hasTags && f.trim().length > 0) {
@@ -545,7 +554,6 @@
             f = f.replace(/(Опис:|Піраміда:|Верхні ноти:|Ноти серця:|Серце:|Середні ноти:|Базові ноти:|Ноти бази:|Акорди:)/gi, '<span class="note-header">$1</span>');
         }
         
-        // Обробка відгуків з контейнером-скролом
         if (f.includes('[+]') || f.includes('[-]') || f.includes('[=]')) {
             f = f.replace(/(Відгуки:)/gi, ''); 
             f += '<div style="margin-top:15px;"><span style="font-weight:700; text-transform:uppercase; font-size:10px; letter-spacing:1px; color:#999;">💬 Відгуки:</span><div class="reviews-scroll-container">';
@@ -557,7 +565,6 @@
             f += '</div></div>';
         }
         
-        // НОВА кнопка поділитися ПІД текстом, але ПЕРЕД вибором об'єму
         const shareBtnHTML = `
             <div style="text-align: right; margin-top: 15px; margin-bottom: 5px;">
                 <button onclick="sharePerfume()" style="background:none; border:none; cursor:pointer; color:var(--gold); display:inline-flex; align-items:center; font-size:10px; text-transform:uppercase; letter-spacing:1px; font-weight:700; padding: 0;">
@@ -584,7 +591,6 @@
             <div class="price-display" id="modalPrice">Ціна: ${calculatePrice(price, '5 мл')}</div>
             <div class="price-sub">Базова ціна: ${price} грн / 1 мл</div>`;
             
-        // Форма для залишення відгуку (з прихованим текстом)
         const reviewFormHTML = `
             <div class="review-form-container" id="reviewFormBlock">
                 <span class="review-form-title">Оцінити аромат</span>
@@ -602,7 +608,6 @@
             </div>
         `;
         
-        // Формуємо фінальний вигляд модалки
         document.getElementById('mD').innerHTML = f + shareBtnHTML + volHTML;
         document.getElementById('reviewFormContainerHTML').innerHTML = reviewFormHTML;
         
@@ -612,7 +617,6 @@
 
     function selectVol(el, vol) {
         if (el.classList.contains('disabled')) return; 
-        
         selectedVol = vol; document.querySelectorAll('.vol-chip').forEach(c => c.classList.remove('active'));
         el.classList.add('active'); 
         document.getElementById('modalPrice').innerText = "Ціна: " + calculatePrice(currentBasePrice, vol);
@@ -620,34 +624,23 @@
 
     function order(b, n) {
         gtag('event', 'conversion', {'send_to': 'AW-16525383566/vI-KCN_Yw70ZEM6lyuU9'});
-
         const p = document.getElementById('modalPrice').innerText;
         const msg = `🛍️ ЗАМОВЛЕННЯ:\n${b} ${n}\nОб'єм: ${selectedVol}\n${p}`;
         window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent(msg)}`, '_top');
     }
 
-    // НОВА ЛОГІКА ЖИВОГО ПОШУКУ З ХРЕСТИКОМ
     function handleSearchInput() {
         const inputField = document.getElementById('searchInput');
         const clearBtn = document.getElementById('clearSearchBtn');
         const q = inputField.value.toLowerCase().trim();
         const resContainer = document.getElementById('searchResults');
         
-        // Показуємо або ховаємо хрестик
-        if (q.length > 0) {
-            clearBtn.style.display = 'block';
-        } else {
-            clearBtn.style.display = 'none';
-        }
+        if (q.length > 0) { clearBtn.style.display = 'block'; } else { clearBtn.style.display = 'none'; }
         
-        filterCatalog(); // продовжуємо фільтрувати сітку на фоні
+        filterCatalog();
         
-        if (!q) {
-            resContainer.style.display = 'none';
-            return;
-        }
+        if (!q) { resContainer.style.display = 'none'; return; }
 
-        // Шукаємо по бренду або назві парфуму
         const matches = globalCatalogData.filter(c => {
             const searchStr = (c[0] + " " + c[1]).toLowerCase();
             return searchStr.includes(q);
@@ -665,43 +658,18 @@
                 
                 const item = document.createElement('div');
                 item.className = 'search-item';
-                item.innerHTML = `
-                    <img src="${img.replace(/'/g, "%27")}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
-                    <div class="search-item-info">
-                        <div class="search-item-brand">${brand}</div>
-                        <div class="search-item-name">${name}</div>
-                    </div>
-                    <div class="search-item-price">від ${minPriceLabel}</div>
-                `;
+                item.innerHTML = `<img src="${img.replace(/'/g, "%27")}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'"><div class="search-item-info"><div class="search-item-brand">${brand}</div><div class="search-item-name">${name}</div></div><div class="search-item-price">від ${minPriceLabel}</div>`;
                 
-                item.onclick = () => {
-                    showModal(c);
-                    resContainer.style.display = 'none';
-                    document.getElementById('searchInput').value = '';
-                    document.getElementById('clearSearchBtn').style.display = 'none';
-                    filterCatalog();
-                };
+                item.onclick = () => { showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; filterCatalog(); };
                 resContainer.appendChild(item);
             });
         }
         resContainer.style.display = 'block';
     }
 
-    // Функція очищення пошуку
-    function clearSearch() {
-        document.getElementById('searchInput').value = '';
-        handleSearchInput();
-        document.getElementById('searchResults').style.display = 'none';
-    }
+    function clearSearch() { document.getElementById('searchInput').value = ''; handleSearchInput(); document.getElementById('searchResults').style.display = 'none'; }
 
-    // Ховаємо список пошуку, якщо клікаємо деінде
-    document.addEventListener('click', function(e) {
-        const controls = document.getElementById('stickyControls');
-        if (controls && !controls.contains(e.target)) {
-            const res = document.getElementById('searchResults');
-            if (res) res.style.display = 'none';
-        }
-    });
+    document.addEventListener('click', function(e) { const controls = document.getElementById('stickyControls'); if (controls && !controls.contains(e.target)) { const res = document.getElementById('searchResults'); if (res) res.style.display = 'none'; } });
 
     function navigateToPerfume(n) { document.getElementById('searchInput').value = n; handleSearchInput(); document.getElementById('newsModalWindow').style.display='none'; scrollToFirstCards(); }
     
@@ -737,40 +705,31 @@
     function renderBrandSlider(cat) {
         const brs = [...new Set(cat.map(c => c[0]))].sort(), s = document.getElementById('brandSlider');
         s.innerHTML = '';
-        
         const btnAll = document.createElement('button');
         btnAll.className = 'brand-btn active';
         btnAll.innerText = 'Усі бренди';
         btnAll.onclick = function() { setBrand('', this); };
         s.appendChild(btnAll);
-
-        brs.forEach(b => { 
-            const btn = document.createElement('button');
-            btn.className = 'brand-btn';
-            btn.innerText = b;
-            btn.onclick = function() { setBrand(b, this); };
-            s.appendChild(btn);
-        });
+        brs.forEach(b => { const btn = document.createElement('button'); btn.className = 'brand-btn'; btn.innerText = b; btn.onclick = function() { setBrand(b, this); }; s.appendChild(btn); });
     }
     load();
+
+    // Логіка появи хмаринки Telegram (1 раз за сесію, поява через 15 сек)
+    setTimeout(() => {
+        if (!sessionStorage.getItem('chatBubbleShown')) {
+            const bubble = document.getElementById('tgChatBubble');
+            if (bubble) {
+                bubble.classList.add('show');
+                sessionStorage.setItem('chatBubbleShown', 'true');
+                // Автоматично ховаємо хмаринку через 15 секунд після її появи
+                setTimeout(() => { bubble.classList.remove('show'); }, 15000);
+            }
+        }
+    }, 15000); 
+
 </script>
 
-<div id="infoModal" class="modal" onclick="this.style.display='none'">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <button class="modal-close-x" onclick="document.getElementById('infoModal').style.display='none'">✕</button>
-        
-        <h3 id="mB" style="text-align:center;font-family:var(--serif);margin-bottom:5px;"></h3>
-        <p id="mN" style="text-align:center;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;"></p>
-        
-        <div id="mD" style="font-size:13.5px;"></div>
-        
-        <button id="modalOrderBtn" class="modal-btn-full modal-order-btn">Замовити аромат</button>
-        
-        <div id="reviewFormContainerHTML"></div>
-        
-        <button class="modal-btn-full close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button>
-    </div>
-</div>
+<div id="infoModal" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-x" onclick="document.getElementById('infoModal').style.display='none'">✕</button><h3 id="mB" style="text-align:center;font-family:var(--serif);margin-bottom:5px;"></h3><p id="mN" style="text-align:center;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;"></p><div id="mD" style="font-size:13.5px;"></div><button id="modalOrderBtn" class="modal-btn-full modal-order-btn">Замовити аромат</button><div id="reviewFormContainerHTML"></div><button class="modal-btn-full close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button></div></div>
 
 <div id="newsModalWindow" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><h3 style="font-family:var(--serif);text-align:center;text-transform:uppercase;letter-spacing:1px;">Новини та акції</h3><hr style="border:0;height:1px;background:#f0f0f0;margin:20px 0;"><div id="newsModalContent"></div><button class="modal-btn-full close-btn" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button></div></div>
 </body>
