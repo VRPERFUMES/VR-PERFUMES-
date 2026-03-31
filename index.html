@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VR-PERFUMES | Premium Showcase</title>
     
+    <link rel="icon" href="https://i.postimg.cc/CxkmFFJ3/logo.png" type="image/png">
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16525383566"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -71,20 +73,12 @@
         
         /* SEARCH & STICKY NAV */
         .sticky-active { position: sticky; top: 0; z-index: 1000; background: #fff; padding-top: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-        
         .search-wrapper { position: relative; margin: 0 20px; }
         #searchInput { width: 100%; padding: 12px 0; border: none; border-bottom: 1px solid #eee; font-size: 14px; outline: none; letter-spacing: 1px; box-sizing: border-box; }
         
-        /* ВИПАДАЮЧИЙ СПИСОК ПОШУКУ */
-        .search-dropdown {
-            display: none; position: absolute; top: 100%; left: 0; right: 0;
-            background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-radius: 0 0 8px 8px; max-height: 320px; overflow-y: auto; z-index: 2000;
-            border: 1px solid #eee; border-top: none;
-        }
-        .search-item {
-            display: flex; align-items: center; padding: 10px 15px; border-bottom: 1px solid #f9f9f9; cursor: pointer; transition: 0.2s;
-        }
+        /* LIVE SEARCH DROPDOWN */
+        .search-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 0 0 8px 8px; max-height: 320px; overflow-y: auto; z-index: 2000; border: 1px solid #eee; border-top: none; }
+        .search-item { display: flex; align-items: center; padding: 10px 15px; border-bottom: 1px solid #f9f9f9; cursor: pointer; transition: 0.2s; }
         .search-item:last-child { border-bottom: none; }
         .search-item:active { background: #fdfdfd; }
         .search-item img { width: 35px; height: 35px; object-fit: contain; margin-right: 12px; border-radius: 4px; }
@@ -116,6 +110,13 @@
         .card .badge-top { top: 10px; color: var(--gold); border: 1px solid var(--gold); background: #fff; }
         .card .badge-new + .badge-top { top: 35px; }
 
+        /* SKELETON LOADER */
+        .skeleton { animation: pulse 1.5s infinite ease-in-out; background: #f0f0f0; border-radius: 4px; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        .skeleton-img { width: 100%; aspect-ratio: 1; margin-bottom: 10px; }
+        .skeleton-text { height: 12px; margin-bottom: 8px; width: 80%; margin-left: auto; margin-right: auto; }
+        .skeleton-text.short { width: 50%; }
+
         /* WEEK PICK */
         .week-spotlight { padding: 25px 15px; background: #fafafa; margin: 15px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; text-align: center; }
         .week-label { font-size: 9px; text-transform: uppercase; letter-spacing: 4px; color: var(--gold); margin-bottom: 15px; display: block; font-weight: 600; }
@@ -124,8 +125,11 @@
 
         /* MODAL & COMPACT REVIEWS */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: #fff; padding: 30px 20px; max-width: 450px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+        .modal-content { background: #fff; padding: 30px 20px; max-width: 450px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.1); position: relative; }
         
+        /* Оновлена іконка Поділитися */
+        .share-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; cursor: pointer; color: var(--gold); z-index: 10; padding: 5px; display: flex; align-items: center; justify-content: center; }
+
         .reviews-scroll-container { max-height: 160px; overflow-y: auto; margin: 10px 0 20px; padding-right: 5px; border-bottom: 1px solid #f2f2f2; }
         .reviews-scroll-container::-webkit-scrollbar { width: 3px; }
         .reviews-scroll-container::-webkit-scrollbar-thumb { background: #eee; border-radius: 10px; }
@@ -138,6 +142,18 @@
         .style-block { border: 1px solid #eee; padding: 12px; margin: 15px 0; background: #fdfdfd; font-size: 13px; }
         .style-header { color: var(--gold); font-size: 9px; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 5px; font-weight: 700; }
 
+        /* REVIEW FORM (Зірочки) */
+        .review-form-container { margin-top: 25px; padding: 15px; background: #fafafa; border-radius: 6px; border: 1px solid #eee; }
+        .review-form-title { font-size: 10px; text-transform: uppercase; font-weight: 700; color: var(--gold); letter-spacing: 1px; margin-bottom: 10px; display: block; text-align: center; }
+        .star-rating { display: flex; flex-direction: row-reverse; justify-content: center; gap: 5px; margin-bottom: 15px; }
+        .star-rating input { display: none; }
+        .star-rating label { font-size: 26px; color: #ddd; cursor: pointer; transition: 0.2s; }
+        .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: var(--gold); }
+        .review-textarea { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: var(--sans); font-size: 13px; resize: none; margin-bottom: 12px; outline: none; background: #fff; }
+        .review-textarea:focus { border-color: var(--gold); }
+        .review-submit-btn { background: #fff; color: #000; border: 1px solid #000; padding: 12px 15px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; cursor: pointer; border-radius: 4px; width: 100%; transition: 0.2s; }
+        .review-submit-btn:hover { background: #000; color: #fff; }
+
         /* VOLUMES & PRICE */
         .vol-container { margin: 20px 0; border-top: 1px solid #f0f0f0; padding-top: 15px; }
         .vol-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; display: block; margin-bottom: 10px; }
@@ -148,15 +164,29 @@
         .price-display { font-size: 20px; font-family: var(--serif); color: var(--gold); margin: 15px 0 2px 0; font-weight: 400; }
         .price-sub { font-size: 11px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
 
-        /* ABOUT & PROJECTS */
+        /* ABOUT & FAQ */
         .about-section { background: #fafafa; padding: 60px 20px; text-align: center; border-top: 1px solid #eee; }
         .about-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .about-content { max-width: 500px; margin: 0 auto; text-align: left; font-size: 14px; line-height: 1.8; color: #333; }
+        
+        .faq-container { margin-top: 25px; text-align: left; border-top: 1px solid #e5e5e5; }
+        .faq-item { border-bottom: 1px solid #e5e5e5; }
+        .faq-question { padding: 15px 0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--text-dark); transition: color 0.3s; }
+        .faq-question::after { content: '+'; font-size: 16px; color: var(--gold); }
+        .faq-answer { display: none; padding-bottom: 15px; font-size: 13px; color: #555; }
+        .faq-item.active .faq-answer { display: block; }
+        .faq-item.active .faq-question { color: var(--gold); }
+        .faq-item.active .faq-question::after { content: '−'; }
+
         .about-contacts { display: flex; gap: 10px; justify-content: center; margin-top: 25px; }
         .contact-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 12px; border: 1px solid #ddd; text-decoration: none; color: #1a1a1a; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         
+        /* FLOATING & TOP BTNS */
         .floating-tg { position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 1500; text-decoration: none; }
         .floating-tg svg { width: 22px; height: 22px; fill: white; }
+        
+        #scrollTopBtn { display: none; position: fixed; bottom: 85px; right: 30px; background: #1a1a1a; color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 18px; cursor: pointer; z-index: 1400; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s; }
+        #scrollTopBtn:active { transform: scale(0.9); }
 
         .modal-btn-full { display: flex; width: 100%; height: 50px; margin-top: 12px; align-items: center; justify-content: center; font-size: 10px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; text-decoration: none; border: none; cursor: pointer; }
         .modal-order-btn { background: var(--gold); color: #fff; }
@@ -212,7 +242,13 @@
 </div>
 
 <div id="weekPerfumeContainer"></div>
-<div id="catalog">Завантаження...</div>
+
+<div id="catalog">
+    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+</div>
 
 <div class="about-section">
     <img src="Screenshot_20260328-171201.png" class="about-photo" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
@@ -222,7 +258,22 @@
             <p>Чи любите ви парфуми так, як люблю їх я? Парфуми зі мною у кожен момент життя, завжди маю багато різних ароматів.</p>
             <p style="font-style:italic; border-left:2px solid var(--gold); padding-left:15px; margin:20px 0;">Кажуть, жінка може мовчати, але її парфуми все скажуть за неї.</p>
             <p>💯 Всі парфуми оригінальні, купуються виключно в офіційних магазинах Європи та США.</p>
-            <p>✨ Розпив від 2мл — ідеальний спосіб знайти свій аромат без зайвих витрат.</p>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Що таке розпив?</div>
+                    <div class="faq-answer">Це процес перенесення оригінального парфуму з рідного флакона у менші ємності. Ідеальний спосіб познайомитись з ароматом без купівлі повного об'єму.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Які об'єми доступні?</div>
+                    <div class="faq-answer">Ми робимо розпив у якісні скляні атомайзери об'ємом 2, 5, 10 та 20 мл. Інші об'єми — за індивідуальним запитом.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Як відбувається доставка?</div>
+                    <div class="faq-answer">Відправляємо ваші улюблені аромати Новою Поштою по всій Україні.</div>
+                </div>
+            </div>
+            
         </div>
         <div style="text-align:center; margin-top: 15px;">
             <span class="toggle-about" id="toggleBtn" onclick="toggleAbout()" style="color:var(--gold); cursor:pointer; text-transform:uppercase; font-size:10px; letter-spacing:1px; font-weight:700;">Наша історія ↓</span>
@@ -257,6 +308,8 @@
     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.13-.31-1.08-.66.02-.18.27-.36.74-.55 2.91-1.27 4.85-2.11 5.81-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
 </a>
 
+<button id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
+
 <script>
     const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=339534482&single=true&output=csv';
     const TG_NICK = 'viktoriia_viktoriia_r'; 
@@ -265,6 +318,16 @@
     
     // Зберігаємо глобальну базу даних для живого пошуку
     let globalCatalogData = []; 
+
+    // Логіка для кнопки "Вгору"
+    window.onscroll = function() {
+        const btn = document.getElementById("scrollTopBtn");
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.style.display = "block";
+        } else {
+            btn.style.display = "none";
+        }
+    };
 
     function initSwipe() {
         const s = document.getElementById('heroCarousel');
@@ -276,7 +339,44 @@
         const m = document.getElementById('aboutMore'), b = document.getElementById('toggleBtn');
         let isVis = m.style.display === "block";
         m.style.display = isVis ? "none" : "block";
-        b.innerText = isVis ? "Наша історія ↓" : "Згорнути ↑";
+        b.innerText = isVis ? "Згорнути ↑" : "Наша історія ↓";
+    }
+
+    function toggleFaq(el) {
+        el.parentElement.classList.toggle('active');
+    }
+
+    function sharePerfume() {
+        const brand = document.getElementById('mB').innerText;
+        const name = document.getElementById('mN').innerText;
+        if (navigator.share) {
+            navigator.share({
+                title: `${brand} ${name} | VR-PERFUMES`,
+                text: `Подивись на цей аромат: ${brand} ${name} ✨`,
+                url: window.location.href
+            }).catch(err => console.log('Share error:', err));
+        } else {
+            alert("Ваш браузер не підтримує швидке поширення.");
+        }
+    }
+
+    // НОВА ФУНКЦІЯ: Відправка відгуку в Telegram
+    function submitReview(b, n) {
+        const text = document.getElementById('reviewText').value.trim();
+        const rating = document.querySelector('input[name="rating"]:checked');
+        
+        if (!rating) { alert('Будь ласка, оберіть оцінку зірочками!'); return; }
+        if (!text) { alert('Будь ласка, напишіть кілька слів!'); return; }
+        
+        const stars = rating.value;
+        const msg = `📝 НОВИЙ ВІДГУК:\n${b} ${n}\nОцінка: ${stars}⭐\nТекст: ${text}`;
+        
+        // Відправляємо в телеграм
+        window.open(`https://t.me/${TG_NICK}?text=${encodeURIComponent(msg)}`, '_blank');
+        
+        // Очищуємо форму та дякуємо
+        document.getElementById('reviewText').value = '';
+        document.querySelector('.review-form-container').innerHTML = '<div style="text-align:center; padding: 20px 0; color: #4CAF50; font-weight: 600; font-size: 13px;">Дякуємо! Ваш відгук відправлено на модерацію ✨</div>';
     }
 
     function safeParseCSV(str) {
@@ -462,8 +562,24 @@
             </div>
             <div class="price-display" id="modalPrice">Ціна: ${calculatePrice(price, '5 мл')}</div>
             <div class="price-sub">Базова ціна: ${price} грн / 1 мл</div>`;
+            
+        // Форма для залишення відгуку
+        const reviewFormHTML = `
+            <div class="review-form-container" id="reviewFormBlock">
+                <span class="review-form-title">Залишити відгук</span>
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+                </div>
+                <textarea id="reviewText" class="review-textarea" rows="3" placeholder="Поділіться своїми враженнями..."></textarea>
+                <button class="review-submit-btn" onclick="submitReview('${brand.replace(/'/g, "\\'")}', '${name.replace(/'/g, "\\'")}')">Відправити відгук</button>
+            </div>
+        `;
         
-        document.getElementById('mD').innerHTML = f + volHTML;
+        document.getElementById('mD').innerHTML = f + volHTML + reviewFormHTML;
         document.getElementById('modalOrderBtn').onclick = () => order(brand, name);
         document.getElementById('infoModal').style.display = 'flex';
     }
@@ -523,7 +639,6 @@
                     <div class="search-item-price">від ${minPriceLabel}</div>
                 `;
                 
-                // При натисканні на результат - відкриваємо модалку і закриваємо пошук
                 item.onclick = () => {
                     showModal(c);
                     resContainer.style.display = 'none';
@@ -595,7 +710,22 @@
     load();
 </script>
 
-<div id="infoModal" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><h3 id="mB" style="text-align:center;font-family:var(--serif);margin-bottom:5px;"></h3><p id="mN" style="text-align:center;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;"></p><div id="mD" style="font-size:13.5px;"></div><button id="modalOrderBtn" class="modal-btn-full modal-order-btn">Замовити аромат</button><button class="modal-btn-full close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button></div></div>
+<div id="infoModal" class="modal" onclick="this.style.display='none'">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="share-btn" onclick="sharePerfume()" title="Поділитися">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+            </svg>
+        </button>
+        
+        <h3 id="mB" style="text-align:center;font-family:var(--serif);margin-bottom:5px;"></h3>
+        <p id="mN" style="text-align:center;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;"></p>
+        <div id="mD" style="font-size:13.5px;"></div>
+        <button id="modalOrderBtn" class="modal-btn-full modal-order-btn">Замовити аромат</button>
+        <button class="modal-btn-full close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button>
+    </div>
+</div>
+
 <div id="newsModalWindow" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><h3 style="font-family:var(--serif);text-align:center;text-transform:uppercase;letter-spacing:1px;">Новини та акції</h3><hr style="border:0;height:1px;background:#f0f0f0;margin:20px 0;"><div id="newsModalContent"></div><button class="modal-btn-full close-btn" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button></div></div>
 </body>
 </html>
