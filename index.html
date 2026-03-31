@@ -59,7 +59,13 @@
         .banner-title { font-size: 42px; font-weight: 900; display: block; margin-bottom: 12px; letter-spacing: -1.5px; text-transform: uppercase; line-height: 0.95; }
         .banner-catchy { display: block; font-size: 14px; font-weight: 400; margin-bottom: 25px; line-height: 1.4; color: #f5f5f5; max-width: 300px; margin-left: auto; margin-right: auto; }
         .banner-btn { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; padding: 14px 35px; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; color: #fff; text-decoration: none; cursor: pointer; background: rgba(0,0,0,0.1); backdrop-filter: blur(2px); }
-        .banner-price-sub { display: block; font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; }
+        .banner-price-sub { display: block; font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; }        /* Стиль для відео-фону в банері */
+        video.banner-bg-img { 
+            position: absolute; top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            object-fit: cover; z-index: 0; 
+        }
+        
 
         /* UI ELEMENTS */
         .carousel-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
@@ -688,12 +694,69 @@
     }
 
     function initCarousel() {
-        const s = document.querySelectorAll('.slide'), d = document.getElementById('carouselDots');
-        if(!d) return; d.innerHTML = '';
-        s.forEach((_, i) => { const dot = document.createElement('div'); dot.className = `dot ${i===0?'active':''}`; dot.onclick = () => goToSlide(i); d.appendChild(dot); });
-        clearInterval(carouselInterval); 
-        carouselInterval = setInterval(() => goToSlide((carouselIndex+1)%s.length), 3000);
-    }
+    // 1. Фільтруємо дані: шукаємо "промо", "тиждень" або "скоро"
+    const promos = globalCatalogData.filter(c => c[7] && (
+        c[7].toLowerCase().includes('промо') || 
+        c[7].toLowerCase().includes('тиждень') || 
+        c[7].toLowerCase().includes('скоро')
+    ));
+    
+    const carousel = document.getElementById('heroCarousel');
+    const logoSlide = carousel.querySelector('.logo-slide').cloneNode(true);
+    carousel.innerHTML = ''; 
+    carousel.appendChild(logoSlide);
+
+    // 2. Створюємо слайди
+    promos.forEach(p => {
+        const isComingSoon = p[7].toLowerCase().includes('скоро');
+        const mediaUrl = p[5];
+        
+        // Визначаємо контент: відео чи фото
+        let mediaHtml = '';
+        if (mediaUrl.toLowerCase().includes('.mp4')) {
+            mediaHtml = `<video class="banner-bg-img" autoplay muted loop playsinline><source src="${mediaUrl}" type="video/mp4"></video>`;
+        } else {
+            mediaHtml = `<div class="banner-bg-img" style="background-image:url('${mediaUrl}')"></div>`;
+        }
+
+        const slide = document.createElement('div');
+        slide.className = 'slide';
+        slide.innerHTML = `
+            ${mediaHtml}
+            <div class="video-overlay"></div>
+            <div class="banner-content">
+                <span class="banner-brand">${isComingSoon ? 'COMING SOON' : p[0]}</span>
+                <span class="banner-title">${p[1]}</span>
+                <button class="banner-btn" onclick='showModal(${JSON.stringify(p).replace(/'/g, "&apos;")})'>
+                    ${isComingSoon ? 'ДЕТАЛЬНІШЕ' : 'СПРОБУВАТИ АРОМАТ'}
+                </button>
+                <span class="banner-price-sub">${isComingSoon ? 'Незабаром у наявності' : p[2] + ' грн / 1 мл'}</span>
+            </div>
+        `;
+        carousel.appendChild(slide);
+    });
+
+    // 3. Логіка автоматичного перемикання
+    clearInterval(carouselInterval);
+    carouselInterval = setInterval(() => {
+        const slides = document.querySelectorAll('.slide');
+        if (slides.length < 2) return;
+        slides[carouselIndex].classList.remove('active');
+        carouselIndex = (carouselIndex + 1) % slides.length;
+        slides[carouselIndex].classList.add('active');
+        
+        // Оновлюємо крапки (якщо вони є)
+        const dots = document.querySelectorAll('.dot');
+        if (dots.length > 0) {
+            dots.forEach((d, i) => d.classList.toggle('active', i === carouselIndex));
+        }
+    }, 4000);
+    
+    // Малюємо крапки заново під нову кількість слайдів
+    if (typeof renderDots === "function") renderDots();
+}
+
+    
     
     function goToSlide(i) {
         const s = document.querySelectorAll('.slide'), dots = document.querySelectorAll('.dot');
