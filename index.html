@@ -59,13 +59,14 @@
         .banner-title { font-size: 42px; font-weight: 900; display: block; margin-bottom: 12px; letter-spacing: -1.5px; text-transform: uppercase; line-height: 0.95; }
         .banner-catchy { display: block; font-size: 14px; font-weight: 400; margin-bottom: 25px; line-height: 1.4; color: #f5f5f5; max-width: 300px; margin-left: auto; margin-right: auto; }
         .banner-btn { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; padding: 14px 35px; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; color: #fff; text-decoration: none; cursor: pointer; background: rgba(0,0,0,0.1); backdrop-filter: blur(2px); }
-        .banner-price-sub { display: block; font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; }        /* Стиль для відео-фону в банері */
+        .banner-price-sub { display: block; font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; }        
+        
+        /* Стиль для відео-фону в банері */
         video.banner-bg-img { 
             position: absolute; top: 0; left: 0; 
             width: 100%; height: 100%; 
             object-fit: cover; z-index: 0; 
         }
-        
 
         /* UI ELEMENTS */
         .carousel-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
@@ -79,11 +80,12 @@
         .action-buttons { display: flex; gap: 10px; padding: 20px 15px; background: #fff; }
         .viber-link, .news-btn { flex: 1; border: 1px solid #eee; padding: 14px; text-align: center; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; color: #000; cursor: pointer; }
         
-        /* SEARCH & STICKY NAV */
-        .sticky-active { position: sticky; top: 0; z-index: 1000; background: #fff; padding-top: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        /* SEARCH & STICKY NAV (GLASSMORPHISM) */
+        .sticky-active { position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding-top: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.4); }
         .search-wrapper { position: relative; margin: 0 20px; }
-        #searchInput { width: 100%; padding: 12px 30px 12px 0; border: none; border-bottom: 1px solid #eee; font-size: 14px; outline: none; letter-spacing: 1px; box-sizing: border-box; }
-        #clearSearchBtn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 16px; color: #999; cursor: pointer; display: none; z-index: 10; padding: 5px; }
+        #searchInput { width: 100%; padding: 12px 35px 12px 15px; border: 1px solid rgba(0,0,0,0.08); border-radius: 20px; font-size: 13px; outline: none; letter-spacing: 1px; box-sizing: border-box; background: rgba(255, 255, 255, 0.5); box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); transition: all 0.3s ease; }
+        #searchInput:focus { background: rgba(255, 255, 255, 0.95); box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-color: rgba(197, 160, 89, 0.5); }
+        #clearSearchBtn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 16px; color: #999; cursor: pointer; display: none; z-index: 10; padding: 5px; margin-right: 10px; }
         
         /* LIVE SEARCH DROPDOWN */
         .search-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 0 0 8px 8px; max-height: 320px; overflow-y: auto; z-index: 2000; border: 1px solid #eee; border-top: none; }
@@ -198,9 +200,11 @@
         #scrollTopBtn { display: none; position: fixed; bottom: 85px; right: 30px; background: #1a1a1a; color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 18px; cursor: pointer; z-index: 1400; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s; }
         #scrollTopBtn:active { transform: scale(0.9); }
 
-        .modal-btn-full { display: flex; width: 100%; height: 50px; margin-top: 12px; align-items: center; justify-content: center; font-size: 10px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; text-decoration: none; border: none; cursor: pointer; }
-        .modal-order-btn { background: var(--gold); color: #fff; }
-        .close-btn { background: #000; color: #fff; margin-bottom: 15px; }
+        .modal-btn-full { display: flex; width: 100%; height: 50px; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; }
+        /* Ліпка кнопка */
+        .modal-order-btn { position: sticky; bottom: -20px; left: 0; width: calc(100% + 40px); margin-left: -20px; margin-top: 20px; margin-bottom: -30px; padding: 20px 0; background: var(--gold); color: #fff; box-shadow: 0 -10px 20px rgba(0,0,0,0.1); z-index: 100; }
+        .modal-order-btn:active { background: #000; }
+        .close-btn { background: #f5f5f5; color: #999; margin-top: 15px; border-radius: 8px; }
         
         /* БЛОК НАШІ ПРОЄКТИ (МЕДАЛЬЙОНИ) */
         .other-projects { padding: 40px 20px; text-align: center; background: #fff; border-top: 1px solid #f2f2f2; }
@@ -216,7 +220,7 @@
         .project-name { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #444; text-align: center; line-height: 1.2; }
         .project-item:active .project-circle { transform: scale(0.9); border-color: #000; }
 
-        /* TG CHAT BUBBLE (НОВЕ) */
+        /* TG CHAT BUBBLE */
         .tg-chat-bubble { position: fixed; bottom: 85px; right: 25px; background: #fff; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.15); padding: 12px 15px 12px 12px; display: flex; align-items: center; gap: 12px; z-index: 1499; opacity: 0; transform: translateY(20px) scale(0.9); pointer-events: none; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f0f0f0; width: 240px; box-sizing: border-box; }
         .tg-chat-bubble.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
         .tg-chat-bubble::after { content: ''; position: absolute; bottom: -6px; right: 15px; width: 12px; height: 12px; background: #fff; transform: rotate(45deg); border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; }
@@ -525,6 +529,7 @@
             renderBrandSlider(catalogData); 
             initCarousel(); 
             initSwipe(); 
+            init3DEffect();
             formatNews(rows[0][10]);
         } catch (e) { console.error(e); }
     }
@@ -693,6 +698,34 @@
         });
     }
 
+    // --- 3D ефект карток (Tilt) ---
+    function init3DEffect() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; 
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -8; 
+                const rotateY = ((x - centerX) / centerX) * 8;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                card.style.transition = 'none';
+                card.style.zIndex = '10';
+                card.style.boxShadow = '0 15px 30px rgba(0,0,0,0.1)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+                card.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease';
+                card.style.zIndex = '1';
+                card.style.boxShadow = 'none';
+            });
+        });
+    }
+
     function initCarousel() {
     const promos = globalCatalogData.filter(c => c[7] && (
         c[7].toLowerCase().includes('промо') || 
@@ -845,11 +878,27 @@
         }, 100);
     }, 3000);
 
-
 </script>
 
-<div id="infoModal" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-x" onclick="document.getElementById('infoModal').style.display='none'">✕</button><h3 id="mB" style="text-align:center;font-family:var(--serif);margin-bottom:5px;"></h3><p id="mN" style="text-align:center;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;"></p><div id="mD" style="font-size:13.5px;"></div><button id="modalOrderBtn" class="modal-btn-full modal-order-btn">Замовити аромат</button><div id="reviewFormContainerHTML"></div><button class="modal-btn-full close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button></div></div>
+<div id="infoModal" class="modal" onclick="this.style.display='none'">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close-x" onclick="document.getElementById('infoModal').style.display='none'">✕</button>
+        <h3 id="mB" style="text-align:center;font-family:var(--serif);margin-bottom:5px;"></h3>
+        <p id="mN" style="text-align:center;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;"></p>
+        <div id="mD" style="font-size:13.5px;"></div>
+        <button id="modalOrderBtn" class="modal-btn-full modal-order-btn">Замовити аромат</button>
+        <div id="reviewFormContainerHTML"></div>
+        <button class="modal-btn-full close-btn" onclick="document.getElementById('infoModal').style.display='none'">Закрити</button>
+    </div>
+</div>
 
-<div id="newsModalWindow" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><h3 style="font-family:var(--serif);text-align:center;text-transform:uppercase;letter-spacing:1px;">Новини та акції</h3><hr style="border:0;height:1px;background:#f0f0f0;margin:20px 0;"><div id="newsModalContent"></div><button class="modal-btn-full close-btn" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button></div></div>
+<div id="newsModalWindow" class="modal" onclick="this.style.display='none'">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h3 style="font-family:var(--serif);text-align:center;text-transform:uppercase;letter-spacing:1px;">Новини та акції</h3>
+        <hr style="border:0;height:1px;background:#f0f0f0;margin:20px 0;">
+        <div id="newsModalContent"></div>
+        <button class="modal-btn-full close-btn" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button>
+    </div>
+</div>
 </body>
 </html>
