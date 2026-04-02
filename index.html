@@ -27,6 +27,12 @@
             --badge-new-bg: #333333; 
         }
 
+        /* PREMIUM CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #f9f9f9; }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #b39151; }
+        
         body { 
             font-family: var(--sans); 
             margin: 0; padding: 0; 
@@ -92,9 +98,6 @@
         .modal-note-tag { display: inline-block; background: #fff; border: 1px solid #eaeaea; padding: 3px 8px; border-radius: 4px; font-size: 11px; margin: 0 4px 4px 0; cursor: pointer; color: #444; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
         .modal-note-tag:hover, .modal-note-tag:active { border-color: var(--gold); color: #fff; background: var(--gold); box-shadow: 0 3px 8px rgba(197,160,89,0.3); transform: translateY(-1px); }
         
-        .vol-chip.bottle-special { border-color: #000; border-width: 2px; font-weight: 900; background: #fffaf0; }
-        .vol-chip.bottle-special.active { background: #000; color: var(--gold); border-color: var(--gold); }
-        
         .recommendations-block { margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
         .rec-title { font-size: 10px; text-transform: uppercase; color: var(--gold); font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; display: block; }
         .rec-scroll { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; }
@@ -115,12 +118,16 @@
         .search-empty { padding: 25px 15px; text-align: center; font-size: 13px; color: #666; font-family: var(--serif); }
 
         .brand-slider { display: flex; gap: 30px; overflow-x: auto; padding: 15px 20px; scrollbar-width: none; align-items: center; }
-        .brand-btn { background: none; border: none; opacity: 0.4; font-size: 11px; text-transform: uppercase; white-space: nowrap; letter-spacing: 1px; cursor: pointer; }
+        .brand-btn { background: none; border: none; opacity: 0.4; font-size: 11px; text-transform: uppercase; white-space: nowrap; letter-spacing: 1px; cursor: pointer; transition: 0.3s;}
+        .brand-btn:hover { opacity: 1; color: var(--gold); }
         .brand-btn.active { opacity: 1; color: var(--gold); font-weight: 700; }
 
         .tabs-container { display: flex; gap: 20px; justify-content: center; padding-bottom: 15px; }
-        .tab-btn { background: none; border: none; font-size: 10px; font-weight: 600; color: #ccc; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; padding: 5px 0;}
-        .tab-btn.active { color: #000; border-bottom: 1px solid var(--gold); }
+        .tab-btn { background: none; border: none; font-size: 10px; font-weight: 600; color: #ccc; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; padding: 5px 0; transition: 0.3s;}
+        
+        /* ЗОЛОТЕ ПІДСВІЧУВАННЯ ТАБІВ (PREMIUM) */
+        .tab-btn:hover { color: var(--gold); }
+        .tab-btn.active { color: var(--gold); font-weight: 800; border-bottom: 2px solid var(--gold); }
 
         /* ОПТИМІЗОВАНИЙ КАТАЛОГ ДЛЯ ПК ТА МОБІЛОК */
         #catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 30px 15px; padding: 20px; }
@@ -128,7 +135,7 @@
         @media (min-width: 992px) { #catalog { grid-template-columns: repeat(4, 1fr); gap: 40px 25px; padding: 30px 40px; } }
         @media (min-width: 1200px) { #catalog { grid-template-columns: repeat(5, 1fr); gap: 40px 30px; } }
 
-        .card { position: relative; display: flex; flex-direction: column; background: #fff; }
+        .card { position: relative; display: flex; flex-direction: column; background: #fff; transition: box-shadow 0.3s ease; }
         .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f9f9f9; cursor: pointer; position: relative; z-index: 5; }
         .card-price-label { font-size: 12px; color: var(--gold); font-weight: 700; margin: 10px 0 2px; text-align: center; }
         .brand { font-family: var(--serif); font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; text-align: center; }
@@ -136,17 +143,23 @@
         .order-btn { border: 1px solid #000; background: transparent; padding: 12px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; cursor: pointer; position: relative; z-index: 10; transition: 0.3s; }
         .order-btn:hover { background: #000; color: #fff; }
         
-        .badge { position: absolute; left: 10px; padding: 3px 9px; font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px; z-index: 10; font-weight: 700; }
-        .card .badge-new { top: 10px; background: var(--badge-new-bg); color: #fff; }
-        .card .badge-top { top: 10px; color: var(--gold); border: 1px solid var(--gold); background: #fff; }
-        .card .badge-bottle { top: 10px; background: #000; color: var(--gold); border: 1px solid var(--gold); }
-        .card .badge-last { top: 10px; background: #fff; color: #a94442; border: 1px solid #a94442; }
+        /* КОНТЕЙНЕР ДЛЯ БЕЙДЖІВ */
+        .badges-wrapper { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 10; align-items: flex-start; pointer-events: none; }
+        .badge { padding: 3px 9px; font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; border-radius: 2px; }
+        .badge-new { background: var(--badge-new-bg); color: #fff; }
+        .badge-top { color: var(--gold); border: 1px solid var(--gold); background: #fff; }
+        .badge-bottle { background: #000; color: var(--gold); border: 1px solid var(--gold); }
         
-        /* Логіка накладання бейджів один під одним */
-        .card .badge-new + .badge-top, .card .badge-new + .badge-bottle, .card .badge-new + .badge-last, .card .badge-top + .badge-bottle, .card .badge-top + .badge-last, .card .badge-bottle + .badge-last { top: 35px; }
-        .card .badge-new + .badge-top + .badge-bottle, .card .badge-new + .badge-top + .badge-last, .card .badge-top + .badge-bottle + .badge-last { top: 60px; }
+        /* ПУЛЬСУЮЧИЙ БЕЙДЖ ДЕФІЦИТУ (PREMIUM) */
+        .badge-last { background: #fff; color: #a94442; border: 1px solid #a94442; animation: badgePulse 2s infinite ease-in-out; }
+        @keyframes badgePulse {
+            0% { box-shadow: 0 0 0 0 rgba(169, 68, 66, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(169, 68, 66, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(169, 68, 66, 0); }
+        }
 
         .wishlist-btn { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; z-index: 15; font-size: 16px; color: #ccc; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .wishlist-btn:hover { color: var(--gold); }
         .wishlist-btn:active { transform: scale(0.8); }
         .wishlist-btn.active { color: var(--gold); border-color: rgba(197,160,89,0.3); }
 
@@ -168,9 +181,6 @@
         .modal-close-x:hover { color: #000; }
 
         .reviews-scroll-container { max-height: 160px; overflow-y: auto; margin: 10px 0 15px; padding-right: 5px; border-bottom: 1px solid #f2f2f2; }
-        .reviews-scroll-container::-webkit-scrollbar { width: 3px; }
-        .reviews-scroll-container::-webkit-scrollbar-thumb { background: #eee; border-radius: 10px; }
-        
         .review-box { border-left: 3px solid #eee; background: #fcfcfc; padding: 8px 12px; margin: 6px 0; font-style: italic; font-size: 12px; color: #555; line-height: 1.4; }
         .review-pos { border-left-color: var(--gold); background: #fdfdfd; }
         .review-neg { border-left-color: #333; background: #f9f9f9; }
@@ -192,6 +202,11 @@
         .vol-chip { padding: 8px 12px; border: 1px solid #eee; font-size: 11px; cursor: pointer; transition: 0.3s; background: #fff; border-radius: 4px;}
         .vol-chip.active { border-color: var(--gold); color: var(--gold); font-weight: 700; background: #fefaf4; }
         .vol-chip.disabled { opacity: 0.3; pointer-events: none; background: #fafafa; color: #ccc; border-color: #eee; text-decoration: line-through; }
+        
+        /* НОВА ПРЕМІАЛЬНА КНОПКА "РІДНИЙ ФЛАКОН" (VR MINIMALISM) */
+        .vol-chip.bottle-special { background: #000; color: var(--gold); border: 1px solid #000; font-weight: 700; font-size: 9px; text-transform: uppercase; letter-spacing: 1px;}
+        .vol-chip.bottle-special.active { background: #fff; color: #000; border-color: #000; }
+        
         .price-display { font-size: 20px; font-family: var(--serif); color: var(--gold); margin: 10px 0 2px 0; font-weight: 400; }
         .price-sub { font-size: 11px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
 
@@ -248,6 +263,9 @@
         .cart-floating-btn svg { width: 22px; height: 22px; fill: var(--gold); }
         .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--gold); color: #fff; font-size: 10px; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; }
         
+        /* FLYING ICON ANIMATION (PREMIUM) */
+        .flying-icon { position: fixed; z-index: 10000; width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: all 1s cubic-bezier(0.19, 1, 0.22, 1); pointer-events: none; opacity: 1;}
+
         .cart-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%; background: #fff; z-index: 3500; transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
         .cart-drawer.open { right: 0; }
         .cart-drawer-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3499; display: none; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
@@ -409,7 +427,7 @@
     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.13-.31-1.08-.66.02-.18.27-.36.74-.55 2.91-1.27 4.85-2.11 5.81-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
 </a>
 
-<div class="cart-floating-btn" onclick="toggleCart()">
+<div class="cart-floating-btn" onclick="toggleCart()" id="cartFloatingBtn">
     <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0 0 20 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
     <div class="cart-badge" id="cartBadge">0</div>
 </div>
@@ -461,7 +479,7 @@
     const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=339534482&single=true&output=csv';
     const TG_NICK = 'viktoriia_viktoriia_r'; 
     let carouselIndex = 0, carouselInterval, currentCategory = 'all', currentBrand = '', touchstartX = 0, touchendX = 0;
-    let selectedVol = "5 мл", currentBasePrice = 0, currentFixedPrice = 0;
+    let selectedVol = "5 мл", currentBasePrice = 0, currentFixedPrice = 0, currentModalImg = '';
     
     let globalCatalogData = []; 
     
@@ -615,10 +633,11 @@
                 const bottleMl = c[11]; // Колонка L
                 
                 const pDate = new Date(dateStr), isNew = (new Date() - pDate) / (1000*60*60*24) <= 10;
-                const isTop = top && top.toLowerCase().includes('топ'), isPromo = top && top.toLowerCase().includes('промо'), isWeek = top && top.toLowerCase().includes('тиждень');
+                // Додали перевірку і на "топ", і на "хіт"
+                const isTop = top && (top.toLowerCase().includes('топ') || top.toLowerCase().includes('хіт'));
+                const isPromo = top && top.toLowerCase().includes('промо');
+                const isWeek = top && top.toLowerCase().includes('тиждень');
                 const isBottle = bottleMl && parseInt(bottleMl) > 0;
-                
-                // Перевірка на Останні краплі
                 const isLastDrops = top && top.toLowerCase().includes('останн');
                 
                 const startsFrom5 = minVol && String(minVol).includes('5');
@@ -681,10 +700,12 @@
                 div.setAttribute('data-category', (isNew ? 'new ' : '') + (isTop ? 'top ' : '') + (top ? top.toLowerCase() : ''));
                 
                 div.innerHTML = `
-                    ${isNew?'<div class="badge badge-new">New</div>':''}
-                    ${isTop?'<div class="badge badge-top">Hit</div>':''}
-                    ${isBottle?'<div class="badge badge-bottle">Флакон</div>':''}
-                    ${isLastDrops?'<div class="badge badge-last">Останні мл</div>':''}
+                    <div class="badges-wrapper">
+                        ${isNew?'<div class="badge badge-new">New</div>':''}
+                        ${isTop?'<div class="badge badge-top">Hit</div>':''}
+                        ${isBottle?'<div class="badge badge-bottle">Флакон</div>':''}
+                        ${isLastDrops?'<div class="badge badge-last">Останні мл</div>':''}
+                    </div>
                     <div class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist(event, '${brand.replace(/'/g, "\\'")}', '${name.replace(/'/g, "\\'")}', this)">${isWished ? '♥' : '♡'}</div>
                     <img loading="lazy" src="${safeImg}">
                     <div class="card-price-label">від ${minPriceLabel}</div>
@@ -712,26 +733,12 @@
         } catch (e) { console.error(e); }
     }
 
-    function formatNews(raw) {
-        if(!raw) return;
-        let html = '';
-        raw.split(/\n\s*\n/).forEach(block => {
-            let lines = block.split('\n').filter(l => l.trim() !== '');
-            if(lines.length > 0) {
-                let title = lines[0], body = lines.length > 1 ? lines.slice(1).join('<br>') : title;
-                body = body.replace(/\{(.*?)\}/g, (m, p) => `<span style="color:var(--gold);font-weight:700;text-decoration:underline;cursor:pointer;" onclick="navigateToPerfume('${p.replace(/'/g,"\\'")}')">${p}</span>`);
-                html += `<div class="news-item"><span class="news-title">${lines.length>1?title:'АКТУАЛЬНО'}</span><div class="news-text" style="font-size:14px; line-height:1.7; color:#444;">${body}</div></div>`;
-            }
-        });
-        document.getElementById('newsModalContent').innerHTML = html;
-    }
-
     function showModal(pArr, isWeekly = false) {
         const [brand, name, price, minVol, desc, img, , top, weekText] = pArr;
         const bottleMl = pArr[11]; // Колонка L
         const bottlePrice = pArr[12]; // Колонка M
         
-        currentBasePrice = price; currentFixedPrice = 0; selectedVol = "5 мл";
+        currentBasePrice = price; currentFixedPrice = 0; selectedVol = "5 мл"; currentModalImg = img;
         document.getElementById('mB').innerText = brand; document.getElementById('mN').innerText = name;
         
         let rawText = (isWeekly && weekText) ? weekText : desc;
@@ -849,9 +856,9 @@
                     <div class="vol-chip" onclick="selectVol(this, '10 мл')">10 мл</div>
                     <div class="vol-chip" onclick="selectVol(this, '20 мл')">20 мл</div>
                     <div class="vol-chip" onclick="selectVol(this, 'Флакон')">Флакон</div>
-                    ${isBottleAvailable ? `<div class="vol-chip bottle-special" onclick="selectVol(this, 'Рідний флакон (${bottleMl} мл)', ${bottlePrice})">💎 Флакон ${bottleMl} мл</div>` : ''}
+                    ${isBottleAvailable ? `<div class="vol-chip bottle-special" onclick="selectVol(this, 'Рідний флакон (${bottleMl} мл)', ${bottlePrice})">Залишок у рідному флаконі (${bottleMl} мл)</div>` : ''}
                 </div>
-                ${isLastDrops ? `<div style="text-align:center; color: #a94442; font-size: 10px; text-transform: uppercase; margin-top: 12px; font-weight: 700; border: 1px dashed #a94442; padding: 6px; border-radius: 4px;">⚡ Увага: аромат закінчується, останні мілілітри</div>` : ''}
+                ${isLastDrops ? `<div style="text-align:center; color: #a94442; font-size: 10px; text-transform: uppercase; margin-top: 12px; font-weight: 700; border: 1px dashed #a94442; padding: 6px; border-radius: 4px; animation: badgePulse 2s infinite ease-in-out;">⚡ Увага: аромат закінчується, останні мілілітри</div>` : ''}
             </div>
             <div class="price-display" id="modalPrice">Ціна: ${calculatePrice(price, '5 мл')}</div>
             <div class="price-sub">Базова ціна: ${price} грн / 1 мл</div>`;
@@ -894,6 +901,34 @@
         }
     }
 
+    /* АНІМАЦІЯ "ПОЛЬОТУ В КОШИК" (PREMIUM) */
+    function animateFlyToCart() {
+        const cartBtn = document.getElementById('cartFloatingBtn');
+        const startRect = document.getElementById('modalOrderBtn').getBoundingClientRect();
+        const endRect = cartBtn.getBoundingClientRect();
+        
+        const img = document.createElement('img');
+        img.src = currentModalImg || 'https://i.postimg.cc/CxkmFFJ3/logo.png';
+        img.className = 'flying-icon';
+        img.style.left = startRect.left + (startRect.width / 2) - 20 + 'px';
+        img.style.top = startRect.top + 'px';
+        document.body.appendChild(img);
+        
+        requestAnimationFrame(() => {
+            img.style.left = endRect.left + (endRect.width / 2) - 20 + 'px';
+            img.style.top = endRect.top + (endRect.height / 2) - 20 + 'px';
+            img.style.transform = 'scale(0.2) rotate(360deg)';
+            img.style.opacity = '0.5';
+        });
+        
+        setTimeout(() => {
+            img.remove();
+            cartBtn.classList.remove('cart-pulse-anim');
+            void cartBtn.offsetWidth; 
+            cartBtn.classList.add('cart-pulse-anim');
+        }, 1000);
+    }
+
     function order(b, n) {
         const pText = document.getElementById('modalPrice').innerText;
         let priceNum = parseInt(pText.replace(/\D/g, ''));
@@ -902,24 +937,24 @@
         cart.push({ brand: b, name: n, volume: selectedVol, price: priceNum, priceText: pText.replace('Ціна: ', '') });
         saveCart();
         
-        const cartFloatingBtn = document.querySelector('.cart-floating-btn');
-        cartFloatingBtn.classList.remove('cart-pulse-anim');
-        void cartFloatingBtn.offsetWidth; 
-        cartFloatingBtn.classList.add('cart-pulse-anim');
+        // Запускаємо анімацію польоту
+        animateFlyToCart();
         
         const btn = document.getElementById('modalOrderBtn');
         const originalText = btn.innerText;
         btn.innerText = '✓ ДОДАНО В КОШИК';
         btn.style.background = '#1a1a1a';
         btn.style.color = 'var(--gold)'; 
+        btn.style.pointerEvents = 'none';
         
         setTimeout(() => {
             btn.innerText = originalText;
             btn.style.background = 'var(--gold)';
             btn.style.color = '#fff';
+            btn.style.pointerEvents = 'auto';
             document.getElementById('infoModal').style.display = 'none';
             toggleCart();
-        }, 600);
+        }, 1100);
     }
 
     function saveCart() {
@@ -979,9 +1014,11 @@
             if(total >= 1500) {
                 shippingText.innerHTML = 'Безкоштовна доставка активована! ✨';
                 shippingText.style.color = 'var(--gold)';
+                shippingText.style.fontWeight = '700';
             } else {
                 shippingText.innerHTML = `Додайте ще на <b>${1500 - total} грн</b> для безкоштовної доставки`;
                 shippingText.style.color = '#555';
+                shippingText.style.fontWeight = '600';
             }
         }
         
