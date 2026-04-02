@@ -34,7 +34,7 @@
             color: var(--text-dark); 
             padding-bottom: 90px; 
             -webkit-tap-highlight-color: transparent; 
-            line-height: 1.6; 
+            line-height: 1.5; 
         }
 
         .tt-hint { background: #fff; color: #444; padding: 12px 15px; text-align: center; font-size: 11px; border-bottom: 1px solid #f2f2f2; letter-spacing: 0.3px; position: relative; z-index: 1001; }
@@ -42,7 +42,7 @@
 
         /* HERO CAROUSEL */
         .hero-carousel { position: relative; height: 350px; overflow: hidden; background: #000; touch-action: pan-y; }
-        @media (min-width: 1024px) { .hero-carousel { height: 550px; } }
+        @media (min-width: 1024px) { .hero-carousel { height: 450px; } }
 
         .slide { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: all 0.8s ease; z-index: 1; pointer-events: none; }
         .slide.active { opacity: 1; z-index: 2; pointer-events: auto; }
@@ -50,7 +50,6 @@
         .bg-video, .banner-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; background-size: cover; background-position: center; z-index: 0; }
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 1; }
 
-        /* ОНОВЛЕНИЙ ЛОГОТИП І ТЕКСТ */
         .logo { width: 120px; position: relative; z-index: 2; margin-bottom: 15px; mix-blend-mode: screen; }
         .hero-carousel h1 { font-family: var(--serif); font-size: 22px; letter-spacing: 12px; color: var(--gold); text-transform: uppercase; z-index: 2; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
         
@@ -63,7 +62,6 @@
         
         video.banner-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
 
-        /* UI ELEMENTS */
         .carousel-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
         .dot { width: 6px; height: 6px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.5); cursor: pointer; }
         .dot.active { background: #fff; transform: scale(1.2); }
@@ -82,7 +80,7 @@
         #searchInput:focus { background: rgba(255, 255, 255, 0.95); box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-color: rgba(197, 160, 89, 0.5); }
         #clearSearchBtn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 16px; color: #999; cursor: pointer; display: none; z-index: 10; padding: 5px; margin-right: 10px; }
         
-        /* NOTE SUGGESTIONS & MODAL INTERACTIVE ELEMENTS */
+        /* NOTE SUGGESTIONS CHIPS */
         .note-suggestions { padding: 5px 20px 10px; overflow-x: auto; white-space: nowrap; display: flex; gap: 8px; scrollbar-width: none; border-bottom: 1px solid rgba(0,0,0,0.03); }
         .note-suggestions::-webkit-scrollbar { display: none; }
         .note-label { font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: 1px; align-self: center; font-weight: 700; }
@@ -90,13 +88,14 @@
         .note-chip:active { transform: scale(0.95); }
         .note-chip.active-note { border-color: var(--gold); color: var(--gold); background: #fdfbf7; font-weight: 700; }
         
-        .modal-note-tag { display: inline-block; background: #fff; border: 1px solid #eaeaea; padding: 4px 10px; border-radius: 4px; font-size: 11px; margin: 0 5px 6px 0; cursor: pointer; color: #444; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        /* УЩІЛЬНЕНІ НОТИ В МОДАЛЦІ */
+        .modal-note-tag { display: inline-block; background: #fff; border: 1px solid #eaeaea; padding: 3px 8px; border-radius: 4px; font-size: 11px; margin: 0 4px 4px 0; cursor: pointer; color: #444; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
         .modal-note-tag:hover, .modal-note-tag:active { border-color: var(--gold); color: #fff; background: var(--gold); box-shadow: 0 3px 8px rgba(197,160,89,0.3); transform: translateY(-1px); }
         
         .vol-chip.bottle-special { border-color: #000; border-width: 2px; font-weight: 900; background: #fffaf0; }
         .vol-chip.bottle-special.active { background: #000; color: var(--gold); border-color: var(--gold); }
         
-        .recommendations-block { margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+        .recommendations-block { margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
         .rec-title { font-size: 10px; text-transform: uppercase; color: var(--gold); font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; display: block; }
         .rec-scroll { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; }
         .rec-scroll::-webkit-scrollbar { display: none; }
@@ -104,7 +103,6 @@
         .rec-item img { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; margin-bottom: 5px; background: #f9f9f9;}
         .rec-item span { display: block; font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #444; font-family: var(--serif); }
 
-        /* LIVE SEARCH DROPDOWN */
         .search-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 0 0 8px 8px; max-height: 320px; overflow-y: auto; z-index: 2000; border: 1px solid #eee; border-top: none; }
         .search-item { display: flex; align-items: center; padding: 10px 15px; border-bottom: 1px solid #f9f9f9; cursor: pointer; transition: 0.2s; }
         .search-item:last-child { border-bottom: none; }
@@ -124,14 +122,19 @@
         .tab-btn { background: none; border: none; font-size: 10px; font-weight: 600; color: #ccc; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; padding: 5px 0;}
         .tab-btn.active { color: #000; border-bottom: 1px solid var(--gold); }
 
-        /* CATALOG */
-        #catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 15px; padding: 20px; }
+        /* ОПТИМІЗОВАНИЙ КАТАЛОГ ДЛЯ ПК ТА МОБІЛОК */
+        #catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 30px 15px; padding: 20px; }
+        @media (min-width: 600px) { #catalog { grid-template-columns: repeat(3, 1fr); gap: 30px 20px; } }
+        @media (min-width: 992px) { #catalog { grid-template-columns: repeat(4, 1fr); gap: 40px 25px; padding: 30px 40px; } }
+        @media (min-width: 1200px) { #catalog { grid-template-columns: repeat(5, 1fr); gap: 40px 30px; } }
+
         .card { position: relative; display: flex; flex-direction: column; background: #fff; }
         .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f9f9f9; cursor: pointer; position: relative; z-index: 5; }
         .card-price-label { font-size: 12px; color: var(--gold); font-weight: 700; margin: 10px 0 2px; text-align: center; }
         .brand { font-family: var(--serif); font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; text-align: center; }
         .name { font-family: var(--serif); font-size: 14px; margin: 2px 0 10px; min-height: 35px; text-align: center; line-height: 1.2; }
-        .order-btn { border: 1px solid #000; background: transparent; padding: 12px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; cursor: pointer; position: relative; z-index: 10; }
+        .order-btn { border: 1px solid #000; background: transparent; padding: 12px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; cursor: pointer; position: relative; z-index: 10; transition: 0.3s; }
+        .order-btn:hover { background: #000; color: #fff; }
         
         .badge { position: absolute; left: 10px; padding: 3px 9px; font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px; z-index: 10; font-weight: 700; }
         .card .badge-new { top: 10px; background: var(--badge-new-bg); color: #fff; }
@@ -140,66 +143,55 @@
         .card .badge-new + .badge-top { top: 35px; }
         .card .badge-new + .badge-bottle, .card .badge-top + .badge-bottle { top: 60px; }
 
-        /* WISHLIST BUTTON */
         .wishlist-btn { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; z-index: 15; font-size: 16px; color: #ccc; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         .wishlist-btn:active { transform: scale(0.8); }
         .wishlist-btn.active { color: var(--gold); border-color: rgba(197,160,89,0.3); }
 
-        /* SKELETON LOADER */
         .skeleton { animation: pulse 1.5s infinite ease-in-out; background: #f0f0f0; border-radius: 4px; }
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
         .skeleton-img { width: 100%; aspect-ratio: 1; margin-bottom: 10px; }
         .skeleton-text { height: 12px; margin-bottom: 8px; width: 80%; margin-left: auto; margin-right: auto; }
         .skeleton-text.short { width: 50%; }
 
-        /* WEEK PICK */
         .week-spotlight { padding: 25px 15px; background: #fafafa; margin: 15px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; text-align: center; }
         .week-label { font-size: 9px; text-transform: uppercase; letter-spacing: 4px; color: var(--gold); margin-bottom: 15px; display: block; font-weight: 600; }
         .week-img { max-height: 180px; width: auto; max-width: 90%; object-fit: contain; margin-bottom: 15px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.06)); cursor: pointer; }
         .week-card-btn { width: 220px; height: 40px; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; background: #1a1a1a; color: #fff; border: none; cursor: pointer; }
 
-        /* MODAL & COMPACT REVIEWS */
+        /* УЩІЛЬНЕНА МОДАЛКА */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: #fff; padding: 30px 20px; max-width: 450px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.1); position: relative; }
-        
+        .modal-content { background: #fff; padding: 25px 20px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.1); position: relative; border-radius: 8px;}
         .modal-close-x { position: absolute; top: 15px; left: 15px; font-size: 20px; color: #999; background: none; border: none; cursor: pointer; padding: 5px; z-index: 20; transition: 0.3s; }
         .modal-close-x:hover { color: #000; }
 
-        .reviews-scroll-container { max-height: 160px; overflow-y: auto; margin: 10px 0 20px; padding-right: 5px; border-bottom: 1px solid #f2f2f2; }
+        .reviews-scroll-container { max-height: 160px; overflow-y: auto; margin: 10px 0 15px; padding-right: 5px; border-bottom: 1px solid #f2f2f2; }
         .reviews-scroll-container::-webkit-scrollbar { width: 3px; }
         .reviews-scroll-container::-webkit-scrollbar-thumb { background: #eee; border-radius: 10px; }
         
-        .review-box { border-left: 3px solid #eee; background: #fcfcfc; padding: 10px 12px; margin: 8px 0; font-style: italic; font-size: 12.5px; color: #555; line-height: 1.4; }
+        .review-box { border-left: 3px solid #eee; background: #fcfcfc; padding: 8px 12px; margin: 6px 0; font-style: italic; font-size: 12px; color: #555; line-height: 1.4; }
         .review-pos { border-left-color: var(--gold); background: #fdfdfd; }
         .review-neg { border-left-color: #333; background: #f9f9f9; }
         
-        .note-header { color: var(--gold); text-transform: uppercase; font-size: 10px; font-weight: 700; display: block; margin-top: 15px; margin-bottom: 5px; letter-spacing: 1px; }
-        .style-block { border: 1px solid #eee; padding: 12px; margin: 15px 0; background: #fdfdfd; font-size: 13px; }
-        .style-header { color: var(--gold); font-size: 9px; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 5px; font-weight: 700; }
-
-        /* REVIEW FORM (Зірочки) */
         .review-form-container { margin-top: 15px; margin-bottom: 10px; padding: 15px; background: #fafafa; border-radius: 6px; border: 1px solid #eee; }
         .review-form-title { font-size: 10px; text-transform: uppercase; font-weight: 700; color: var(--gold); letter-spacing: 1px; margin-bottom: 10px; display: block; text-align: center; }
         .star-rating { display: flex; flex-direction: row-reverse; justify-content: center; gap: 5px; margin-bottom: 5px; }
         .star-rating input { display: none; }
         .star-rating label { font-size: 26px; color: #ddd; cursor: pointer; transition: 0.2s; }
         .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: var(--gold); }
-        .review-textarea { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: var(--sans); font-size: 13px; resize: none; margin-bottom: 12px; outline: none; background: #fff; margin-top: 10px;}
+        .review-textarea { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: var(--sans); font-size: 13px; resize: none; margin-bottom: 10px; outline: none; background: #fff; margin-top: 10px;}
         .review-textarea:focus { border-color: var(--gold); }
-        .review-submit-btn { background: #fff; color: #000; border: 1px solid #000; padding: 12px 15px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; cursor: pointer; border-radius: 4px; width: 100%; transition: 0.2s; }
+        .review-submit-btn { background: #fff; color: #000; border: 1px solid #000; padding: 10px 15px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; cursor: pointer; border-radius: 4px; width: 100%; transition: 0.2s; }
         .review-submit-btn:hover { background: #000; color: #fff; }
 
-        /* VOLUMES & PRICE */
-        .vol-container { margin: 15px 0 20px; border-top: 1px solid #f0f0f0; padding-top: 15px; }
-        .vol-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; display: block; margin-bottom: 10px; }
-        .vol-grid { display: flex; gap: 8px; flex-wrap: wrap; }
-        .vol-chip { padding: 9px 14px; border: 1px solid #eee; font-size: 11px; cursor: pointer; transition: 0.3s; background: #fff; }
+        .vol-container { margin: 15px 0 15px; border-top: 1px solid #f0f0f0; padding-top: 12px; }
+        .vol-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; display: block; margin-bottom: 8px; }
+        .vol-grid { display: flex; gap: 6px; flex-wrap: wrap; }
+        .vol-chip { padding: 8px 12px; border: 1px solid #eee; font-size: 11px; cursor: pointer; transition: 0.3s; background: #fff; border-radius: 4px;}
         .vol-chip.active { border-color: var(--gold); color: var(--gold); font-weight: 700; background: #fefaf4; }
         .vol-chip.disabled { opacity: 0.3; pointer-events: none; background: #fafafa; color: #ccc; border-color: #eee; text-decoration: line-through; }
-        .price-display { font-size: 20px; font-family: var(--serif); color: var(--gold); margin: 15px 0 2px 0; font-weight: 400; }
-        .price-sub { font-size: 11px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .price-display { font-size: 20px; font-family: var(--serif); color: var(--gold); margin: 10px 0 2px 0; font-weight: 400; }
+        .price-sub { font-size: 11px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
 
-        /* ABOUT & FAQ */
         .about-section { background: #fafafa; padding: 60px 20px; text-align: center; border-top: 1px solid #eee; }
         .about-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .about-content { max-width: 500px; margin: 0 auto; text-align: left; font-size: 14px; line-height: 1.8; color: #333; }
@@ -216,33 +208,26 @@
         .about-contacts { display: flex; gap: 10px; justify-content: center; margin-top: 25px; }
         .contact-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 12px; border: 1px solid #ddd; text-decoration: none; color: #1a1a1a; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         
-        /* FLOATING & TOP BTNS */
         .floating-tg { position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 1500; text-decoration: none; }
         .floating-tg svg { width: 22px; height: 22px; fill: white; }
         
         #scrollTopBtn { display: none; position: fixed; bottom: 150px; right: 25px; background: rgba(26, 26, 26, 0.8); backdrop-filter: blur(5px); color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 18px; cursor: pointer; z-index: 1400; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s; }
         #scrollTopBtn:active { transform: scale(0.9); }
 
-        .modal-btn-full { display: flex; width: 100%; height: 50px; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; }
-        .modal-order-btn { position: sticky; bottom: -20px; left: 0; width: calc(100% + 40px); margin-left: -20px; margin-top: 20px; margin-bottom: -30px; padding: 20px 0; background: var(--gold); color: #fff; box-shadow: 0 -10px 20px rgba(0,0,0,0.1); z-index: 100; transition: background 0.3s ease, color 0.3s ease; }
+        .modal-btn-full { display: flex; width: 100%; height: 50px; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; border-radius: 6px;}
+        .modal-order-btn { position: sticky; bottom: -20px; left: 0; width: calc(100% + 40px); margin-left: -20px; margin-top: 15px; margin-bottom: -25px; padding: 20px 0; background: var(--gold); color: #fff; box-shadow: 0 -10px 20px rgba(0,0,0,0.1); z-index: 100; transition: background 0.3s ease, color 0.3s ease; border-radius: 0 0 8px 8px;}
         .modal-order-btn:active { background: #000; }
-        .close-btn { background: #f5f5f5; color: #999; margin-top: 15px; border-radius: 8px; }
+        .close-btn { background: #f5f5f5; color: #999; margin-top: 10px; }
         
-        /* БЛОК НАШІ ПРОЄКТИ (МЕДАЛЬЙОНИ) */
         .other-projects { padding: 40px 20px; text-align: center; background: #fff; border-top: 1px solid #f2f2f2; }
         .projects-title { font-size: 9px; text-transform: uppercase; letter-spacing: 3px; color: #bbb; margin-bottom: 30px; display: block; font-weight: 600; }
         .projects-flex { display: flex; gap: 45px; justify-content: center; }
         .project-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #1a1a1a; transition: 0.3s; width: 80px; }
-        .project-circle { 
-            width: 65px; height: 65px; border-radius: 50%; border: 1px solid var(--gold); 
-            margin-bottom: 12px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; 
-        }
+        .project-circle { width: 65px; height: 65px; border-radius: 50%; border: 1px solid var(--gold); margin-bottom: 12px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .project-circle img { width: 100%; height: 100%; object-fit: cover; }
         .project-name { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #444; text-align: center; line-height: 1.2; }
         .project-item:active .project-circle { transform: scale(0.9); border-color: #000; }
 
-        /* TG CHAT BUBBLE */
         .tg-chat-bubble { position: fixed; bottom: 85px; right: 25px; background: #fff; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.15); padding: 12px 15px 12px 12px; display: flex; align-items: center; gap: 12px; z-index: 1499; opacity: 0; transform: translateY(20px) scale(0.9); pointer-events: none; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f0f0f0; width: 240px; box-sizing: border-box; }
         .tg-chat-bubble.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
         .tg-chat-bubble::after { content: ''; position: absolute; bottom: -6px; right: 15px; width: 12px; height: 12px; background: #fff; transform: rotate(45deg); border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; }
@@ -252,7 +237,6 @@
         .bubble-close { position: absolute; top: 6px; right: 10px; font-size: 12px; color: #ccc; cursor: pointer; transition: 0.2s; padding: 2px; }
         .bubble-close:hover { color: #000; }
 
-        /* CART STYLES + ANIMATION */
         @keyframes cartPulse { 0% {transform: scale(1);} 50% {transform: scale(1.15); box-shadow: 0 0 20px rgba(197,160,89,0.8);} 100% {transform: scale(1);} }
         .cart-pulse-anim { animation: cartPulse 0.4s ease-in-out; }
         
@@ -418,9 +402,7 @@
         <h3 class="cart-title">Ваш кошик</h3>
         <button class="cart-close" onclick="toggleCart()">×</button>
     </div>
-    <div class="cart-items" id="cartItemsList">
-        </div>
-    
+    <div class="cart-items" id="cartItemsList"></div>
     <div class="cart-footer">
         <div class="cart-total-row">
             <span>Всього:</span>
@@ -726,7 +708,7 @@
             if(revStart !== -1) {
                 let revText = f.substring(revStart);
                 f = f.substring(0, revStart);
-                reviewsHTML += '<div style="margin-top:20px;"><span style="font-weight:700; text-transform:uppercase; font-size:10px; letter-spacing:1px; color:#999;">💬 Відгуки:</span><div class="reviews-scroll-container">';
+                reviewsHTML += '<div style="margin-top:15px;"><span style="font-weight:700; text-transform:uppercase; font-size:10px; letter-spacing:1px; color:#999;">💬 Відгуки:</span><div class="reviews-scroll-container">';
                 reviewsHTML += revText
                     .replace(/\[\+\](.*?)(?=<br>|\[\+\]|\[-\]|\[=\]|$)/g, '<div class="review-box review-pos">$1</div>')
                     .replace(/\[-\](.*?)(?=<br>|\[\+\]|\[-\]|\[=\]|$)/g, '<div class="review-box review-neg">$1</div>')
@@ -738,7 +720,7 @@
         const hasTags = /(Стиль:|Напрямок:|Піраміда|Основні характеристики:|Верхні ноти:)/i.test(f);
 
         if (!hasTags && f.trim().length > 0) {
-            f = '<div style="font-size:14px; line-height:1.6;">' + f + '</div>';
+            f = '<div style="font-size:13.5px; line-height:1.5;">' + f + '</div>';
         } else if (f.trim().length > 0) {
             let intro = "";
             let details = f;
@@ -750,16 +732,17 @@
             }
 
             if (intro.trim()) {
-                intro = '<p style="font-size:14px; margin-bottom:15px; line-height:1.6;">' + intro.replace(/(<br\s*\/?>\s*)+/g, '<br><br>').trim() + '</p>';
+                intro = '<p style="font-size:13.5px; margin-bottom:10px; line-height:1.5;">' + intro.replace(/(<br\s*\/?>\s*)+/g, '<br><br>').trim() + '</p>';
             }
 
             if (details.trim()) {
-                details = '<div style="background-color:#f9f9f9; padding:15px; border-radius:5px; font-size:14px; line-height:1.5;">' + details;
+                details = '<div style="background-color:#f9f9f9; padding:12px; border-radius:5px; font-size:13.5px; line-height:1.4;">' + details;
 
-                details = details.replace(/(Піраміда аромату:|Піраміда композиції:|Основні характеристики:|Стійкість та шлейф:)\s*(?:<br\s*\/?>)?/gi, '<p style="color:#b39151; text-transform:uppercase; font-size:12px; font-weight:bold; margin-top:20px; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">$1</p>');
-                details = details.replace(/(Стиль:|Напрямок:)/gi, '<p style="color:#b39151; text-transform:uppercase; font-size:12px; font-weight:bold; margin-top:10px; margin-bottom:5px;">$1</p>');
+                // Ущільнені заголовки блоків
+                details = details.replace(/(Піраміда аромату:|Піраміда композиції:|Основні характеристики:|Стійкість та шлейф:)\s*(?:<br\s*\/?>)?/gi, '<p style="color:#b39151; text-transform:uppercase; font-size:11px; font-weight:bold; margin-top:15px; margin-bottom:5px; border-bottom:1px solid #eee; padding-bottom:3px;">$1</p>');
+                details = details.replace(/(Стиль:|Напрямок:)/gi, '<p style="color:#b39151; text-transform:uppercase; font-size:11px; font-weight:bold; margin-top:8px; margin-bottom:4px;">$1</p>');
                 
-                // РОЗУМНИЙ ПАРСЕР НОТ (перетворює на клікабельні теги, без точок, ущільнений)
+                // Ущільнений парсер нот
                 details = details.replace(/(Верхні ноти:|Ноти серця:|Серце:|Середні ноти:|Базові ноти:|Ноти бази:|Акорди:)\s*(.*?)(?=<br|<p|$)/gi, function(match, title, notesText) {
                     let clickableNotes = notesText.split(/[,;]/).map(n => {
                         let cleanNote = n.replace(/[.,;]+$/, '').trim(); 
@@ -768,11 +751,12 @@
                         }
                         return cleanNote;
                     }).join(' ');
-                    return `<p style="color:#b39151; text-transform:uppercase; font-size:10px; font-weight:bold; margin-top:12px; margin-bottom:6px;">${title}</p><div style="margin-bottom:4px;">${clickableNotes}</div>`;
+                    return `<p style="color:#b39151; text-transform:uppercase; font-size:9px; font-weight:bold; margin-top:8px; margin-bottom:4px;">${title}</p><div style="margin-bottom:2px;">${clickableNotes}</div>`;
                 });
 
-                details = details.replace(/(Група ароматів:|Група:|Стать:|Країна бренду:|Країна:)/gi, '<span style="display:inline-block; margin-top:6px;"><b>$1</b></span>');
+                details = details.replace(/(Група ароматів:|Група:|Стать:|Країна бренду:|Країна:)/gi, '<span style="display:inline-block; margin-top:4px;"><b>$1</b></span>');
 
+                // Ущільнені блоки Стійкість та Шлейф
                 details = details.replace(/(Стійкість:|Шлейф:)\s*(?:<br\s*\/?>)?\s*(\d)[^\wА-Яа-яієґїA-Za-z]*([А-Яа-яієґїA-Za-z\s,]+)/gi, function(m, p1, p2, p3) {
                     let num = parseInt(p2);
                     if(isNaN(num)) num = 0;
@@ -783,7 +767,7 @@
                         else bars += '<span style="display:inline-block; width:30px; height:8px; background-color:#e0e0e0; border-radius:3px; margin-right:4px;">&nbsp;</span>';
                     }
                     let textDesc = p3.replace(/<br\s*\/?>/gi, '').trim();
-                    return `<div style="margin-top:15px; margin-bottom:5px;"><p style="margin:0 0 5px 0; font-size:14px;"><b>${p1}</b></p><div style="display:block; font-size:0; line-height:0;">${bars}</div><p style="margin:5px 0 0 0; font-size:12px; color:gray;">${textDesc}</p></div>`;
+                    return `<div style="margin-top:10px; margin-bottom:0;"><p style="margin:0 0 3px 0; font-size:13px;"><b>${p1}</b></p><div style="display:block; font-size:0; line-height:0;">${bars}</div><p style="margin:2px 0 0 0; font-size:11px; color:gray;">${textDesc}</p></div>`;
                 });
 
                 details += '</div>';
