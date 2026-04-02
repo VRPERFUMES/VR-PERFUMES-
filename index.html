@@ -312,6 +312,22 @@
         .cart-checkout-btn { display: flex; width: 100%; padding: 18px 0; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; background: #000; color: #fff; border: none; cursor: pointer; border-radius: 8px; transition: 0.3s; }
         .cart-checkout-btn:active { background: var(--gold); }
 
+ /* SECTION REVIEWS - PREMIUM MINIMALISM */
+        .reviews-section { padding: 50px 20px; background: #fff; border-top: 1px solid #f2f2f2; text-align: center; }
+        .reviews-header { font-size: 10px; text-transform: uppercase; letter-spacing: 4px; color: var(--gold); font-weight: 700; margin-bottom: 30px; display: block; }
+        
+        .reviews-container { max-width: 600px; margin: 0 auto; text-align: left; }
+        .review-card { border-bottom: 1px solid #f9f9f9; padding: 25px 0; transition: 0.3s; }
+        .review-card:last-child { border-bottom: none; }
+        .review-author { font-family: var(--serif); font-size: 15px; font-weight: 700; color: #1a1a1a; display: block; margin-bottom: 4px; }
+        .review-stars { color: var(--gold); font-size: 9px; letter-spacing: 2px; margin-bottom: 10px; display: block; }
+        .review-text { font-size: 13.5px; color: #444; line-height: 1.7; font-style: italic; font-weight: 400; }
+        
+        #reviewsHistory { display: none; }
+        .toggle-reviews-btn { color: var(--gold); cursor: pointer; text-transform: uppercase; font-size: 10px; letter-spacing: 2px; font-weight: 700; margin-top: 30px; display: inline-block; border-bottom: 1px solid var(--gold); padding-bottom: 4px; }
+
+        .leave-review-box { margin-top: 50px; padding: 30px 20px; background: #fbfbfb; border-radius: 4px; border: 1px solid #eee; }
+        .leave-review-title { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 20px; display: block; color: #1a1a1a; }       
     </style>
 </head>
 <body>
@@ -404,6 +420,95 @@
     </div>
 </div>
 
+<div class="reviews-section">
+    <span class="reviews-header">Що про нас кажуть</span>
+    
+    <div class="reviews-container">
+        <div class="review-card">
+            <span class="review-author">Олена К.</span>
+            <span class="review-stars">★★★★★</span>
+            <p class="review-text">«Неймовірний сервіс. Вікторія допомогла підібрати аромат на подарунок подрузі, вгадала на всі 100%. Soleil Blanc тепер мій фаворит. Дякую за терпіння та професіоналізм!»</p>
+        </div>
+        <div class="review-card">
+            <span class="review-author">Марина</span>
+            <span class="review-stars">★★★★★</span>
+            <p class="review-text">«Вже втретє беру розпив і щоразу в захваті. Все чітко, швидко і, головне, оригінально. Стійкість ароматів вражає, Ganymede тримається добу на одязі.»</p>
+        </div>
+        <div class="review-card">
+            <span class="review-author">Тетяна В.</span>
+            <span class="review-stars">★★★★★</span>
+            <p class="review-text">«Дуже приємно мати справу з професіоналом. Доставка за один день, пакування максимально надійне. Вікторія завжди порадить найкраще. Дякую!»</p>
+        </div>
+
+        <div id="reviewsHistory">
+            <div class="review-card">
+                <span class="review-author">Ірина</span>
+                <span class="review-stars">★★★★★</span>
+                <p class="review-text">«Замовляла декілька пробників для знайомства. Атомайзери дуже якісні, не протікають. Спілкування з Вікторією — окреме задоволення, дуже душевно.»</p>
+            </div>
+            <div class="review-card">
+                <span class="review-author">Наталі</span>
+                <span class="review-stars">★★★★★</span>
+                <p class="review-text">«Найкращий вибір нішевої парфумерії, який я бачила в розпиві. Отримала свій Baccarat 540 наступного дня після замовлення. Все супер!»</p>
+            </div>
+            <div class="review-card">
+                <span class="review-author">Світлана П.</span>
+                <span class="review-stars">★★★★★</span>
+                <p class="review-text">«Вражена обізнаністю Вікторії. Дуже детально розповіла про піраміду та розкриття аромату. Тепер я ваш постійний клієнт, дякую за чесний сервіс.»</p>
+            </div>
+            <div class="review-card">
+                <span class="review-author">Анна</span>
+                <span class="review-stars">★★★★★</span>
+                <p class="review-text">«Для мене важливо, щоб був оригінал. Тут сумнівів немає. Lost Cherry звучить розкішно. Дякую за можливість купувати улюблену нішу невеликими об'ємами.»</p>
+            </div>
+            <div class="review-card">
+                <span class="review-author">Юлія</span>
+                <span class="review-stars">★★★★★</span>
+                <p class="review-text">«Швидко, професійно та естетично. Пакування — це любов! Відчувається увага до кожної деталі. Вікторія, ви найкраща у своїй справі.»</p>
+            </div>
+            <div class="review-card">
+                <span class="review-author">Катерина М.</span>
+                <span class="review-stars">★★★★★</span>
+                <p class="review-text">«Шукала конкретний аромат від Tom Ford, знайшла тільки тут. Сервіс на висоті, все дуже оперативно. Рекомендую всім знайомим!»</p>
+            </div>
+            <div class="review-card">
+                <span class="review-author">Вікторія</span>
+                <span class="review-stars">★★★★★</span>
+                <p class="review-text">«Дуже вдячна за пораду щодо вибору зимового парфуму. Аромат саме такий, як я хотіла — теплий та шлейфовий. Доставка миттєва.»</p>
+            </div>
+            <div class="review-card">
+                <span class="review-author">Олександра</span>
+                <span class="review-stars">★★★★★</span>
+                <p class="review-text">«Якість атомайзерів приємно здивувала — скляні, виглядають дуже солідно. Аромати 100% оригінал. Тепер тільки до вас!»</p>
+            </div>
+            <div class="review-card">
+                <span class="review-author">Марія Л.</span>
+                <span class="review-stars">★★★★★</span>
+                <p class="review-text">«Прекрасний досвід покупки. Вікторія допомогла підібрати сет під мій настрій. Все прийшло ідеально запакованим. Щиро дякую!»</p>
+            </div>
+        </div>
+        
+        <span class="toggle-reviews-btn" id="toggleReviewsBtn" onclick="toggleReviews()">Показати більше ↓</span>
+    </div>
+
+    <div class="reviews-container">
+        <div class="leave-review-box">
+            <span class="leave-review-title">Лишити відгук про сервіс</span>
+            <div class="star-rating">
+                <input type="radio" id="gstar5" name="grating" value="5" onchange="showGeneralReviewFields()"><label for="gstar5">★</label>
+                <input type="radio" id="gstar4" name="grating" value="4" onchange="showGeneralReviewFields()"><label for="gstar4">★</label>
+                <input type="radio" id="gstar3" name="grating" value="3" onchange="showGeneralReviewFields()"><label for="gstar3">★</label>
+                <input type="radio" id="gstar2" name="grating" value="2" onchange="showGeneralReviewFields()"><label for="gstar2">★</label>
+                <input type="radio" id="gstar1" name="grating" value="1" onchange="showGeneralReviewFields()"><label for="gstar1">★</label>
+            </div>
+            <div id="generalReviewFields" style="display:none; margin-top:20px;">
+                <input type="text" id="revName" class="cart-comment-input" placeholder="Ваше ім'я" style="margin-bottom:15px; border-radius: 4px;">
+                <textarea id="revText" class="review-textarea" rows="3" placeholder="Ваші враження від замовлення та роботи..." style="border-radius: 4px;"></textarea>
+                <button class="review-submit-btn" onclick="submitGeneralReview()" style="border-radius: 4px; padding: 15px;">ВІДПРАВИТИ ВІДГУК</button>
+            </div>
+        </div>
+    </div>
+</div>    
 <div class="other-projects">
     <span class="projects-title">Наші Проєкти</span>
     <div class="projects-flex">
@@ -1378,6 +1483,39 @@
         }, 300);
     }, 3000);
 
+function toggleReviews() {
+        const h = document.getElementById('reviewsHistory'), b = document.getElementById('toggleReviewsBtn');
+        let isVis = h.style.display === "block";
+        h.style.display = isVis ? "none" : "block";
+        b.innerText = isVis ? "Згорнути ↑" : "Показати більше ↓";
+    }
+
+    function showGeneralReviewFields() {
+        document.getElementById('generalReviewFields').style.display = 'block';
+    }
+
+    function submitGeneralReview() {
+        const name = document.getElementById('revName').value.trim() || "Клієнт";
+        const text = document.getElementById('revText').value.trim();
+        const rating = document.querySelector('input[name="grating"]:checked');
+        
+        if (!rating) { alert('Будь ласка, оберіть оцінку зірочками!'); return; }
+        if (!text) { alert('Будь ласка, напишіть пару слів про ваш досвід!'); return; }
+        
+        const stars = rating.value;
+        const msg = `✨ НОВИЙ ВІДГУК ПРО СЕРВІС VR:\nВід: ${name}\nОцінка: ${stars}⭐\nТекст: ${text}`;
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(msg).catch(err => console.log('Clipboard error', err));
+        }
+        
+        const encodedMsg = encodeURIComponent(msg);
+        window.location.href = `https://t.me/${TG_NICK}?text=${encodedMsg}`;
+        
+        setTimeout(() => {
+            document.querySelector('.leave-review-box').innerHTML = '<div style="color:var(--gold); font-weight:700; padding:20px; font-size:13px; letter-spacing:1px; text-transform:uppercase;">Дякуємо! Ваш відгук відправлено Вікторії ✨</div>';
+        }, 1500);
+    }    
 </script>
 
 <div id="infoModal" class="modal" onclick="this.style.display='none'">
