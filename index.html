@@ -87,6 +87,25 @@
         #searchInput:focus { background: rgba(255, 255, 255, 0.95); box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-color: rgba(197, 160, 89, 0.5); }
         #clearSearchBtn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 16px; color: #999; cursor: pointer; display: none; z-index: 10; padding: 5px; margin-right: 10px; }
         
+        /* NOTE SUGGESTIONS & MODAL INTERACTIVE ELEMENTS */
+        .note-suggestions { padding: 5px 20px 10px; overflow-x: auto; white-space: nowrap; display: flex; gap: 8px; scrollbar-width: none; border-bottom: 1px solid rgba(0,0,0,0.03); }
+        .note-suggestions::-webkit-scrollbar { display: none; }
+        .note-label { font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: 1px; align-self: center; font-weight: 700; }
+        .note-chip { display: inline-block; padding: 4px 12px; background: #fff; border: 1px solid #eaeaea; border-radius: 20px; font-size: 10px; color: #555; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; }
+        .note-chip:active { transform: scale(0.95); }
+        .note-chip.active-note { border-color: var(--gold); color: var(--gold); background: #fdfbf7; font-weight: 700; }
+        
+        .modal-note-tag { display: inline-block; background: #fff; border: 1px dashed #ccc; padding: 3px 8px; border-radius: 4px; font-size: 12px; margin: 2px 4px 2px 0; cursor: pointer; color: #555; transition: 0.2s; }
+        .modal-note-tag:hover { border-color: var(--gold); color: var(--gold); background: #fdfbf7; }
+        
+        .recommendations-block { margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+        .rec-title { font-size: 10px; text-transform: uppercase; color: var(--gold); font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        .rec-scroll { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; }
+        .rec-scroll::-webkit-scrollbar { display: none; }
+        .rec-item { min-width: 65px; width: 65px; text-align: center; cursor: pointer; }
+        .rec-item img { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; margin-bottom: 5px; background: #f9f9f9;}
+        .rec-item span { display: block; font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #444; font-family: var(--serif); }
+
         /* LIVE SEARCH DROPDOWN */
         .search-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 0 0 8px 8px; max-height: 320px; overflow-y: auto; z-index: 2000; border: 1px solid #eee; border-top: none; }
         .search-item { display: flex; align-items: center; padding: 10px 15px; border-bottom: 1px solid #f9f9f9; cursor: pointer; transition: 0.2s; }
@@ -300,6 +319,17 @@
         <span id="clearSearchBtn" onclick="clearSearch()">✕</span>
         <div id="searchResults" class="search-dropdown"></div>
     </div>
+    
+    <div class="note-suggestions" id="noteSuggestions">
+        <span class="note-label">Ноти:</span>
+        <span class="note-chip" onclick="searchByNote('Ваніль', this)">Ваніль</span>
+        <span class="note-chip" onclick="searchByNote('Вишня', this)">Вишня</span>
+        <span class="note-chip" onclick="searchByNote('Шкіра', this)">Шкіра</span>
+        <span class="note-chip" onclick="searchByNote('Троянда', this)">Троянда</span>
+        <span class="note-chip" onclick="searchByNote('Бергамот', this)">Бергамот</span>
+        <span class="note-chip" onclick="searchByNote('Мускус', this)">Мускус</span>
+    </div>
+    
     <div class="brand-slider" id="brandSlider"></div>
     <div class="tabs-container">
         <button class="tab-btn active" onclick="setCategory('all', this)">Усі</button>
@@ -682,7 +712,6 @@
         let rawText = (isWeekly && weekText) ? weekText : desc;
         let f = rawText;
         
-        // --- ПОЧАТОК НОВОГО РОЗУМНОГО ПАРСЕРА ---
         let reviewsHTML = '';
         if (f.includes('[+]') || f.includes('[-]') || f.includes('[=]')) {
             f = f.replace(/(Відгуки:)/gi, '');
@@ -720,17 +749,24 @@
             if (details.trim()) {
                 details = '<div style="background-color:#f9f9f9; padding:15px; border-radius:5px; font-size:14px; line-height:1.5;">' + details;
 
-                // Заголовки блоків (Золоті з лінією)
                 details = details.replace(/(Піраміда аромату:|Піраміда композиції:|Основні характеристики:|Стійкість та шлейф:)\s*(?:<br\s*\/?>)?/gi, '<p style="color:#b39151; text-transform:uppercase; font-size:12px; font-weight:bold; margin-top:20px; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">$1</p>');
-
-                // Заголовки тексту (Стиль, Ноти)
                 details = details.replace(/(Стиль:|Напрямок:)/gi, '<p style="color:#b39151; text-transform:uppercase; font-size:12px; font-weight:bold; margin-top:10px; margin-bottom:5px;">$1</p>');
-                details = details.replace(/(Верхні ноти:|Ноти серця:|Серце:|Середні ноти:|Базові ноти:|Ноти бази:|Акорди:)/gi, '<p style="color:#b39151; text-transform:uppercase; font-size:11px; font-weight:bold; margin-top:10px; margin-bottom:2px;">$1</p>');
+                
+                // РОЗУМНИЙ ПАРСЕР НОТ (перетворює на клікабельні теги)
+                details = details.replace(/(Верхні ноти:|Ноти серця:|Серце:|Середні ноти:|Базові ноти:|Ноти бази:|Акорди:)\s*(.*?)(?=<br|<p|$)/gi, function(match, title, notesText) {
+                    let clickableNotes = notesText.split(/[,;]/).map(n => {
+                        let cleanNote = n.trim();
+                        if(cleanNote.length > 2) {
+                            let searchNote = cleanNote.replace(/\.$/, '');
+                            return `<span class="modal-note-tag" onclick="searchByNote('${searchNote}')">${cleanNote}</span>`;
+                        }
+                        return cleanNote;
+                    }).join(' ');
+                    return `<p style="color:#b39151; text-transform:uppercase; font-size:11px; font-weight:bold; margin-top:10px; margin-bottom:5px;">${title}</p><div style="margin-bottom:10px;">${clickableNotes}</div>`;
+                });
 
-                // Жирний текст характеристик
                 details = details.replace(/(Група ароматів:|Група:|Стать:|Країна бренду:|Країна:)/gi, '<span style="display:inline-block; margin-top:6px;"><b>$1</b></span>');
 
-                // Парсер візуальних шкал (Стійкість: 4 - Висока)
                 details = details.replace(/(Стійкість:|Шлейф:)\s*(?:<br\s*\/?>)?\s*(\d)[^\wА-Яа-яієґїA-Za-z]*([А-Яа-яієґїA-Za-z\s,]+)/gi, function(m, p1, p2, p3) {
                     let num = parseInt(p2);
                     if(isNaN(num)) num = 0;
@@ -749,8 +785,20 @@
             f = intro + details;
         }
 
-        f += reviewsHTML;
-        // --- КІНЕЦЬ НОВОГО РОЗУМНОГО ПАРСЕРА ---
+        // БЛОК РЕКОМЕНДАЦІЙ
+        let recsHTML = '';
+        let sameBrand = globalCatalogData.filter(c => c[0] === brand && c[1] !== name).slice(0, 5);
+        if(sameBrand.length > 0) {
+            recsHTML += '<div class="recommendations-block"><span class="rec-title">Також від ' + brand + ':</span><div class="rec-scroll">';
+            sameBrand.forEach(c => {
+                let safeImg = c[5].replace(/'/g, "%27");
+                let cStr = JSON.stringify(c).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+                recsHTML += `<div class="rec-item" onclick='showModal(${cStr})'><img src="${safeImg}"><span>${c[1]}</span></div>`;
+            });
+            recsHTML += '</div></div>';
+        }
+
+        f += recsHTML + reviewsHTML;
 
         const shareBtnHTML = `
             <div style="text-align: right; margin-top: 15px; margin-bottom: 5px;">
@@ -989,7 +1037,28 @@
         resContainer.style.display = 'block';
     }
 
-    function clearSearch() { document.getElementById('searchInput').value = ''; handleSearchInput(); document.getElementById('searchResults').style.display = 'none'; }
+    function clearSearch() { 
+        document.getElementById('searchInput').value = ''; 
+        handleSearchInput(); 
+        document.getElementById('searchResults').style.display = 'none'; 
+        document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note')); 
+    }
+
+    function searchByNote(note, btnElement) {
+        document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note'));
+        const inputField = document.getElementById('searchInput');
+        
+        if (inputField.value.toLowerCase() === note.toLowerCase()) {
+            clearSearch(); return;
+        }
+        
+        if(btnElement) btnElement.classList.add('active-note');
+        inputField.value = note;
+        handleSearchInput();
+        document.getElementById('searchResults').style.display = 'none';
+        scrollToFirstCards();
+        document.getElementById('infoModal').style.display = 'none'; 
+    }
 
     document.addEventListener('click', function(e) { const controls = document.getElementById('stickyControls'); if (controls && !controls.contains(e.target)) { const res = document.getElementById('searchResults'); if (res) res.style.display = 'none'; } });
 
