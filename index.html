@@ -149,6 +149,7 @@
         .badge-new { background: var(--badge-new-bg); color: #fff; }
         .badge-top { color: var(--gold); border: 1px solid var(--gold); background: #fff; }
         .badge-bottle { background: #000; color: var(--gold); border: 1px solid var(--gold); }
+.badge-set { background: #1a1a1a; color: #fff; border: 1px solid #1a1a1a; }
         
         /* ПУЛЬСУЮЧИЙ БЕЙДЖ ДЕФІЦИТУ (PREMIUM) */
         .badge-last { background: #fff; color: #a94442; border: 1px solid #a94442; animation: badgePulse 2s infinite ease-in-out; }
@@ -366,15 +367,15 @@
         <span class="note-chip" onclick="searchByNote('Бергамот', this)">Бергамот</span>
         <span class="note-chip" onclick="searchByNote('Мускус', this)">Мускус</span>
     </div>
-    
-    <div class="brand-slider" id="brandSlider"></div>
     <div class="tabs-container">
         <button class="tab-btn active" onclick="setCategory('all', this)">Усі</button>
         <button class="tab-btn" onclick="setCategory('new', this)">Новинки</button>
         <button class="tab-btn" onclick="setCategory('top', this)">Хіти</button>
+        <button class="tab-btn" onclick="setCategory('set', this)">Сети</button>
         <button class="tab-btn" onclick="setCategory('bottle', this)">Залишки у флаконі</button>
         <button class="tab-btn" onclick="setCategory('wishlist', this)">Улюблені ♡</button>
     </div>
+   
 </div>
 
 <div id="weekPerfumeContainer"></div>
@@ -707,8 +708,7 @@
             wContainer.innerHTML = '';
 
             catalogData.sort((a, b) => new Date(b[6]) - new Date(a[6]));
-
-            catalogData.forEach(c => {
+catalogData.forEach(c => {
                 const [brand, name, price, minVol, desc, img, dateStr, top, weekText] = c;
                 const bottleMl = c[11]; 
                 
@@ -718,6 +718,12 @@
                 const isWeek = top && top.toLowerCase().includes('тиждень');
                 const isBottle = bottleMl && parseInt(bottleMl) > 0;
                 const isLastDrops = top && top.toLowerCase().includes('останн');
+
+                // ПРАВКА ТУТ: Додаємо розпізнавання сетів
+                const isSet = (brand && brand.toLowerCase().includes('set')) || 
+                              (brand && brand.toLowerCase().includes('сет')) || 
+                              (name && name.toLowerCase().includes('сет')) || 
+                              (top && top.toLowerCase().includes('сет'));
                 
                 const startsFrom5 = minVol && String(minVol).includes('5');
                 const minPriceLabel = calculatePrice(price, startsFrom5 ? '5 мл' : '2 мл');
@@ -727,15 +733,14 @@
                 const isWished = wishlist.includes(cardId);
                 const safeDesc = desc ? desc.replace(/<[^>]*>?/gm, ' ').replace(/"/g, '&quot;') : '';
 
+                // Логіка банерів (залишаємо твою оригінальну)
                 if (isPromo || isWeek) {
                     let catchyHeading = ""; 
-
                     if (isPromo && !isWeek && desc) {
                         let cleanDesc = desc.replace(/<[^>]+>/g, ' ').replace(/\[[+\-=]\]/g, '');
                         cleanDesc = cleanDesc.replace(/(Опис:|Стиль:|Напрямок:|Піраміда:|Верхні ноти:|Ноти серця:|Серце:|Середні ноти:|Базові ноти:|Ноти бази:|Акорди:|Відгуки:)/gi, '');
                         cleanDesc = cleanDesc.replace(/\b20\d{2}\s*р?\.?\b/gi, ''); 
                         cleanDesc = cleanDesc.replace(/\s+/g, ' ').trim();
-                        
                         let sentences = cleanDesc.split(/[.!?<]/);
                         for (let s of sentences) {
                             let candidate = s.trim();
@@ -748,16 +753,11 @@
                     } else if (isWeek) {
                         catchyHeading = "Ексклюзивна пропозиція цього тижня";
                     }
-
-                    let overlayOpacity = isPromo ? '0.5' : '0.3';
-
                     const slide = document.createElement('div');
                     slide.className = 'slide';
-                    slide.innerHTML = `<div class="banner-bg-img" style="background-image:url('${safeImg}')"></div><div class="video-overlay" style="background:rgba(0,0,0,${overlayOpacity})"></div><div class="banner-content"><span class="banner-brand">${isWeek ? 'WEEKLY PICK' : brand}</span><span class="banner-title">${name}</span><span class="banner-catchy">${catchyHeading}</span><span class="banner-btn">СПРОБУВАТИ АРОМАТ</span><span class="banner-price-sub">${price} грн / 1 мл</span></div>`;
-                    
+                    slide.innerHTML = `<div class="banner-bg-img" style="background-image:url('${safeImg}')"></div><div class="video-overlay"></div><div class="banner-content"><span class="banner-brand">${isWeek ? 'WEEKLY PICK' : brand}</span><span class="banner-title">${name}</span><span class="banner-catchy">${catchyHeading}</span><span class="banner-btn">СПРОБУВАТИ АРОМАТ</span><span class="banner-price-sub">${price} грн / 1 мл</span></div>`;
                     slide.querySelector('.banner-bg-img').onclick = () => showModal(c, isWeek);
                     slide.querySelector('.banner-btn').onclick = () => showModal(c, isWeek);
-                    
                     carousel.appendChild(slide);
                 }
                 
@@ -765,22 +765,25 @@
                     const wDiv = document.createElement('div');
                     wDiv.className = 'week-spotlight';
                     wDiv.innerHTML = `<span class="week-label">Ексклюзив тижня</span><img src="${safeImg}" class="week-img"><div class="brand">${brand}</div><div class="name">${name}</div><div class="week-btn-container"><button class="week-card-btn primary">ОПИС</button></div>`;
-                    
                     wDiv.querySelector('.week-img').onclick = () => showModal(c, true);
                     wDiv.querySelector('.week-card-btn').onclick = () => showModal(c, true);
                     wContainer.appendChild(wDiv);
                 }
 
+                // Створення основних карток
                 const div = document.createElement('div');
                 div.className = 'card'; 
                 div.setAttribute('data-brand', brand); 
                 div.setAttribute('data-id', cardId); 
                 div.setAttribute('data-desc', safeDesc); 
-                div.setAttribute('data-category', (isNew ? 'new ' : '') + (isTop ? 'top ' : '') + (isBottle ? 'bottle ' : '') + (top ? top.toLowerCase() : ''));
+                
+                // ПРАВКА ТУТ: Додаємо категорію 'set' у фільтр
+                div.setAttribute('data-category', (isNew ? 'new ' : '') + (isTop ? 'top ' : '') + (isBottle ? 'bottle ' : '') + (isSet ? 'set ' : '') + (top ? top.toLowerCase() : ''));
                 
                 div.innerHTML = `
                     <div class="badges-wrapper">
                         ${isNew?'<div class="badge badge-new">New</div>':''}
+                        ${isSet?'<div class="badge badge-set">Набір</div>':''} 
                         ${isTop?'<div class="badge badge-top">Hit</div>':''}
                         ${isBottle?'<div class="badge badge-bottle">Флакон</div>':''}
                         ${isLastDrops?'<div class="badge badge-last">Останні мл</div>':''}
@@ -926,20 +929,35 @@
         const disable2ml = minVol && String(minVol).includes('5');
         const isBottleAvailable = bottleMl && parseInt(bottleMl) > 0;
         const isLastDrops = top && top.toLowerCase().includes('останн');
+        
+        // НОВИЙ РЯДОК: Визначаємо, чи це набір
+        const isSetType = (minVol && String(minVol).toLowerCase().includes('тільки')) || brand.toLowerCase().includes('SET');
+
+        // ФОРМУЄМО КНОПКИ: Якщо сет — одна кнопка, якщо ні — всі доступні
+        let volButtons = '';
+        if (isSetType) {
+            selectedVol = "Набір";
+            volButtons = `<div class="vol-chip active" onclick="selectVol(this, 'Набір')">${minVol}</div>`;
+        } else {
+            selectedVol = "5 мл";
+            volButtons = `
+                <div class="vol-chip ${disable2ml ? 'disabled' : ''}" onclick="selectVol(this, '2 мл')">2 мл</div>
+                <div class="vol-chip active" onclick="selectVol(this, '5 мл')">5 мл</div>
+                <div class="vol-chip" onclick="selectVol(this, '10 мл')">10 мл</div>
+                <div class="vol-chip" onclick="selectVol(this, '20 мл')">20 мл</div>
+                <div class="vol-chip" onclick="selectVol(this, 'Флакон')">Флакон</div>
+                ${isBottleAvailable ? `<div class="vol-chip bottle-special" onclick="selectVol(this, 'Рідний флакон (${bottleMl} мл)', ${bottlePrice})">Залишок у рідному флаконі (${bottleMl} мл)</div>` : ''}
+            `;
+        }
 
         const volHTML = `
             <div class="vol-container"><span class="vol-label">Оберіть об'єм:</span>
                 <div class="vol-grid">
-                    <div class="vol-chip ${disable2ml ? 'disabled' : ''}" onclick="selectVol(this, '2 мл')">2 мл</div>
-                    <div class="vol-chip active" onclick="selectVol(this, '5 мл')">5 мл</div>
-                    <div class="vol-chip" onclick="selectVol(this, '10 мл')">10 мл</div>
-                    <div class="vol-chip" onclick="selectVol(this, '20 мл')">20 мл</div>
-                    <div class="vol-chip" onclick="selectVol(this, 'Флакон')">Флакон</div>
-                    ${isBottleAvailable ? `<div class="vol-chip bottle-special" onclick="selectVol(this, 'Рідний флакон (${bottleMl} мл)', ${bottlePrice})">Залишок у рідному флаконі (${bottleMl} мл)</div>` : ''}
+                    ${volButtons}
                 </div>
                 ${isLastDrops ? `<div style="text-align:center; color: #a94442; font-size: 10px; text-transform: uppercase; margin-top: 12px; font-weight: 700; border: 1px dashed #a94442; padding: 6px; border-radius: 4px; animation: badgePulse 2s infinite ease-in-out;">⚡ Увага: аромат закінчується, останні мілілітри</div>` : ''}
             </div>
-            <div class="price-display" id="modalPrice">Ціна: ${calculatePrice(price, '5 мл')}</div>
+            <div class="price-display" id="modalPrice">Ціна: ${isSetType ? calculatePrice(price, '2 мл') : calculatePrice(price, '5 мл')}</div>
             <div class="price-sub">Базова ціна: ${price} грн / 1 мл</div>`;
             
         const reviewFormHTML = `
