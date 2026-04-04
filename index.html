@@ -151,7 +151,7 @@
         .badge-new { background: var(--badge-new-bg); color: #fff; }
         .badge-top { color: var(--gold); border: 1px solid var(--gold); background: #fff; }
         .badge-bottle { background: #000; color: var(--gold); border: 1px solid var(--gold); }
-.badge-set { background: #1a1a1a; color: #fff; border: 1px solid #1a1a1a; }
+        .badge-set { background: #1a1a1a; color: #fff; border: 1px solid #1a1a1a; }
         
         /* ПУЛЬСУЮЧИЙ БЕЙДЖ ДЕФІЦИТУ (PREMIUM) */
         .badge-last { background: #fff; color: #a94442; border: 1px solid #a94442; animation: badgePulse 2s infinite ease-in-out; }
@@ -723,7 +723,6 @@ catalogData.forEach(c => {
                 const isBottle = bottleMl && parseInt(bottleMl) > 0;
                 const isLastDrops = top && top.toLowerCase().includes('останн');
 
-                // ПРАВКА ТУТ: Додаємо розпізнавання сетів
                 const isSet = (brand && brand.toLowerCase().includes('set')) || 
                               (brand && brand.toLowerCase().includes('сет')) || 
                               (name && name.toLowerCase().includes('сет')) || 
@@ -731,14 +730,13 @@ catalogData.forEach(c => {
                 
                 const startsFrom5 = minVol && String(minVol).includes('5');
                 const minPriceLabel = calculatePrice(price, startsFrom5 ? '5 мл' : '2 мл');
-                const displayPriceStr = isSet ? minPriceLabel : `від ${minPriceLabel}`; // Якщо сет, то без "від"
+                const displayPriceStr = isSet ? minPriceLabel : `від ${minPriceLabel}`; 
                 const safeImg = img.replace(/'/g, "%27");
                 
                 const cardId = brand + ' ' + name;
                 const isWished = wishlist.includes(cardId);
                 const safeDesc = desc ? desc.replace(/<[^>]*>?/gm, ' ').replace(/"/g, '&quot;') : '';
 
-                // Логіка банерів (залишаємо твою оригінальну)
                 if (isPromo || isWeek) {
                     let catchyHeading = ""; 
                     if (isPromo && !isWeek && desc) {
@@ -775,14 +773,12 @@ catalogData.forEach(c => {
                     wContainer.appendChild(wDiv);
                 }
 
-                // Створення основних карток
                 const div = document.createElement('div');
                 div.className = 'card'; 
                 div.setAttribute('data-brand', brand); 
                 div.setAttribute('data-id', cardId); 
                 div.setAttribute('data-desc', safeDesc); 
                 
-                // ПРАВКА ТУТ: Додаємо категорію 'set' у фільтр
                 div.setAttribute('data-category', (isNew ? 'new ' : '') + (isTop ? 'top ' : '') + (isBottle ? 'bottle ' : '') + (isSet ? 'set ' : '') + (top ? top.toLowerCase() : ''));
                 
                 div.innerHTML = `
@@ -835,6 +831,19 @@ catalogData.forEach(c => {
         let rawText = (isWeekly && weekText) ? weekText : desc;
         let f = rawText;
         
+        let posCount = (f.match(/\[\+\]/g) || []).length;
+        let neuCount = (f.match(/\[=\]/g) || []).length;
+        let negCount = (f.match(/\[-\]/g) || []).length;
+        let totalRev = posCount + neuCount + negCount;
+        let aggregatedStarsHTML = '';
+        
+        if (totalRev > 0) {
+            let totalScore = (posCount * 5) + (neuCount * 3) + (negCount * 1);
+            let avgStars = Math.round(totalScore / totalRev);
+            let starsStr = '★'.repeat(avgStars) + '☆'.repeat(5 - avgStars);
+            aggregatedStarsHTML = `<div style="text-align:center; color:var(--gold); font-size:16px; letter-spacing:2px; margin-top:-10px; margin-bottom:15px;" title="Оцінка на основі ${totalRev} відгуків">${starsStr} <span style="font-size:11px; color:#999; letter-spacing:0; vertical-align:middle; font-weight:normal;">(${totalRev})</span></div>`;
+        }
+
         let reviewsHTML = '';
         if (f.includes('[+]') || f.includes('[-]') || f.includes('[=]')) {
             f = f.replace(/(Відгуки:)/gi, '');
@@ -918,7 +927,7 @@ catalogData.forEach(c => {
             recsHTML += '</div></div>';
         }
 
-        f += recsHTML + reviewsHTML;
+        f = aggregatedStarsHTML + f + recsHTML + reviewsHTML;
 
         const shareBtnHTML = `
             <div style="text-align: right; margin-top: 15px; margin-bottom: 5px;">
@@ -935,13 +944,11 @@ catalogData.forEach(c => {
         const isBottleAvailable = bottleMl && parseInt(bottleMl) > 0;
         const isLastDrops = top && top.toLowerCase().includes('останн');
         
-        // НОВИЙ РЯДОК: Визначаємо, чи це набір
        const isSetType = (minVol && String(minVol).toLowerCase().includes('тільки')) || 
                   brand.toLowerCase().includes('set') || 
                   brand.toLowerCase().includes('сет') || 
                   name.toLowerCase().includes('сет');
 
-        // ФОРМУЄМО КНОПКИ: Якщо сет — одна кнопка, якщо ні — всі доступні
         let volButtons = '';
         if (isSetType) {
             selectedVol = "Набір";
@@ -999,7 +1006,6 @@ catalogData.forEach(c => {
         
         if (vol === "Набір") {
             currentFixedPrice = 0;
-            // Для сетів ми примусово кажемо рахувати як за 2 мл (це наша повна ціна боксу)
             document.getElementById('modalPrice').innerText = "Ціна: " + calculatePrice(currentBasePrice, "2 мл");
         } else if (fixedP > 0) {
             currentFixedPrice = fixedP;
@@ -1524,13 +1530,27 @@ catalogData.forEach(c => {
     }
 
     function renderPremiumPromo(promoData) {
-        if (!promoData || promoData[0] !== 'ON') return;
-        
-        if (document.getElementById('promoCard') || sessionStorage.getItem('promoCardShown')) return;
-        sessionStorage.setItem('promoCardShown', 'true');
+        if (!promoData || promoData.length === 0 || !promoData[0]) return;
+        const status = String(promoData[0]).trim().toUpperCase();
+        if (status !== 'ON') return;
 
-        const [status, brand, name, videoUrl, imgUrl, linkOrName, customText] = promoData;
-        const badgeText = customText ? customText : 'НОВИНКА'; 
+        // ДЛЯ ТЕСТІВ: Закоментований захист від повторного показу
+        // if (document.getElementById('promoCard') || sessionStorage.getItem('promoCardShown')) return;
+        // sessionStorage.setItem('promoCardShown', 'true');
+
+        const brand = promoData[1] ? String(promoData[1]).trim() : '';
+        const name = promoData[2] ? String(promoData[2]).trim() : '';
+        const videoUrl = promoData[3] ? String(promoData[3]).trim() : '';
+        const imgUrl = promoData[4] ? String(promoData[4]).trim() : '';
+        const linkOrName = promoData[5] ? String(promoData[5]).trim() : '';
+        const customText = promoData[6] ? String(promoData[6]).trim() : '';
+
+        const badgeText = customText !== '' ? customText : 'НОВИНКА'; 
+
+        const hasVideo = videoUrl !== '';
+        const mediaHtml = hasVideo 
+            ? `<video autoplay muted loop playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.5; z-index:1; background-color:#000;"><source src="${videoUrl}" type="video/mp4"></video>`
+            : `<div style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.3; z-index:1; background-image:url('${imgUrl}'); background-size:cover; background-position:center; filter:blur(3px);"></div>`;
 
         setTimeout(() => {
             const promo = document.createElement('div');
@@ -1542,12 +1562,12 @@ catalogData.forEach(c => {
                 right: '20px',
                 width: '300px',
                 height: '450px',
-                backgroundColor: '#000',
+                backgroundColor: '#1a1a1a', 
                 zIndex: '3000',
                 borderRadius: '20px',
                 overflow: 'hidden',
-                boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
-                border: '1px solid rgba(255,255,255,0.1)',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
+                border: '1px solid rgba(197, 160, 89, 0.3)', 
                 display: 'flex',
                 flexDirection: 'column',
                 transition: 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
@@ -1556,14 +1576,12 @@ catalogData.forEach(c => {
             });
 
             window.handlePromoAction = function() {
-                const target = linkOrName.trim();
-                
-                if (target.startsWith('http') || target.includes('www.')) {
-                    window.open(target, '_blank');
+                if (linkOrName.startsWith('http') || linkOrName.includes('www.')) {
+                    window.open(linkOrName, '_blank');
                     document.getElementById('promoCard').remove();
-                } else {
+                } else if (linkOrName !== '') {
                     const item = globalCatalogData.find(p => 
-                        (p[0] + ' ' + p[1]).toLowerCase().includes(target.toLowerCase())
+                        (String(p[0]) + ' ' + String(p[1])).toLowerCase().includes(linkOrName.toLowerCase())
                     );
                     
                     if (item) {
@@ -1572,29 +1590,31 @@ catalogData.forEach(c => {
                     } else {
                         const searchInput = document.getElementById('searchInput');
                         if (searchInput) {
-                            searchInput.value = target;
+                            searchInput.value = linkOrName;
                             handleSearchInput();
                             scrollToFirstCards();
                         }
                         document.getElementById('promoCard').remove();
                     }
+                } else {
+                    document.getElementById('promoCard').remove();
                 }
             };
 
+            const safeImgHtml = imgUrl !== '' ? `<img src="${imgUrl}" style="max-height:160px; filter:drop-shadow(0 10px 20px rgba(0,0,0,0.5)); border-radius: 8px;">` : '';
+
             promo.innerHTML = `
-                <button onclick="document.getElementById('promoCard').remove()" style="position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.2); border:none; color:white; border-radius:50%; width:30px; height:30px; cursor:pointer; z-index:10; font-size:18px;">×</button>
-                <video autoplay muted loop playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.5; z-index:1;">
-                    <source src="${videoUrl}" type="video/mp4">
-                </video>
+                <button onclick="document.getElementById('promoCard').remove()" style="position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.2); border:none; color:white; border-radius:50%; width:30px; height:30px; cursor:pointer; z-index:10; font-size:18px; display:flex; justify-content:center; align-items:center;">×</button>
+                ${mediaHtml}
                 <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between; align-items:center; padding:30px 15px; text-align:center; pointer-events:none;">
                     <div>
-                        <h3 style="margin:0; font-size:12px; color:#fff; letter-spacing:3px; opacity:0.8;">${brand}</h3>
+                        <h3 style="margin:0; font-size:12px; color:var(--gold); letter-spacing:3px;">${brand}</h3>
                         <h2 style="margin:5px 0; font-size:24px; color:#fff; font-weight:900; line-height:1.0;">${name}</h2>
-                        <div style="background:#c5a059; color:#fff; display:inline-block; padding:5px 10px; transform:rotate(-3deg); font-weight:700; font-size:11px; margin-top:10px; text-transform:uppercase;">${badgeText}</div>
+                        <div style="background:var(--gold); color:#fff; display:inline-block; padding:5px 10px; transform:rotate(-3deg); font-weight:700; font-size:11px; margin-top:10px; text-transform:uppercase;">${badgeText}</div>
                     </div>
-                    <img src="${imgUrl}" style="max-height:160px; filter:drop-shadow(0 10px 20px rgba(0,0,0,0.5));">
+                    ${safeImgHtml}
                     <div style="pointer-events:auto; width:100%;">
-                        <button onclick="handlePromoAction()" style="background:#fff; color:#000; border:none; padding:12px 0; width:100%; font-weight:900; text-transform:uppercase; letter-spacing:1px; border-radius:10px; cursor:pointer; font-size:11px; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+                        <button onclick="handlePromoAction()" style="background:#fff; color:#000; border:none; padding:12px 0; width:100%; font-weight:900; text-transform:uppercase; letter-spacing:1px; border-radius:10px; cursor:pointer; font-size:11px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.3s;">
                             Дізнатися більше
                         </button>
                     </div>
@@ -1602,8 +1622,8 @@ catalogData.forEach(c => {
             `;
 
             document.body.appendChild(promo);
-            setTimeout(() => { promo.style.opacity = '1'; promo.style.transform = 'translateY(0) scale(1)'; }, 300);
-        }, 3000);
+            setTimeout(() => { promo.style.opacity = '1'; promo.style.transform = 'translateY(0) scale(1)'; }, 100);
+        }, 2500); 
     }
 
     load();
