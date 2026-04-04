@@ -1378,7 +1378,29 @@ body.dark-theme .tg-chat-bubble .bubble-text b { color: #fff; }
 
     document.addEventListener('click', function(e) { const controls = document.getElementById('stickyControls'); if (controls && !controls.contains(e.target)) { const res = document.getElementById('searchResults'); if (res) res.style.display = 'none'; } });
 
-    function navigateToPerfume(n) { document.getElementById('searchInput').value = n; handleSearchInput(); document.getElementById('newsModalWindow').style.display='none'; scrollToFirstCards(); }
+    function navigateToPerfume(n) {
+    // 1. Закриваємо вікно новин
+    document.getElementById('newsModalWindow').style.display = 'none';
+
+    // 2. Шукаємо товар у нашому масиві даних за назвою або брендом
+    const item = globalCatalogData.find(p => 
+        (p[0] + " " + p[1]).toLowerCase().includes(n.toLowerCase())
+    );
+
+    if (item) {
+        // Якщо знайшли — одразу показуємо модалку цього парфуму
+        showModal(item);
+    } else {
+        // Якщо точного збігу немає — вбиваємо назву в пошук і скролимо до результатів
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.value = n;
+            handleSearchInput();
+            scrollToFirstCards();
+        }
+    }
+}
+
     
     function setCategory(c, b) { currentCategory = c; document.getElementById('searchInput').value = ''; triggerCatalogAnimation(); document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); scrollToFirstCards(); }
     
@@ -1477,11 +1499,17 @@ body.dark-theme .tg-chat-bubble .bubble-text b { color: #fff; }
         brs.forEach(b => { const btn = document.createElement('button'); btn.className = 'brand-btn'; btn.innerText = b; btn.onclick = function() { setBrand(b, this); }; s.appendChild(btn); });
     }
     
-    function formatNews(newsText) {
-        if(!newsText) return;
-        let formatted = newsText.replace(/\n/g, '<br>').replace(/\*(.*?)\*/g, '<b>$1</b>');
-        document.getElementById('newsModalContent').innerHTML = '<div style="font-size:14px; line-height:1.7; color:var(--text-dark);">' + formatted + '</div>';
-    }
+     function formatNews(newsText) {
+    if(!newsText) return;
+    let formatted = newsText
+        .replace(/\n/g, '<br>') // Переноси рядків
+        .replace(/\*(.*?)\*/g, '<b>$1</b>') // Жирний текст через *зірочки*
+        // Робимо назви у {фігурних дужках} клікабельними:
+        .replace(/\{(.*?)\}/g, '<span style="color:var(--gold); font-weight:bold; cursor:pointer; text-decoration:underline;" onclick="navigateToPerfume(\'$1\')">$1</span>');
+
+    document.getElementById('newsModalContent').innerHTML = '<div style="font-size:14px; line-height:1.7; color:var(--text-dark);">' + formatted + '</div>';
+}
+
 
     function renderGeneralReviews(data) {
         const mainList = document.getElementById('reviewsListContainer'), historyList = document.getElementById('reviewsHistory'), toggleBtn = document.getElementById('toggleReviewsBtn');
