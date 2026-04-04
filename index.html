@@ -7,13 +7,17 @@
     
     <link rel="icon" href="https://i.postimg.cc/CxkmFFJ3/logo.png" type="image/png">
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18051738791"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'AW-18051738791');
-</script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-18051738791');
+    </script>
 
     <style>
         :root { 
@@ -22,7 +26,8 @@
             --text-dark: #1a1a1a;
             --text-gray: #757575; 
             --gray-light: #fbfbfb;
-            --serif: "Georgia", serif; 
+            --serif: "Playfair Display", serif; 
+            --cinzel: "Cinzel", serif;
             --sans: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
             --badge-new-bg: #333333; 
         }
@@ -43,6 +48,14 @@
             line-height: 1.5; 
         }
 
+        /* ЕФЕКТ МАТОВОГО СКЛА (GLASSMORPHISM) */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
         .tt-hint { background: #fff; color: #444; padding: 12px 15px; text-align: center; font-size: 11px; border-bottom: 1px solid #f2f2f2; letter-spacing: 0.3px; position: relative; z-index: 1001; }
         .tt-hint b { color: var(--gold); }
 
@@ -57,13 +70,13 @@
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 1; }
 
         .logo { width: 120px; position: relative; z-index: 2; margin-bottom: 15px; mix-blend-mode: screen; }
-        .hero-carousel h1 { font-family: var(--serif); font-size: 22px; letter-spacing: 12px; color: var(--gold); text-transform: uppercase; z-index: 2; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .hero-carousel h1 { font-family: var(--cinzel); font-size: 26px; font-weight: 700; letter-spacing: 12px; color: var(--gold); text-transform: uppercase; z-index: 2; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
         
         .banner-content { text-align: center; padding: 20px; color: #fff; position: relative; z-index: 2; width: 100%; box-sizing: border-box; margin-top: -15px; }
         .banner-brand { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: var(--gold); display: block; margin-bottom: 5px; font-weight: 700; }
-        .banner-title { font-size: 42px; font-weight: 900; display: block; margin-bottom: 12px; letter-spacing: -1.5px; text-transform: uppercase; line-height: 0.95; }
-        .banner-catchy { display: block; font-size: 14px; font-weight: 400; margin-bottom: 25px; line-height: 1.4; color: #f5f5f5; max-width: 300px; margin-left: auto; margin-right: auto; }
-        .banner-btn { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; padding: 14px 35px; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; color: #fff; text-decoration: none; cursor: pointer; background: rgba(0,0,0,0.1); backdrop-filter: blur(2px); }
+        .banner-title { font-size: 42px; font-family: var(--cinzel); font-weight: 900; display: block; margin-bottom: 12px; letter-spacing: -1.5px; text-transform: uppercase; line-height: 0.95; }
+        .banner-catchy { display: block; font-family: var(--serif); font-size: 16px; font-style: italic; margin-bottom: 25px; line-height: 1.4; color: #f5f5f5; max-width: 300px; margin-left: auto; margin-right: auto; }
+        .banner-btn { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; padding: 14px 35px; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; color: #fff; text-decoration: none; cursor: pointer; background: rgba(0,0,0,0.1); backdrop-filter: blur(4px); }
         .banner-price-sub { display: block; font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; }        
         
         video.banner-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
@@ -80,9 +93,9 @@
         .viber-link, .news-btn { flex: 1; border: 1px solid #eee; padding: 14px; text-align: center; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; color: #000; cursor: pointer; }
         
         /* SEARCH & STICKY NAV */
-        .sticky-active { position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding-top: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.4); }
+        .sticky-active { position: sticky; top: 0; z-index: 1000; padding-top: 10px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
         .search-wrapper { position: relative; margin: 0 20px; }
-        #searchInput { width: 100%; padding: 12px 35px 12px 15px; border: 1px solid rgba(0,0,0,0.08); border-radius: 20px; font-size: 13px; outline: none; letter-spacing: 1px; box-sizing: border-box; background: rgba(255, 255, 255, 0.5); box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); transition: all 0.3s ease; }
+        #searchInput { width: 100%; padding: 12px 35px 12px 15px; border: 1px solid rgba(0,0,0,0.08); border-radius: 20px; font-size: 13px; outline: none; letter-spacing: 1px; box-sizing: border-box; background: rgba(255, 255, 255, 0.6); box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); transition: all 0.3s ease; }
         #searchInput:focus { background: rgba(255, 255, 255, 0.95); box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-color: rgba(197, 160, 89, 0.5); }
         #clearSearchBtn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 16px; color: #999; cursor: pointer; display: none; z-index: 10; padding: 5px; margin-right: 10px; }
         
@@ -90,9 +103,9 @@
         .note-suggestions { padding: 5px 20px 10px; overflow-x: auto; white-space: nowrap; display: flex; gap: 8px; scrollbar-width: none; border-bottom: 1px solid rgba(0,0,0,0.03); }
         .note-suggestions::-webkit-scrollbar { display: none; }
         .note-label { font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: 1px; align-self: center; font-weight: 700; }
-        .note-chip { display: inline-block; padding: 4px 12px; background: #fff; border: 1px solid #eaeaea; border-radius: 20px; font-size: 10px; color: #555; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; }
+        .note-chip { display: inline-block; padding: 4px 12px; background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; font-size: 10px; color: #555; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; }
         .note-chip:active { transform: scale(0.95); }
-        .note-chip.active-note { border-color: var(--gold); color: var(--gold); background: #fdfbf7; font-weight: 700; }
+        .note-chip.active-note { border-color: var(--gold); color: var(--gold); background: #fdfbf7; font-weight: 700; box-shadow: 0 2px 8px rgba(197,160,89,0.2); }
         
         /* УЩІЛЬНЕНІ НОТИ В МОДАЛЦІ */
         .modal-note-tag { display: inline-block; background: #fff; border: 1px solid #eaeaea; padding: 3px 8px; border-radius: 4px; font-size: 11px; margin: 0 4px 4px 0; cursor: pointer; color: #444; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
@@ -106,14 +119,14 @@
         .rec-item img { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; margin-bottom: 5px; background: #f9f9f9;}
         .rec-item span { display: block; font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #444; font-family: var(--serif); }
 
-        .search-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 0 0 8px 8px; max-height: 320px; overflow-y: auto; z-index: 2000; border: 1px solid #eee; border-top: none; }
+        .search-dropdown { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 0 0 8px 8px; max-height: 320px; overflow-y: auto; z-index: 2000; border: 1px solid rgba(0,0,0,0.05); border-top: none; }
         .search-item { display: flex; align-items: center; padding: 10px 15px; border-bottom: 1px solid #f9f9f9; cursor: pointer; transition: 0.2s; }
         .search-item:last-child { border-bottom: none; }
         .search-item:active { background: #fdfdfd; }
         .search-item img { width: 35px; height: 35px; object-fit: contain; margin-right: 12px; border-radius: 4px; }
         .search-item-info { flex: 1; overflow: hidden; }
         .search-item-brand { font-size: 8px; color: var(--gold); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 2px; }
-        .search-item-name { font-size: 13px; font-family: var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #1a1a1a; }
+        .search-item-name { font-size: 13px; font-family: var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #1a1a1a; font-weight: 600;}
         .search-item-price { font-size: 10px; color: #999; white-space: nowrap; margin-left: 10px; font-weight: 600; }
         .search-empty { padding: 25px 15px; text-align: center; font-size: 13px; color: #666; font-family: var(--serif); }
 
@@ -127,12 +140,11 @@
         @media (min-width: 768px) { .tabs-container { justify-content: center; } }
         .tab-btn { background: none; border: none; font-size: 11px; font-weight: 600; color: #a0a0a0; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; padding: 5px 0; transition: 0.3s; white-space: nowrap; flex-shrink: 0; }
         
-        /* ЗОЛОТЕ ПІДСВІЧУВАННЯ ТАБІВ (PREMIUM) */
         .tab-btn:hover { color: var(--gold); }
         .tab-btn.active { color: var(--gold); font-weight: 800; border-bottom: 2px solid var(--gold); }
 
         /* ОПТИМІЗОВАНИЙ КАТАЛОГ ДЛЯ ПК ТА МОБІЛОК */
-        #catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 30px 15px; padding: 20px; }
+        #catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 30px 15px; padding: 20px; transition: opacity 0.4s ease; }
         @media (min-width: 600px) { #catalog { grid-template-columns: repeat(3, 1fr); gap: 30px 20px; } }
         @media (min-width: 992px) { #catalog { grid-template-columns: repeat(4, 1fr); gap: 40px 25px; padding: 30px 40px; } }
         @media (min-width: 1200px) { #catalog { grid-template-columns: repeat(5, 1fr); gap: 40px 30px; } }
@@ -140,13 +152,12 @@
         .card { position: relative; display: flex; flex-direction: column; background: #fff; transition: box-shadow 0.3s ease; }
         .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f9f9f9; cursor: pointer; position: relative; z-index: 5; }
         .card-price-label { font-size: 12px; color: var(--gold); font-weight: 700; margin: 10px 0 2px; text-align: center; }
-        .brand { font-family: var(--serif); font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; text-align: center; }
-        .name { font-family: var(--serif); font-size: 14px; margin: 2px 0 10px; min-height: 35px; text-align: center; line-height: 1.2; }
+        .brand { font-family: var(--cinzel); font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; text-align: center; font-weight: 600;}
+        .name { font-family: var(--serif); font-size: 15px; font-weight: 600; margin: 2px 0 10px; min-height: 35px; text-align: center; line-height: 1.2; }
         .card-stars { color: var(--gold); font-size: 10px; text-align: center; letter-spacing: 1px; margin-top: -5px; margin-bottom: 10px; }
         .order-btn { border: 1px solid #000; background: transparent; padding: 12px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; cursor: pointer; position: relative; z-index: 10; transition: 0.3s; }
         .order-btn:hover { background: #000; color: #fff; }
         
-        /* КОНТЕЙНЕР ДЛЯ БЕЙДЖІВ */
         .badges-wrapper { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 10; align-items: flex-start; pointer-events: none; }
         .badge { padding: 3px 9px; font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; border-radius: 2px; }
         .badge-new { background: var(--badge-new-bg); color: #fff; }
@@ -154,7 +165,6 @@
         .badge-bottle { background: #000; color: var(--gold); border: 1px solid var(--gold); }
         .badge-set { background: #1a1a1a; color: #fff; border: 1px solid #1a1a1a; }
         
-        /* ПУЛЬСУЮЧИЙ БЕЙДЖ ДЕФІЦИТУ (PREMIUM) */
         .badge-last { background: #fff; color: #a94442; border: 1px solid #a94442; animation: badgePulse 2s infinite ease-in-out; }
         @keyframes badgePulse {
             0% { box-shadow: 0 0 0 0 rgba(169, 68, 66, 0.4); }
@@ -162,7 +172,7 @@
             100% { box-shadow: 0 0 0 0 rgba(169, 68, 66, 0); }
         }
 
-        .wishlist-btn { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; z-index: 15; font-size: 16px; color: #ccc; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .wishlist-btn { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; z-index: 15; font-size: 16px; color: #ccc; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.08); backdrop-filter: blur(4px);}
         .wishlist-btn:hover { color: var(--gold); }
         .wishlist-btn:active { transform: scale(0.8); }
         .wishlist-btn.active { color: var(--gold); border-color: rgba(197,160,89,0.3); }
@@ -178,18 +188,18 @@
         .week-img { max-height: 180px; width: auto; max-width: 90%; object-fit: contain; margin-bottom: 15px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.06)); cursor: pointer; }
         .week-card-btn { width: 220px; height: 40px; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; background: #1a1a1a; color: #fff; border: none; cursor: pointer; }
 
-        /* УЩІЛЬНЕНА МОДАЛКА */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: #fff; padding: 25px 20px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.1); position: relative; border-radius: 8px;}
+        /* УЩІЛЬНЕНА МОДАЛКА ЗІ СКЛОМ */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-content { background: rgba(255, 255, 255, 0.95); padding: 25px 20px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.2); position: relative; border-radius: 12px; border: 1px solid rgba(255,255,255,0.5); }
         .modal-close-x { position: absolute; top: 15px; left: 15px; font-size: 20px; color: #999; background: none; border: none; cursor: pointer; padding: 5px; z-index: 20; transition: 0.3s; }
         .modal-close-x:hover { color: #000; }
 
         .reviews-scroll-container { max-height: 160px; overflow-y: auto; margin: 10px 0 15px; padding-right: 5px; border-bottom: 1px solid #f2f2f2; }
-        .review-box { border-left: 3px solid #eee; background: #fcfcfc; padding: 8px 12px; margin: 6px 0; font-style: italic; font-size: 12px; color: #555; line-height: 1.4; }
-        .review-pos { border-left-color: var(--gold); background: #fdfdfd; }
-        .review-neg { border-left-color: #333; background: #f9f9f9; }
+        .review-box { border-left: 3px solid #eee; background: rgba(252,252,252,0.8); padding: 8px 12px; margin: 6px 0; font-family: var(--serif); font-style: italic; font-size: 13px; color: #555; line-height: 1.4; border-radius: 0 4px 4px 0;}
+        .review-pos { border-left-color: var(--gold); background: rgba(253,253,253,0.9); }
+        .review-neg { border-left-color: #333; background: rgba(249,249,249,0.9); }
         
-        .review-form-container { margin-top: 15px; margin-bottom: 10px; padding: 15px; background: #fafafa; border-radius: 6px; border: 1px solid #eee; }
+        .review-form-container { margin-top: 15px; margin-bottom: 10px; padding: 15px; background: rgba(250,250,250,0.8); border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); }
         .review-form-title { font-size: 10px; text-transform: uppercase; font-weight: 700; color: var(--gold); letter-spacing: 1px; margin-bottom: 10px; display: block; text-align: center; }
         .star-rating { display: flex; flex-direction: row-reverse; justify-content: center; gap: 5px; margin-bottom: 5px; }
         .star-rating input { display: none; }
@@ -207,11 +217,10 @@
         .vol-chip.active { border-color: var(--gold); color: var(--gold); font-weight: 700; background: #fefaf4; }
         .vol-chip.disabled { opacity: 0.3; pointer-events: none; background: #fafafa; color: #ccc; border-color: #eee; text-decoration: line-through; }
         
-        /* НОВА ПРЕМІАЛЬНА КНОПКА "РІДНИЙ ФЛАКОН" (VR MINIMALISM) */
         .vol-chip.bottle-special { background: #000; color: var(--gold); border: 1px solid #000; font-weight: 700; font-size: 9px; text-transform: uppercase; letter-spacing: 1px;}
         .vol-chip.bottle-special.active { background: #fff; color: #000; border-color: #000; }
         
-        .price-display { font-size: 20px; font-family: var(--serif); color: var(--gold); margin: 10px 0 2px 0; font-weight: 400; }
+        .price-display { font-size: 22px; font-family: var(--serif); font-weight: 600; color: var(--gold); margin: 10px 0 2px 0; }
         .price-sub { font-size: 11px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
 
         .about-section { background: #fafafa; padding: 60px 20px; text-align: center; border-top: 1px solid #eee; }
@@ -222,7 +231,7 @@
         .faq-item { border-bottom: 1px solid #e5e5e5; }
         .faq-question { padding: 15px 0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--text-dark); transition: color 0.3s; }
         .faq-question::after { content: '+'; font-size: 16px; color: var(--gold); }
-        .faq-answer { display: none; padding-bottom: 15px; font-size: 13px; color: #555; }
+        .faq-answer { display: none; padding-bottom: 15px; font-size: 13px; color: #555; font-family: var(--serif); }
         .faq-item.active .faq-answer { display: block; }
         .faq-item.active .faq-question { color: var(--gold); }
         .faq-item.active .faq-question::after { content: '−'; }
@@ -237,7 +246,7 @@
         #scrollTopBtn:active { transform: scale(0.9); }
 
         .modal-btn-full { display: flex; width: 100%; height: 50px; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; border-radius: 6px;}
-        .modal-order-btn { position: sticky; bottom: -20px; left: 0; width: calc(100% + 40px); margin-left: -20px; margin-top: 15px; margin-bottom: -25px; padding: 20px 0; background: var(--gold); color: #fff; box-shadow: 0 -10px 20px rgba(0,0,0,0.1); z-index: 100; transition: background 0.3s ease, color 0.3s ease; border-radius: 0 0 8px 8px;}
+        .modal-order-btn { position: sticky; bottom: -20px; left: 0; width: calc(100% + 40px); margin-left: -20px; margin-top: 15px; margin-bottom: -25px; padding: 20px 0; background: var(--gold); color: #fff; box-shadow: 0 -10px 20px rgba(0,0,0,0.1); z-index: 100; transition: background 0.3s ease, color 0.3s ease; border-radius: 0 0 12px 12px;}
         .modal-order-btn:active { background: #000; }
         .close-btn { background: #f5f5f5; color: #999; margin-top: 10px; }
         
@@ -250,9 +259,9 @@
         .project-name { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #444; text-align: center; line-height: 1.2; }
         .project-item:active .project-circle { transform: scale(0.9); border-color: #000; }
 
-        .tg-chat-bubble { position: fixed; bottom: 85px; right: 25px; background: #fff; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.15); padding: 12px 15px 12px 12px; display: flex; align-items: center; gap: 12px; z-index: 1499; opacity: 0; transform: translateY(20px) scale(0.9); pointer-events: none; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #f0f0f0; width: 240px; box-sizing: border-box; }
+        .tg-chat-bubble { position: fixed; bottom: 85px; right: 25px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.15); padding: 12px 15px 12px 12px; display: flex; align-items: center; gap: 12px; z-index: 1499; opacity: 0; transform: translateY(20px) scale(0.9); pointer-events: none; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(0,0,0,0.05); width: 240px; box-sizing: border-box; }
         .tg-chat-bubble.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-        .tg-chat-bubble::after { content: ''; position: absolute; bottom: -6px; right: 15px; width: 12px; height: 12px; background: #fff; transform: rotate(45deg); border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; }
+        .tg-chat-bubble::after { content: ''; position: absolute; bottom: -6px; right: 15px; width: 12px; height: 12px; background: #fff; transform: rotate(45deg); border-right: 1px solid rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .tg-chat-bubble img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
         .bubble-text { font-size: 11px; line-height: 1.4; color: #555; }
         .bubble-text b { color: var(--text-dark); font-size: 12px; display: inline-block; margin-bottom: 2px; }
@@ -267,40 +276,40 @@
         .cart-floating-btn svg { width: 22px; height: 22px; fill: var(--gold); }
         .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--gold); color: #fff; font-size: 10px; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; }
         
-        /* FLYING ICON ANIMATION (PREMIUM) */
+        /* FLYING ICON ANIMATION */
         .flying-icon { position: fixed; z-index: 10000; width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: all 1s cubic-bezier(0.19, 1, 0.22, 1); pointer-events: none; opacity: 1;}
 
-        .cart-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%; background: #fff; z-index: 3500; transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+        .cart-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%; background: rgba(255,255,255,0.92); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 3500; transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1); border-left: 1px solid rgba(255,255,255,0.5); }
         .cart-drawer.open { right: 0; }
         .cart-drawer-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3499; display: none; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
         .cart-drawer-backdrop.show { display: block; }
         
-        .cart-header { padding: 20px 20px 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .cart-title { font-family: var(--serif); font-size: 18px; color: #000; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        .cart-header { padding: 20px 20px 15px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .cart-title { font-family: var(--cinzel); font-size: 18px; font-weight: 700; color: #000; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
         .cart-close { background: none; border: none; font-size: 24px; color: #999; cursor: pointer; padding: 0 10px; }
         
         /* SHIPPING PROGRESS BAR */
-        .shipping-progress-container { margin: 15px 20px 5px; background: #fafafa; border-radius: 6px; border: 1px solid #eee; padding: 12px; text-align: center; display: none; }
+        .shipping-progress-container { margin: 15px 20px 5px; background: rgba(250,250,250,0.7); border-radius: 6px; border: 1px solid rgba(0,0,0,0.05); padding: 12px; text-align: center; display: none; }
         .shipping-progress-text { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 8px; font-weight: 600; }
         .shipping-progress-bar { width: 100%; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden; }
         .shipping-progress-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.5s ease; }
 
         .cart-items { flex: 1; overflow-y: auto; padding: 15px 20px; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px solid #f9f9f9; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.03); }
         .cart-item-info { flex: 1; padding-right: 15px; }
-        .cart-item-brand { font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .cart-item-name { font-size: 13px; font-family: var(--serif); color: #1a1a1a; line-height: 1.2; margin: 3px 0; }
+        .cart-item-brand { font-family: var(--cinzel); font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+        .cart-item-name { font-size: 14px; font-family: var(--serif); font-weight: 600; color: #1a1a1a; line-height: 1.2; margin: 3px 0; }
         .cart-item-vol { font-size: 11px; color: #777; }
         .cart-item-price { font-size: 13px; font-weight: 700; color: #000; }
         .cart-item-remove { background: none; border: none; color: #ff4d4d; font-size: 22px; cursor: pointer; padding: 5px; opacity: 0.6; }
         .cart-item-remove:active { opacity: 1; }
         
-        .cart-empty-msg { text-align: center; color: #999; font-size: 13px; margin-top: 40px; }
+        .cart-empty-msg { text-align: center; color: #999; font-size: 13px; margin-top: 40px; font-family: var(--serif); font-style: italic;}
         
-        .cart-footer { padding: 20px; border-top: 1px solid #eee; background: #fafafa; }
+        .cart-footer { padding: 20px; border-top: 1px solid rgba(0,0,0,0.05); background: rgba(250,250,250,0.5); }
         
         /* GIFT WRAP CHECKBOX */
-        .gift-wrap-container { display: flex; align-items: center; margin-bottom: 15px; cursor: pointer; padding: 12px; border: 1px dashed #ddd; border-radius: 6px; transition: 0.3s; background: #fff; }
+        .gift-wrap-container { display: flex; align-items: center; margin-bottom: 15px; cursor: pointer; padding: 12px; border: 1px dashed #ddd; border-radius: 6px; transition: 0.3s; background: rgba(255,255,255,0.8); }
         .gift-wrap-container:hover { border-color: var(--gold); }
         .gift-wrap-container input { display: none; }
         .gift-wrap-box { width: 16px; height: 16px; border: 1px solid #ccc; border-radius: 3px; margin-right: 12px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
@@ -308,9 +317,9 @@
         .gift-wrap-container input:checked + .gift-wrap-box::after { content: '✓'; color: #fff; font-size: 11px; font-weight: bold; }
         .gift-wrap-text { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #1a1a1a; font-weight: 700; }
 
-        .cart-total-row { display: flex; justify-content: space-between; font-size: 16px; font-family: var(--serif); color: #000; margin-bottom: 15px; }
+        .cart-total-row { display: flex; justify-content: space-between; font-size: 18px; font-family: var(--serif); font-weight: 600; color: #000; margin-bottom: 15px; }
         
-        .cart-comment-input { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-family: var(--sans); font-size: 13px; resize: none; margin-bottom: 15px; outline: none; background: #fff; }
+        .cart-comment-input { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-family: var(--sans); font-size: 13px; resize: none; margin-bottom: 15px; outline: none; background: rgba(255,255,255,0.9); }
         .cart-comment-input:focus { border-color: var(--gold); }
 
         .cart-checkout-btn { display: flex; width: 100%; padding: 18px 0; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; background: #000; color: #fff; border: none; cursor: pointer; border-radius: 8px; transition: 0.3s; }
@@ -326,9 +335,9 @@
         .reviews-container { max-width: 600px; margin: 0 auto; text-align: left; }
         .review-card { border-bottom: 1px solid #f9f9f9; padding: 25px 0; transition: 0.3s; }
         .review-card:last-child { border-bottom: none; }
-        .review-author { font-family: var(--serif); font-size: 15px; font-weight: 700; color: #1a1a1a; display: block; margin-bottom: 4px; }
+        .review-author { font-family: var(--cinzel); font-size: 14px; font-weight: 700; color: #1a1a1a; display: block; margin-bottom: 4px; letter-spacing: 1px;}
         .review-stars { color: var(--gold); font-size: 9px; letter-spacing: 2px; margin-bottom: 10px; display: block; }
-        .review-text { font-size: 13.5px; color: #444; line-height: 1.7; font-style: italic; font-weight: 400; }
+        .review-text { font-family: var(--serif); font-size: 14px; color: #444; line-height: 1.7; font-style: italic; font-weight: 400; }
         
         #reviewsHistory { display: none; }
         .toggle-reviews-btn { color: var(--gold); cursor: pointer; text-transform: uppercase; font-size: 10px; letter-spacing: 2px; font-weight: 700; margin-top: 30px; display: inline-block; border-bottom: 1px solid var(--gold); padding-bottom: 4px; }
@@ -357,7 +366,7 @@
     <div class="news-btn" onclick="document.getElementById('newsModalWindow').style.display='flex'">Новини та акції</div>
 </div>
 
-<div id="stickyControls" class="sticky-active">
+<div id="stickyControls" class="sticky-active glass-panel">
     <div class="search-wrapper">
         <input type="text" id="searchInput" placeholder="ПОШУК АРОМАТУ АБО БРЕНДУ..." oninput="handleSearchInput()">
         <span id="clearSearchBtn" onclick="clearSearch()">✕</span>
@@ -399,7 +408,7 @@
         <p style="text-align:center;"><strong>Вітаю всіх в нашому парфумерному барі! Мене звати Вікторія.</strong></p>
         <div id="aboutMore" style="display:none;">
             <p>Чи любите ви парфуми так, як люблю їх я? Парфуми зі мною у кожен момент життя, завжди маю багато різних ароматів.</p>
-            <p style="font-style:italic; border-left:2px solid var(--gold); padding-left:15px; margin:20px 0;">Кажуть, жінка може мовчати, але її парфуми все скажуть за неї.</p>
+            <p style="font-family: var(--serif); font-style:italic; border-left:2px solid var(--gold); padding-left:15px; margin:20px 0;">Кажуть, жінка може мовчати, але її парфуми все скажуть за неї.</p>
             <p>💯 Всі парфуми оригінальні, купуються виключно в офіційних магазинах Європи та США.</p>
             
             <div class="faq-container">
@@ -499,13 +508,13 @@
     
     <div class="cart-items" id="cartItemsList"></div>
 
-    <div id="cartUpsellBlock" style="display: none; margin: 0 20px 15px; padding: 12px; border: 1px dashed var(--gold); border-radius: 6px; background: #fdfbf7;">
+    <div id="cartUpsellBlock" style="display: none; margin: 0 20px 15px; padding: 12px; border: 1px dashed var(--gold); border-radius: 6px; background: rgba(253,251,247,0.8);">
         <div style="font-size: 9px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; font-weight: 700; letter-spacing: 1px; text-align: center;">Додати на пробу? ✨</div>
         <div style="display: flex; align-items: center; gap: 12px;">
             <img id="upsellImg" src="" style="width: 45px; height: 45px; object-fit: cover; border-radius: 4px; border: 1px solid #eee;">
             <div style="flex: 1; overflow: hidden;">
-                <div id="upsellBrand" style="font-size: 9px; color: #999; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></div>
-                <div id="upsellName" style="font-size: 11px; font-family: var(--serif); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 2px 0;"></div>
+                <div id="upsellBrand" style="font-family: var(--cinzel); font-size: 9px; color: #999; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;"></div>
+                <div id="upsellName" style="font-size: 13px; font-family: var(--serif); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 2px 0;"></div>
                 <div id="upsellPrice" style="font-size: 11px; color: #000; font-weight: 700;"></div>
             </div>
             <button id="upsellAddBtn" style="background: #1a1a1a; color: #fff; border: none; padding: 8px 12px; font-size: 9px; border-radius: 4px; cursor: pointer; text-transform: uppercase; font-weight: 700; transition: 0.2s;">+ 2 мл</button>
@@ -675,7 +684,7 @@
             btn.innerText = '♥';
         }
         localStorage.setItem('vr_wishlist', JSON.stringify(wishlist));
-        if (currentCategory === 'wishlist') filterCatalog(); 
+        if (currentCategory === 'wishlist') triggerCatalogAnimation(); 
     }
 
     async function load() {
@@ -698,7 +707,6 @@
             if (responses[2]) {
                 const dataPromo = await responses[2].text();
                 const promoRows = safeParseCSV(dataPromo);
-                // Шукаємо перший-ліпший рядок, де в першій колонці написано ON
                 promoDataRow = promoRows.find((row, index) => index > 0 && row[0] && String(row[0]).trim().toUpperCase() === 'ON');
             }
 
@@ -720,6 +728,11 @@
             catalogData.sort((a, b) => new Date(b[6]) - new Date(a[6]));
             catalogData.forEach(c => {
                 const [brand, name, price, minVol, desc, img, dateStr, top, weekText] = c;
+                // Індекс 11 - флакон мл, 12 - ціна флакону
+                // ІНВЕНТАРИЗАЦІЯ (ЗАЛИШКИ): 
+                // Якщо у твоєму файлі залишки будуть підключені в колонку M (індекс 13) або N (індекс 14), 
+                // ми можемо додати перевірку: let stock = c[13]; і якщо stock <= 0, ставити "Sold Out".
+                
                 const bottleMl = c[11]; 
                 
                 const pDate = new Date(dateStr), isNew = (new Date() - pDate) / (1000*60*60*24) <= 10;
@@ -743,7 +756,7 @@
                 const isWished = wishlist.includes(cardId);
                 const safeDesc = desc ? desc.replace(/<[^>]*>?/gm, ' ').replace(/"/g, '&quot;') : '';
 
-                // ОБРАХУНОК ЗІРОК ДЛЯ МІНІ-КАРТКИ
+                // ОБРАХУНОК ЗІРОК
                 let rawDesc = desc || '';
                 let posCount = (rawDesc.match(/\[\+\]/g) || []).length;
                 let neuCount = (rawDesc.match(/\[=\]/g) || []).length;
@@ -873,7 +886,7 @@
             if(revStart !== -1) {
                 let revText = f.substring(revStart);
                 f = f.substring(0, revStart);
-                reviewsHTML += '<div style="margin-top:15px;"><span style="font-weight:700; text-transform:uppercase; font-size:10px; letter-spacing:1px; color:#999;">💬 Відгуки:</span><div class="reviews-scroll-container">';
+                reviewsHTML += '<div style="margin-top:15px;"><span style="font-family: var(--cinzel); font-weight:700; text-transform:uppercase; font-size:10px; letter-spacing:1px; color:#999;">💬 Відгуки:</span><div class="reviews-scroll-container">';
                 reviewsHTML += revText
                     .replace(/\[\+\](.*?)(?=<br>|\[\+\]|\[-\]|\[=\]|$)/g, '<div class="review-box review-pos">$1</div>')
                     .replace(/\[-\](.*?)(?=<br>|\[\+\]|\[-\]|\[=\]|$)/g, '<div class="review-box review-neg">$1</div>')
@@ -901,10 +914,10 @@
             }
 
             if (details.trim()) {
-                details = '<div style="background-color:#f9f9f9; padding:12px; border-radius:5px; font-size:13.5px; line-height:1.4;">' + details;
+                details = '<div style="background-color:rgba(249,249,249,0.7); padding:12px; border-radius:5px; font-size:13.5px; line-height:1.4;">' + details;
 
-                details = details.replace(/(Піраміда аромату:|Піраміда композиції:|Основні характеристики:|Стійкість та шлейф:)\s*(?:<br\s*\/?>)?/gi, '<p style="color:#b39151; text-transform:uppercase; font-size:11px; font-weight:bold; margin-top:15px; margin-bottom:5px; border-bottom:1px solid #eee; padding-bottom:3px;">$1</p>');
-                details = details.replace(/(Стиль:|Напрямок:)/gi, '<p style="color:#b39151; text-transform:uppercase; font-size:11px; font-weight:bold; margin-top:8px; margin-bottom:4px;">$1</p>');
+                details = details.replace(/(Піраміда аромату:|Піраміда композиції:|Основні характеристики:|Стійкість та шлейф:)\s*(?:<br\s*\/?>)?/gi, '<p style="font-family:var(--cinzel); color:#b39151; text-transform:uppercase; font-size:11px; font-weight:bold; margin-top:15px; margin-bottom:5px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:3px;">$1</p>');
+                details = details.replace(/(Стиль:|Напрямок:)/gi, '<p style="font-family:var(--cinzel); color:#b39151; text-transform:uppercase; font-size:11px; font-weight:bold; margin-top:8px; margin-bottom:4px;">$1</p>');
                 
                 details = details.replace(/(Верхні ноти:|Ноти серця:|Серце:|Середні ноти:|Базові ноти:|Ноти бази:|Акорди:)\s*(.*?)(?=<br|<p|$)/gi, function(match, title, notesText) {
                     let clickableNotes = notesText.split(/[,;]/).map(n => {
@@ -914,7 +927,7 @@
                         }
                         return cleanNote;
                     }).join(' ');
-                    return `<p style="color:#b39151; text-transform:uppercase; font-size:9px; font-weight:bold; margin-top:8px; margin-bottom:4px;">${title}</p><div style="margin-bottom:2px;">${clickableNotes}</div>`;
+                    return `<p style="font-family:var(--cinzel); color:#b39151; text-transform:uppercase; font-size:9px; font-weight:bold; margin-top:8px; margin-bottom:4px;">${title}</p><div style="margin-bottom:2px;">${clickableNotes}</div>`;
                 });
 
                 details = details.replace(/(Група ароматів:|Група:|Стать:|Країна бренду:|Країна:)/gi, '<span style="display:inline-block; margin-top:4px;"><b>$1</b></span>');
@@ -929,7 +942,7 @@
                         else bars += '<span style="display:inline-block; width:30px; height:8px; background-color:#e0e0e0; border-radius:3px; margin-right:4px;">&nbsp;</span>';
                     }
                     let textDesc = p3.replace(/<br\s*\/?>/gi, '').trim();
-                    return `<div style="margin-top:10px; margin-bottom:0;"><p style="margin:0 0 3px 0; font-size:13px;"><b>${p1}</b></p><div style="display:block; font-size:0; line-height:0;">${bars}</div><p style="margin:2px 0 0 0; font-size:11px; color:gray;">${textDesc}</p></div>`;
+                    return `<div style="margin-top:10px; margin-bottom:0;"><p style="font-family:var(--cinzel); margin:0 0 3px 0; font-size:12px;"><b>${p1}</b></p><div style="display:block; font-size:0; line-height:0;">${bars}</div><p style="margin:2px 0 0 0; font-size:11px; color:gray;">${textDesc}</p></div>`;
                 });
 
                 details += '</div>';
@@ -996,7 +1009,6 @@
             <div class="price-display" id="modalPrice">Ціна: ${isSetType ? calculatePrice(price, '2 мл') : calculatePrice(price, '5 мл')}</div>
             ${isSetType ? '' : `<div class="price-sub">Базова ціна: ${price} грн / 1 мл</div>`}`;
             
-        // Захист від лапок у назві (наприклад, для сетів "Молекулярний")
         const safeReviewBrand = brand.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const safeReviewName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
@@ -1041,6 +1053,16 @@
             document.getElementById('modalPrice').innerText = "Ціна: " + calculatePrice(currentBasePrice, vol);
         }
     }
+    
+    function triggerCatalogAnimation() {
+        const cat = document.getElementById('catalog');
+        cat.style.opacity = '0';
+        setTimeout(() => {
+            filterCatalog();
+            cat.style.opacity = '1';
+        }, 300);
+    }
+
     function animateFlyToCart() {
         const cartBtn = document.getElementById('cartFloatingBtn');
         const startRect = document.getElementById('modalOrderBtn').getBoundingClientRect();
@@ -1282,7 +1304,7 @@
         
         if (q.length > 0) { clearBtn.style.display = 'block'; } else { clearBtn.style.display = 'none'; }
         
-        filterCatalog();
+        triggerCatalogAnimation();
         
         if (!q) { resContainer.style.display = 'none'; return; }
 
@@ -1305,7 +1327,7 @@
                 item.className = 'search-item';
                 item.innerHTML = `<img src="${img.replace(/'/g, "%27")}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'"><div class="search-item-info"><div class="search-item-brand">${brand}</div><div class="search-item-name">${name}</div></div><div class="search-item-price">від ${minPriceLabel}</div>`;
                 
-                item.onclick = () => { showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; filterCatalog(); };
+                item.onclick = () => { showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; triggerCatalogAnimation(); };
                 resContainer.appendChild(item);
             });
         }
@@ -1327,7 +1349,13 @@
             clearSearch(); return;
         }
         
-        if(btnElement) btnElement.classList.add('active-note');
+        if(btnElement) {
+            btnElement.classList.add('active-note');
+            // Міні-анімація натискання
+            btnElement.style.transform = 'scale(0.9)';
+            setTimeout(() => { btnElement.style.transform = 'scale(1)'; }, 150);
+        }
+        
         inputField.value = note;
         handleSearchInput();
         document.getElementById('searchResults').style.display = 'none';
@@ -1339,9 +1367,9 @@
 
     function navigateToPerfume(n) { document.getElementById('searchInput').value = n; handleSearchInput(); document.getElementById('newsModalWindow').style.display='none'; scrollToFirstCards(); }
     
-    function setCategory(c, b) { currentCategory = c; document.getElementById('searchInput').value = ''; handleSearchInput(); document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); scrollToFirstCards(); }
+    function setCategory(c, b) { currentCategory = c; document.getElementById('searchInput').value = ''; triggerCatalogAnimation(); document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); scrollToFirstCards(); }
     
-    function setBrand(b, btn) { currentBrand = b; document.getElementById('searchInput').value = ''; handleSearchInput(); document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active')); btn.classList.add('active'); scrollToFirstCards(); }
+    function setBrand(b, btn) { currentBrand = b; document.getElementById('searchInput').value = ''; triggerCatalogAnimation(); document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active')); btn.classList.add('active'); scrollToFirstCards(); }
     
     function filterCatalog() {
         const q = document.getElementById('searchInput').value.toLowerCase();
@@ -1560,7 +1588,6 @@
         const status = String(promoData[0]).trim().toUpperCase();
         if (status !== 'ON') return;
 
-        // Показуємо банер лише 1 раз за сесію (поки не закриють вкладку браузера)
         if (document.getElementById('promoCard') || sessionStorage.getItem('promoCardShown')) return;
         sessionStorage.setItem('promoCardShown', 'true');
 
@@ -1573,14 +1600,12 @@
 
         const badgeText = customText !== '' ? customText : 'НОВИНКА'; 
 
-        // Перетворюємо посилання Dropbox на ПРЯМЕ ВІДЕО без завантаження
         if (videoUrl.includes('dropbox.com')) {
             videoUrl = videoUrl.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
             videoUrl = videoUrl.replace(/&dl=[01]/g, '').replace(/\?dl=[01]/g, '');
         }
 
         const hasVideo = videoUrl !== '';
-        // Додано webkit-playsinline та preload для iOS, а також фон #1a1a1a
         const mediaHtml = hasVideo 
             ? `<video autoplay muted loop playsinline webkit-playsinline preload="auto" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.6; z-index:1; background-color:#1a1a1a;"><source src="${videoUrl}" type="video/mp4"></video>`
             : `<div style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.3; z-index:1; background-image:url('${imgUrl}'); background-size:cover; background-position:center; filter:blur(3px);"></div>`;
@@ -1634,20 +1659,20 @@
                 }
             };
 
-            const safeImgHtml = imgUrl !== '' ? `<img src="${imgUrl}" style="max-height:160px; filter:drop-shadow(0 10px 20px rgba(0,0,0,0.5)); border-radius: 8px; position:relative; z-index:5;">` : '';
+            const safeImgHtml = imgUrl !== '' ? `<div style="background: rgba(255,255,255,0.95); padding: 15px 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); position:relative; z-index:5; display: flex; justify-content: center; align-items: center;"><img src="${imgUrl}" style="max-height: 200px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.15));"></div>` : '';
 
             promo.innerHTML = `
                 <button onclick="document.getElementById('promoCard').remove()" style="position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.2); border:none; color:white; border-radius:50%; width:30px; height:30px; cursor:pointer; z-index:10; font-size:18px; display:flex; justify-content:center; align-items:center;">×</button>
                 ${mediaHtml}
                 <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:space-between; align-items:center; padding:30px 15px; text-align:center; pointer-events:none;">
                     <div>
-                        <h3 style="margin:0; font-size:12px; color:var(--gold); letter-spacing:3px;">${brand}</h3>
-                        <h2 style="margin:5px 0; font-size:24px; color:#fff; font-weight:900; line-height:1.0;">${name}</h2>
+                        <h3 style="margin:0; font-family:var(--cinzel); font-size:12px; color:var(--gold); letter-spacing:3px;">${brand}</h3>
+                        <h2 style="margin:5px 0; font-family:var(--serif); font-size:24px; color:#fff; font-weight:900; line-height:1.0;">${name}</h2>
                         <div style="background:var(--gold); color:#fff; display:inline-block; padding:5px 10px; transform:rotate(-3deg); font-weight:700; font-size:11px; margin-top:10px; text-transform:uppercase;">${badgeText}</div>
                     </div>
                     ${safeImgHtml}
                     <div style="pointer-events:auto; width:100%;">
-                        <button onclick="handlePromoAction()" style="background:#fff; color:#000; border:none; padding:12px 0; width:100%; font-weight:900; text-transform:uppercase; letter-spacing:1px; border-radius:10px; cursor:pointer; font-size:11px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.3s;">
+                        <button onclick="handlePromoAction()" style="background:#fff; color:#000; border:none; padding:12px 0; width:100%; font-family:var(--cinzel); font-weight:900; text-transform:uppercase; letter-spacing:1px; border-radius:10px; cursor:pointer; font-size:11px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: 0.3s;">
                             Дізнатися більше
                         </button>
                     </div>
@@ -1675,10 +1700,10 @@
 </script>
 
 <div id="infoModal" class="modal" onclick="this.style.display='none'">
-    <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-content glass-panel" onclick="event.stopPropagation()">
         <button class="modal-close-x" onclick="document.getElementById('infoModal').style.display='none'">✕</button>
-        <h3 id="mB" style="text-align:center;font-family:var(--serif);margin-bottom:5px;"></h3>
-        <p id="mN" style="text-align:center;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;"></p>
+        <h3 id="mB" style="text-align:center;font-family:var(--cinzel);margin-bottom:5px;letter-spacing:1px;"></h3>
+        <p id="mN" style="text-align:center;font-family:var(--serif);font-size:14px;color:#444;font-weight:600;margin-bottom:20px;"></p>
         <div id="mD" style="font-size:13.5px;"></div>
         <button id="modalOrderBtn" class="modal-btn-full modal-order-btn">ДОДАТИ В КОШИК</button>
         <div id="reviewFormContainerHTML"></div>
@@ -1687,9 +1712,9 @@
 </div>
 
 <div id="newsModalWindow" class="modal" onclick="this.style.display='none'">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <h3 style="font-family:var(--serif);text-align:center;text-transform:uppercase;letter-spacing:1px;">Новини та акції</h3>
-        <hr style="border:0;height:1px;background:#f0f0f0;margin:20px 0;">
+    <div class="modal-content glass-panel" onclick="event.stopPropagation()">
+        <h3 style="font-family:var(--cinzel);text-align:center;text-transform:uppercase;letter-spacing:1px;">Новини та акції</h3>
+        <hr style="border:0;height:1px;background:rgba(0,0,0,0.1);margin:20px 0;">
         <div id="newsModalContent"></div>
         <button class="modal-btn-full close-btn" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button>
     </div>
