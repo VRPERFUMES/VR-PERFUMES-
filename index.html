@@ -396,6 +396,29 @@
 body.dark-theme .tg-chat-bubble { background: #1a1a1a; border-color: rgba(255,255,255,0.05); color: #fff; }
 body.dark-theme .tg-chat-bubble .bubble-text { color: #ccc; }
 body.dark-theme .tg-chat-bubble .bubble-text b { color: #fff; }
+   /* КНОПКА ПОВЕРНЕННЯ ВГОРУ */
+#scrollTopBtn { 
+    display: none; /* Спочатку вона схована */
+    position: fixed; 
+    bottom: 160px; /* Вище, ніж кошик і телеграм, щоб не перекривати */
+    right: 25px; 
+    background: rgba(26, 26, 26, 0.8); 
+    backdrop-filter: blur(5px); 
+    -webkit-backdrop-filter: blur(5px);
+    color: #fff; 
+    border: none; 
+    width: 44px; 
+    height: 44px; 
+    border-radius: 50%; 
+    font-size: 20px; 
+    cursor: pointer; 
+    z-index: 1400; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+    transition: all 0.3s ease; 
+    font-weight: bold;
+}
+#scrollTopBtn:active { transform: scale(0.9); }
+
     </style>
 </head>
 <body>
@@ -1599,7 +1622,19 @@ setTimeout(() => {
         }
     }
 }, 15000); // 15000 мс = 15 секунд очікування
-    
+    // ЛОГІКА ПОЯВИ КНОПКИ "ВГОРУ"
+window.addEventListener('scroll', function() {
+    const scrollBtn = document.getElementById("scrollTopBtn");
+    if (scrollBtn) {
+        // Якщо прокрутили більше 600px — показуємо, інакше — ховаємо
+        if (window.pageYOffset > 600) {
+            scrollBtn.style.display = "block";
+        } else {
+            scrollBtn.style.display = "none";
+        }
+    }
+});
+
 </script>
 
     <div class="tg-chat-bubble" id="tgChatBubble">
@@ -1610,5 +1645,7 @@ setTimeout(() => {
         Привіт! Я Вікторія. Потрібна допомога у виборі аромату? ✨
     </div>
 </div>
+<button id="scrollTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Наверх">↑</button>
+
 </body>
 </html>
