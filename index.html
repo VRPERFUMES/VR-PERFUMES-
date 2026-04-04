@@ -142,6 +142,7 @@
         .card-price-label { font-size: 12px; color: var(--gold); font-weight: 700; margin: 10px 0 2px; text-align: center; }
         .brand { font-family: var(--serif); font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; text-align: center; }
         .name { font-family: var(--serif); font-size: 14px; margin: 2px 0 10px; min-height: 35px; text-align: center; line-height: 1.2; }
+        .card-stars { color: var(--gold); font-size: 10px; text-align: center; letter-spacing: 1px; margin-top: -5px; margin-bottom: 10px; }
         .order-btn { border: 1px solid #000; background: transparent; padding: 12px; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; cursor: pointer; position: relative; z-index: 10; transition: 0.3s; }
         .order-btn:hover { background: #000; color: #fff; }
         
@@ -314,6 +315,9 @@
 
         .cart-checkout-btn { display: flex; width: 100%; padding: 18px 0; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; background: #000; color: #fff; border: none; cursor: pointer; border-radius: 8px; transition: 0.3s; }
         .cart-checkout-btn:active { background: var(--gold); }
+        
+        .cart-return-btn { display: flex; width: 100%; padding: 14px 0; align-items: center; justify-content: center; font-size: 9px; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; background: transparent; color: #777; border: 1px solid #ddd; cursor: pointer; border-radius: 8px; transition: 0.3s; margin-top: 10px; }
+        .cart-return-btn:active { background: #f5f5f5; color: #000; }
 
         /* SECTION REVIEWS - PREMIUM MINIMALISM */
         .reviews-section { padding: 50px 20px; background: #fff; border-top: 1px solid #f2f2f2; text-align: center; }
@@ -522,6 +526,7 @@
         <textarea id="cartComment" class="cart-comment-input" rows="2" placeholder="Місто, відділення НП, самовивіз або ваш коментар..."></textarea>
         
         <button class="cart-checkout-btn" id="checkoutBtn" onclick="checkoutCart()">Відправити замовлення</button>
+        <button class="cart-return-btn" onclick="toggleCart()">Повернутися до покупок</button>
     </div>
 </div>
 
@@ -693,7 +698,8 @@
             if (responses[2]) {
                 const dataPromo = await responses[2].text();
                 const promoRows = safeParseCSV(dataPromo);
-                if (promoRows.length > 1) promoDataRow = promoRows[1];
+                // Шукаємо перший-ліпший рядок, де в першій колонці написано ON
+                promoDataRow = promoRows.find((row, index) => index > 0 && row[0] && String(row[0]).trim().toUpperCase() === 'ON');
             }
 
             if(rows[0] && rows[0][9]) document.getElementById('newsTicker').innerText = rows[0][9];
@@ -712,7 +718,7 @@
             wContainer.innerHTML = '';
 
             catalogData.sort((a, b) => new Date(b[6]) - new Date(a[6]));
-catalogData.forEach(c => {
+            catalogData.forEach(c => {
                 const [brand, name, price, minVol, desc, img, dateStr, top, weekText] = c;
                 const bottleMl = c[11]; 
                 
@@ -736,6 +742,21 @@ catalogData.forEach(c => {
                 const cardId = brand + ' ' + name;
                 const isWished = wishlist.includes(cardId);
                 const safeDesc = desc ? desc.replace(/<[^>]*>?/gm, ' ').replace(/"/g, '&quot;') : '';
+
+                // ОБРАХУНОК ЗІРОК ДЛЯ МІНІ-КАРТКИ
+                let rawDesc = desc || '';
+                let posCount = (rawDesc.match(/\[\+\]/g) || []).length;
+                let neuCount = (rawDesc.match(/\[=\]/g) || []).length;
+                let negCount = (rawDesc.match(/\[-\]/g) || []).length;
+                let totalRev = posCount + neuCount + negCount;
+                let cardStarsHTML = '';
+                
+                if (totalRev > 0) {
+                    let totalScore = (posCount * 5) + (neuCount * 3) + (negCount * 1);
+                    let avgStars = Math.round(totalScore / totalRev);
+                    let starsStr = '★'.repeat(avgStars) + '☆'.repeat(5 - avgStars);
+                    cardStarsHTML = `<div class="card-stars">${starsStr} <span style="font-size:9px; color:#999; letter-spacing:0;">(${totalRev})</span></div>`;
+                }
 
                 if (isPromo || isWeek) {
                     let catchyHeading = ""; 
@@ -793,7 +814,8 @@ catalogData.forEach(c => {
                     <img loading="lazy" src="${safeImg}">
                     <div class="card-price-label">${displayPriceStr}</div>
                     <div class="brand">${brand}</div>
-                    <div class="name">${name}</div>
+                    <div class="name" ${cardStarsHTML ? 'style="margin-bottom:5px;"' : ''}>${name}</div>
+                    ${cardStarsHTML}
                     <button class="order-btn">Детальніше</button>
                 `;
                 
@@ -1540,12 +1562,17 @@ catalogData.forEach(c => {
 
         const brand = promoData[1] ? String(promoData[1]).trim() : '';
         const name = promoData[2] ? String(promoData[2]).trim() : '';
-        const videoUrl = promoData[3] ? String(promoData[3]).trim() : '';
+        let videoUrl = promoData[3] ? String(promoData[3]).trim() : '';
         const imgUrl = promoData[4] ? String(promoData[4]).trim() : '';
         const linkOrName = promoData[5] ? String(promoData[5]).trim() : '';
         const customText = promoData[6] ? String(promoData[6]).trim() : '';
 
         const badgeText = customText !== '' ? customText : 'НОВИНКА'; 
+
+        // Перетворюємо посилання Dropbox на пряме відео для плеєра
+        if (videoUrl.includes('dropbox.com')) {
+            videoUrl = videoUrl.replace('www.dropbox.com', 'dl.dropboxusercontent.com').split('?')[0] + '?raw=1';
+        }
 
         const hasVideo = videoUrl !== '';
         const mediaHtml = hasVideo 
