@@ -729,10 +729,6 @@
             catalogData.forEach(c => {
                 const [brand, name, price, minVol, desc, img, dateStr, top, weekText] = c;
                 // Індекс 11 - флакон мл, 12 - ціна флакону
-                // ІНВЕНТАРИЗАЦІЯ (ЗАЛИШКИ): 
-                // Якщо у твоєму файлі залишки будуть підключені в колонку M (індекс 13) або N (індекс 14), 
-                // ми можемо додати перевірку: let stock = c[13]; і якщо stock <= 0, ставити "Sold Out".
-                
                 const bottleMl = c[11]; 
                 
                 const pDate = new Date(dateStr), isNew = (new Date() - pDate) / (1000*60*60*24) <= 10;
@@ -1659,7 +1655,8 @@
                 }
             };
 
-            const safeImgHtml = imgUrl !== '' ? `<div style="background: rgba(255,255,255,0.95); padding: 15px 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); position:relative; z-index:5; display: flex; justify-content: center; align-items: center;"><img src="${imgUrl}" style="max-height: 200px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.15));"></div>` : '';
+            // ОСЬ МАГІЯ: Невидимий градієнт під картинкою, щоб JPG "вирізався" навіть на темному фоні відео
+            const safeImgHtml = imgUrl !== '' ? `<div style="position:relative; z-index:5; width:100%; display:flex; justify-content:center; align-items:center;"><div style="position:absolute; width: 220px; height: 220px; background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%); z-index:-1;"></div><img src="${imgUrl}" style="max-height: 250px; max-width: 95%; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5));"></div>` : '';
 
             promo.innerHTML = `
                 <button onclick="document.getElementById('promoCard').remove()" style="position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.2); border:none; color:white; border-radius:50%; width:30px; height:30px; cursor:pointer; z-index:10; font-size:18px; display:flex; justify-content:center; align-items:center;">×</button>
