@@ -122,8 +122,10 @@
         .brand-btn:hover { opacity: 1; color: var(--gold); }
         .brand-btn.active { opacity: 1; color: var(--gold); font-weight: 700; }
 
-        .tabs-container { display: flex; gap: 20px; justify-content: center; padding-bottom: 15px; }
-        .tab-btn { background: none; border: none; font-size: 10px; font-weight: 600; color: #ccc; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; padding: 5px 0; transition: 0.3s;}
+        .tabs-container { display: flex; gap: 25px; overflow-x: auto; padding: 0 20px 15px 20px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        .tabs-container::-webkit-scrollbar { display: none; }
+        @media (min-width: 768px) { .tabs-container { justify-content: center; } }
+        .tab-btn { background: none; border: none; font-size: 11px; font-weight: 600; color: #a0a0a0; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; padding: 5px 0; transition: 0.3s; white-space: nowrap; flex-shrink: 0; }
         
         /* ЗОЛОТЕ ПІДСВІЧУВАННЯ ТАБІВ (PREMIUM) */
         .tab-btn:hover { color: var(--gold); }
@@ -729,6 +731,7 @@ catalogData.forEach(c => {
                 
                 const startsFrom5 = minVol && String(minVol).includes('5');
                 const minPriceLabel = calculatePrice(price, startsFrom5 ? '5 мл' : '2 мл');
+                const displayPriceStr = isSet ? minPriceLabel : `від ${minPriceLabel}`; // Якщо сет, то без "від"
                 const safeImg = img.replace(/'/g, "%27");
                 
                 const cardId = brand + ' ' + name;
@@ -792,7 +795,7 @@ catalogData.forEach(c => {
                     </div>
                     <div class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist(event, '${brand.replace(/'/g, "\\'")}', '${name.replace(/'/g, "\\'")}', this)">${isWished ? '♥' : '♡'}</div>
                     <img loading="lazy" src="${safeImg}">
-                    <div class="card-price-label">від ${minPriceLabel}</div>
+                    <div class="card-price-label">${displayPriceStr}</div>
                     <div class="brand">${brand}</div>
                     <div class="name">${name}</div>
                     <button class="order-btn">Детальніше</button>
@@ -954,7 +957,7 @@ catalogData.forEach(c => {
                 ${isBottleAvailable ? `<div class="vol-chip bottle-special" onclick="selectVol(this, 'Рідний флакон (${bottleMl} мл)', ${bottlePrice})">Залишок у рідному флаконі (${bottleMl} мл)</div>` : ''}
             `;
         }
-const volHTML = `
+        const volHTML = `
             <div class="vol-container"><span class="vol-label">Оберіть об'єм:</span>
                 <div class="vol-grid">
                     ${volButtons}
@@ -962,7 +965,7 @@ const volHTML = `
                 ${isLastDrops ? `<div style="text-align:center; color: #a94442; font-size: 10px; text-transform: uppercase; margin-top: 12px; font-weight: 700; border: 1px dashed #a94442; padding: 6px; border-radius: 4px; animation: badgePulse 2s infinite ease-in-out;">⚡ Увага: аромат закінчується, останні мілілітри</div>` : ''}
             </div>
             <div class="price-display" id="modalPrice">Ціна: ${isSetType ? calculatePrice(price, '2 мл') : calculatePrice(price, '5 мл')}</div>
-            <div class="price-sub">Базова ціна: ${price} грн / 1 мл</div>`;
+            ${isSetType ? '' : `<div class="price-sub">Базова ціна: ${price} грн / 1 мл</div>`}`;
             
         const reviewFormHTML = `
             <div class="review-form-container" id="reviewFormBlock">
