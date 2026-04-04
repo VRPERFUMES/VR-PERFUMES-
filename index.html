@@ -996,6 +996,10 @@
             <div class="price-display" id="modalPrice">Ціна: ${isSetType ? calculatePrice(price, '2 мл') : calculatePrice(price, '5 мл')}</div>
             ${isSetType ? '' : `<div class="price-sub">Базова ціна: ${price} грн / 1 мл</div>`}`;
             
+        // Захист від лапок у назві (наприклад, для сетів "Молекулярний")
+        const safeReviewBrand = brand.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const safeReviewName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
         const reviewFormHTML = `
             <div class="review-form-container" id="reviewFormBlock">
                 <span class="review-form-title">Оцінити аромат</span>
@@ -1008,7 +1012,7 @@
                 </div>
                 <div id="reviewHiddenParts" style="display:none;">
                     <textarea id="reviewText" class="review-textarea" rows="3" placeholder="Поділіться своїми враженнями..."></textarea>
-                    <button class="review-submit-btn" onclick="submitReview('${brand.replace(/'/g, "\\'")}', '${name.replace(/'/g, "\\'")}')">Відправити відгук</button>
+                    <button class="review-submit-btn" onclick="submitReview('${safeReviewBrand}', '${safeReviewName}')">Відправити відгук</button>
                 </div>
             </div>
         `;
@@ -1556,9 +1560,9 @@
         const status = String(promoData[0]).trim().toUpperCase();
         if (status !== 'ON') return;
 
-        // ДЛЯ ТЕСТІВ: Закоментований захист від повторного показу
-        // if (document.getElementById('promoCard') || sessionStorage.getItem('promoCardShown')) return;
-        // sessionStorage.setItem('promoCardShown', 'true');
+        // Показуємо банер лише 1 раз за сесію (поки не закриють вкладку браузера)
+        if (document.getElementById('promoCard') || sessionStorage.getItem('promoCardShown')) return;
+        sessionStorage.setItem('promoCardShown', 'true');
 
         const brand = promoData[1] ? String(promoData[1]).trim() : '';
         const name = promoData[2] ? String(promoData[2]).trim() : '';
@@ -1569,14 +1573,16 @@
 
         const badgeText = customText !== '' ? customText : 'НОВИНКА'; 
 
-        // Перетворюємо посилання Dropbox на пряме відео для плеєра
+        // Перетворюємо посилання Dropbox на ПРЯМЕ ВІДЕО без завантаження
         if (videoUrl.includes('dropbox.com')) {
-            videoUrl = videoUrl.replace('www.dropbox.com', 'dl.dropboxusercontent.com').split('?')[0] + '?raw=1';
+            videoUrl = videoUrl.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+            videoUrl = videoUrl.replace(/&dl=[01]/g, '').replace(/\?dl=[01]/g, '');
         }
 
         const hasVideo = videoUrl !== '';
+        // Додано webkit-playsinline та preload для iOS, а також фон #1a1a1a
         const mediaHtml = hasVideo 
-            ? `<video autoplay muted loop playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.5; z-index:1; background-color:#000;"><source src="${videoUrl}" type="video/mp4"></video>`
+            ? `<video autoplay muted loop playsinline webkit-playsinline preload="auto" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.6; z-index:1; background-color:#1a1a1a;"><source src="${videoUrl}" type="video/mp4"></video>`
             : `<div style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0.3; z-index:1; background-image:url('${imgUrl}'); background-size:cover; background-position:center; filter:blur(3px);"></div>`;
 
         setTimeout(() => {
@@ -1628,7 +1634,7 @@
                 }
             };
 
-            const safeImgHtml = imgUrl !== '' ? `<img src="${imgUrl}" style="max-height:160px; filter:drop-shadow(0 10px 20px rgba(0,0,0,0.5)); border-radius: 8px;">` : '';
+            const safeImgHtml = imgUrl !== '' ? `<img src="${imgUrl}" style="max-height:160px; filter:drop-shadow(0 10px 20px rgba(0,0,0,0.5)); border-radius: 8px; position:relative; z-index:5;">` : '';
 
             promo.innerHTML = `
                 <button onclick="document.getElementById('promoCard').remove()" style="position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.2); border:none; color:white; border-radius:50%; width:30px; height:30px; cursor:pointer; z-index:10; font-size:18px; display:flex; justify-content:center; align-items:center;">×</button>
