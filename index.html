@@ -560,19 +560,33 @@
 </div>
 
 <div id="infoModal" class="modal" onclick="this.style.display='none'">
-    <div class="modal-content glass-panel" onclick="event.stopPropagation()" style="padding: 25px 20px;">
-        <button class="modal-close-x" onclick="document.getElementById('infoModal').style.display='none'" style="top: 10px; right: 10px; background: rgba(128,128,128,0.1); color: var(--text-dark); display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; border: none; font-size: 16px;">✕</button>
+    <div class="modal-content glass-panel" onclick="event.stopPropagation()" style="padding: 0; display: flex; flex-direction: column; max-height: 85vh; border: none; overflow: hidden;">
         
-        <div style="text-align: center; margin-bottom: 15px; margin-top: 10px;">
-            <img id="mImg" src="" style="max-height: 180px; max-width: 100%; object-fit: contain; border-radius: 8px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));">
+        <button class="modal-close-x" onclick="document.getElementById('infoModal').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.07); color: var(--text-dark); border: none; width: 34px; height: 34px; border-radius: 50%; z-index: 100; font-weight: bold; cursor: pointer;">✕</button>
+        
+        <div class="modal-scroll-area" style="padding: 20px; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch;">
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img id="mImg" src="" style="max-height: 200px; max-width: 100%; object-fit: contain; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.12)); border-radius: 10px;">
+            </div>
+
+            <div style="text-align: center;">
+                <h3 id="mB" style="font-family: var(--cinzel); font-size: 11px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; font-weight: 800;"></h3>
+                <p id="mN" style="font-family: var(--serif); font-size: 24px; font-weight: 700; margin: 0 0 20px 0; color: var(--text-dark); line-height: 1.2;"></p>
+                
+                <div id="mD" style="text-align: left; font-size: 14px; color: var(--text-dark); line-height: 1.6;"></div>
+                
+                <div id="reviewFormContainerHTML" style="margin-top: 25px;"></div>
+            </div>
         </div>
 
-        <div style="padding: 0;">
-            <h3 id="mB" style="text-align:center;font-family:var(--cinzel);margin:0 0 5px 0;letter-spacing:2px;font-size:11px;color:var(--gold);text-transform:uppercase;font-weight:800;"></h3>
-            <p id="mN" style="text-align:center;font-family:var(--serif);font-size:22px;color:var(--text-dark);font-weight:700;margin-top:0;margin-bottom:15px;"></p>
-            <div id="mD" style="font-size:14px; color:var(--text-dark);"></div>
-            <button id="modalOrderBtn" class="modal-btn-full modal-order-btn" style="margin-top: 20px;">ДОДАТИ В КОШИК</button>
-            <div id="reviewFormContainerHTML"></div>
+        <div style="padding: 15px 20px; background: var(--bg); border-top: 1px solid rgba(128,128,128,0.1); box-shadow: 0 -5px 15px rgba(0,0,0,0.03);">
+            <button id="modalOrderBtn" class="modal-btn-full modal-order-btn" style="background: var(--gold); color: #fff; height: 52px; font-weight: 800; border-radius: 8px; margin-bottom: 10px; width: 100%; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">
+                Додати в кошик
+            </button>
+            <button class="modal-btn-full" onclick="document.getElementById('infoModal').style.display='none'" style="background: transparent; color: var(--text-gray); border: 1px solid rgba(128,128,128,0.2); height: 46px; font-size: 11px; font-weight: 600; width: 100%; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;">
+                Продовжити покупки
+            </button>
         </div>
     </div>
 </div>
