@@ -838,7 +838,7 @@
             const rows = safeParseCSV(dataProd);
             
             const dataRev = await responses[1].text();
-            ррроооconst reviewsData = safeParseCSV(dataRev);
+            const reviewsData = safeParseCSV(dataRev);
 
             let promoDataRow = null;
             if (responses[2]) {
@@ -1852,44 +1852,6 @@
             }
         }
     });// Оновлена функція каталогу (замінить стару автоматично)
-function renderCatalog(data) {
-    const container = document.getElementById('catalog');
-    if(!container) return;
-
-    container.innerHTML = data.map((c, i) => {
-        const brand = c[0] || '';
-        const name = c[1] || '';
-        const currentPrice = parseInt(c[2]) || 0;
-        const tags = (c[3] || '').toLowerCase();
-        const img = c[5] || '';
-        const oldPrice = parseInt(c[15]) || 0; // Наша колонка P (ексклюзив)
-
-        let badgesHTML = '';
-        
-        // Перевірка на знижку
-        if (tags.includes('sale') && oldPrice > currentPrice) {
-            const discount = Math.round((1 - currentPrice / oldPrice) * 100);
-            badgesHTML += `<div class="badge badge-sale">-${discount}%</div>`;
-        }
-        
-        if (tags.includes('new')) badgesHTML += `<div class="badge badge-new">NEW</div>`;
-        if (tags.includes('top')) badgesHTML += `<div class="badge badge-top">ХІТ</div>`;
-
-        return `
-            <div class="card">
-                <div class="badges-wrapper">${badgesHTML}</div>
-                <img src="${img}" loading="lazy" onclick="alert('${c[4] || 'Опис скоро буде...'}')">
-                <div class="price-display-wrapper">
-                    ${(oldPrice > currentPrice) ? `<span class="old-price">${oldPrice} грн</span>` : ''}
-                    <div class="card-price-label">від ${currentPrice} грн</div>
-                </div>
-                <div class="brand">${brand}</div>
-                <div class="name">${name}</div>
-                <button class="order-btn" onclick="addToCart('${brand}', '${name}', ${currentPrice})">В кошик</button>
-            </div>
-        `;
-    }).join('');
-}
 
 
 </script>
