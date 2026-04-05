@@ -838,7 +838,7 @@
             const rows = safeParseCSV(dataProd);
             
             const dataRev = await responses[1].text();
-            const reviewsData = safeParseCSV(dataRev);
+            ррроооconst reviewsData = safeParseCSV(dataRev);
 
             let promoDataRow = null;
             if (responses[2]) {
@@ -863,19 +863,21 @@
             wContainer.innerHTML = '';
 
             catalogData.sort((a, b) => new Date(b[6]) - new Date(a[6]));
-            catalogData.forEach(c => {
+                    catalogData.forEach(c => {
+                // Витягуємо дані (додаємо c[15] — це твоя колонка P)
                 const [brand, name, price, minVol, desc, img, dateStr, top, weekText, , , bottleMl, bottlePrice, , stockCol] = c;
+                const oldPrice = parseInt(c[15]) || 0; 
                 
                 const stock = parseFloat(stockCol);
                 const isOutOfStock = !isNaN(stock) && stock <= 0;
                 
                 const pDate = new Date(dateStr), isNew = (new Date() - pDate) / (1000*60*60*24) <= 10;
                 const isTop = top && (top.toLowerCase().includes('топ') || top.toLowerCase().includes('хіт'));
+                const isSale = top && top.toLowerCase().includes('sale'); // Тег знижки
                 const isPromo = top && top.toLowerCase().includes('промо');
                 const isWeek = top && top.toLowerCase().includes('тиждень');
                 const isBottle = bottleMl && parseInt(bottleMl) > 0;
                 const isLastDrops = top && top.toLowerCase().includes('останн');
-
                 const isSet = (brand && brand.toLowerCase().includes('set')) || (brand && brand.toLowerCase().includes('сет')) || (name && name.toLowerCase().includes('сет')) || (top && top.toLowerCase().includes('сет'));
                 
                 const startsFrom5 = minVol && String(minVol).includes('5');
@@ -887,81 +889,79 @@
                 const isWished = wishlist.includes(cardId);
                 const safeDesc = desc ? desc.replace(/<[^>]*>?/gm, ' ').replace(/"/g, '&quot;') : '';
 
+                // Логіка зірочок
                 let rawDesc = desc || '';
                 let posCount = (rawDesc.match(/\[\+\]/g) || []).length;
                 let neuCount = (rawDesc.match(/\[=\]/g) || []).length;
                 let negCount = (rawDesc.match(/\[-\]/g) || []).length;
                 let totalRev = posCount + neuCount + negCount;
                 let cardStarsHTML = '';
-                
                 if (totalRev > 0) {
                     let totalScore = (posCount * 5) + (neuCount * 3) + (negCount * 1);
                     let avgStars = Math.round(totalScore / totalRev);
-                    let starsStr = '★'.repeat(avgStars) + '☆'.repeat(5 - avgStars);
-                    cardStarsHTML = `<div class="card-stars">${starsStr} <span style="font-size:10px; color:#999; letter-spacing:0;">(${totalRev})</span></div>`;
+                    cardStarsHTML = `<div class="card-stars">${'★'.repeat(avgStars)}${'☆'.repeat(5 - avgStars)} <span style="font-size:10px; color:#999;">(${totalRev})</span></div>`;
                 }
 
-                if (isPromo || isWeek) {
-                    let catchyHeading = ""; 
-                    if (isPromo && !isWeek && desc) {
-                        let cleanDesc = desc.replace(/<[^>]+>/g, ' ').replace(/\[[+\-=]\]/g, '');
-                        cleanDesc = cleanDesc.replace(/(Опис:|Стиль:|Напрямок:|Піраміда:|Верхні ноти:|Ноти серця:|Серце:|Середні ноти:|Базові ноти:|Ноти бази:|Акорди:|Відгуки:)/gi, '');
-                        cleanDesc = cleanDesc.replace(/\b20\d{2}\s*р?\.?\b/gi, ''); 
-                        cleanDesc = cleanDesc.replace(/\s+/g, ' ').trim();
-                        let sentences = cleanDesc.split(/[.!?<]/);
-                        for (let s of sentences) {
-                            let candidate = s.trim();
-                            if (candidate.length > 15 && /[а-яіїєґa-z]{4,}/i.test(candidate)) { catchyHeading = candidate.length > 60 ? candidate.substring(0, 60).trim() + '...' : candidate; break; }
-                        }
-                        if (!catchyHeading) catchyHeading = "Розкішний аромат для вашого образу";
-                    } else if (isWeek) { catchyHeading = "Ексклюзивна пропозиція цього тижня"; }
+                // Банери зверху
+                if ((isPromo || isWeek) && !isOutOfStock) {
                     const slide = document.createElement('div');
                     slide.className = 'slide';
-                    slide.innerHTML = `<div class="banner-bg-img" style="background-image:url('${safeImg}')"></div><div class="video-overlay"></div><div class="banner-content"><span class="banner-brand">${isWeek ? 'WEEKLY PICK' : brand}</span><span class="banner-title">${name}</span><span class="banner-catchy">${catchyHeading}</span><span class="banner-btn">СПРОБУВАТИ АРОМАТ</span><span class="banner-price-sub">${price} грн / 1 мл</span></div>`;
+                    slide.innerHTML = `<div class="banner-bg-img" style="background-image:url('${safeImg}')"></div><div class="video-overlay"></div><div class="banner-content"><span class="banner-brand">${isWeek ? 'WEEKLY PICK' : brand}</span><span class="banner-title">${name}</span><span class="banner-btn">СПРОБУВАТИ АРОМАТ</span><span class="banner-price-sub">${price} грн / 1 мл</span></div>`;
                     slide.querySelector('.banner-bg-img').onclick = () => showModal(c, isWeek);
                     slide.querySelector('.banner-btn').onclick = () => showModal(c, isWeek);
                     carousel.appendChild(slide);
                 }
                 
+                // Ексклюзив тижня
                 if (isWeek) {
                     const wDiv = document.createElement('div');
                     wDiv.className = 'week-spotlight';
-                    wDiv.innerHTML = `<span class="week-label">Ексклюзив тижня</span><img src="${safeImg}" class="week-img"><div class="brand">${brand}</div><div class="name">${name}</div><div class="week-btn-container"><button class="week-card-btn primary">ОПИС</button></div>`;
+                    wDiv.innerHTML = `<span class="week-label">Ексклюзив тижня</span><img src="${safeImg}" class="week-img"><div class="brand">${brand}</div><div class="name">${name}</div><button class="week-card-btn primary">ОПИС</button>`;
                     wDiv.querySelector('.week-img').onclick = () => showModal(c, true);
                     wDiv.querySelector('.week-card-btn').onclick = () => showModal(c, true);
                     wContainer.appendChild(wDiv);
                 }
 
+                // КАРТКА ТОВАРУ
                 const div = document.createElement('div');
                 div.className = 'card'; 
                 div.setAttribute('data-brand', brand); 
                 div.setAttribute('data-id', cardId); 
-                div.setAttribute('data-desc', safeDesc); 
                 div.setAttribute('data-category', (isNew ? 'new ' : '') + (isTop ? 'top ' : '') + (isBottle ? 'bottle ' : '') + (isSet ? 'set ' : '') + (top ? top.toLowerCase() : ''));
                 
+                // Бейдж відсотка знижки
+                let saleBadgeHTML = '';
+                if (isSale && oldPrice > price) {
+                    const discount = Math.round((1 - price / oldPrice) * 100);
+                    saleBadgeHTML = `<div class="badge badge-sale">-${discount}%</div>`;
+                }
+
                 div.innerHTML = `
                     <div class="badges-wrapper">
+                        ${saleBadgeHTML}
                         ${isNew?'<div class="badge badge-new">New</div>':''}
                         ${isSet?'<div class="badge badge-set">Набір</div>':''} 
                         ${isTop?'<div class="badge badge-top">Hit</div>':''}
                         ${isBottle?'<div class="badge badge-bottle">Флакон</div>':''}
-                        ${isLastDrops?'<div class="badge badge-last">Останні мл</div>':''}
                     </div>
                     <div class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist(event, '${brand.replace(/'/g, "\\'")}', '${name.replace(/'/g, "\\'")}', this)">${isWished ? '♥' : '♡'}</div>
-                    <img loading="lazy" src="${safeImg}">
-                    <div class="card-price-label">${isOutOfStock ? 'Тимчасово відсутній' : displayPriceStr}</div>
+                    <img loading="lazy" src="${safeImg}" onclick="showModal(globalCatalogData.find(x => x[0] === '${brand.replace(/'/g, "\\'")}' && x[1] === '${name.replace(/'/g, "\\'")}'))">
+                    
+                    <div class="price-display-wrapper">
+                        ${(isSale && oldPrice > price) ? `<span class="old-price">${oldPrice} грн</span>` : ''}
+                        <div class="card-price-label">${isOutOfStock ? 'Тимчасово відсутній' : displayPriceStr}</div>
+                    </div>
+
                     <div class="brand">${brand}</div>
-                    <div class="name" ${cardStarsHTML ? 'style="margin-bottom:5px;"' : ''}>${name}</div>
+                    <div class="name">${name}</div>
                     ${cardStarsHTML}
-                    <button class="order-btn" ${isOutOfStock ? 'style="background:rgba(128,128,128,0.1); color:#999; border-color:transparent; pointer-events:none;"' : ''}>
+                    <button class="order-btn" ${isOutOfStock ? 'disabled' : ''} onclick="showModal(globalCatalogData.find(x => x[0] === '${brand.replace(/'/g, "\\'")}' && x[1] === '${name.replace(/'/g, "\\'")}'))">
                         ${isOutOfStock ? 'НЕМАЄ В НАЯВНОСТІ' : 'Детальніше'}
                     </button>
                 `;
-                
-                div.querySelector('img').onclick = () => showModal(c);
-                if(!isOutOfStock) div.querySelector('.order-btn').onclick = () => showModal(c);
                 container.appendChild(div);
             });
+
 
             renderBrandSlider(catalogData); 
             initCarousel(); 
