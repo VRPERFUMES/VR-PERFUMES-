@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VR-PERFUMES | Premium Showcase</title>
+    <meta name="description" content="VR-PERFUMES - преміальний парфумерний бар. Розпив оригінальної нішової парфумерії, сети, залишки у флаконах.">
+    <meta property="og:title" content="VR-PERFUMES | Premium Showcase">
+    <meta property="og:description" content="Розпив оригінальної нішової парфумерії від Вікторії.">
+    <meta property="og:image" content="https://i.postimg.cc/CxkmFFJ3/logo.png">
+    <meta property="og:type" content="website">
     
     <link rel="icon" href="https://i.postimg.cc/CxkmFFJ3/logo.png" type="image/png">
     
@@ -177,7 +182,7 @@
         @media (min-width: 1200px) { #catalog { grid-template-columns: repeat(5, 1fr); gap: 40px 30px; } }
 
         .card { position: relative; display: flex; flex-direction: column; background: var(--bg); transition: box-shadow 0.3s ease; }
-        .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f9f9f9; border-radius: 4px; cursor: pointer; position: relative; z-index: 5; }
+        .card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: #f9f9f9; border-radius: 4px; cursor: pointer; position: relative; z-index: 5; content-visibility: auto; }
         .card-price-label { font-size: 13px; font-family: var(--serif); color: var(--gold); font-weight: 700; margin: 10px 0 2px; text-align: center; }
         .brand { font-family: var(--cinzel); font-size: 11px; color: #999; text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; text-align: center; font-weight: 700;}
         .name { font-family: var(--serif); font-size: 14px; font-weight: 600; margin: 4px 0 10px; min-height: 35px; text-align: center; line-height: 1.2; color: var(--text-dark); }
@@ -495,7 +500,17 @@
 
 <div id="weekPerfumeContainer"></div>
 
+<div id="wishlistShareAction" style="display:none; text-align:center; padding: 0 20px 20px;">
+    <button onclick="shareWishlist()" style="background:var(--gold); color:#fff; border:none; padding:15px 30px; font-size:12px; text-transform:uppercase; font-weight:800; letter-spacing:1.5px; border-radius:8px; cursor:pointer; box-shadow:0 5px 15px rgba(197,160,89,0.3); width:100%; max-width:400px;">Поділитися моїм Wishlist 🎁</button>
+</div>
+
 <div id="catalog">
+    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
+    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
     <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
     <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
     <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
@@ -741,13 +756,31 @@
     function sharePerfume() {
         const brand = document.getElementById('mB').innerText;
         const name = document.getElementById('mN').innerText;
+        const shareUrl = window.location.origin + window.location.pathname + "?p=" + encodeURIComponent(brand + " " + name);
         if (navigator.share) {
             navigator.share({
                 title: `${brand} ${name} | VR-PERFUMES`,
                 text: `Подивись на цей аромат: ${brand} ${name} ✨`,
-                url: window.location.href
+                url: shareUrl
             }).catch(err => console.log('Share error:', err));
         } else { alert("Ваш браузер не підтримує швидке поширення."); }
+    }
+
+    function shareWishlist() {
+        if (wishlist.length === 0) return;
+        const encodedData = encodeURIComponent(JSON.stringify(wishlist));
+        const shareUrl = window.location.origin + window.location.pathname + "?w=" + encodedData;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Мої парфумерні бажання | VR-PERFUMES',
+                text: 'Поглянь, що я хочу спробувати! 🎁',
+                url: shareUrl
+            }).catch(err => console.log('Share error:', err));
+        } else if (navigator.clipboard) { 
+            navigator.clipboard.writeText(shareUrl);
+            alert("Посилання на ваш Wishlist скопійовано! Відправте його друзям 🎁");
+        }
     }
 
     function showReviewFields() { document.getElementById('reviewHiddenParts').style.display = 'block'; }
@@ -960,7 +993,7 @@
                         ${isLastDrops?'<div class="badge badge-last">Останні мл</div>':''}
                     </div>
                     <div class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist(event, '${brand.replace(/'/g, "\\'")}', '${name.replace(/'/g, "\\'")}', this)">${isWished ? '♥' : '♡'}</div>
-                    <img loading="lazy" src="${safeImg}">
+                    <img loading="lazy" src="${safeImg}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
                     <div class="price-display-wrapper">
                         ${oldPriceHTML}
                         <div class="card-price-label">${isOutOfStock ? 'Тимчасово відсутній' : displayPriceStr}</div>
@@ -987,6 +1020,37 @@
             renderGeneralReviews(reviewsData.slice(1));
             if (promoDataRow) renderPremiumPromo(promoDataRow);
             
+            // ЧИТАННЯ ЛІНКІВ SMART SHARE ТА WISHLIST
+            setTimeout(() => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const shareP = urlParams.get('p');
+                const shareW = urlParams.get('w');
+                
+                if (shareP) {
+                    const foundItem = globalCatalogData.find(p => (p[0] + " " + p[1]).toLowerCase() === shareP.toLowerCase());
+                    if (foundItem) showModal(foundItem);
+                }
+                
+                if (shareW) {
+                    try {
+                        const importedIds = JSON.parse(decodeURIComponent(shareW));
+                        if (Array.isArray(importedIds) && importedIds.length > 0) {
+                            let addedCount = 0;
+                            importedIds.forEach(id => {
+                                if (!wishlist.includes(id)) { wishlist.push(id); addedCount++; }
+                            });
+                            if (addedCount > 0) {
+                                localStorage.setItem('vr_wishlist', JSON.stringify(wishlist));
+                                triggerCatalogAnimation();
+                                alert(`Успішно додано ${addedCount} ароматів до ваших Улюблених з посилання! 🎁`);
+                            }
+                        }
+                    } catch(e) { console.error('Помилка імпорту Wishlist', e); }
+                    
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            }, 500);
+
             updateCartUI();
         } catch (e) { 
             console.error(e); 
@@ -1005,7 +1069,9 @@
         
         document.getElementById('mB').innerText = brand; 
         document.getElementById('mN').innerText = name;
-        document.getElementById('mImg').src = safeImg; 
+        const mImgEl = document.getElementById('mImg');
+        mImgEl.src = safeImg; 
+        mImgEl.onerror = function() { this.src = 'https://i.postimg.cc/CxkmFFJ3/logo.png'; };
         
         const scarcityDiv = document.getElementById('scarcityMsg');
         if (stock > 0 && stock < 10) {
@@ -1375,7 +1441,10 @@
                     const price2mlText = calculatePrice(price, '2 мл');
                     const priceNum = parseInt(price2mlText.replace(/\D/g, ''));
 
-                    document.getElementById('upsellImg').src = img.replace(/'/g, "%27");
+                    const upImg = document.getElementById('upsellImg');
+                    upImg.src = img.replace(/'/g, "%27");
+                    upImg.onerror = function() { this.src = 'https://i.postimg.cc/CxkmFFJ3/logo.png'; };
+                    
                     document.getElementById('upsellBrand').innerText = brand;
                     document.getElementById('upsellName').innerText = name;
                     document.getElementById('upsellPrice').innerText = price2mlText;
@@ -1615,6 +1684,11 @@
 
         document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
+        
+        // ПОКАЗ КНОПКИ ШЕРИНГУ WISHLIST
+        const wBtn = document.getElementById('wishlistShareAction');
+        if (wBtn) wBtn.style.display = (c === 'wishlist' && wishlist.length > 0) ? 'block' : 'none';
+
         triggerCatalogAnimation();
         scrollToFirstCards();
     }
