@@ -524,6 +524,24 @@
         .recent-scroll::-webkit-scrollbar { display: none; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* Додай це в самий кінець свого CSS */
+#modalAura {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;       /* Розмір сяйва */
+    height: 250px;
+    z-index: 0;         /* Позаду флакона, але всередині контейнера */
+    background-size: cover;
+    background-position: center;
+    filter: blur(50px) brightness(0.8); /* М'яке розмиття */
+    opacity: 0;         /* З'явиться через JS */
+    transition: opacity 1s ease-in-out;
+    pointer-events: none;
+    border-radius: 50%;
+    will-change: opacity, filter; /* Оптимізація для телефонів */
+}
     </style>
 </head>
     </head>
@@ -942,59 +960,107 @@
         recognition.start();
     }
 
-// === ІНТЕЛЕКТУАЛЬНИЙ МОДУЛЬ ВІРИ 17.0 (ULTIMATE VARIETY) ===
+// === ІНТЕЛЕКТУАЛЬНИЙ МОДУЛЬ ВІРИ 21.0 (HYPER-DATABASE & SEDUCTIVE) ===
     
-    // Одна ідеальна мелодія для всіх ароматів
-    const meditationMusic = new Audio("https://cdn.pixabay.com/download/audio/2022/05/24/audio_9650993096.mp3");
-    meditationMusic.loop = true;
-    meditationMusic.volume = 0.07;
+    let viraMusic = null;
 
-    function toggleSynesthesia(btn) {
-        if (!meditationMusic.paused) {
-            meditationMusic.pause();
-            if(btn) btn.classList.remove('playing');
-            return;
+    // Керування фоновою магією
+    function handleViraBackground(action) {
+        if (!viraMusic) {
+            viraMusic = new Audio("https://cdn.pixabay.com/download/audio/2022/05/24/audio_9650993096.mp3");
+            viraMusic.loop = true;
+            viraMusic.volume = 0.07;
         }
-        meditationMusic.currentTime = 0;
-        meditationMusic.play().catch(() => console.log("Чекаємо кліку для звуку"));
-        if(btn) btn.classList.add('playing');
+
+        if (action === 'start') {
+            viraMusic.currentTime = 0;
+            viraMusic.play().catch(() => console.log("Музика чекає кліку"));
+        } else {
+            const fadeOut = setInterval(() => {
+                if (viraMusic.volume > 0.01) {
+                    viraMusic.volume -= 0.01;
+                } else {
+                    clearInterval(fadeOut);
+                    viraMusic.pause();
+                    viraMusic.volume = 0.07;
+                }
+            }, 50);
+        }
     }
 
     function prepareViraText(brand, name, rawDesc) {
         const orthoepy = {
             "Trussardi": "Труссáрді", "Zarkoperfume": "Зáрко парфýм", "Molecule": "Молéкула", 
-            "Gaba": "Ґабá", "Chloe": "Клоé", "Hermes": "Ермéс", "Bianco Latte": "Б'янко Лáтте"
+            "Gaba": "Ґабá", "Chloe": "Клоé", "Hermes": "Ермéс", "Bianco Latte": "Б'янко Лáтте",
+            "Mancera": "Мансерá", "Attar": "Аттáр", "Kilian": "Кіліáн", "Tom Ford": "Том Фόрд",
+            "Nishane": "Нішанé", "Gritti": "Ґрітті", "Kajal": "Кажáл", "Byredo": "Байрéдо",
+            "Ganymede": "Ґанімéд", "Casamorati": "Казаморáті", "Xerjoff": "Ксéрджофф"
         };
         let fName = name;
         for (let key in orthoepy) { if (name.includes(key)) fName = orthoepy[key]; }
 
-        let cleanDesc = rawDesc.split('[+]')[0].replace(/🔊 ШІ Асистент/g, '').replace(/\d+\s+відгук(ів|и|а)?/g, '').split('Також від')[0].trim();
+        // Очищення тексту
+        let cleanDesc = rawDesc.split('[+]')[0]
+                              .replace(/🔊 ШІ Асистент/g, '')
+                              .replace(/ШІ Асистент/g, '')
+                              .replace(/\d+\s+відгук(ів|и|а)?/g, '')
+                              .split('Також від')[0].trim();
         const dLower = cleanDesc.toLowerCase();
 
-        // --- БЛОК 1: ВСТУП (Максимальна різноманітність) ---
+        // 1. ГІПЕР-БАЗА ВСТУПІВ (20 варіантів)
         const intros = [
-            `Заплющ очі... Відчуй цей момент. Перед тобою — ${fName}. `,
-            `Послухай... ${fName} — це не просто аромат, це твоя нова історія. `,
-            `Дивись... Вікторія обрала ${fName} саме тому, що він має особливу душу. `,
-            `Я відчуваю... що ${fName} сьогодні резонує з твоїм настроєм. `,
-            `Ти тільки уяви... як цей шлейф заповнює простір навколо тебе. `
+            `Послухай... ${fName} — це твоя нова пристрасть. `,
+            `Ти тільки відчуй... цей аромат від ${brand} просто збиває з ніг. `,
+            `Вітаю... Вікторія каже, що ${fName} — це вибір для впевнених. `,
+            `Заплющ очі... і дозволь цій магії від ${brand} заповнити простір. `,
+            `О, цей вибір... ${fName} — справжній аристократ у світі ніші. `,
+            `Це кохання... справжнє, глибоке кохання з першого подиху. `,
+            `Відкрий для себе... таємницю, яку приховує цей флакон від ${brand}. `,
+            `Затамуй подих... Зараз ${fName} розкаже тобі свою історію. `,
+            `Ти заслуговуєш на це... ${fName} — це шедевр без компромісів. `,
+            `Відчуваєш цей поклик? Це ${brand} запрошує тебе у світ розкоші. `,
+            `Неймовірно... ${fName} — це саме те, чого тобі не вистачало. `,
+            `Готова до магії? ${fName} вже готова підкорювати твоє серце. `,
+            `Це легенда... аромат від ${brand}, про який мріють усі навколо. `,
+            `Давай на мить зупинимось... і просто насолодимося цією красою. `,
+            `Приготуйся... Сьогодні ти будеш королевою будь-якої події. `,
+            `Я відчуваю... що цей аромат від ${brand} стане твоїм фаворитом. `,
+            `Дивись... це справжній ексклюзив, який підкреслить твій характер. `,
+            `Ніжність та сила... ідеальний баланс у виконанні ${brand}. `,
+            `Ти тільки поглянь... яка глибина прихована в назві ${fName}. `,
+            `Це твій час... час сяяти разом із цим шедевром від ${brand}. `
         ];
 
-        // --- БЛОК 2: ХУКИ (Замість "тканини") ---
+        // 2. ГІПЕР-БАЗА ХУКІВ (20 варіантів)
         const hooks = [
-            "Він огортає тебе... наче невидима аура впевненості. ",
-            "Це справжній компліментарний вибух... готуйся відповідати на питання «що це за парфум?». ",
-            "Він звучить дуже дорого... підкреслюючи твій статус без зайвих слів. ",
-            "Це аромат-загадка... який хочеться розгадувати знову і знову. ",
-            "Він лягає на шкіру неймовірно м'яко... створюючи ефект магнетичного тяжіння. "
+            "Він огортає тебе... наче невидима хмаринка чистої впевненості. ",
+            "Його магнетичний шлейф... змушує людей озиратися тобі услід. ",
+            "Це звучить дуже дорого... наче ти щойно з приватної вечірки. ",
+            "Він має неймовірну глибину... яку хочеться розгадувати кожну хвилину. ",
+            "Це справжня ольфакторна спокуса... від якої неможливо відмовитись. ",
+            "Він лягає на шкіру... наче найдорожчий оксамит або тонкий шовк. ",
+            "Це аромат-статус... він заявляє про тебе ще до першого слова. ",
+            "Він неймовірно сексуальний... вкрадливий та дуже переконливий. ",
+            "Це чиста енергія... запечатана у скло для твого натхнення. ",
+            "Він створює ауру ексклюзивності... яку неможливо скопіювати. ",
+            "Це твій секретний інгредієнт... твоя невидима корона. ",
+            "Він шепоче про твою чуттєвість... м'яко, але дуже виразно. ",
+            "Це справжній компліментарний магніт... готуйся до запитань навколо. ",
+            "Він має характер... сильний, незалежний і водночас такий ніжний. ",
+            "Це аромат-свято... яке завжди з тобою, де б ти не була. ",
+            "Він звучить як музика... де кожна нота на своєму місці. ",
+            "Це втілення розкоші... доступне лише обраним. ",
+            "Він змінює твій настрій... додаючи світла у кожен твій день. ",
+            "Це справжній афродизіак... таємничий та дуже привабливий. ",
+            "Він дарує відчуття польоту... наче ти маєш крила за спиною. "
         ];
 
-        // --- БЛОК 3: ЛОГІКА НОТ (Рандомізація вибору) ---
+        // 3. РАНДОМНІ НОТИ
         const getNote = (regex) => {
             const m = cleanDesc.match(regex);
             if (!m || m[1].toLowerCase().includes('відсутні')) return null;
             const all = m[1].split(',').map(n => n.trim()).filter(n => n.length > 2);
-            return all[Math.floor(Math.random() * all.length)]; // Беремо ВИПАДКОВУ ноту
+            return all[Math.floor(Math.random() * all.length)];
         };
 
         const top = getNote(/Верхні ноти:\s*([^<|\n|\.]+)/i);
@@ -1002,27 +1068,27 @@
         const base = getNote(/Базові ноти:\s*([^<|\n|\.]+)/i);
 
         let notesSpeech = "";
-        if (top) notesSpeech += `Спочатку я чую в ньому ${top}... це дуже спокусливо. `;
-        if (heart) notesSpeech += `Згодом він розкривається нотою ${heart}... справжня магія. `;
-        if (base) notesSpeech += `А у фіналі залишається шлейф із ${base}... неймовірна стійкість. `;
+        if (top) notesSpeech += `З перших секунд... я відчуваю спокусливий ${top}. `;
+        if (heart) notesSpeech += `Але зачекай... коли розкриється ${heart}, ти відчуєш справжню насолоду. `;
+        if (base) notesSpeech += `І цей фінальний акорд... стійкий шлейф із ${base}, який залишиться в пам'яті. `;
 
-        // --- БЛОК 4: ОБ'ЄМ (Покращена детекція) ---
-        const activeVolBtn = document.querySelector('.vol-btn.active') || document.querySelector('input[name="volume"]:checked')?.parentElement;
-        let volText = activeVolBtn ? activeVolBtn.innerText : "5 мл";
-        
-        let volSpeech = "Обирай свій формат... ";
-        if (volText.includes("2")) volSpeech = "Два мілілітри... ідеально, щоб відчути цю магію вперше. ";
-        else if (volText.includes("5")) volSpeech = "П'яти мілілітрів тобі вистачить на цілий місяць... це буде твій найкращий місяць. ";
-        else if (volText.includes("10")) volSpeech = "Десять мілілітрів... це два місяці нескінченних компліментів. Найкращий вибір. ";
-        else if (volText.includes("20")) volSpeech = "Двадцять мілілітрів... коли хочеться, щоб цей аромат став твоєю частиною. ";
-        else if (volText.includes("флакон")) volSpeech = "Залишок у рідному склі... це справжня розкіш у твоїй колекції. ";
+        // 4. ОБ'ЄМ ТА ФІНАЛ
+        const activeBtn = document.querySelector('.vol-btn.active, .volume-option.active, input[name="volume"]:checked');
+        const vText = activeBtn ? (activeBtn.innerText || activeBtn.value || "").toLowerCase() : "";
+        let volSpeech = vText.includes("2") ? "Два мілілітри... ідеально для інтимного знайомства. " : 
+                        vText.includes("10") ? "Десять мілілітрів... це два місяці нескінченних компліментів. " : 
+                        vText.includes("20") ? "Двадцять мілілітрів... коли ти точно знаєш, що це кохання. " :
+                        "П'яти мілілітрів... тобі вистачить на цілий місяць чистої насолоди. ";
 
-        // --- БЛОК 5: ФІНАЛ ---
         const closings = [
-            " Тільки ти... і цей аромат. Додамо його в кошик?",
-            " Цей шлейф чекає на тебе... Спробуємо?",
-            " Вікторія вже готова підготувати твій розпив. Оформлюємо?",
-            " Ти відчуваєш... як він тобі пасує? Замовляємо?"
+            " Тільки ти... і цей аромат. Додамо в кошик?",
+            " Ця магія чекає... Спробуємо її на тобі?",
+            " Оформлюємо замовлення? Ти будеш у захваті... ",
+            " Твій ідеальний шлейф вже готовий... Додаси його?",
+            " Не відмовляй собі у задоволенні... Спробуємо?",
+            " Вікторія вже готує твій атомайзер... Що скажеш?",
+            " Спробуй... і ти більше не захочеш з ним розлучатися. ",
+            " Це фінальний штрих твого ідеального образу. Оформлюємо?"
         ];
 
         return intros[Math.floor(Math.random() * intros.length)] + 
@@ -1034,7 +1100,7 @@
     function speakDescription() {
         if (isSpeaking) {
             synth.cancel();
-            meditationMusic.pause();
+            handleViraBackground('stop');
             isSpeaking = false;
             updateVoiceBtn(false);
             return;
@@ -1045,16 +1111,23 @@
         const modalContent = document.getElementById('mD').innerText;
         
         const speechText = prepareViraText(brand, name, modalContent);
-        
-        toggleSynesthesia(document.getElementById('voiceBtn'));
 
         const utterance = new SpeechSynthesisUtterance(speechText);
         utterance.lang = 'uk-UA'; 
-        utterance.pitch = 0.92; // Ще нижчий, вкрадливий тон
-        utterance.rate = 0.70;  // Повільний темп
+        utterance.pitch = 0.90; 
+        utterance.rate = 0.72; 
         
-        utterance.onstart = () => { isSpeaking = true; updateVoiceBtn(true); };
-        utterance.onend = () => { isSpeaking = false; updateVoiceBtn(false); };
+        utterance.onstart = () => { 
+            isSpeaking = true; 
+            updateVoiceBtn(true); 
+            handleViraBackground('start'); 
+        };
+        
+        utterance.onend = () => { 
+            isSpeaking = false; 
+            updateVoiceBtn(false); 
+            handleViraBackground('stop'); 
+        };
         
         synth.speak(utterance);
     }
