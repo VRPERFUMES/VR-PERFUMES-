@@ -942,12 +942,15 @@
         recognition.start();
     }
 
-  // === ПАРФУМЕРНА СИНЕСТЕЗІЯ ТА ШІ-КОНСУЛЬТАНТ ВІРА ===
+  // === ІНТЕЛЕКТУАЛЬНИЙ МОДУЛЬ ВІРИ 7.5 (RELAX EDITION) ===
     const audioVibes = {
         "Tom Ford": "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3", 
         "Baccarat": "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3", 
-        "Zarkoperfume": "https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3", 
-        "Kilian": "https://cdn.pixabay.com/download/audio/2022/10/25/audio_2490ebf927.mp3", 
+        "Zarkoperfume": "https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3",
+        "Molecule": "https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3",
+        "Kilian": "https://cdn.pixabay.com/download/audio/2022/10/25/audio_2490ebf927.mp3",
+        "Nasomatto": "https://cdn.pixabay.com/download/audio/2022/03/24/audio_b0f1a6f88d.mp3",
+        "Tiziana Terenzi": "https://cdn.pixabay.com/download/audio/2022/03/24/audio_b0f1a6f88d.mp3",
         "default": "https://cdn.pixabay.com/download/audio/2022/02/07/audio_67eb2eaed8.mp3" 
     };
 
@@ -955,25 +958,24 @@
 
     function toggleSynesthesia(brand, name, btn) {
         let audioUrl = audioVibes.default;
+        const searchStr = (brand + " " + name).toLowerCase();
         for (let key in audioVibes) {
-            if (brand.toLowerCase().includes(key.toLowerCase()) || name.toLowerCase().includes(key.toLowerCase())) {
+            if (searchStr.includes(key.toLowerCase())) {
                 audioUrl = audioVibes[key];
                 break;
             }
         }
         if (currentAudio && !currentAudio.paused) {
             currentAudio.pause();
-            btn.classList.remove('playing');
-            btn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Атмосфера аромату`;
+            if(btn) btn.classList.remove('playing');
             return;
         }
         if (currentAudio) currentAudio.pause(); 
         currentAudio = new Audio(audioUrl);
         currentAudio.loop = true;
-        currentAudio.volume = 0.3; 
-        currentAudio.play().catch(e => console.log("Чекаємо на взаємодію..."));
-        btn.classList.add('playing');
-        btn.innerHTML = `<div class="audio-bars"><span></span><span></span><span></span></div> Відчути вайб...`;
+        currentAudio.volume = 0.12; // ТИХИЙ ФОН
+        currentAudio.play().catch(e => console.log("Музика чекає на клік"));
+        if(btn) btn.classList.add('playing');
     }
 
     function prepareViraText(brand, name, rawDesc, currentVol) {
@@ -990,31 +992,27 @@
         }
         const d = rawDesc.toLowerCase();
         const intros = [
-            `Привіт! Я Віра. Давай зануримось в атмосферу ${fName}. Це справжній маніфест розкоші від ${fBrand}. `,
-            `Вітаю! Це Віра. Ти обрала ${fName}. Зараз розкажу, чому Вікторія вважає цей аромат шедевром. `,
-            `Гарний вибір! Це ${fBrand}. Я Віра, допоможу тобі відчути магію цього флакона. `
+            `Привіт! Я Віра. Давай не поспішаючи розберемо ${fName}. Це вишукана робота бренду ${fBrand}. `,
+            `Вітаю! Це Віра. Ти обрала ${fName}. Зараз розкажу, чому Вікторія вважає цей аромат особливим. `,
+            `Рада допомогти. ${fName} від ${fBrand} — це справжнє задоволення. Давай зануримось у його характер. `
         ];
         let notesSpeech = "";
         const notesMatch = rawDesc.match(/(?:ноти:|Піраміда:|склад:)\s*([^<|\n|\.]+)/i);
         if (notesMatch) {
-            const top3 = notesMatch[1].split(',').slice(0, 3).map(n => n.trim()).join(', ');
-            notesSpeech = `Він розкривається неймовірно дорогим звучанням ${top3}. `;
+            const notesArray = notesMatch[1].split(',').map(n => n.trim()).filter(n => n.length > 2);
+            const top3 = notesArray.slice(0, 3).join(', та ');
+            notesSpeech = `У цій композиції я особливо відчуваю ${top3}. `;
         }
-        let usage = "";
-        if (currentVol.includes("5 мл")) usage = "Об'єму п'ять мілілітрів тобі вистачить приблизно на шістдесят розпилень — це цілий місяць задоволення. ";
-        else if (currentVol.includes("10 мл")) usage = "Формат десять мілілітрів набагато вигідніший, його вистачить на два повних місяці твого шлейфу. ";
-        
-        let tech = "";
-        if (d.includes('шлейф')) tech = "Це справжній магніт для компліментів, приготуйся до захоплених поглядів. ";
-
+        let genderSpeech = d.includes('унісекс') ? "До речі, він ідеально пасує і жінкам, і чоловікам. " : "";
+        let vibe = "Це дуже компліментарний аромат з дорогим звучанням. ";
+        if (d.includes('стійк')) vibe += "Він неймовірно гідно тримається на шкірі протягом усього дня. ";
+        let usage = currentVol.includes("5 мл") ? "Такого об'єму тобі вистачить на цілий місяць щоденного задоволення. " : (currentVol.includes("10 мл") ? "Десять мілілітрів — це два місяці твого особистого шлейфу, дуже вигідно. " : "");
         const closings = [
-            "Вікторія вже підготувала твій атомайзер. Додавай у кошик!",
-            "Це ідеальна інвестиція у твій настрій. Спробуємо?",
-            "Думаю, цей шлейф стане твоїм новим фаворитом."
+            "Вікторія вже підготувала твій атомайзер. Додаси в кошик?",
+            "Думаю, цей шлейф стане твоїм новим фаворитом. Що скажеш?",
+            "Цей аромат ідеально доповнить твій образ. Спробуємо?"
         ];
-        return {
-            speech: intros[Math.floor(Math.random() * intros.length)] + notesSpeech + tech + usage + closings[Math.floor(Math.random() * closings.length)]
-        };
+        return intros[Math.floor(Math.random() * intros.length)] + notesSpeech + genderSpeech + vibe + usage + closings[Math.floor(Math.random() * closings.length)];
     }
 
     function speakDescription() {
@@ -1027,17 +1025,13 @@
         }
         const brand = document.getElementById('mB').innerText;
         const name = document.getElementById('mN').innerText;
-        const descHTML = document.getElementById('mD').innerHTML;
-        let tempDiv = document.createElement("div");
-        tempDiv.innerHTML = descHTML;
-        let cleanDesc = tempDiv.innerText.split('💬 Відгуки')[0]; 
-        const vira = prepareViraText(brand, name, cleanDesc, selectedVol);
-        try {
-            const syncBtn = document.querySelector('.synesthesia-btn');
-            if (syncBtn && !syncBtn.classList.contains('playing')) toggleSynesthesia(brand, name, syncBtn);
-        } catch (e) { console.log("Звук чекає..."); }
-        const utterance = new SpeechSynthesisUtterance(vira.speech);
-        utterance.lang = 'uk-UA'; utterance.pitch = 1.12; utterance.rate = 0.86;
+        const modalContent = document.getElementById('mD').innerText;
+        let cleanText = modalContent.split('Також від')[0].split('💬 Відгуки')[0].split('Поділитися')[0].trim();
+        const speechText = prepareViraText(brand, name, cleanText, selectedVol);
+        const syncBtn = document.querySelector('.synesthesia-btn');
+        toggleSynesthesia(brand, name, syncBtn);
+        const utterance = new SpeechSynthesisUtterance(speechText);
+        utterance.lang = 'uk-UA'; utterance.pitch = 1.08; utterance.rate = 0.82; // ПОВІЛЬНИЙ ТЕМП
         utterance.onstart = () => { isSpeaking = true; updateVoiceBtn(true); };
         utterance.onend = () => { isSpeaking = false; updateVoiceBtn(false); };
         synth.speak(utterance);
@@ -1049,18 +1043,6 @@
         btn.innerHTML = active ? `<div class="voice-wave"><span></span><span></span><span></span></div> Зупинити` : `<span>🔊</span> ШІ Асистент`;
         if (active) btn.classList.add('voice-active'); else btn.classList.remove('voice-active');
     }
-    function updateVoiceBtn(active) {
-        const btn = document.getElementById('voiceBtn');
-        if (!btn) return;
-        if (active) {
-            btn.innerHTML = `<div class="voice-wave"><span></span><span></span><span></span></div> Зупинити`;
-            btn.classList.add('voice-active');
-        } else {
-            btn.innerHTML = `<span>🔊</span> ШІ Асистент`;
-            btn.classList.remove('voice-active');
-        }
-    }
-
     function closeModalAudio() {
         document.getElementById('infoModal').style.display='none';
         if (currentAudio) { currentAudio.pause(); currentAudio = null; }
