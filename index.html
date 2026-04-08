@@ -983,7 +983,59 @@
     let synth = window.speechSynthesis;
     let isSpeaking = false;
 
-        function speakDescription() {
+            // --- ІНТЕЛЕКТУАЛЬНИЙ МОДУЛЬ ВІРИ ---
+    function prepareViraText(brand, name, rawDesc) {
+        // 1. Словник правильної вимови (Фонетична карта)
+        const orthoepy = {
+            "Baccarat Rouge 540": "Баккара Руж п'ятсот сорок",
+            "Tobacco Vanille": "Тобакко Ваніль",
+            "Lost Cherry": "Лост Черрі",
+            "Zarkoperfume": "Зарко парфум",
+            "Kilian": "Кіліан",
+            "Maison Francis Kurkdjian": "Мейсон Френсіс Куркджан",
+            "Byredo": "Байредо",
+            "Ganymede": "Ганімед",
+            "Tiziana Terenzi": "Тізіана Терензі",
+            "Montale": "Монталь",
+            "Molecule": "Молекула",
+            "Jo Malone": "Джо Малон",
+            "Tom Ford": "Том Форд"
+        };
+
+        let fixedBrand = brand;
+        let fixedName = name;
+        
+        // Замінюємо вимову бренду та назви, якщо вони є в словнику
+        for (let key in orthoepy) {
+            if (brand.includes(key)) fixedBrand = orthoepy[key];
+            if (name.includes(key)) fixedName = orthoepy[key];
+        }
+
+        // 2. Аналіз тексту для висновку
+        let analysis = "";
+        const descLower = rawDesc.toLowerCase();
+        
+        if (descLower.includes("вечір") || descLower.includes("шлейф") || descLower.includes("густий")) {
+            analysis = "Це досить насичений аромат, який ідеально розкриється ввечері або в прохолодну погоду.";
+        } else if (descLower.includes("свіжий") || descLower.includes("цитрус") || descLower.includes("офіс")) {
+            analysis = "Це легка та енергійна композиція, чудовий варіант на кожен день.";
+        } else if (descLower.includes("солодк") || descLower.includes("ваніль") || descLower.includes("гурман")) {
+            analysis = "Якщо ти любиш «смачні», затишні аромати — це саме те, що треба.";
+        }
+
+        // 3. Витягуємо головні ноти для резюме
+        let notesMatch = rawDesc.match(/(?:Верхні ноти:|Ноти:)\s*(.*?)(?=\.|\n|<)/i);
+        let keyNotes = notesMatch ? `Особливо цікаво тут звучать ${notesMatch[1]}.` : "";
+
+        return {
+            intro: `Привіт! Я Віра. Давай розберемо аромат ${fixedName} від бренду ${fixedBrand}.`,
+            main: analysis,
+            details: keyNotes,
+            closing: `Вікторія каже, що цей парфум зараз дуже популярний. Хочеш спробувати?`
+        };
+    }
+
+    function speakDescription() {
         if (isSpeaking) {
             synth.cancel();
             isSpeaking = false;
@@ -995,24 +1047,18 @@
         const name = document.getElementById('mN').innerText;
         const descHTML = document.getElementById('mD').innerHTML;
         
+        // Очищуємо текст від HTML та відгуків
         let tempDiv = document.createElement("div");
         tempDiv.innerHTML = descHTML;
         let cleanDesc = tempDiv.innerText.split('💬 Відгуки')[0]; 
+
+        // Отримуємо інтелектуально оброблений текст
+        const viraSpeech = prepareViraText(brand, name, cleanDesc);
         
-        // --- ЛОГІКА ВСТУПУ ВІРИ ---
-        const intros = [
-            `Привіт! Я Віра, цифровий асистент Вікторії. Слухай, цей аромат від ${brand} просто неймовірний.`,
-            `Рада допомогти! Я Віра. Давай я розповім тобі, чому Вікторія обрала ${name} для нашого бару.`,
-            `Вітаю! Це Віра. Ось деталі про характер цього парфуму.`,
-            `Чудовий вибір! Я Віра, і я зараз розкажу тобі все про ${brand}.`
-        ];
-        const chosenIntro = intros[Math.floor(Math.random() * intros.length)];
-        
-        // Об'єднуємо вступ від Віри з основним описом
-        const fullText = `${chosenIntro} ${cleanDesc}`;
+        // Формуємо фінальну промову: Вступ + Аналіз + Ноти + Заклик
+        const fullText = `${viraSpeech.intro} ${viraSpeech.main} ${viraSpeech.details} ${viraSpeech.closing}`;
         
         const utterance = new SpeechSynthesisUtterance(fullText);
-        
         utterance.lang = 'uk-UA'; 
         utterance.pitch = 1.1; 
         utterance.rate = 0.95;  
@@ -1022,6 +1068,7 @@
 
         synth.speak(utterance);
     }
+
 
 
     function updateVoiceBtn(active) {
