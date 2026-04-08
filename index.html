@@ -983,7 +983,7 @@
     let synth = window.speechSynthesis;
     let isSpeaking = false;
 
-    function speakDescription() {
+        function speakDescription() {
         if (isSpeaking) {
             synth.cancel();
             isSpeaking = false;
@@ -999,18 +999,30 @@
         tempDiv.innerHTML = descHTML;
         let cleanDesc = tempDiv.innerText.split('💬 Відгуки')[0]; 
         
-        const fullText = `${brand}. ${name}. ${cleanDesc}`;
+        // --- ЛОГІКА ВСТУПУ ВІРИ ---
+        const intros = [
+            `Привіт! Я Віра, цифровий асистент Вікторії. Слухай, цей аромат від ${brand} просто неймовірний.`,
+            `Рада допомогти! Я Віра. Давай я розповім тобі, чому Вікторія обрала ${name} для нашого бару.`,
+            `Вітаю! Це Віра. Ось деталі про характер цього парфуму.`,
+            `Чудовий вибір! Я Віра, і я зараз розкажу тобі все про ${brand}.`
+        ];
+        const chosenIntro = intros[Math.floor(Math.random() * intros.length)];
+        
+        // Об'єднуємо вступ від Віри з основним описом
+        const fullText = `${chosenIntro} ${cleanDesc}`;
+        
         const utterance = new SpeechSynthesisUtterance(fullText);
         
         utterance.lang = 'uk-UA'; 
         utterance.pitch = 1.1; 
-        utterance.rate = 0.9;  
+        utterance.rate = 0.95;  
 
         utterance.onstart = () => { isSpeaking = true; updateVoiceBtn(true); };
         utterance.onend = () => { isSpeaking = false; updateVoiceBtn(false); };
 
         synth.speak(utterance);
     }
+
 
     function updateVoiceBtn(active) {
         const btn = document.getElementById('voiceBtn');
