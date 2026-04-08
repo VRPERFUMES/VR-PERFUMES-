@@ -523,7 +523,20 @@
         .recent-scroll { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
         .recent-scroll::-webkit-scrollbar { display: none; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+/* Нові стилі для ШІ та Плеєра */
+.voice-control-wrapper { margin-bottom: 20px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.synesthesia-btn, .voice-intro-btn { background: rgba(197, 160, 89, 0.05); border: 1px solid var(--gold); color: var(--gold); padding: 10px 18px; border-radius: 30px; font-family: var(--sans); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease; }
+.synesthesia-btn:hover, .voice-intro-btn:hover { background: var(--gold); color: #fff; box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3); }
+.synesthesia-btn.playing, .voice-intro-btn.voice-active { background: var(--text-dark); border-color: var(--text-dark); color: var(--bg); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+.audio-bars, .voice-wave { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+.audio-bars span, .voice-wave span { width: 2px; background: currentColor; height: 100%; transition: height 0.1s ease; }
+.synesthesia-btn.playing .audio-bars span, .voice-intro-btn.voice-active .voice-wave span { animation: sound-bounce 0.8s infinite ease-in-out alternate; }
+@keyframes sound-bounce { 0% { height: 20%; } 100% { height: 100%; } }
 
+/* Стиль для Аури (кольоровий фон за флаконом) */
+.aura-wrapper { position: relative; display: inline-block; transition: all 0.8s ease; }
+.modal-aura { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 220px; height: 220px; border-radius: 50%; filter: blur(45px); opacity: 0; z-index: 0; pointer-events: none; transition: background 1s ease, opacity 1s ease; }
+.modal-aura.active { opacity: 0.45; }
     </style>
 </head>
     </head>
@@ -815,8 +828,10 @@
             <div style="text-align: center; margin: 20px 0;">
                 <div class="aura-wrapper">
                     <div id="modalAura" class="modal-aura"></div>
-                    <img id="mImg" src="" crossorigin="anonymous" onload="updateAura(this)" style="max-height: 200px; max-width: 100%; object-fit: contain; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.12)); border-radius: 10px; position: relative; z-index: 2;">
-                </div>
+                   <div class="aura-wrapper">
+    <div id="modalAura" class="modal-aura"></div>
+    <img id="mImg" src="" crossorigin="anonymous" onload="updateAura(this)" style="max-height: 200px; position: relative; z-index: 2;">
+</div>
             </div>
 
             <div style="text-align: center;">
@@ -862,7 +877,46 @@
     let cart = JSON.parse(localStorage.getItem('vr_cart')) || [];
     let wishlist = JSON.parse(localStorage.getItem('vr_wishlist')) || [];
     let recentlyViewed = JSON.parse(localStorage.getItem('vr_recent')) || [];
+
+    // Функція для озвучки опису
+let synth = window.speechSynthesis;
+let isSpeaking = false;
+
+function speakDescription() {
+    if (isSpeaking) { synth.cancel(); isSpeaking = false; updateVoiceBtn(false); return; }
+    const brand = document.getElementById('mB').innerText;
+    const name = document.getElementById('mN').innerText;
+    let descText = document.getElementById('mD').innerText;
     
+    const fullText = `Привіт! Я ваш парфумерний сомельє. Розглядаєте ${brand} ${name}? Це чудовий вибір. Бажаєте додати у кошик?`;
+    
+    const utterance = new SpeechSynthesisUtterance(fullText);
+    utterance.lang = 'uk-UA'; utterance.pitch = 1.2;
+    utterance.onstart = () => { isSpeaking = true; updateVoiceBtn(true); };
+    utterance.onend = () => { isSpeaking = false; updateVoiceBtn(false); };
+    synth.speak(utterance);
+}
+
+function updateVoiceBtn(active) {
+    const btn = document.getElementById('voiceBtn');
+    if (!btn) return;
+    btn.innerHTML = active ? `<div class="voice-wave"><span></span><span></span><span></span></div> Зупинити` : `<span>🔊</span> Сомельє`;
+}
+
+// Функція для магічної Аури
+function updateAura(imgElement) {
+    const aura = document.getElementById('modalAura');
+    if (!aura) return;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 1; canvas.height = 1;
+    ctx.drawImage(imgElement, 0, 0, 1, 1);
+    try {
+        const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+        aura.style.background = `radial-gradient(circle, rgba(${r}, ${g}, ${b}, 0.8) 0%, rgba(${r}, ${g}, ${b}, 0) 70%)`;
+        aura.classList.add('active');
+    } catch (e) { console.log("Aura error"); }
+}
     const brandLoreData = {
         "Ella K Parfums": "Подорож крізь аромати від Соні Констант. Кожна композиція — це ольфакторний щоденник мандрівниці, що втілює дух пригод та екзотичну красу далеких країв.",
         "Zadig & Voltaire": "Французький рок-н-рол у флаконі. Аромати для вільних духом, де бунтарська енергія змішується з паризьким шиком та сучасним мінімалізмом.",
@@ -1535,6 +1589,11 @@
         } else { scarcityDiv.innerHTML = ''; }
         
         let rawText = (isWeekly && weekText) ? weekText : desc;
+       const voiceBtnHTML = `
+    <div class="voice-control-wrapper">
+        <button id="voiceBtn" class="voice-intro-btn" onclick="speakDescription()"><span>🔊</span> Сомельє</button>
+    </div>
+`;
         let f = rawText;
 
         f = f.replace(/\{(.*?)\}/g, function(match, perfName) {
@@ -1737,8 +1796,15 @@
                 </div>
             </div>
         `;
+        const voiceBtnHTML = `
+            <div class="voice-control-wrapper">
+                <button id="voiceBtn" class="voice-intro-btn" onclick="speakDescription()">
+                    <span>🔊</span> Сомельє
+                </button>
+            </div>
+        `;
         
-        document.getElementById('mD').innerHTML = f + shareBtnHTML + synesthesiaHTML + volHTML;
+        document.getElementById('mD').innerHTML = voiceBtnHTML + f + shareBtnHTML + synesthesiaHTML + volHTML;
         document.getElementById('reviewFormContainerHTML').innerHTML = reviewFormHTML;
         
         const orderBtn = document.getElementById('modalOrderBtn');
@@ -2045,11 +2111,14 @@
             return;
         }
 
-        let qOriginal = inputVal.toLowerCase().trim();
-        let qFixedLayout = fixKeyboardLayout(qOriginal);
+ let q = inputVal.toLowerCase().trim();
+        
+        // РОЗУМНИЙ ФІЛЬТР СТОП-СЛІВ (Лагодить пошук!)
+        let cleanQ = q.replace(/(хочу|шукаю|знайти|порайдьте|підкажіть|аромат|парфум|духи|мені|якийсь|з|на|купити|покажи)/gi, ' ').replace(/\s+/g, ' ').trim();
+        if(cleanQ.length < 2) cleanQ = q; 
 
-        let q1 = applySynonyms(qOriginal);
-        let q2 = applySynonyms(qFixedLayout);
+        let q1 = applySynonyms(cleanQ);
+        let q2 = applySynonyms(fixKeyboardLayout(cleanQ));
 
         let results = globalCatalogData.filter(p => {
             let searchableText = (p[0] + " " + p[1] + " " + (p[4] || "")).toLowerCase();
