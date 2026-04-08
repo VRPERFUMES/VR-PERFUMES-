@@ -983,55 +983,95 @@
     let synth = window.speechSynthesis;
     let isSpeaking = false;
 
-            // --- ІНТЕЛЕКТУАЛЬНИЙ МОДУЛЬ ВІРИ ---
+            // --- ПРОСУНУТИЙ МОДУЛЬ ВІРИ: ЕКСПЕРТНИЙ АНАЛІЗ ---
     function prepareViraText(brand, name, rawDesc) {
-        // 1. Словник правильної вимови (Фонетична карта)
+        // 1. РОЗШИРЕНА ФОНЕТИКА (Бренди різними мовами)
         const orthoepy = {
-            "Baccarat Rouge 540": "Баккара Руж п'ятсот сорок",
-            "Tobacco Vanille": "Тобакко Ваніль",
-            "Lost Cherry": "Лост Черрі",
-            "Zarkoperfume": "Зарко парфум",
-            "Kilian": "Кіліан",
+            // Франція
             "Maison Francis Kurkdjian": "Мейсон Френсіс Куркджан",
+            "Parfums de Marly": "Парфам де Марлі",
+            "Guerlain": "Герлен",
+            "Hermes": "Ермес",
+            "Juliette Has A Gun": "Джульєтта Хез е Ган",
+            "Ex Nihilo": "Екс Нііло",
+            "Diptyque": "Діптік",
+            "Liquides Imaginaires": "Лікід Імажінер",
+            // Італія
+            "Tiziana Terenzi": "Тіціана Терензі",
+            "Xerjoff": "Ксерджофф",
+            "Casamorati": "Казамораті",
+            "V Canto": "Ві Канто",
+            "Gritti": "Грітті",
+            "Giardini Di Toscana": "Джардіні Ді Тоскана",
+            "Nasomatto": "Назоматто",
+            // Інші
+            "Zarkoperfume": "Зарко парфум",
+            "Nishane": "Нішане",
             "Byredo": "Байредо",
+            "Baccarat Rouge 540": "Баккара Руж п'ятсот сорок",
             "Ganymede": "Ганімед",
-            "Tiziana Terenzi": "Тізіана Терензі",
-            "Montale": "Монталь",
-            "Molecule": "Молекула",
-            "Jo Malone": "Джо Малон",
-            "Tom Ford": "Том Форд"
+            "Megamare": "Мегамаре",
+            "Kirke": "Кірке",
+            "Erba Pura": "Ерба Пура"
         };
 
-        let fixedBrand = brand;
-        let fixedName = name;
-        
-        // Замінюємо вимову бренду та назви, якщо вони є в словнику
+        let fBrand = brand;
+        let fName = name;
         for (let key in orthoepy) {
-            if (brand.includes(key)) fixedBrand = orthoepy[key];
-            if (name.includes(key)) fixedName = orthoepy[key];
+            if (brand.includes(key)) fBrand = orthoepy[key];
+            if (name.includes(key)) fName = orthoepy[key];
         }
 
-        // 2. Аналіз тексту для висновку
+        const d = rawDesc.toLowerCase();
         let analysis = "";
-        const descLower = rawDesc.toLowerCase();
-        
-        if (descLower.includes("вечір") || descLower.includes("шлейф") || descLower.includes("густий")) {
-            analysis = "Це досить насичений аромат, який ідеально розкриється ввечері або в прохолодну погоду.";
-        } else if (descLower.includes("свіжий") || descLower.includes("цитрус") || descLower.includes("офіс")) {
-            analysis = "Це легка та енергійна композиція, чудовий варіант на кожен день.";
-        } else if (descLower.includes("солодк") || descLower.includes("ваніль") || descLower.includes("гурман")) {
-            analysis = "Якщо ти любиш «смачні», затишні аромати — це саме те, що треба.";
+        let mood = "";
+
+        // 2. АНАЛІЗ ПІРАМІДИ ТА НАСТРОЮ (Замість простого переліку)
+        const groups = [
+            { keywords: ['мускус', 'пудр', 'ірис', 'чистот'], text: "Він створює дуже ніжний, пудровий ефект, наче друга шкіра." },
+            { keywords: ['уд', 'шкір', 'ладан', 'дерев'], text: "Це статусний, глибокий аромат з виразними деревними та шкіряними акцентами." },
+            { keywords: ['цитрус', 'бергамот', 'лимон', 'морськ'], text: "Дуже свіжа, дифузна композиція, що дарує відчуття чистоти та енергії." },
+            { keywords: ['троянд', 'жасмин', 'квітк', 'тубероз'], text: "Тут домінує розкішний квітковий букет, дуже жіночний та витончений." },
+            { keywords: ['ваніль', 'карамель', 'шоколад', 'мигдаль'], text: "Це справжня гурманіка — солодкий, затишний та неймовірно апетитний шлейф." },
+            { keywords: ['вишн', 'черешн'], text: "Яскравий ягідний характер з характерною мигдальною гірчинкою." }
+        ];
+
+        for (let g of groups) {
+            if (g.keywords.some(k => d.includes(k))) {
+                mood += g.text + " ";
+            }
         }
 
-        // 3. Витягуємо головні ноти для резюме
-        let notesMatch = rawDesc.match(/(?:Верхні ноти:|Ноти:)\s*(.*?)(?=\.|\n|<)/i);
-        let keyNotes = notesMatch ? `Особливо цікаво тут звучать ${notesMatch[1]}.` : "";
+        // 3. АНАЛІЗ ТЕХНІЧНИХ ПАРАМЕТРІВ (Стійкість та Шлейф)
+        let techInfo = "";
+        const longMatch = rawDesc.match(/Стійкість:\s*(\d)/i);
+        const sillageMatch = rawDesc.match(/Шлейф:\s*(\d)/i);
+
+        if (longMatch) {
+            const val = parseInt(longMatch[1]);
+            if (val >= 4) techInfo += "Він неймовірно стійкий, триматиметься весь день. ";
+            else if (val <= 2) techInfo += "Це інтимний аромат, він сидить близько до шкіри. ";
+        }
+
+        if (sillageMatch) {
+            const val = parseInt(sillageMatch[1]);
+            if (val >= 4) techInfo += "Його шлейф точно помітять усі навколо, він дуже дифузний. ";
+        }
+
+        // 4. ГЕНЕРАЦІЯ ВИСНОВКУ
+        if (!mood) mood = "Це багатогранна композиція, яка розкривається поступово та цікаво. ";
+        
+        const finalIntro = [
+            `Привіт! Я Віра. Давай подивимось на ${fName}. Це робота бренду ${fBrand}.`,
+            `Рада допомогти. Це ${fBrand}, аромат ${fName}. Зараз розкажу, який він.`,
+            `Цікавий вибір! ${fName} від ${fBrand}. Ось мій аналіз.`
+        ];
 
         return {
-            intro: `Привіт! Я Віра. Давай розберемо аромат ${fixedName} від бренду ${fixedBrand}.`,
-            main: analysis,
-            details: keyNotes,
-            closing: `Вікторія каже, що цей парфум зараз дуже популярний. Хочеш спробувати?`
+            intro: finalIntro[Math.floor(Math.random() * finalIntro.length)],
+            body: mood,
+            tech: techInfo,
+            closing: "Вікторія обожнює такі складні поєднання. Як тобі?"
         };
     }
 
@@ -1047,29 +1087,25 @@
         const name = document.getElementById('mN').innerText;
         const descHTML = document.getElementById('mD').innerHTML;
         
-        // Очищуємо текст від HTML та відгуків
         let tempDiv = document.createElement("div");
         tempDiv.innerHTML = descHTML;
         let cleanDesc = tempDiv.innerText.split('💬 Відгуки')[0]; 
 
-        // Отримуємо інтелектуально оброблений текст
-        const viraSpeech = prepareViraText(brand, name, cleanDesc);
+        const vira = prepareViraText(brand, name, cleanDesc);
         
-        // Формуємо фінальну промову: Вступ + Аналіз + Ноти + Заклик
-        const fullText = `${viraSpeech.intro} ${viraSpeech.main} ${viraSpeech.details} ${viraSpeech.closing}`;
+        // Збираємо все докупи: Вступ + Аналіз нот + Технічні дані + Фінал
+        const fullText = `${vira.intro} ${vira.body} ${vira.tech} ${vira.closing}`;
         
         const utterance = new SpeechSynthesisUtterance(fullText);
         utterance.lang = 'uk-UA'; 
-        utterance.pitch = 1.1; 
-        utterance.rate = 0.95;  
+        utterance.pitch = 1.05; // Трохи природніший тон
+        utterance.rate = 0.9;   // Трохи повільніше для експертності
 
         utterance.onstart = () => { isSpeaking = true; updateVoiceBtn(true); };
         utterance.onend = () => { isSpeaking = false; updateVoiceBtn(false); };
 
         synth.speak(utterance);
     }
-
-
 
     function updateVoiceBtn(active) {
         const btn = document.getElementById('voiceBtn');
