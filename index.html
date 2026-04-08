@@ -66,6 +66,11 @@
         body.dark-theme .cart-item { border-bottom-color: rgba(255,255,255,0.05); }
         body.dark-theme .ig-guarantee-block { background: rgba(197, 160, 89, 0.05); border-color: rgba(197, 160, 89, 0.2); color: #f5f5f5; }
         body.dark-theme .ig-sub { color: #aaa; }
+        body.dark-theme .layering-section { background: var(--bg); border-top: 1px solid rgba(255,255,255,0.05); }
+        body.dark-theme .layer-res-box { background: rgba(197, 160, 89, 0.05); color: #f5f5f5; }
+        body.dark-theme .custom-sort-header { background: #1a1a1a; }
+        body.dark-theme .custom-sort-options { background: #1a1a1a; border-color: rgba(255,255,255,0.1); }
+        body.dark-theme .sort-option { color: #f5f5f5; border-bottom: 1px solid rgba(255,255,255,0.05); }
         
         .theme-switch { position: absolute; right: 20px; top: 20px; font-size: 20px; cursor: pointer; z-index: 1010; color: #1a1a1a; transition: 0.3s; background: none; border: none; padding: 0; outline: none; }
         body.dark-theme .theme-switch { color: var(--gold); }
@@ -128,12 +133,20 @@
         .action-buttons { display: flex; gap: 10px; padding: 20px 15px; background: var(--bg); }
         .viber-link, .news-btn { flex: 1; border: 1px solid #eee; padding: 14px; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; color: var(--text-dark); cursor: pointer; font-weight: 600; }
         
-        /* SEARCH & STICKY NAV */
+        /* SEARCH & STICKY NAV + ШІ МІКРОФОН */
         .sticky-active { position: sticky; top: 0; z-index: 1000; padding-top: 12px; }
         .search-wrapper { position: relative; margin-left: 20px; margin-right: 50px; }
-        #searchInput { width: 100%; padding: 12px 35px 12px 15px; border: 1px solid rgba(0,0,0,0.08); border-radius: 20px; font-size: 13px; outline: none; letter-spacing: 0.5px; box-sizing: border-box; background: rgba(255, 255, 255, 0.6); box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); transition: all 0.3s ease; }
+        #searchInput { width: 100%; padding: 12px 60px 12px 15px; border: 1px solid rgba(0,0,0,0.08); border-radius: 20px; font-size: 13px; outline: none; letter-spacing: 0.5px; box-sizing: border-box; background: rgba(255, 255, 255, 0.6); box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); transition: all 0.3s ease; }
         #searchInput:focus { border-color: var(--gold); }
-        #clearSearchBtn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 16px; color: #999; cursor: pointer; display: none; z-index: 10; padding: 5px; margin-right: 10px; }
+        
+        /* Кнопка Очистити */
+        #clearSearchBtn { position: absolute; right: 35px; top: 50%; transform: translateY(-50%); font-size: 16px; color: #999; cursor: pointer; display: none; z-index: 10; padding: 5px; }
+        
+        /* Кнопка Мікрофона (Цифровий Сомельє) */
+        .mic-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; fill: none; stroke: var(--gold); stroke-width: 2; cursor: pointer; z-index: 10; transition: 0.3s; stroke-linecap: round; stroke-linejoin: round; }
+        .mic-btn:hover { stroke: var(--text-dark); }
+        .mic-btn.listening { animation: mic-pulse 1.2s infinite; stroke: #ff3b30; }
+        @keyframes mic-pulse { 0% { transform: translateY(-50%) scale(1); opacity: 1; } 50% { transform: translateY(-50%) scale(1.15); opacity: 0.6; } 100% { transform: translateY(-50%) scale(1); opacity: 1; } }
         
         /* NOTE SUGGESTIONS CHIPS */
         .note-suggestions { padding: 8px 20px 10px; overflow-x: auto; white-space: nowrap; display: flex; gap: 8px; scrollbar-width: none; border-bottom: 1px solid rgba(0,0,0,0.03); }
@@ -142,6 +155,10 @@
         .note-chip { display: inline-block; padding: 5px 14px; background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; font-size: 11px; color: #555; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;}
         .note-chip:active { transform: scale(0.95); }
         .note-chip.active-note { border-color: var(--gold); color: var(--gold); background: #fdfbf7; font-weight: 700; box-shadow: 0 2px 8px rgba(197,160,89,0.2); }
+        
+        /* КОНТУРНІ SVG НОТИ ДЛЯ МОДАЛКИ */
+        .note-header { display: flex; align-items: center; gap: 8px; font-family: var(--cinzel); color: var(--gold); text-transform: uppercase; font-size: 11px; font-weight: 800; margin-top: 15px; margin-bottom: 8px; border-bottom: 1px solid rgba(197, 160, 89, 0.1); padding-bottom: 4px; }
+        .note-icon-svg { width: 14px; height: 14px; fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
         
         .modal-note-tag { display: inline-block; background: #fff; border: 1px solid #eaeaea; padding: 4px 10px; border-radius: 4px; font-size: 12px; margin: 0 4px 4px 0; cursor: pointer; color: #444; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02); font-weight: 500;}
         .modal-note-tag:hover, .modal-note-tag:active { border-color: var(--gold); color: #fff; background: var(--gold); box-shadow: 0 3px 8px rgba(197,160,89,0.3); transform: translateY(-1px); }
@@ -175,22 +192,35 @@
         .tab-btn { background: none; border: none; font-size: 11px; font-weight: 600; color: #a0a0a0; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; padding: 5px 0; transition: 0.3s; white-space: nowrap; flex-shrink: 0; }
         .tab-btn.active { color: var(--gold); font-weight: 800; border-bottom: 2px solid var(--gold); }
 
-        /* ОПТИМІЗОВАНИЙ КАТАЛОГ ДЛЯ ПК ТА МОБІЛОК + ЕФЕКТ РІДКОГО СКЛА */
+        /* === КАСТОМНЕ ЗОЛОТЕ СОРТУВАННЯ === */
+        .sort-wrapper { padding: 0 20px 10px; }
+        .custom-sort-wrapper { position: relative; width: 250px; margin-left: auto; font-family: var(--cinzel); font-size: 10px; letter-spacing: 1px; z-index: 100; }
+        .custom-sort-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border: 1px solid var(--gold); border-radius: 6px; background: var(--bg); color: var(--gold); font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .custom-sort-options { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg); border: 1px solid rgba(197, 160, 89, 0.3); border-top: none; border-radius: 0 0 6px 6px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: none; overflow: hidden; }
+        .custom-sort-options.show { display: block; animation: fadeIn 0.2s ease; }
+        .sort-option { padding: 12px 15px; color: var(--text-dark); cursor: pointer; border-bottom: 1px solid rgba(128,128,128,0.1); text-transform: uppercase; font-weight: 600; }
+        .sort-option:last-child { border-bottom: none; }
+        .sort-option:hover, .sort-option.active { color: var(--gold); background: rgba(197, 160, 89, 0.05); }
+
+        /* ОПТИМІЗОВАНИЙ КАТАЛОГ ДЛЯ ПК ТА МОБІЛОК + ЕФЕКТ РІДКОГО СКЛА + РІВНІ КАРТКИ */
         #catalog { display: grid; grid-template-columns: 1fr 1fr; gap: 30px 15px; padding: 20px; transition: opacity 0.4s ease; }
         @media (min-width: 600px) { #catalog { grid-template-columns: repeat(3, 1fr); gap: 30px 20px; } }
         @media (min-width: 992px) { #catalog { grid-template-columns: repeat(4, 1fr); gap: 40px 25px; padding: 30px 40px; } }
         @media (min-width: 1200px) { #catalog { grid-template-columns: repeat(5, 1fr); gap: 40px 30px; } }
 
-        .card { position: relative; display: flex; flex-direction: column; background: var(--bg); transition: box-shadow 0.3s ease; overflow: hidden; }
+        .card { position: relative; display: flex; flex-direction: column; justify-content: space-between; height: 100%; min-height: 380px; padding-bottom: 15px; background: var(--bg); border: 1px solid rgba(197, 160, 89, 0.1); border-radius: 12px; transition: all 0.4s ease; overflow: hidden; }
         .card::after { content: ''; position: absolute; top: -50%; left: -150%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1), transparent); transform: rotate(45deg); transition: all 0.6s ease; z-index: 6; pointer-events: none; }
         .card:hover::after { left: 100%; }
 
-        .card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: #f9f9f9; border-radius: 4px; cursor: pointer; position: relative; z-index: 5; content-visibility: auto; }
+        .card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: #f9f9f9; cursor: pointer; position: relative; z-index: 5; }
+        
+        .card-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: flex-start; padding: 0 10px; }
         .card-price-label { font-size: 13px; font-family: var(--serif); color: var(--gold); font-weight: 700; margin: 10px 0 2px; text-align: center; }
         .brand { font-family: var(--cinzel); font-size: 11px; color: #999; text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; text-align: center; font-weight: 700;}
         .name { font-family: var(--serif); font-size: 14px; font-weight: 600; margin: 4px 0 10px; min-height: 35px; text-align: center; line-height: 1.2; color: var(--text-dark); }
-        .card-stars { color: var(--gold); font-size: 11px; text-align: center; letter-spacing: 1px; margin-top: -5px; margin-bottom: 10px; }
-        .order-btn { border: 1px solid var(--text-dark); background: transparent; color: var(--text-dark); padding: 12px; font-size: 10px; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; position: relative; z-index: 10; transition: 0.3s; border-radius: 4px; }
+        .card-stars { height: 18px; margin: 5px 0 10px; color: var(--gold); font-size: 11px; text-align: center; letter-spacing: 1px; display: flex; justify-content: center; align-items: center;}
+        
+        .order-btn { margin-top: auto; margin-left: 10px; margin-right: 10px; border: 1px solid var(--text-dark); background: transparent; color: var(--text-dark); padding: 12px; font-size: 10px; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; position: relative; z-index: 10; transition: 0.3s; border-radius: 4px; }
         .order-btn:hover { background: var(--text-dark); color: var(--bg); }
         
         .badges-wrapper { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 10; align-items: flex-start; pointer-events: none; }
@@ -227,14 +257,43 @@
         .week-img { max-height: 200px; width: auto; max-width: 90%; object-fit: contain; margin-bottom: 15px; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.1)); cursor: pointer; }
         .week-card-btn { width: 220px; height: 44px; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; background: #1a1a1a; color: #fff; border: none; cursor: pointer; border-radius: 4px; }
 
-        /* ЧИСТА ТА ЧИТАБЕЛЬНА МОДАЛКА + АУРА */
+        /* ЧИСТА ТА ЧИТАБЕЛЬНА МОДАЛКА + ЕФЕКТИВНА АУРА */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { background: var(--bg); width: 100%; max-width: 420px; border-radius: 12px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
         .modal-close-x { position: absolute; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; font-size: 16px; z-index: 20; transition: 0.3s; }
         
-        /* СТИЛЬ АУРИ */
         .aura-wrapper { position: relative; display: inline-block; transition: all 0.8s ease; }
-        .aura-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120%; height: 120%; filter: blur(40px); opacity: 0.4; border-radius: 50%; z-index: -1; transition: background 0.8s ease; }
+        .modal-aura { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 220px; height: 220px; border-radius: 50%; filter: blur(45px); opacity: 0; z-index: 0; pointer-events: none; transition: background 1s ease, opacity 1s ease; }
+        .modal-aura.active { opacity: 0.45; }
+        body.dark-theme .modal-aura.active { opacity: 0.25; }
+
+        /* --- СИНЕСТЕЗІЯ (ПЛЕЄР) ТА AI ГОЛОС --- */
+        .voice-control-wrapper { margin-bottom: 20px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        
+        .synesthesia-btn, .voice-intro-btn { background: rgba(197, 160, 89, 0.05); border: 1px solid var(--gold); color: var(--gold); padding: 10px 18px; border-radius: 30px; font-family: var(--sans); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease; }
+        .synesthesia-btn:hover, .voice-intro-btn:hover { background: var(--gold); color: #fff; box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3); }
+        
+        .synesthesia-btn.playing, .voice-intro-btn.voice-active { background: var(--text-dark); border-color: var(--text-dark); color: var(--bg); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
+        .audio-bars, .voice-wave { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+        .audio-bars span, .voice-wave span { width: 2px; background: currentColor; height: 100%; transition: height 0.1s ease; }
+        .synesthesia-btn.playing .audio-bars span, .voice-intro-btn.voice-active .voice-wave span { animation: sound-bounce 0.8s infinite ease-in-out alternate; }
+        .synesthesia-btn.playing .audio-bars span:nth-child(2), .voice-intro-btn.voice-active .voice-wave span:nth-child(2) { animation-delay: 0.2s; }
+        .synesthesia-btn.playing .audio-bars span:nth-child(3), .voice-intro-btn.voice-active .voice-wave span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes sound-bounce { 0% { height: 20%; } 100% { height: 100%; } }
+
+        /* --- ОЛЬФАКТОРНА ЛАБОРАТОРІЯ --- */
+        .layering-section { padding: 40px 20px; background: var(--gray-light); border-top: 1px solid rgba(128,128,128,0.1); text-align: center; }
+        .layering-card { max-width: 600px; margin: 0 auto; }
+        .layering-title { font-family: var(--cinzel); color: var(--gold); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; }
+        .layering-title svg { width: 20px; height: 20px; fill: none; stroke: var(--gold); stroke-width: 1.5; }
+        .layering-desc { font-size: 13px; color: #777; margin-bottom: 25px; }
+        .layering-inputs { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
+        .layering-select { background: var(--bg); border: 1px solid rgba(128,128,128,0.3); color: var(--text-dark); padding: 12px; border-radius: 6px; font-family: var(--sans); font-size: 12px; font-weight: 600; width: 42%; outline: none; transition: 0.3s; }
+        .layering-select:focus { border-color: var(--gold); }
+        .layering-plus { color: var(--gold); font-size: 20px; font-weight: 300; }
+        .layer-res-box { min-height: 50px; padding: 15px; border: 1px dashed var(--gold); border-radius: 8px; font-size: 13px; font-style: italic; background: rgba(197, 160, 89, 0.05); color: var(--text-dark); display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        .layer-success { color: var(--text-dark); font-weight: 500; animation: fadeIn 0.5s ease; font-style: normal; }
 
         .reviews-scroll-container { max-height: 160px; overflow-y: auto; margin: 10px 0 15px; padding-right: 5px; border-bottom: 1px solid #f2f2f2; }
         .review-box { border-left: 3px solid #eee; background: rgba(128,128,128,0.05); padding: 10px 14px; margin: 8px 0; font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--text-dark); line-height: 1.5; border-radius: 0 4px 4px 0;}
@@ -260,8 +319,9 @@
         .vol-chip.disabled { opacity: 0.3; pointer-events: none; text-decoration: line-through; }
         .vol-chip small { display: block; font-size: 10px; margin-top: 2px; opacity: 0.7; font-weight: 400; text-transform: none; line-height: 1.2; }
         
-        .vol-chip.bottle-special { background: #000; color: var(--gold); border: 1px solid #000; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;}
-        .vol-chip.bottle-special.active { background: var(--bg); color: var(--text-dark); border-color: var(--text-dark); }
+        /* ЗОЛОТА КНОПКА ФЛАКОНА */
+        .vol-chip.bottle-special { background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(197, 160, 89, 0.05) 100%); border: 1px dashed var(--gold); color: var(--text-dark); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; width: 100%; box-shadow: none;}
+        .vol-chip.bottle-special:hover, .vol-chip.bottle-special.active { background: linear-gradient(135deg, #d4af37 0%, #aa8529 100%); color: #fff; border: 1px solid transparent; box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4); }
         
         .price-display { font-size: 24px; font-family: var(--serif); font-weight: 700; color: var(--gold); margin: 10px 0 2px 0; text-align: center; }
         .price-sub { font-size: 11px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; text-align: center; }
@@ -455,12 +515,6 @@
             }
         }
 
-        /* === НОВІ ФІШКИ: СОРТУВАННЯ, ЛОР, НЕЩОДАВНО ПЕРЕГЛЯНУТІ === */
-        .sort-wrapper { padding: 0 20px 10px; display: flex; justify-content: flex-end; }
-        .sort-select { background: transparent; border: 1px solid rgba(128,128,128,0.3); border-radius: 6px; padding: 6px 12px; font-size: 11px; font-family: var(--sans); color: var(--text-dark); outline: none; cursor: pointer; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: 0.3s; }
-        body.dark-theme .sort-select { color: #fff; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
-        .sort-select:focus { border-color: var(--gold); }
-        
         .brand-lore-box { display: none; padding: 20px; margin: 0 20px 20px; background: rgba(197, 160, 89, 0.05); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; font-family: var(--serif); font-size: 13px; line-height: 1.6; color: var(--text-dark); animation: fadeIn 0.5s ease; }
         .brand-lore-title { font-family: var(--cinzel); font-size: 14px; font-weight: 800; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
         
@@ -472,6 +526,7 @@
 
     </style>
 </head>
+    </head>
 <body>
 
 <div class="tt-hint">💡 Не переходить у Telegram? Тисніть <b>(⋯)</b> та <b>«Відкрити у браузері»</b>.</div>
@@ -496,6 +551,12 @@
     <button class="theme-switch" onclick="toggleTheme()" id="themeBtn">☾</button>
     <div class="search-wrapper">
         <input type="text" id="searchInput" placeholder="ПОШУК АРОМАТУ АБО БРЕНДУ..." oninput="handleSearchInput()">
+        <svg class="mic-btn" id="micBtn" viewBox="0 0 24 24" onclick="startVoiceSearch()">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
         <span id="clearSearchBtn" onclick="clearSearch()">✕</span>
         <div id="searchResults" class="search-dropdown"></div>
     </div>
@@ -520,13 +581,26 @@
     </div>
     
     <div class="sort-wrapper">
-        <select id="sortSelect" class="sort-select" onchange="sortCatalog()">
-            <option value="default">За замовчуванням (Нові)</option>
-            <option value="popularity">За популярністю (Відгуки)</option>
-            <option value="price-asc">Ціна: від дешевих</option>
-            <option value="price-desc">Ціна: від дорогих</option>
-            <option value="name-asc">За алфавітом (А-Я)</option>
-        </select>
+        <div class="custom-sort-wrapper">
+            <div class="custom-sort-header" onclick="toggleSortMenu(event)">
+                <span id="currentSortText">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</span>
+                <svg viewBox="0 0 24 24" width="16" height="16"><path d="M7 10l5 5 5-5z" fill="var(--gold)"/></svg>
+            </div>
+            <div class="custom-sort-options" id="sortOptionsList">
+                <div class="sort-option active" onclick="applySort('default', 'ЗА ЗАМОВЧУВАННЯМ (НОВІ)')">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</div>
+                <div class="sort-option" onclick="applySort('popularity', 'ЗА ПОПУЛЯРНІСТЮ (ВІДГУКИ)')">ЗА ПОПУЛЯРНІСТЮ (ВІДГУКИ)</div>
+                <div class="sort-option" onclick="applySort('price-asc', 'ЦІНА: ВІД ДЕШЕВИХ')">ЦІНА: ВІД ДЕШЕВИХ</div>
+                <div class="sort-option" onclick="applySort('price-desc', 'ЦІНА: ВІД ДОРОГИХ')">ЦІНА: ВІД ДОРОГИХ</div>
+                <div class="sort-option" onclick="applySort('name-asc', 'ЗА АЛФАВІТОМ (А-Я)')">ЗА АЛФАВІТОМ (А-Я)</div>
+            </div>
+            <select id="sortSelect" style="display:none;" onchange="sortCatalog()">
+                <option value="default">default</option>
+                <option value="popularity">popularity</option>
+                <option value="price-asc">price-asc</option>
+                <option value="price-desc">price-desc</option>
+                <option value="name-asc">name-asc</option>
+            </select>
+        </div>
     </div>
 </div>
 
@@ -546,17 +620,32 @@
     <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
     <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
     <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
-    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
-    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
-    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
-    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
-    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
-    <div class="card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>
 </div>
 
 <div class="recent-section" id="recentSection">
     <span class="recent-title">Нещодавно переглянуті</span>
     <div class="recent-scroll" id="recentScrollContainer"></div>
+</div>
+
+<div class="layering-section">
+    <div class="layering-card">
+        <div class="layering-title">
+            <svg viewBox="0 0 24 24"><path d="M9 2v2.75L4 16v4h16v-4L15 4.75V2H9zm2 2h2v1.25l5 11.25H6L11 5.25V4zM7.5 17h9v1h-9v-1z"/></svg>
+            Ольфакторна Лабораторія
+        </div>
+        <div class="layering-desc">Дізнайтеся, як змішати аромати, щоб створити свій унікальний шлейф</div>
+        <div class="layering-inputs">
+            <select id="layer1" class="layering-select" onchange="checkLayering()">
+                <option value="">Аромат №1</option>
+            </select>
+            <span class="layering-plus">+</span>
+            <select id="layer2" class="layering-select" onchange="checkLayering()">
+                <option value="">Аромат №2</option>
+                <option value="Будь-який аромат">Molecule 01 (Підсилювач)</option>
+            </select>
+        </div>
+        <div id="layeringResult" class="layer-res-box">Оберіть комбінацію для магії ✨</div>
+    </div>
 </div>
 
 <div class="about-section">
@@ -716,16 +805,16 @@
     </div>
 </div>
 
-<div id="infoModal" class="modal" onclick="this.style.display='none'">
+<div id="infoModal" class="modal" onclick="closeModalAudio()">
     <div class="modal-content glass-panel" onclick="event.stopPropagation()" style="padding: 0; display: flex; flex-direction: column; max-height: 85vh; border: none; overflow: hidden;">
         
-        <button class="modal-close-x" onclick="document.getElementById('infoModal').style.display='none'" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.07); color: var(--text-dark); border: none; width: 34px; height: 34px; border-radius: 50%; z-index: 100; font-weight: bold; cursor: pointer;">✕</button>
+        <button class="modal-close-x" onclick="closeModalAudio()" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.07); color: var(--text-dark); border: none; width: 34px; height: 34px; border-radius: 50%; z-index: 100; font-weight: bold; cursor: pointer;">✕</button>
         
         <div class="modal-scroll-area" style="padding: 20px; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; padding-bottom: 80px;">
             
             <div style="text-align: center; margin: 20px 0;">
                 <div class="aura-wrapper">
-                    <div id="modalAura" class="aura-bg"></div>
+                    <div id="modalAura" class="modal-aura"></div>
                     <img id="mImg" src="" crossorigin="anonymous" onload="updateAura(this)" style="max-height: 200px; max-width: 100%; object-fit: contain; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.12)); border-radius: 10px; position: relative; z-index: 2;">
                 </div>
             </div>
@@ -759,6 +848,7 @@
         <button class="modal-btn-full" style="background:var(--bg); color:var(--text-dark); border:1px solid rgba(128,128,128,0.3); margin-top: 25px;" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button>
     </div>
 </div>
+
 <script>
     const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=339534482&single=true&output=csv';
     const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=1478567043&single=true&output=csv';
@@ -769,12 +859,10 @@
     let selectedVol = "5 мл", currentBasePrice = 0, currentFixedPrice = 0, currentModalImg = '';
     
     let globalCatalogData = []; 
-    
     let cart = JSON.parse(localStorage.getItem('vr_cart')) || [];
     let wishlist = JSON.parse(localStorage.getItem('vr_wishlist')) || [];
     let recentlyViewed = JSON.parse(localStorage.getItem('vr_recent')) || [];
     
-    // === НОВЕ: Повний словник Бренд-лору ===
     const brandLoreData = {
         "Ella K Parfums": "Подорож крізь аромати від Соні Констант. Кожна композиція — це ольфакторний щоденник мандрівниці, що втілює дух пригод та екзотичну красу далеких країв.",
         "Zadig & Voltaire": "Французький рок-н-рол у флаконі. Аромати для вільних духом, де бунтарська енергія змішується з паризьким шиком та сучасним мінімалізмом.",
@@ -812,50 +900,249 @@
         "Chloé Atelier des Fleurs": "Вишукана колекція, присвячена магії квітів. Кожен парфум — це моно-букет, що ідеально передає чистоту та крихкість живої рослини."
     };
 
-    const originalTitle = document.title;
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            document.title = cart.length > 0 ? "🎁 Ваше замовлення чекає!" : "✨ Погляньте на новинки...";
-        } else {
-            document.title = originalTitle;
+    // === ШІ-СОМЕЛЬЄ (ГОЛОСОВИЙ ПОШУК) ===
+    function startVoiceSearch() {
+        const micBtn = document.getElementById('micBtn');
+        const inputField = document.getElementById('searchInput');
+        
+        if (!('webkitSpeechRecognition' in window)) {
+            alert('Ваш браузер не підтримує голосовий пошук 😔');
+            return;
         }
-    });
 
-    // === НОВЕ: Динамічна аура флакона ===
-    function updateAura(imgElement) {
-        try {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 1;
-            canvas.height = 1;
-            // Малюємо 1 піксель для середнього кольору
-            ctx.drawImage(imgElement, 0, 0, 1, 1);
-            const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-            const color = `rgba(${r}, ${g}, ${b}, 0.5)`;
-            
-            const aura = document.getElementById('modalAura');
-            if(aura) aura.style.background = color;
-        } catch (e) {
-            // Fallback якщо зображення з іншого домену блокує CORS
-            const aura = document.getElementById('modalAura');
-            if(aura) aura.style.background = 'rgba(197, 160, 89, 0.3)';
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = 'uk-UA';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = function() {
+            micBtn.classList.add('listening');
+            inputField.placeholder = "Слухаю... Назвіть аромат...";
+            inputField.value = '';
+        };
+
+        recognition.onresult = function(event) {
+            const speechResult = event.results[0][0].transcript;
+            inputField.value = speechResult;
+            handleSearchInput();
+        };
+
+        recognition.onerror = function(event) {
+            micBtn.classList.remove('listening');
+            inputField.placeholder = "ПОШУК АРОМАТУ АБО БРЕНДУ...";
+        };
+
+        recognition.onend = function() {
+            micBtn.classList.remove('listening');
+            inputField.placeholder = "ПОШУК АРОМАТУ АБО БРЕНДУ...";
+        };
+
+        recognition.start();
+    }
+
+    // === ПАРФУМЕРНА СИНЕСТЕЗІЯ (АУДІО ВАЙБ) ===
+    const audioVibes = {
+        "Tom Ford": "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3", 
+        "Baccarat": "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3", 
+        "Zarkoperfume": "https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3", 
+        "Kilian": "https://cdn.pixabay.com/download/audio/2022/10/25/audio_2490ebf927.mp3", 
+        "default": "https://cdn.pixabay.com/download/audio/2022/02/07/audio_67eb2eaed8.mp3" 
+    };
+
+    let currentAudio = null;
+
+    function toggleSynesthesia(brand, name, btn) {
+        let audioUrl = audioVibes.default;
+        for (let key in audioVibes) {
+            if (brand.toLowerCase().includes(key.toLowerCase()) || name.toLowerCase().includes(key.toLowerCase())) {
+                audioUrl = audioVibes[key];
+                break;
+            }
+        }
+
+        if (currentAudio && !currentAudio.paused) {
+            currentAudio.pause();
+            btn.classList.remove('playing');
+            btn.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Атмосфера аромату`;
+            return;
+        }
+
+        if (currentAudio) currentAudio.pause(); 
+        
+        currentAudio = new Audio(audioUrl);
+        currentAudio.loop = true;
+        currentAudio.volume = 0.4; 
+        currentAudio.play();
+        
+        document.querySelectorAll('.synesthesia-btn').forEach(b => b.classList.remove('playing'));
+        btn.classList.add('playing');
+        btn.innerHTML = `<div class="audio-bars"><span></span><span></span><span></span></div> Відчути вайб...`;
+    }
+
+    // === AI VOICE ASSISTANT (ОЗВУЧКА ВІКТОРІЇ) ===
+    let synth = window.speechSynthesis;
+    let isSpeaking = false;
+
+    function speakDescription() {
+        if (isSpeaking) {
+            synth.cancel();
+            isSpeaking = false;
+            updateVoiceBtn(false);
+            return;
+        }
+
+        const brand = document.getElementById('mB').innerText;
+        const name = document.getElementById('mN').innerText;
+        const descHTML = document.getElementById('mD').innerHTML;
+        
+        let tempDiv = document.createElement("div");
+        tempDiv.innerHTML = descHTML;
+        let cleanDesc = tempDiv.innerText.split('💬 Відгуки')[0]; 
+        
+        const fullText = `${brand}. ${name}. ${cleanDesc}`;
+        const utterance = new SpeechSynthesisUtterance(fullText);
+        
+        utterance.lang = 'uk-UA'; 
+        utterance.pitch = 1.1; 
+        utterance.rate = 0.9;  
+
+        utterance.onstart = () => { isSpeaking = true; updateVoiceBtn(true); };
+        utterance.onend = () => { isSpeaking = false; updateVoiceBtn(false); };
+
+        synth.speak(utterance);
+    }
+
+    function updateVoiceBtn(active) {
+        const btn = document.getElementById('voiceBtn');
+        if (!btn) return;
+        if (active) {
+            btn.innerHTML = `<div class="voice-wave"><span></span><span></span><span></span></div> Зупинити`;
+            btn.classList.add('voice-active');
+        } else {
+            btn.innerHTML = `<span>🔊</span> ШІ Асистент`;
+            btn.classList.remove('voice-active');
         }
     }
 
-    // === ОНОВЛЕНО: Сортування з логікою популярності ===
+    function closeModalAudio() {
+        document.getElementById('infoModal').style.display='none';
+        if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+        if (isSpeaking) { synth.cancel(); isSpeaking = false; updateVoiceBtn(false); }
+    }
+
+    // === ОЛЬФАКТОРНА ЛАБОРАТОРІЯ (LAYERING) ===
+    const layeringPairs = [
+        { a: "Baccarat Rouge 540", b: "Wood Sage & Sea Salt", result: "Неймовірний контраст: морська сіль пом'якшує солодкість, створюючи ефект 'дорогого курорту'." },
+        { a: "Lost Cherry", b: "Tobacco Vanille", result: "Класика спокуси. Вишня стає димною та густою. Ідеально для вечора." },
+        { a: "Molecule 01", b: "Будь-який аромат", result: "Молекула посилить стійкість та додасть глибини будь-якому вашому парфуму." },
+        { a: "Delina", b: "Not A Perfume", result: "Троянда стає більш чистою та дзвінкою, прибираючи зайву пудровість." }
+    ];
+
+    function populateLayeringSelects() {
+        const s1 = document.getElementById('layer1');
+        const s2 = document.getElementById('layer2');
+        if (!s1 || !s2 || globalCatalogData.length === 0) return;
+        
+        const options = globalCatalogData.map(p => `<option value="${p[1]}">${p[1]}</option>`).join('');
+        s1.innerHTML = `<option value="">Аромат №1</option>` + options;
+        s2.innerHTML = `<option value="">Аромат №2</option><option value="Будь-який аромат">Molecule 01 (Підсилювач)</option>` + options;
+    }
+
+    function checkLayering() {
+        const p1 = document.getElementById('layer1').value;
+        const p2 = document.getElementById('layer2').value;
+        const resultBox = document.getElementById('layeringResult');
+
+        if (!p1 || !p2) {
+            resultBox.innerHTML = "Оберіть комбінацію для магії ✨";
+            return;
+        }
+        if (p1 === p2) {
+            resultBox.innerHTML = "Спробуйте обрати два різні аромати 🪄";
+            return;
+        }
+
+        const match = layeringPairs.find(pair => 
+            (pair.a === p1 && pair.b === p2) || (pair.a === p2 && pair.b === p1) || (pair.b === "Будь-який аромат" && (p1 !== "" || p2 !== ""))
+        );
+
+        if (match) {
+            let resText = match.result;
+            if (match.b === "Будь-який аромат") resText = "Цей аромат чудово посилиться та отримає додатковий шлейф завдяки молекулі.";
+            resultBox.innerHTML = `<div class="layer-success"><b>Ідеальна пара!</b><br>${resText}</div>`;
+        } else {
+            resultBox.innerHTML = "Це сміливий експеримент! Спробуйте і розкажіть нам про результат 🧪";
+        }
+    }
+
+    // === ЛОГІКА ДИНАМІЧНОЇ АУРИ ТА СОРТУВАННЯ ===
+    function updateAura(imgElement) {
+        const aura = document.getElementById('modalAura');
+        if (!aura) return;
+
+        aura.classList.remove('active');
+        
+        const tempImg = new Image();
+        tempImg.crossOrigin = "Anonymous"; 
+        tempImg.src = imgElement.src;
+
+        tempImg.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1; canvas.height = 1;
+            ctx.drawImage(tempImg, 0, 0, 1, 1);
+            
+            try {
+                const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+                aura.style.background = `radial-gradient(circle, rgba(${r}, ${g}, ${b}, 0.8) 0%, rgba(${r}, ${g}, ${b}, 0) 70%)`;
+            } catch (e) {
+                aura.style.background = 'radial-gradient(circle, rgba(197, 160, 89, 0.6) 0%, rgba(197, 160, 89, 0) 70%)';
+            }
+            aura.classList.add('active');
+        };
+    }
+
+    function toggleSortMenu(e) {
+        e.stopPropagation();
+        document.getElementById('sortOptionsList').classList.toggle('show');
+    }
+
+    function applySort(val, text) {
+        document.getElementById('currentSortText').innerText = text;
+        document.getElementById('sortSelect').value = val;
+        
+        document.querySelectorAll('.sort-option').forEach(el => el.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        document.getElementById('sortOptionsList').classList.remove('show');
+        sortCatalog();
+    }
+    document.addEventListener('click', function(e) { 
+        const controls = document.getElementById('stickyControls'); 
+        if (controls && !controls.contains(e.target)) { 
+            const res = document.getElementById('searchResults'); 
+            if (res) res.style.display = 'none'; 
+        }
+        
+        const sortWrapper = document.querySelector('.custom-sort-wrapper');
+        if (sortWrapper && !sortWrapper.contains(e.target)) {
+            document.getElementById('sortOptionsList').classList.remove('show');
+        }
+    });
+
     function sortCatalog() {
         const val = document.getElementById('sortSelect').value;
         const container = document.getElementById('catalog');
         const cards = Array.from(container.querySelectorAll('.card'));
         
         cards.sort((a, b) => {
-            if (val === 'default') return 0; // Початкове за датою
-            
-            // Логіка для популярності (відгуки)
+            if (val === 'default') {
+                return parseInt(a.getAttribute('data-original-index')) - parseInt(b.getAttribute('data-original-index'));
+            }
             if (val === 'popularity') {
                 const revA = parseInt(a.getAttribute('data-reviews-count')) || 0;
                 const revB = parseInt(b.getAttribute('data-reviews-count')) || 0;
-                return revB - revA; // Спочатку ті, у кого більше відгуків
+                return revB - revA; 
             }
             
             let priceA = parseFloat(a.querySelector('.card-price-label').innerText.replace(/\D/g, '')) || 0;
@@ -872,7 +1159,6 @@
         cards.forEach(card => container.appendChild(card));
     }
 
-    // ВІДОБРАЖЕННЯ НЕЩОДАВНО ПЕРЕГЛЯНУТИХ
     function renderRecentlyViewed() {
         const sec = document.getElementById('recentSection');
         const cont = document.getElementById('recentScrollContainer');
@@ -1036,7 +1322,7 @@
             wContainer.innerHTML = '';
 
             catalogData.sort((a, b) => new Date(b[6]) - new Date(a[6]));
-            catalogData.forEach(c => {
+            catalogData.forEach((c, index) => {
                 const [brand, name, price, minVol, desc, img, dateStr, top, weekText, , , bottleMl, bottlePrice, , stockCol] = c;
                 
                 const oldPricePerMl = c[15] ? parseFloat(String(c[15]).replace(',', '.')) || 0 : 0;
@@ -1062,12 +1348,10 @@
                 const displayPriceStr = isSet ? minPriceLabel : `від ${minPriceLabel}`; 
                 
                 const safeImg = img.replace(/'/g, "%27");
-                
                 const cardId = brand + ' ' + name;
                 const isWished = wishlist.includes(cardId);
                 const safeDesc = desc ? desc.replace(/<[^>]*>?/gm, ' ').replace(/"/g, '&quot;') : '';
 
-                // ОНОВЛЕНО: Підрахунок зірок та запис в data-атрибут для сортування
                 let rawDesc = desc || '';
                 let count5 = (rawDesc.match(/\[\+\+\]/g) || []).length;
                 let count4 = (rawDesc.replace(/\[\+\+\]/g, '').match(/\[\+\]/g) || []).length;
@@ -1082,6 +1366,8 @@
                     let avgStars = Math.round(totalScore / totalRev);
                     let starsStr = '★'.repeat(avgStars) + '☆'.repeat(5 - avgStars);
                     cardStarsHTML = `<div class="card-stars">${starsStr} <span style="font-size:10px; color:#999; letter-spacing:0;">(${totalRev})</span></div>`;
+                } else {
+                    cardStarsHTML = `<div class="card-stars"></div>`;
                 }
 
                 let saleBadgeHTML = '';
@@ -1134,10 +1420,11 @@
 
                 const div = document.createElement('div');
                 div.className = 'card'; 
+                div.setAttribute('data-original-index', index);
                 div.setAttribute('data-brand', brand); 
                 div.setAttribute('data-id', cardId); 
                 div.setAttribute('data-desc', safeDesc); 
-                div.setAttribute('data-reviews-count', totalRev || 0); // Додано для сортування
+                div.setAttribute('data-reviews-count', totalRev || 0);
                 div.setAttribute('data-category', (isNew ? 'new ' : '') + (isTop ? 'top ' : '') + (isBottle ? 'bottle ' : '') + (isSet ? 'set ' : '') + (top ? top.toLowerCase() : ''));
                 
                 div.innerHTML = `
@@ -1151,14 +1438,16 @@
                     </div>
                     <div class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist(event, '${brand.replace(/'/g, "\\'")}', '${name.replace(/'/g, "\\'")}', this)">${isWished ? '♥' : '♡'}</div>
                     <img loading="lazy" src="${safeImg}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
-                    <div class="price-display-wrapper">
-                        ${oldPriceHTML}
-                        <div class="card-price-label">${isOutOfStock ? 'Тимчасово відсутній' : displayPriceStr}</div>
+                    <div class="card-info">
+                        <div class="price-display-wrapper">
+                            ${oldPriceHTML}
+                            <div class="card-price-label">${isOutOfStock ? 'Тимчасово відсутній' : displayPriceStr}</div>
+                        </div>
+                        <div style="font-size: 10px; color: #999; text-align: center; margin-top: -2px; margin-bottom: 5px; opacity: 0.6;">${currentPricePerMl} грн / 1 мл</div>
+                        <div class="brand">${brand}</div>
+                        <div class="name">${name}</div>
+                        ${cardStarsHTML}
                     </div>
-                    <div style="font-size: 10px; color: #999; text-align: center; margin-top: -2px; margin-bottom: 5px; opacity: 0.6;">${currentPricePerMl} грн / 1 мл</div>
-                    <div class="brand">${brand}</div>
-                    <div class="name" ${cardStarsHTML ? 'style="margin-bottom:5px;"' : ''}>${name}</div>
-                    ${cardStarsHTML}
                     <button class="order-btn" ${isOutOfStock ? 'style="background:rgba(128,128,128,0.1); color:#999; border-color:transparent; pointer-events:none;"' : ''}>
                         ${isOutOfStock ? 'НЕМАЄ В НАЯВНОСТІ' : 'Детальніше'}
                     </button>
@@ -1176,6 +1465,7 @@
             formatNews(rows[0][10]);
             renderGeneralReviews(reviewsData.slice(1));
             if (promoDataRow) renderPremiumPromo(promoDataRow);
+            populateLayeringSelects();
             
             setTimeout(() => {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -1237,7 +1527,6 @@
         mImgEl.src = safeImg; 
         mImgEl.onerror = function() { this.src = 'https://i.postimg.cc/CxkmFFJ3/logo.png'; };
         
-        // Виклик аури при відкритті
         updateAura(mImgEl);
 
         const scarcityDiv = document.getElementById('scarcityMsg');
@@ -1336,12 +1625,26 @@
                 details = details.replace(/(Стиль:|Напрямок:)/gi, '<p style="font-family:var(--cinzel); color:var(--gold); text-transform:uppercase; font-size:11px; font-weight:800; margin-top:10px; margin-bottom:4px;">$1</p>');
                 
                 details = details.replace(/(Верхні ноти:|Ноти серця:|Серце:|Середні ноти:|Базові ноти:|Ноти бази:|Акорди:)\s*(.*?)(?=<br|<p|$)/gi, function(match, title, notesText) {
+                    let icon = '';
+                    const t = title.toLowerCase();
+
+                    if (t.includes('верхні')) {
+                        icon = `<svg class="note-icon-svg" viewBox="0 0 24 24"><path d="M12 2L15 8L22 9L17 14L18.5 21L12 17.5L5.5 21L7 14L2 9L9 8L12 2Z"/></svg>`; 
+                    } else if (t.includes('серця') || t.includes('середні') || t.includes('серце')) {
+                        icon = `<svg class="note-icon-svg" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`; 
+                    } else if (t.includes('базові') || t.includes('бази')) {
+                        icon = `<svg class="note-icon-svg" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`; 
+                    } else {
+                        icon = `<svg class="note-icon-svg" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>`; 
+                    }
+
                     let clickableNotes = notesText.split(/[,;]/).map(n => {
                         let cleanNote = n.replace(/[.,;]+$/, '').trim(); 
                         if(cleanNote.length > 2) return `<span class="modal-note-tag" onclick="searchByNote('${cleanNote}')">${cleanNote}</span>`;
                         return cleanNote;
                     }).join(' ');
-                    return `<p style="font-family:var(--cinzel); color:var(--gold); text-transform:uppercase; font-size:11px; font-weight:800; margin-top:10px; margin-bottom:6px;">${title}</p><div style="margin-bottom:4px;">${clickableNotes}</div>`;
+
+                    return `<div class="note-header">${icon} <span>${title}</span></div><div style="margin-bottom:12px; display:flex; flex-wrap:wrap; gap:4px;">${clickableNotes}</div>`;
                 });
 
                 details = details.replace(/(Група ароматів:|Група:|Стать:|Країна бренду:|Країна:)/gi, '<span style="display:inline-block; margin-top:6px;"><b>$1</b></span>');
@@ -1373,9 +1676,25 @@
             recsHTML += '</div></div>';
         }
 
-        f = aggregatedStarsHTML + f + recsHTML + reviewsHTML;
+        const voiceBtnHTML = `
+            <div class="voice-control-wrapper">
+                <button id="voiceBtn" class="voice-intro-btn" onclick="speakDescription()">
+                    <span>🔊</span> ШІ Асистент
+                </button>
+            </div>
+        `;
+        
+        const synesthesiaHTML = `
+            <div style="text-align: center; margin-bottom: 15px;">
+                <button class="synesthesia-btn" onclick="toggleSynesthesia('${brand.replace(/'/g, "\\'")}', '${name.replace(/'/g, "\\'")}', this)">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Атмосфера аромату
+                </button>
+            </div>
+        `;
 
-        const shareBtnHTML = `<div style="text-align: right; margin-top: 15px; margin-bottom: 5px;"><button onclick="sharePerfume()" style="background:none; border:none; cursor:pointer; color:var(--gold); display:inline-flex; align-items:center; font-size:11px; text-transform:uppercase; letter-spacing:1.5px; font-weight:800; padding: 0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-right:6px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>Поділитися</button></div>`;
+        f = aggregatedStarsHTML + voiceBtnHTML + f + recsHTML + reviewsHTML;
+
+        const shareBtnHTML = `<div style="text-align: right; margin-top: 15px; margin-bottom: 15px;"><button onclick="sharePerfume()" style="background:none; border:none; cursor:pointer; color:var(--gold); display:inline-flex; align-items:center; font-size:11px; text-transform:uppercase; letter-spacing:1.5px; font-weight:800; padding: 0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="margin-right:6px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>Поділитися</button></div>`;
 
         const disable2ml = minVol && String(minVol).includes('5');
         const isBottleAvailable = bottleMl && parseInt(bottleMl) > 0;
@@ -1419,7 +1738,7 @@
             </div>
         `;
         
-        document.getElementById('mD').innerHTML = f + shareBtnHTML + volHTML;
+        document.getElementById('mD').innerHTML = f + shareBtnHTML + synesthesiaHTML + volHTML;
         document.getElementById('reviewFormContainerHTML').innerHTML = reviewFormHTML;
         
         const orderBtn = document.getElementById('modalOrderBtn');
@@ -1518,7 +1837,7 @@
             btn.style.background = 'var(--gold)';
             btn.style.color = '#fff';
             btn.style.pointerEvents = 'auto';
-            document.getElementById('infoModal').style.display = 'none';
+            closeModalAudio();
             toggleCart();
         }, 1100);
     }
@@ -1809,10 +2128,8 @@
         handleSearchInput();
         document.getElementById('searchResults').style.display = 'none';
         scrollToFirstCards();
-        document.getElementById('infoModal').style.display = 'none'; 
+        closeModalAudio(); 
     }
-
-    document.addEventListener('click', function(e) { const controls = document.getElementById('stickyControls'); if (controls && !controls.contains(e.target)) { const res = document.getElementById('searchResults'); if (res) res.style.display = 'none'; } });
 
     function navigateToPerfume(n) {
         document.getElementById('newsModalWindow').style.display = 'none';
@@ -1866,7 +2183,6 @@
         document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active'));
         if (btn) btn.classList.add('active');
         
-        // Відображення Бренд-лору
         const loreBox = document.getElementById('brandLoreBox');
         if (b && brandLoreData[b]) {
             document.getElementById('brandLoreTitle').innerText = 'Історія ' + b;
@@ -1889,8 +2205,6 @@
             const mC = currentCategory === 'all' || (currentCategory === 'wishlist' ? isWished : c.getAttribute('data-category').includes(currentCategory));
             c.style.display = (mS && mB && mC) ? 'flex' : 'none';
         });
-        
-        // Застосовуємо сортування одразу після фільтрації
         sortCatalog();
     }
 
@@ -1984,7 +2298,6 @@
 
         document.getElementById('newsModalContent').innerHTML = '<div style="font-size:14px; line-height:1.7; color:var(--text-dark);">' + formatted + '</div>';
     }
-
 
     function renderGeneralReviews(data) {
         const mainList = document.getElementById('reviewsListContainer'), historyList = document.getElementById('reviewsHistory'), toggleBtn = document.getElementById('toggleReviewsBtn');
@@ -2152,3 +2465,4 @@
 
 </body>
 </html>
+
