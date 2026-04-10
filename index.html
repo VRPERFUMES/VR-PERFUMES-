@@ -3786,57 +3786,54 @@ body.modal-open {
 
         // === ГЕНЕРАЦІЯ ОЛЬФАКТОРНОЇ КАРТИ (DNA) ===
     function generateDNA(descText) {
-        let d = (descText || "").toLowerCase();
-        
-        function getSyncScore(keywords, defaultVal) {
-            for (let word of keywords) {
-                let regex = new RegExp(word + ':\\s*(?:<br\\s*\\/?>)?\\s*(\\d)', 'i');
-                let match = d.match(regex);
-                if (match && match[1]) return parseInt(match[1]) * 20;
+    let d = (descText || "").toLowerCase();
+    
+    function getSyncScore(keywords, defaultVal) {
+        // Шукаємо або цифру, або ключове слово
+        for (let word of keywords) {
+            let regex = new RegExp(word + ':\\s*(?:<br\\s*\\/?>)?\\s*([\\dА-Яа-яієґї]+)', 'i');
+            let match = d.match(regex);
+            if (match && match[1]) {
+                let val = match[1].toLowerCase();
+                if (val.includes('5') || val.includes('екстремальна') || val.includes('заповню')) return 100;
+                if (val.includes('4') || val.includes('висока') || val.includes('дуже')) return 80;
+                if (val.includes('3') || val.includes('середня') || val.includes('дифуз')) return 60;
+                if (val.includes('2')) return 40;
+                if (val.includes('1')) return 20;
             }
-            return defaultVal;
         }
-
-        let l = getSyncScore(['стійкість', 'стойкость'], null);
-        if (l === null) l = d.includes('стійк') ? 80 : 50;
-
-        let s = getSyncScore(['шлейф'], null);
-        if (s === null) s = d.includes('шлейф') ? 80 : 50;
-
-        let sw = getSyncScore(['солодкість', 'сладость'], null);
-        if (sw === null) sw = (d.includes('солодк') || d.includes('ваніл') || d.includes('гурман')) ? 80 : 20;
-
-        let f = getSyncScore(['свіжість', 'свежесть'], null);
-        if (f === null) f = (d.includes('свіж') || d.includes('цитрус') || d.includes('морськ')) ? 80 : 20;
-        
-        return `
-            <div style="display:flex; flex-direction:column; gap:8px;">
-                <div style="display:flex; align-items:center; font-size:10px; font-weight:700; color:var(--text-dark);">
-                    <span style="width:75px; text-align:left;">Стійкість</span> 
-                    <div style="flex:1; background:rgba(128,128,128,0.1); height:6px; border-radius:3px; overflow:hidden;">
-                        <div style="width:${l}%; background:var(--gold); height:100%; border-radius:3px; transition: width 1s ease;"></div>
-                    </div>
-                </div>
-                <div style="display:flex; align-items:center; font-size:10px; font-weight:700; color:var(--text-dark);">
-                    <span style="width:75px; text-align:left;">Шлейф</span> 
-                    <div style="flex:1; background:rgba(128,128,128,0.1); height:6px; border-radius:3px; overflow:hidden;">
-                        <div style="width:${s}%; background:var(--gold); height:100%; border-radius:3px; transition: width 1s ease;"></div>
-                    </div>
-                </div>
-                <div style="display:flex; align-items:center; font-size:10px; font-weight:700; color:var(--text-dark);">
-                    <span style="width:75px; text-align:left;">Солодкість</span> 
-                    <div style="flex:1; background:rgba(128,128,128,0.1); height:6px; border-radius:3px; overflow:hidden;">
-                        <div style="width:${sw}%; background:var(--gold); height:100%; border-radius:3px; transition: width 1s ease;"></div>
-                    </div>
-                </div>
-                <div style="display:flex; align-items:center; font-size:10px; font-weight:700; color:var(--text-dark);">
-                    <span style="width:75px; text-align:left;">Свіжість</span> 
-                    <div style="flex:1; background:rgba(128,128,128,0.1); height:6px; border-radius:3px; overflow:hidden;">
-                        <div style="width:${f}%; background:var(--gold); height:100%; border-radius:3px; transition: width 1s ease;"></div>
-                    </div>
-                </div>
-            </div>`;
+        return defaultVal;
     }
+
+    let l = getSyncScore(['стійкість', 'стойкость'], 60);
+    let s = getSyncScore(['шлейф'], 60);
+    let sw = getSyncScore(['солодкість', 'сладость'], d.includes('солодк') ? 80 : 20);
+    let f = getSyncScore(['свіжість', 'свежесть'], d.includes('свіж') ? 80 : 20);
+
+    // Анімація: спочатку width: 0, а через 100мс ставимо реальну ширину
+    setTimeout(() => {
+        const bars = document.querySelectorAll('.dna-bar-fill');
+        bars.forEach(bar => { bar.style.width = bar.getAttribute('data-width') + '%'; });
+    }, 100);
+    
+    return `
+        <div style="display:flex; flex-direction:column; gap:8px;">
+            ${renderBar('Стійкість', l)}
+            ${renderBar('Шлейф', s)}
+            ${renderBar('Солодкість', sw)}
+            ${renderBar('Свіжість', f)}
+        </div>`;
+}
+
+function renderBar(label, value) {
+    return `
+        <div style="display:flex; align-items:center; font-size:10px; font-weight:700; color:var(--text-dark);">
+            <span style="width:75px; text-align:left;">${label}</span> 
+            <div style="flex:1; background:rgba(128,128,128,0.1); height:6px; border-radius:3px; overflow:hidden;">
+                <div class="dna-bar-fill" data-width="${value}" style="width:0%; background:var(--gold); height:100%; border-radius:3px; transition: width 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);"></div>
+            </div>
+        </div>`;
+}
 
 
     function showModal(pArr, isWeekly = false) 
