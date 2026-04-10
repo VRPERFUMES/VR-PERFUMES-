@@ -3999,27 +3999,16 @@ body.modal-open {
 
                 details = details.replace(/(Група ароматів:|Група:|Стать:|Країна бренду:|Країна:)/gi, '<span style="display:inline-block; margin-top:6px;"><b>$1</b></span>');
 
-                details = details.replace(/(Стійкість:|Шлейф:)\s*(?:<br\s*\/?>)?\s*(\d)[^\wА-Яа-яієґїA-Za-z]*([А-Яа-яієґїA-Za-z\s,]+)/gi, function(m, p1, p2, p3) {
-                    let num = parseInt(p2); 
-                    if(isNaN(num)) num = 0; 
-                    if(num > 5) num = 5;
-                    let bars = '';
-                    for(let i = 0; i < 5; i++) {
-                        if(i < num) bars += '<span style="display:inline-block; width:30px; height:6px; background-color:var(--gold); border-radius:3px; margin-right:4px;">&nbsp;</span>';
-                        else bars += '<span style="display:inline-block; width:30px; height:6px; background-color:rgba(128,128,128,0.2); border-radius:3px; margin-right:4px;">&nbsp;</span>';
-                    }
-                    let textDesc = p3.replace(/<br\s*\/?>/gi, '').trim();
-                    return `
-                        <div style="margin-top:12px; margin-bottom:0;">
-                            <p style="font-family:var(--cinzel); margin:0 0 4px 0; font-size:12px; font-weight:800;">${p1}</p>
-                            <div style="display:block; font-size:0; line-height:0;">${bars}</div>
-                            <p style="margin:4px 0 0 0; font-size:12px; color:#888; font-style:italic;">${textDesc}</p>
-                        </div>`;
-                });
+               
                 
                 details += '</div>';
             }
             f = intro + details;
+            // 1. Вирізаємо з тексту слова "Стійкість" та "Шлейф", бо вони вже є в нашому новому графіку
+        f = f.replace(/(Стійкість:|Шлейф:|Стойкость:).*?(?=<br>|<p|$)/gi, '');
+
+        // 2. Прибираємо зайві порожні рядки (якщо вони утворилися після видалення)
+        f = f.replace(/(<br\s*\/?>\s*){3,}/g, '<br><br>');
         }
 
         // --- ЕКСПЕРТНИЙ АНАЛІЗ (FRAGRANTICA LOGIC) ---
@@ -4042,14 +4031,29 @@ body.modal-open {
         ['цитрус', 'морськ', 'водн', 'бергамот', 'лимон', 'зелен', 'м’ят'].forEach(n => { if (d_dna.includes(n)) expFresh += 25; });
         if (expFresh > 100) expFresh = 100;
 
-        let expGender = 50; 
-        if (d_dna.includes('жіноч') || d_dna.includes('для неї') || d_dna.includes('rose')) expGender += 35;
-        if (d_dna.includes('чолові') || d_dna.includes('для нього') || d_dna.includes('тютюн') || d_dna.includes('шкіра')) expGender -= 25;
+       // 5. Гендер (0% - Чоловік, 50% - Унісекс, 100% - Жінка)
+        let expGender = 50; // Починаємо з центру
+
+        // Перевірка на ключові слова статі
+        if (d_dna.includes('жіноч') || d_dna.includes('для неї') || d_dna.includes('rose') || d_dna.includes('троянд')) expGender += 30;
+        if (d_dna.includes('чолові') || d_dna.includes('для нього') || d_dna.includes('тютюн') || d_dna.includes('шкіра')) expGender -= 30;
+        
+        // Вплив дерева (робимо його м'якшим, щоб не зносило повзунок занадто сильно)
+        if (d_dna.includes('дерев') || d_dna.includes('кедр') || d_dna.includes('cedr')) expGender -= 10;
+
+        // ГОЛОВНЕ ПРАВИЛО: Якщо є слово "унісекс", силоміць повертаємо повзунок до центру
+        if (d_dna.includes('унісекс') || d_dna.includes('unisex')) {
+            // Якщо є натяк на жінку, лишаємо 55%, якщо на чоловіка 45%, якщо чисто унісекс - 50%
+            if (expGender > 50) expGender = 55;
+            else if (expGender < 50) expGender = 45;
+            else expGender = 50;
+        }
+
+        // Обмежувачі
         if (expGender > 95) expGender = 95; if (expGender < 5) expGender = 5;
 
-        // ВІДОБРАЖЕННЯ
+        // Викликаємо відображення
         document.getElementById('dnaChartContainer').innerHTML = generateDNA(expLongevity, expSillage, expSweet, expFresh, expGender);
-        document.getElementById('olfactoryDNA').style.display = 'block';
        
         // Соціальний доказ
         const proofElem = document.getElementById('socialProof');
