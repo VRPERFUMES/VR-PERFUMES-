@@ -3830,12 +3830,12 @@ function renderGenderBar(value) {
     return `
         <div style="display:flex; flex-direction:column; gap:6px;">
             <div style="display:flex; justify-content:space-between; font-size:8px; font-weight:800; text-transform:uppercase; color: #999; letter-spacing:1px;">
-                <span>♂ Maskuline</span>
-                <span style="color:var(--gold)">Unisex</span>
-                <span>Feminine ♀</span>
+                <span>♂ Чоловічий</span>
+                <span style="color:var(--gold)">Унісекс</span>
+                <span>Жіночий ♀</span>
             </div>
             <div style="background:rgba(128,128,128,0.1); height:2px; border-radius:1px; position:relative; margin: 0 5px;">
-                <div class="gender-pointer" data-pos="${value}" style="width:8px; height:8px; background:var(--gold); position:absolute; top:-3px; left:50%; transform:translateX(-50%); border-radius:50%; transition: left 1.2s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 0 5px var(--gold); border: 1.5px solid #fff;"></div>
+                <div class="gender-pointer" data-pos="${value}" style="width:10px; height:10px; background:var(--gold); position:absolute; top:-4px; left:50%; transform:translateX(-50%); border-radius:50%; transition: left 1.2s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 0 8px var(--gold); border: 2px solid #fff; z-index:2;"></div>
             </div>
         </div>`;
 }
@@ -3893,8 +3893,14 @@ function renderGenderBar(value) {
             if (low.includes('солодк') || low.includes('ваніл') || low.includes('карамел')) dSw = 85;
             if (low.includes('свіж') || low.includes('цитрус') || low.includes('морськ')) dF = 85;
             
-            if (low.includes('жіноч') || low.includes('для неї')) dG = 85;
-            if (low.includes('чолові') || low.includes('для нього')) dG = 15;
+           // Прив'язка до напису "Стать:"
+            const mG = rawText.match(/Стать:\s*([А-Яа-яієґї]+)/i);
+            if (mG) {
+                const g = mG[1].toLowerCase();
+                if (g.includes('жіноч')) dG = 85;
+                else if (g.includes('чолові')) dG = 15;
+                else if (g.includes('унісекс')) dG = 50;
+            }
         }
 
         // Рендер DNA (ОДИН ВИКЛИК)
