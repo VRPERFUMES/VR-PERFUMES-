@@ -3785,7 +3785,7 @@ body.modal-open {
     }
 
         // === ГЕНЕРАЦІЯ ОЛЬФАКТОРНОЇ КАРТИ (DNA) ===
-    function generateDNA(l, s, sw, f, g) {
+   function generateDNA(l, s, sw, f, g) {
     // Плавний запуск анімації через мікрозатримку
     setTimeout(() => {
         const fills = document.querySelectorAll('.dna-bar-fill');
@@ -3798,10 +3798,7 @@ body.modal-open {
 
     return `
         <div style="background: rgba(128,128,128,0.03); padding: 18px; border-radius: 12px; margin: 15px 0; border: 1px solid rgba(197, 160, 89, 0.15);">
-            <div style="font-size: 10px; text-transform: uppercase; color: var(--gold); letter-spacing: 2px; margin-bottom: 18px; text-align: center; font-weight: 800; opacity: 0.8;">
-                Fragrance Profile
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px 25px;">
+            <div class="dna-grid">
                 ${renderDNABar('Стійкість', l)}
                 ${renderDNABar('Шлейф', s)}
                 ${renderDNABar('Солодкість', sw)}
