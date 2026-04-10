@@ -3873,7 +3873,45 @@ body.modal-open {
         
         let rawText = (isWeekly && weekText) ? weekText : desc;
         let f = rawText;
+// --- ПРАВИЛЬНА СИНХРОНІЗАЦІЯ (КРОК 2) ---
+        
+        // 1. Створюємо "шукач" цифр
+        function findScore(text, key) {
+            const r = new RegExp(key + ':\\s*(\\d)', 'i');
+            const m = text.match(r);
+            return m ? parseInt(m[1]) : null; // Шукаємо чисту цифру (1-5)
+        }
 
+        // 2. Отримуємо бали з ОРИГІНАЛЬНОГО тексту (rawText), поки він не змінений
+        let longevityScore = findScore(rawText, 'стійкість');
+        let sillageScore = findScore(rawText, 'шлейф');
+
+        // 3. Якщо раптом цифр немає, робимо розумну перевірку за словами
+        if (longevityScore === null) {
+            longevityScore = rawText.toLowerCase().includes('стійк') ? 4 : 3;
+        }
+        if (sillageScore === null) {
+            sillageScore = rawText.toLowerCase().includes('шлейф') ? 4 : 3;
+        }
+
+        // 4. Перетворюємо бали (0-5) у відсотки (0-100)
+        const finalL = longevityScore * 20; // 5 балів стане 100%
+        const finalS = sillageScore * 20; // 4 бали стане 80%
+
+        // 5. Розраховуємо Солодкість/Свіжість та Гендер
+        const finalSw = (rawText.toLowerCase().includes('солодк') || rawText.toLowerCase().includes('ваніл')) ? 85 : 20;
+        const finalF = (rawText.toLowerCase().includes('свіж') || rawText.toLowerCase().includes('цитрус')) ? 85 : 20;
+        
+        let finalG = 50; 
+        if (rawText.toLowerCase().includes('жіноч') || rawText.toLowerCase().includes('для неї')) finalG = 85;
+        if (rawText.toLowerCase().includes('чолові') || rawText.toLowerCase().includes('для нього')) finalG = 15;
+
+        // 6. МАЛЮЄМО DNA (Викликаємо функцію з розрахованими відсотками)
+        // Цей рядок обов'язково має бути ТУТ, а не нижче!
+        document.getElementById('dnaChartContainer').innerHTML = generateDNA(finalL, finalS, finalSw, finalF, finalG);
+        document.getElementById('olfactoryDNA').style.display = 'block';
+
+        // --- КІНЕЦЬ БЛОКУ СИНХРОНІЗАЦІЇ ---
         f = f.replace(/\{(.*?)\}/g, function(match, perfName) {
             let searchStr = perfName.toLowerCase().trim();
             let found = globalCatalogData.find(p => (p[0] + ' ' + p[1]).toLowerCase().includes(searchStr));
