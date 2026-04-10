@@ -3784,15 +3784,13 @@ body.modal-open {
         }
     }
 
-      // === FRAGRANTICA STYLE DNA (5 ШКАЛ + GRID) ===
+     // === FRAGRANTICA STYLE DNA ===
     function generateDNA(l, s, sw, f, g) {
-        // Запуск анімації виїзду смужок
         requestAnimationFrame(() => {
             const bars = document.querySelectorAll('.dna-bar-fill');
             bars.forEach(bar => { 
-                bar.style.width = bar.getAttribute('data-width') + '%'; 
+                if(bar) bar.style.width = bar.getAttribute('data-width') + '%'; 
             });
-            // Окремо для повзунка гендера
             const genderPointer = document.querySelector('.gender-pointer');
             if(genderPointer) genderPointer.style.left = genderPointer.getAttribute('data-pos') + '%';
         });
@@ -3840,7 +3838,6 @@ body.modal-open {
                 </div>
             </div>`;
     }
-
 
     function showModal(pArr, isWeekly = false) 
     {document.body.classList.add('modal-open');
