@@ -769,19 +769,20 @@
             border-radius: 4px; 
         }
 
-        /* WEATHER PREMIUM WIDGET */
+       /* WEATHER PREMIUM WIDGET - Компактний з рекомендаціями */
         .weather-widget {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 20px;
-            margin: 15px 15px 5px 15px;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            max-width: 450px;
+            margin: 15px auto;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(197, 160, 89, 0.2);
-            border-radius: 12px;
-            transition: 0.3s;
+            border-radius: 15px;
+            padding: 12px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-sizing: border-box;
         }
 
         body.dark-theme .weather-widget {
@@ -789,13 +790,39 @@
             border-color: rgba(255, 255, 255, 0.05);
         }
 
+        .weather-main-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .weather-info { display: flex; flex-direction: column; }
-        .weather-city { font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); font-weight: 800; margin-bottom: 2px; }
+        .weather-city { font-size: 8px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); font-weight: 800; }
         .weather-temp { font-size: 18px; font-weight: 700; color: var(--text-dark); font-family: var(--serif); }
         .weather-icon-box { text-align: right; }
-        #weatherIcon { font-size: 18px; display: block; }
-        .weather-desc { font-size: 8px; text-transform: uppercase; color: var(--text-gray); letter-spacing: 1px; font-weight: 600; }
+        #weatherIcon { font-size: 18px; }
+        .weather-desc { font-size: 8px; text-transform: uppercase; color: var(--text-gray); letter-spacing: 1px; }
 
+        .weather-recommendation {
+            border-top: 1px solid rgba(197, 160, 89, 0.1);
+            padding-top: 8px;
+            font-size: 11px;
+            line-height: 1.4;
+            color: var(--text-dark);
+            font-style: italic;
+            text-align: center;
+        }
+
+        .weather-rec-link {
+            color: var(--gold);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-style: normal;
+            border-bottom: 1px dashed var(--gold);
+            margin-left: 4px;
+        }
         .search-item-info { 
             flex: 1; 
             overflow: hidden; 
@@ -2856,14 +2883,17 @@ body.modal-open {
     </div>
 
     <div class="weather-widget" id="weatherWidget">
-    <div class="weather-info">
-        <span class="weather-city">Khmelnytskyi</span>
-        <span class="weather-temp" id="temp">--°C</span>
+    <div class="weather-main-row">
+        <div class="weather-info">
+            <span class="weather-city">Khmelnytskyi</span>
+            <span class="weather-temp" id="temp">--°C</span>
+        </div>
+        <div class="weather-icon-box">
+            <span id="weatherIcon">✨</span>
+            <span class="weather-desc" id="weatherDesc">Оновлення...</span>
+        </div>
     </div>
-    <div class="weather-icon-box">
-        <span id="weatherIcon">✨</span>
-        <span class="weather-desc" id="weatherDesc">Оновлення...</span>
-    </div>
+    <div id="weatherRec" class="weather-recommendation"></div>
 </div>
     
     <div class="action-buttons">
@@ -4915,27 +4945,40 @@ async function updateWeather() {
         const temp = Math.round(data.current_weather.temperature);
         const code = data.current_weather.weathercode;
         
-        document.getElementById('temp').innerText = `${temp}°C`;
+        const tempElement = document.getElementById('temp');
+        if (tempElement) tempElement.innerText = `${temp}°C`;
         
-        const weatherMap = {
-            0: { icon: '☀️', desc: 'Ясно' },
-            1: { icon: '🌤️', desc: 'Малохмарно' },
-            2: { icon: '⛅', desc: 'Хмарно' },
-            3: { icon: '☁️', desc: 'Похмуро' },
-            45: { icon: '🌫️', desc: 'Туман' },
-            61: { icon: '🌧️', desc: 'Дощ' },
-            71: { icon: '❄️', desc: 'Сніг' },
-            95: { icon: '⛈️', desc: 'Гроза' }
-        };
-        
-        const state = weatherMap[code] || { icon: '✨', desc: 'Чудовий день' };
-        document.getElementById('weatherIcon').innerText = state.icon;
-        document.getElementById('weatherDesc').innerText = state.desc;
+        const weatherMap = { 0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️', 45:'🌫️', 61:'🌧️', 71:'❄️', 95:'⛈️' };
+        document.getElementById('weatherIcon').innerText = weatherMap[code] || '✨';
+        document.getElementById('weatherDesc').innerText = temp <= 8 ? "Прохолодно" : "Тепло";
+
+        let recText = "";
+        let targetNote = "";
+
+        if (temp <= 5) {
+            recText = "Сьогодні морозно. Ідеальний час для зігріваючої";
+            targetNote = "Ваніль";
+        } else if (temp > 5 && temp <= 15) {
+            recText = "Прохолодно та свіжо. Обирайте витончену";
+            targetNote = "Шкіра";
+        } else if (temp > 15 && temp <= 22) {
+            recText = "Приємна погода. Радимо ніжну";
+            targetNote = "Троянда";
+        } else {
+            recText = "Спекотний день! Найкраще пасуватиме";
+            targetNote = "Бергамот";
+        }
+
+        const recContainer = document.getElementById('weatherRec');
+        if (recContainer) {
+            recContainer.innerHTML = `${recText} <span class="weather-rec-link" onclick="searchByNote('${targetNote}')">${targetNote} →</span>`;
+        }
     } catch (e) {
-        document.getElementById('weatherWidget').style.display = 'none';
+        const widget = document.getElementById('weatherWidget');
+        if (widget) widget.style.display = 'none';
     }
 }
-updateWeather();
+updateWeather(); // Цей рядок уже тут є!
     
 </script>
 
