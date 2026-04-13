@@ -2150,6 +2150,16 @@
         .modal-order-btn:active { 
             transform: scale(0.98); 
         }
+
+        /* Пульсація кнопки після завершення мови ШІ асистента */
+        @keyframes viraCTAPulse {
+            0%   { box-shadow: 0 10px 20px rgba(197,160,89,0.3), 0 0 0 0 rgba(197,160,89,0.5); }
+            50%  { box-shadow: 0 10px 20px rgba(197,160,89,0.5), 0 0 0 10px rgba(197,160,89,0); transform: scale(1.03); }
+            100% { box-shadow: 0 10px 20px rgba(197,160,89,0.3), 0 0 0 0 rgba(197,160,89,0); }
+        }
+        .vira-cta-pulse {
+            animation: viraCTAPulse 0.7s ease-in-out 2;
+        }
         
         .other-projects { 
             padding: 50px 20px; 
@@ -3889,13 +3899,18 @@ body.dark-theme .ig-story-ring.seen {
         // ===== ОБ'ЄМИ =====
         speech += getVolumePhrase(pricePerMl) + ' ';
 
-        // ===== ЗАКЛИК =====
+        // ===== ЗАКЛИК З УРАХУВАННЯМ ОБ'ЄМУ І ЦІНИ =====
+        const currentVol = selectedVol || '5 мл';
+        const currentPriceLabel = document.getElementById('modalPriceLabel')
+            ? document.getElementById('modalPriceLabel').innerText
+            : '';
+
         const outros = [
-            `Додати до кошика?`,
-            `Готові спробувати?`,
-            `Цей аромат чекає саме на вас.`,
-            `Рекомендую взяти — не пошкодуєте.`,
-            `Хочете — і він ваш.`,
+            `Якщо хочете познайомитися ближче — ${currentVol} буде чудовим початком. Подумайте, чи не додати до кошика.`,
+            `${currentVol}${currentPriceLabel ? ' за ' + currentPriceLabel : ''} — мабуть, найкращий спосіб спробувати. Рішення за вами.`,
+            `Цей аромат варто відчути на власній шкірі. ${currentVol} якраз для цього підійде.`,
+            `Якщо щось у цьому описі вас зачепило — довіртеся першому враженню. ${currentVol} чекає у кошику.`,
+            `Іноді найкраще рішення — просто спробувати. ${currentVol} — чудовий перший крок.`,
         ];
         speech += pickRandom(outros);
 
@@ -4057,7 +4072,15 @@ body.dark-theme .ig-story-ring.seen {
         utterance.onend = () => { 
             isSpeaking = false; 
             updateVoiceBtn(false); 
-            handleViraAtmosphere('stop'); 
+            handleViraAtmosphere('stop');
+            // Підсвічуємо кнопку "Додати в кошик" після завершення розповіді
+            const orderBtn = document.getElementById('modalOrderBtn');
+            if (orderBtn && orderBtn.style.pointerEvents !== 'none') {
+                orderBtn.classList.remove('vira-cta-pulse');
+                void orderBtn.offsetWidth; // reflow
+                orderBtn.classList.add('vira-cta-pulse');
+                setTimeout(() => orderBtn.classList.remove('vira-cta-pulse'), 2000);
+            }
         };
 
         synth.speak(utterance);
@@ -5071,6 +5094,25 @@ function renderGenderBar(value) {
         else if (fixedP > 0) currentFixedPrice = fixedP; 
         else currentFixedPrice = 0; 
         updateModalStickyBar();
+
+        // Голосовий коментар на вибір об'єму (тільки якщо ШІ не говорить зараз)
+        if (!isSpeaking && window.speechSynthesis) {
+            const volComments = {
+                '2 мл':  ['Два мілілітри — гарний спосіб познайомитися з ароматом.', 'Хороший вибір, щоб відчути аромат на шкірі.', 'Два мілілітри — тиждень для роздумів.'],
+                '5 мл':  ['П\'ять мілілітрів — мабуть, найзручніший формат для першого знайомства.', 'Хороший вибір. Вистачить, щоб добре відчути аромат.', 'П\'ять мілілітрів — можна носити і вирішувати не поспішаючи.'],
+                '10 мл': ['Десять мілілітрів — якщо аромат вже сподобався, це розумний вибір.', 'Гарний формат. Вистачить надовго.', 'Десять мілілітрів — для тих, хто хоче бути впевненим.'],
+                '20 мл': ['Двадцять мілілітрів — схоже, аромат вас дійсно зачепив.', 'Солідний вибір. Цього вистачить на цілий сезон.', 'Двадцять мілілітрів — щоб аромат завжди був поруч.'],
+            };
+            const comments = volComments[vol];
+            if (comments) {
+                const u = new SpeechSynthesisUtterance(pickRandom(comments));
+                u.lang = 'uk-UA';
+                u.rate = 0.9;
+                u.pitch = 1.0;
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(u);
+            }
+        }
     }
     
     function triggerCatalogAnimation() {
