@@ -3727,16 +3727,20 @@ body.dark-theme .ig-story-ring.seen {
         return 'Доступні об\'єми: ' + chosen.join('; ') + '.';
     }
 
-    function generateViraSpeech(brand, name, rawDesc) {
+        function generateViraSpeech(brand, name, rawDesc) {
         const sBrand = getSmartName(brand);
         const sName = getSmartName(name);
 
-        // Витягуємо ноти
-        const topNotes   = getAllNotes(rawDesc, /(Верхні ноти|Ноти):?\s*(.*?)(?=\n|Серце|Середні|Базові|Ноти бази|$)/is);
-        const heartNotes = getAllNotes(rawDesc, /(Серце|Середні ноти|Ноти серця):?\s*(.*?)(?=\n|Базові|Ноти бази|$)/is);
-        const baseNotes  = getAllNotes(rawDesc, /(Базові ноти|Ноти бази|База):?\s*(.*?)(?=\n|$)/is);
+        // 1. Очищаємо текст від HTML-тегів (які читаються як "менше ніж") та перетворюємо <br> на абзаци
+        const cleanText = rawDesc.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '');
+
+        // 2. Витягуємо ноти (зупиняємось на крапках, нових рядках або технічних словах)
+        const topNotes   = getAllNotes(cleanText, /(Верхні ноти|Ноти):?\s*(.*?)(?=\n|\.|Серце|Середні|Базові|Ноти бази|Стать|Група|Країна|Стійкість|Шлейф|$)/is);
+        const heartNotes = getAllNotes(cleanText, /(Серце|Середні ноти|Ноти серця):?\s*(.*?)(?=\n|\.|Базові|Ноти бази|Стать|Група|Країна|Стійкість|Шлейф|$)/is);
+        const baseNotes  = getAllNotes(cleanText, /(Базові ноти|Ноти бази|База):?\s*(.*?)(?=\n|\.|Стать|Група|Країна|Стійкість|Шлейф|$)/is);
 
         // Стійкість та шлейф з опису
+
         const mL = rawDesc.match(/стійкість:\s*(\d)/i);
         const mS = rawDesc.match(/шлейф:\s*(\d)/i);
         const longevityPct  = mL ? parseInt(mL[1]) * 20 : 60;
