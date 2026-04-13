@@ -51,7 +51,8 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
         }
 
-                body.dark-theme .modal-content, 
+        body.dark-theme .card, 
+        body.dark-theme .modal-content, 
         body.dark-theme .cart-drawer, 
         body.dark-theme .about-section, 
         body.dark-theme .reviews-section, 
@@ -59,15 +60,6 @@
             background: var(--bg); 
             border-color: rgba(255, 255, 255, 0.05); 
         }
-
-        body.dark-theme .card {
-            background: rgba(30, 30, 30, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-color: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
 
         body.dark-theme .search-dropdown, 
         body.dark-theme .tg-chat-bubble, 
@@ -259,11 +251,150 @@
         }
 
         .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
             transition: background-color 0.3s;
+        }
+
+        body.dark-theme .glass-panel {
+            background: rgba(18, 18, 18, 0.80);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* === GLASSMORPHISM СКРІЗЬ === */
+        .card {
+            background: rgba(255,255,255,0.72) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.55) !important;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+        body.dark-theme .card {
+            background: rgba(26,26,26,0.72) !important;
+            border: 1px solid rgba(255,255,255,0.07) !important;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+
+        .modal-content {
+            backdrop-filter: blur(24px) !important;
+            -webkit-backdrop-filter: blur(24px) !important;
+            background: rgba(255,255,255,0.88) !important;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+        body.dark-theme .modal-content {
+            background: rgba(18,18,18,0.88) !important;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .cart-drawer {
+            backdrop-filter: blur(24px) !important;
+            -webkit-backdrop-filter: blur(24px) !important;
+        }
+
+        .search-dropdown {
+            background: rgba(255,255,255,0.88) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255,255,255,0.6) !important;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1) !important;
+        }
+        body.dark-theme .search-dropdown {
+            background: rgba(20,20,20,0.90) !important;
+            border: 1px solid rgba(255,255,255,0.08) !important;
+        }
+
+        .week-spotlight {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.7) !important;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+        }
+        body.dark-theme .week-spotlight {
+            background: rgba(26,26,26,0.7) !important;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .weather-widget {
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            background: rgba(255,255,255,0.55) !important;
+            border: 1px solid rgba(255,255,255,0.5) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        body.dark-theme .weather-widget {
+            background: rgba(26,26,26,0.55) !important;
+            border: 1px solid rgba(255,255,255,0.06) !important;
+        }
+
+        .tg-chat-bubble {
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            background: rgba(255,255,255,0.88) !important;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        body.dark-theme .tg-chat-bubble {
+            background: rgba(20,20,20,0.88) !important;
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .quiz-sheet {
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            background: rgba(255,255,255,0.90) !important;
+            border-top: 1px solid rgba(255,255,255,0.7);
+            box-shadow: 0 -8px 40px rgba(0,0,0,0.1);
+        }
+        body.dark-theme .quiz-sheet {
+            background: rgba(18,18,18,0.92) !important;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .quiz-option {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255,255,255,0.5) !important;
+        }
+        body.dark-theme .quiz-option {
+            background: rgba(255,255,255,0.04) !important;
+        }
+
+        .cart-footer {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(255,255,255,0.88) !important;
+            border-top: 1px solid rgba(255,255,255,0.6);
+        }
+        body.dark-theme .cart-footer {
+            background: rgba(18,18,18,0.88) !important;
+        }
+
+        #stickyControls {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.82) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.55);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+        body.dark-theme #stickyControls {
+            background: rgba(18,18,18,0.82) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Скелетон — прозорий щоб скло просвічувало */
+        .skeleton-card {
+            background: rgba(255,255,255,0.55) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.45) !important;
+        }
+        body.dark-theme .skeleton-card {
+            background: rgba(30,30,30,0.55) !important;
+            border: 1px solid rgba(255,255,255,0.05) !important;
         }
 
         .tt-hint { 
@@ -1047,6 +1178,17 @@
             transition: opacity 0.4s ease; 
         }
 
+        /* Анімація появи карток */
+        .card {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .card.card-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         @media (min-width: 600px) { 
             #catalog { 
                 grid-template-columns: repeat(3, 1fr); 
@@ -1069,7 +1211,7 @@
             } 
         }
 
-                .card { 
+        .card { 
             position: relative; 
             display: flex; 
             flex-direction: column; 
@@ -1077,16 +1219,12 @@
             height: 100%; 
             min-height: 380px; 
             padding-bottom: 15px; 
-            background: rgba(255, 255, 255, 0.4); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6); 
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            background: var(--bg); 
+            border: 1px solid rgba(197, 160, 89, 0.1); 
             border-radius: 12px; 
             transition: all 0.4s ease; 
             overflow: hidden; 
         }
-
 
         .card::after { 
             content: ''; 
@@ -2111,11 +2249,114 @@
             color: #fff; 
             box-shadow: 0 10px 20px rgba(197, 160, 89, 0.3); 
             z-index: 100; 
-            transition: background 0.3s ease, color 0.3s ease; 
+            transition: background 0.3s ease, color 0.3s ease, transform 0.15s ease, box-shadow 0.15s ease;
+            will-change: transform;
         }
 
         .modal-order-btn:active { 
             transform: scale(0.98); 
+        }
+
+        /* === ЗОЛОТА РІДИНА В КОШИКУ === */
+        .cart-floating-btn {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1500;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: 1px solid var(--gold);
+            overflow: hidden;
+            background: #1a1a1a;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .cart-liquid {
+            position: absolute;
+            bottom: 0;
+            left: -10%;
+            width: 120%;
+            height: 0%;
+            background: linear-gradient(180deg, rgba(197,160,89,0.9) 0%, rgba(212,175,55,1) 100%);
+            transition: height 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            border-radius: 0 0 50% 50%;
+            z-index: 0;
+        }
+
+        .cart-liquid::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -20%;
+            width: 140%;
+            height: 20px;
+            background: rgba(197,160,89,0.85);
+            border-radius: 50%;
+            animation: wave 2.2s ease-in-out infinite;
+        }
+
+        .cart-liquid::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -10%;
+            width: 120%;
+            height: 14px;
+            background: rgba(228,196,100,0.6);
+            border-radius: 50%;
+            animation: wave 2.8s ease-in-out infinite reverse;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateX(0) scaleY(1); }
+            50% { transform: translateX(-8%) scaleY(1.2); }
+        }
+
+        .cart-floating-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--gold);
+            position: relative;
+            z-index: 1;
+            transition: fill 0.4s ease;
+        }
+
+        .cart-floating-btn.has-liquid svg {
+            fill: #fff;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+        }
+
+        .cart-floating-btn:active { transform: scale(0.9); }
+
+        /* Оновлений прогрес-бар доставки — рідина */
+        .shipping-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(128,128,128,0.12);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .shipping-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #c5a059, #e8d084, #c5a059);
+            background-size: 200% 100%;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
+            border-radius: 3px;
+            animation: goldShimmer 2.5s linear infinite;
+        }
+
+        @keyframes goldShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
         
         .other-projects { 
@@ -2196,34 +2437,6 @@
             animation: cartPulse 0.4s ease-in-out; 
         }
         
-        .cart-floating-btn { 
-            position: fixed; 
-            bottom: 25px; 
-            left: 25px; 
-            width: 55px; 
-            height: 55px; 
-            background: #1a1a1a; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); 
-            z-index: 1500; 
-            cursor: pointer; 
-            transition: transform 0.3s; 
-            border: 1px solid var(--gold); 
-        }
-
-        .cart-floating-btn:active { 
-            transform: scale(0.9); 
-        }
-
-        .cart-floating-btn svg { 
-            width: 24px; 
-            height: 24px; 
-            fill: var(--gold); 
-        }
-
         .cart-badge { 
             position: absolute; 
             top: -5px; 
@@ -2238,7 +2451,9 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            border: 2px solid #fff; 
+            border: 2px solid #fff;
+            position: absolute;
+            z-index: 2;
         }
         
         .flying-icon { 
@@ -3156,8 +3371,8 @@ body.dark-theme .ig-story-ring.seen {
 
     <div class="weather-widget" id="weatherWidget">
     <div class="weather-main-row">
-                <div class="weather-info">
-            <span class="weather-city" id="weatherCity">Місцева погода</span>
+        <div class="weather-info">
+            <span class="weather-city">Khmelnytskyi</span>
             <span class="weather-temp" id="temp">--°C</span>
         </div>
         <div class="weather-icon-box">
@@ -3493,6 +3708,7 @@ body.dark-theme .ig-story-ring.seen {
     </div>
 
     <div class="cart-floating-btn" onclick="toggleCart()" id="cartFloatingBtn">
+        <div class="cart-liquid" id="cartLiquid"></div>
         <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0 0 20 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
         <div class="cart-badge" id="cartBadge">0</div>
     </div>
@@ -3619,14 +3835,22 @@ body.dark-theme .ig-story-ring.seen {
         return text.split(/[,;]/)[0].trim();
     }
 
-        function getAllNotes(text, pattern) {
+    function getAllNotes(text, pattern) {
         const match = text.match(pattern);
         if (!match || !match[2]) return [];
-        // Відрізаємо будь-яке сміття (стать, країна), якщо воно випадково потрапило в блок нот
-        let rawNotesStr = match[2].replace(/(Стать|Група|Країна|Стійкість|Шлейф|Відгуки).*/is, '');
-        return rawNotesStr.split(/[,;&]/).map(n => n.trim()).filter(n => n.length >= 2).slice(0, 3);
+        // Прибираємо HTML-теги, <br>, службові мітки та зайві символи
+        const cleaned = match[2]
+            .replace(/<br\s*\/?>/gi, ',')
+            .replace(/<[^>]*>/g, '')
+            .replace(/\[[^\]]*\]/g, '')
+            .replace(/(Стать|Група|Країна|Стиль|Напрямок|Стійкість|Шлейф)[^,\n]*/gi, '')
+            .replace(/менше ніж|більше ніж|близько|до|від/gi, '')
+            .trim();
+        return cleaned.split(/[,;]/)
+            .map(n => n.trim())
+            .filter(n => n.length >= 2 && !/^\d+$/.test(n))
+            .slice(0, 3);
     }
-
 
     function pickRandom(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
@@ -3739,20 +3963,16 @@ body.dark-theme .ig-story-ring.seen {
         return 'Доступні об\'єми: ' + chosen.join('; ') + '.';
     }
 
-        function generateViraSpeech(brand, name, rawDesc) {
+    function generateViraSpeech(brand, name, rawDesc) {
         const sBrand = getSmartName(brand);
         const sName = getSmartName(name);
 
-        // 1. Очищаємо текст від HTML-тегів (які читаються як "менше ніж") та перетворюємо <br> на абзаци
-        const cleanText = rawDesc.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '');
-
-        // 2. Витягуємо ноти (зупиняємось на крапках, нових рядках або технічних словах)
-        const topNotes   = getAllNotes(cleanText, /(Верхні ноти|Ноти):?\s*(.*?)(?=\n|\.|Серце|Середні|Базові|Ноти бази|Стать|Група|Країна|Стійкість|Шлейф|$)/is);
-        const heartNotes = getAllNotes(cleanText, /(Серце|Середні ноти|Ноти серця):?\s*(.*?)(?=\n|\.|Базові|Ноти бази|Стать|Група|Країна|Стійкість|Шлейф|$)/is);
-        const baseNotes  = getAllNotes(cleanText, /(Базові ноти|Ноти бази|База):?\s*(.*?)(?=\n|\.|Стать|Група|Країна|Стійкість|Шлейф|$)/is);
+        // Витягуємо ноти
+        const topNotes   = getAllNotes(rawDesc, /(Верхні ноти|Ноти):?\s*(.*?)(?=\n|Серце|Середні|Базові|Ноти бази|$)/is);
+        const heartNotes = getAllNotes(rawDesc, /(Серце|Середні ноти|Ноти серця):?\s*(.*?)(?=\n|Базові|Ноти бази|$)/is);
+        const baseNotes  = getAllNotes(rawDesc, /(Базові ноти|Ноти бази|База):?\s*(.*?)(?=\n|$)/is);
 
         // Стійкість та шлейф з опису
-
         const mL = rawDesc.match(/стійкість:\s*(\d)/i);
         const mS = rawDesc.match(/шлейф:\s*(\d)/i);
         const longevityPct  = mL ? parseInt(mL[1]) * 20 : 60;
@@ -4210,7 +4430,66 @@ body.dark-theme .ig-story-ring.seen {
         }, {passive:true});
     }
 
-    function toggleAbout() {
+    // === АНІМАЦІЯ КАРТОК ПРИ СКРОЛІ (Intersection Observer) ===
+    let cardObserver = null;
+
+    function initCardObserver() {
+        if (cardObserver) cardObserver.disconnect();
+
+        cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    // Затримка каскадом для карток у одному ряду
+                    const card = entry.target;
+                    const delay = (parseInt(card.getAttribute('data-original-index') || 0) % 2) * 60;
+                    setTimeout(() => card.classList.add('card-visible'), delay);
+                    cardObserver.unobserve(card);
+                }
+            });
+        }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -30px 0px'
+        });
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.classList.remove('card-visible');
+            cardObserver.observe(card);
+        });
+    }
+
+    // === MAGNETIC КНОПКА "ДОДАТИ В КОШИК" ===
+    function initMagneticBtn() {
+        const btn = document.getElementById('modalOrderBtn');
+        if (!btn) return;
+
+        btn.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const dx = (e.clientX - cx) * 0.28;
+            const dy = (e.clientY - cy) * 0.28;
+            this.style.transform = `translate(${dx}px, ${dy}px)`;
+        });
+
+        btn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translate(0,0)';
+        });
+
+        // Touch-версія для мобільного
+        btn.addEventListener('touchmove', function(e) {
+            const touch = e.touches[0];
+            const rect = this.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const dx = Math.max(-8, Math.min(8, (touch.clientX - cx) * 0.18));
+            const dy = Math.max(-5, Math.min(5, (touch.clientY - cy) * 0.18));
+            this.style.transform = `translate(${dx}px, ${dy}px)`;
+        }, { passive: true });
+
+        btn.addEventListener('touchend', function() {
+            this.style.transform = 'translate(0,0)';
+        });
+    }
         const m = document.getElementById('aboutMore');
         const b = document.getElementById('toggleBtn');
         if(!m || !b) return;
@@ -4569,7 +4848,7 @@ body.dark-theme .ig-story-ring.seen {
             });
 
             renderBrandSlider(catalogData); 
-            initCarousel(); initSwipe(); init3DEffect(); formatNews(rows[0][10]); renderGeneralReviews(reviewsData.slice(1));
+            initCarousel(); initSwipe(); initCardObserver(); init3DEffect(); formatNews(rows[0][10]); renderGeneralReviews(reviewsData.slice(1));
             if (promoDataRow) renderPremiumPromo(promoDataRow);
             populateLayeringSelects();
             
@@ -4701,8 +4980,11 @@ function renderGenderBar(value) {
         } else { scarcityDiv.innerHTML = ''; }
         
         let rawText = (isWeekly && weekText) ? weekText : desc;
-        // Зберігаємо чистий опис для ШІ Асистента (до будь-якої HTML-обробки)
-        window._viraPureDesc = rawText || '';
+        // Зберігаємо чистий опис для ШІ Асистента — без HTML-тегів
+        window._viraPureDesc = (rawText || '')
+            .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<[^>]*>/g, '')
+            .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'");
         let f = rawText;
 // --- СИНХРОНІЗАЦІЯ ТА СТАБІЛЬНІСТЬ ---
         let dL = 60, dS = 60, dSw = 20, dF = 20, dG = 50;
@@ -4981,6 +5263,7 @@ function renderGenderBar(value) {
 
         updateModalStickyBar();
         document.getElementById('infoModal').style.display = 'flex';
+        setTimeout(initMagneticBtn, 50);
     }
 
     function updateModalStickyBar() {
@@ -5009,7 +5292,11 @@ function renderGenderBar(value) {
     function triggerCatalogAnimation() {
         const cat = document.getElementById('catalog');
         cat.style.opacity = '0';
-        setTimeout(() => { filterCatalog(); cat.style.opacity = '1'; }, 300);
+        setTimeout(() => { 
+            filterCatalog(); 
+            cat.style.opacity = '1';
+            initCardObserver();
+        }, 300);
     }
 
     function animateFlyToCart() {
@@ -5074,8 +5361,24 @@ function renderGenderBar(value) {
 
     function removeFromCart(index) { cart.splice(index, 1); saveCart(); }
 
+    function updateCartLiquid() {
+        const liquid = document.getElementById('cartLiquid');
+        const btn = document.getElementById('cartFloatingBtn');
+        if (!liquid) return;
+        const total = cart.reduce((s, i) => s + (i.price || 0), 0);
+        // Рідина від 0% (порожній) до 80% (повний) — 1500 грн = 80%
+        const pct = Math.min(80, (total / 1500) * 80);
+        liquid.style.height = pct + '%';
+        if (pct > 0) {
+            btn.classList.add('has-liquid');
+        } else {
+            btn.classList.remove('has-liquid');
+        }
+    }
+
     function updateCartUI() {
         document.getElementById('cartBadge').innerText = cart.length;
+        updateCartLiquid();
         const list = document.getElementById('cartItemsList');
         const shippingContainer = document.getElementById('shippingContainer');
         const shippingText = document.getElementById('shippingText');
@@ -5650,7 +5953,8 @@ function renderGenderBar(value) {
     // === INSTAGRAM STORIES ===
     // Таб у Google Sheets: колонки — A:фото URL, B:посилання на пост/рілс, C:підпис (опційно)
     // gid таба зі сторіс — замінити на свій після створення таба
-    const STORIES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=344285905&single=true&output=csv';
+    const STORIES_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=STORIES_GID&single=true&output=csv';
+
     async function loadStories() {
         try {
             const res = await fetch(STORIES_CSV + '&v=' + Date.now());
@@ -5828,8 +6132,16 @@ function renderGenderBar(value) {
     (function initSocialProofToasts() {
         const names = ['Аліна','Вікторія','Марія','Катерина','Наталія','Юлія','Дарина','Ірина','Оксана','Тетяна','Олена','Анна','Софія','Діана','Поліна'];
         const cities = ['Києва','Харкова','Одеси','Львова','Дніпра','Запоріжжя','Вінниці','Полтави','Черкас','Хмельницького','Рівного','Луцька','Чернівців','Сум'];
-        const actions = ['додала', 'замовила', 'придбала', 'забрала'];
-        const times = ['щойно','2 хв тому','5 хв тому','7 хв тому','10 хв тому','15 хв тому'];
+        const actions = ['додала до кошика', 'замовила', 'поклала до кошика', 'придбала'];
+        const times = ['щойно','3 хв тому','8 хв тому','12 хв тому','20 хв тому'];
+
+        // Об'єми з реалістичними вагами: 5 мл часто, 2 мл доволі часто, 20 мл рідко
+        function pickVol() {
+            const r = Math.random();
+            if (r < 0.50) return '5 мл';
+            if (r < 0.85) return '2 мл';
+            return '20 мл';
+        }
 
         // Створюємо контейнер
         const toastContainer = document.createElement('div');
@@ -5851,7 +6163,7 @@ function renderGenderBar(value) {
             const city = cities[Math.floor(Math.random() * cities.length)];
             const action = actions[Math.floor(Math.random() * actions.length)];
             const time = times[Math.floor(Math.random() * times.length)];
-            const vol = ['2 мл','5 мл','10 мл'][Math.floor(Math.random() * 3)];
+            const vol = pickVol();
             const img = item[5] ? item[5].replace(/'/g, "%27") : '';
 
             const toast = document.createElement('div');
@@ -5912,9 +6224,9 @@ function renderGenderBar(value) {
             setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 400);
         }
 
-        // Максимум 3 сповіщення за сесію, ненав'язливо
+        // Максимум 2 сповіщення за сесію
         let toastCount = 0;
-        const MAX_TOASTS = 3;
+        const MAX_TOASTS = 2;
 
         function maybeShowToast() {
             if (toastCount >= MAX_TOASTS) return;
@@ -5922,14 +6234,14 @@ function renderGenderBar(value) {
             showToast();
         }
 
-        // Перший показ через 45 секунд, далі кожні 90 секунд
+        // Перший показ через 60 секунд, далі один раз через 120 секунд
         setTimeout(() => {
             maybeShowToast();
             const interval = setInterval(() => {
                 if (toastCount >= MAX_TOASTS) { clearInterval(interval); return; }
                 maybeShowToast();
-            }, 90000);
-        }, 45000);
+            }, 120000);
+        }, 60000);
     })();
     // 1. Хмаринка Вікторії (показуємо завжди для перевірки, без sessionStorage)
     setTimeout(() => {
@@ -6001,21 +6313,21 @@ function renderGenderBar(value) {
 
 async function updateWeather() {
     try {
-        // 1. Отримуємо координати та місто клієнта по IP (без запиту на геолокацію)
-        let lat = 49.42, lon = 26.98, cityName = "Україна";
+        // Визначаємо місто та координати по IP (без запиту дозволу)
+        let lat = 49.42, lon = 26.98, city = 'Хмельницький';
         try {
-            const geoRes = await fetch('https://get.geojs.io/v1/ip/geo.json');
-            const geoData = await geoRes.json();
-            if (geoData.latitude && geoData.longitude) {
-                lat = geoData.latitude;
-                lon = geoData.longitude;
-                cityName = geoData.city || cityName;
+            const geoRes = await fetch('https://ipapi.co/json/');
+            const geo = await geoRes.json();
+            if (geo && geo.latitude && geo.longitude) {
+                lat = geo.latitude;
+                lon = geo.longitude;
+                city = geo.city || geo.region || 'Ваше місто';
             }
-        } catch (e) {
-            console.log('Локацію не знайдено, використовуємо базову.');
-        }
+        } catch(e) { /* fallback to Khmelnytskyi */ }
 
-        // 2. Отримуємо погоду для визначених координат
+        const cityEl = document.querySelector('.weather-city');
+        if (cityEl) cityEl.innerText = city;
+
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`);
         const data = await response.json();
         const temp = Math.round(data.current_weather.temperature);
@@ -6023,9 +6335,6 @@ async function updateWeather() {
         
         const tempElement = document.getElementById('temp');
         if (tempElement) tempElement.innerText = `${temp}°C`;
-
-        const cityElement = document.getElementById('weatherCity');
-        if (cityElement) cityElement.innerText = cityName;
         
         const weatherSVG = {
             0: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
@@ -6067,95 +6376,7 @@ async function updateWeather() {
         if (widget) widget.style.display = 'none';
     }
 }
-
 updateWeather();
-    // === ВІЗУАЛЬНИЙ ЕФЕКТ: ЗОЛОТИЙ ПИЛ (ПАРФУМЕРНА ХМАРКА) ===
-    setTimeout(() => {
-        const carousel = document.getElementById('heroCarousel');
-        if (!carousel) return;
-        
-        // Створюємо полотно для малювання пилу
-        const canvas = document.createElement('canvas');
-        canvas.style.position = 'absolute';
-        canvas.style.top = '0';
-        canvas.style.left = '0';
-        canvas.style.width = '100%';
-        canvas.style.height = '100%';
-        canvas.style.pointerEvents = 'none'; // Щоб не заважав клікати на кнопки
-        canvas.style.zIndex = '5'; // Летить поверх відео та картинок
-        carousel.appendChild(canvas);
-        
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        // Адаптація під розмір екрану
-        function resizeCanvas() {
-            canvas.width = carousel.offsetWidth;
-            canvas.height = carousel.offsetHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        // Клас однієї частинки пилу
-        class DustParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5 + 0.5; // Різний розмір (0.5 - 2px)
-                this.speedX = Math.random() * 0.4 - 0.2; // Легке хитання вліво-вправо
-                this.speedY = Math.random() * -0.5 - 0.1; // Повільно летять вгору
-                this.opacity = Math.random() * 0.6 + 0.1; // Різна прозорість
-                this.fadeSpeed = Math.random() * 0.015 - 0.007; // Швидкість мерехтіння
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                
-                // Мерехтіння (пульсація світла)
-                this.opacity += this.fadeSpeed;
-                if (this.opacity <= 0.1 || this.opacity >= 0.8) this.fadeSpeed *= -1;
-
-                // Якщо пилинка вилетіла за верхній край — повертаємо її вниз
-                if (this.y < 0) {
-                    this.y = canvas.height;
-                    this.x = Math.random() * canvas.width;
-                }
-                // Відбивання від бокових стінок
-                if (this.x > canvas.width || this.x < 0) {
-                    this.speedX *= -1;
-                }
-            }
-            draw() {
-                ctx.fillStyle = `rgba(197, 160, 89, ${this.opacity})`; // Золотий колір var(--gold)
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        // Створюємо хмару (на ПК більше частинок, на мобільному менше для швидкодії)
-        function initDust() {
-            particles = [];
-            const particleCount = window.innerWidth < 600 ? 40 : 80;
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new DustParticle());
-            }
-        }
-
-        // Анімація
-        function animateDust() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateDust);
-        }
-
-        initDust();
-        animateDust();
-    }, 1500); // Запускаємо через 1.5 сек після завантаження сторінки
-
     
 </script>
 
