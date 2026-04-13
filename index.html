@@ -51,9 +51,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
         }
 
-        body.dark-theme .card, 
         body.dark-theme .modal-content, 
-        body.dark-theme .cart-drawer, 
         body.dark-theme .about-section, 
         body.dark-theme .reviews-section, 
         body.dark-theme .other-projects { 
@@ -66,7 +64,7 @@
         body.dark-theme .leave-review-box, 
         body.dark-theme .cart-footer, 
         body.dark-theme .review-form-container { 
-            background: #1a1a1a; 
+            background: rgba(22, 22, 22, 0.88); 
             border-color: rgba(255, 255, 255, 0.05); 
             color: #fff; 
         }
@@ -96,7 +94,7 @@
         body.dark-theme .vol-chip, 
         body.dark-theme .modal-note-tag, 
         body.dark-theme .review-box { 
-            background: #1a1a1a; 
+            background: rgba(30, 30, 30, 0.75); 
             border-color: #333; 
             color: #ddd; 
         }
@@ -113,13 +111,8 @@
             border-color: #333; 
         }
 
-        body.dark-theme .week-spotlight { 
-            background: #1a1a1a; 
-            border-color: #333; 
-        }
-
         body.dark-theme .action-buttons { 
-            background: var(--bg); 
+            background: transparent; 
         }
 
         body.dark-theme .viber-link, 
@@ -483,12 +476,12 @@
             display: flex; 
             gap: 10px; 
             padding: 20px 15px; 
-            background: var(--bg); 
+            background: transparent;
         }
 
         .viber-link, .news-btn { 
             flex: 1; 
-            border: 1px solid #eee; 
+            border: 1px solid rgba(197, 160, 89, 0.18); 
             padding: 14px; 
             text-align: center; 
             font-size: 11px; 
@@ -497,7 +490,23 @@
             text-decoration: none; 
             color: var(--text-dark); 
             cursor: pointer; 
-            font-weight: 600; 
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .viber-link:hover, .news-btn:hover {
+            background: rgba(197, 160, 89, 0.08);
+            border-color: rgba(197, 160, 89, 0.4);
+        }
+        
+        body.dark-theme .viber-link,
+        body.dark-theme .news-btn {
+            background: rgba(26, 26, 26, 0.65);
+            border-color: rgba(255, 255, 255, 0.07);
         }
         
         /* ПРАВИЛЬНЕ ПОЗИЦІОНУВАННЯ ПОШУКУ ТА КНОПКИ LAB */
@@ -512,7 +521,16 @@
             flex-direction: column;
             padding: 12px 15px;
             gap: 8px;
-            background: var(--bg);
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        
+        body.dark-theme #stickyControls {
+            background: rgba(18, 18, 18, 0.88);
+            border-bottom-color: rgba(255, 255, 255, 0.05);
         }
 
         .search-wrapper { 
@@ -747,14 +765,15 @@
             top: 100%; 
             left: 0; 
             right: 0; 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(10px); 
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
-            border-radius: 0 0 8px 8px; 
+            background: rgba(255, 255, 255, 0.92); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
+            border-radius: 0 0 12px 12px; 
             max-height: 320px; 
             overflow-y: auto; 
             z-index: 2000; 
-            border: 1px solid rgba(0, 0, 0, 0.05); 
+            border: 1px solid rgba(197, 160, 89, 0.12); 
             border-top: none; 
         }
 
@@ -1069,11 +1088,19 @@
             height: 100%; 
             min-height: 380px; 
             padding-bottom: 15px; 
-            background: var(--bg); 
-            border: 1px solid rgba(197, 160, 89, 0.1); 
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(197, 160, 89, 0.13); 
             border-radius: 12px; 
             transition: all 0.4s ease; 
             overflow: hidden; 
+            box-shadow: 0 2px 16px rgba(197, 160, 89, 0.05);
+        }
+        
+        body.dark-theme .card {
+            background: rgba(26, 26, 26, 0.75);
+            border-color: rgba(255, 255, 255, 0.06);
         }
 
         .card::after { 
@@ -1324,9 +1351,19 @@
 
         .week-spotlight { 
             padding: 30px 20px; 
-            background: var(--gray-light); 
-            margin: 15px 0; 
-            text-align: center; 
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            margin: 15px; 
+            text-align: center;
+            border-radius: 16px;
+            border: 1px solid rgba(197, 160, 89, 0.12);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        }
+        
+        body.dark-theme .week-spotlight {
+            background: rgba(26, 26, 26, 0.65);
+            border-color: rgba(255, 255, 255, 0.06);
         }
 
         .week-label { 
@@ -1706,9 +1743,11 @@
             margin-top: 15px; 
             margin-bottom: 10px; 
             padding: 15px; 
-            background: rgba(128, 128, 128, 0.05); 
-            border-radius: 6px; 
-            border: 1px solid rgba(128, 128, 128, 0.1); 
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px; 
+            border: 1px solid rgba(197, 160, 89, 0.12); 
         }
 
         .review-form-title { 
@@ -1816,9 +1855,15 @@
             font-size: 12px; 
             cursor: pointer; 
             transition: 0.3s; 
-            background: transparent; 
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-radius: 6px; 
             font-weight: 600;
+        }
+        
+        body.dark-theme .vol-chip {
+            background: rgba(30, 30, 30, 0.7);
         }
 
         .vol-chip.active { 
@@ -2250,15 +2295,20 @@
             width: 100%; 
             max-width: 400px; 
             height: 100%; 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px); 
+            background: rgba(255, 255, 255, 0.88); 
+            backdrop-filter: blur(30px); 
+            -webkit-backdrop-filter: blur(30px); 
             z-index: 3500; 
             transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             display: flex; 
             flex-direction: column; 
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1); 
-            border-left: 1px solid rgba(128, 128, 128, 0.2); 
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1); 
+            border-left: 1px solid rgba(197, 160, 89, 0.12); 
+        }
+        
+        body.dark-theme .cart-drawer {
+            background: rgba(16, 16, 16, 0.92);
+            border-left-color: rgba(255, 255, 255, 0.05);
         }
 
         .cart-drawer.open { 
@@ -2414,8 +2464,10 @@
         
         .cart-footer { 
             padding: 25px 20px; 
-            border-top: 1px solid rgba(128, 128, 128, 0.1); 
-            background: var(--bg); 
+            border-top: 1px solid rgba(197, 160, 89, 0.1); 
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
         
         .gift-wrap-container { 
@@ -2615,9 +2667,17 @@
         .leave-review-box { 
             margin-top: 60px; 
             padding: 40px 20px; 
-            background: rgba(128, 128, 128, 0.05); 
-            border-radius: 8px; 
-            border: 1px solid rgba(128, 128, 128, 0.1); 
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 16px; 
+            border: 1px solid rgba(197, 160, 89, 0.15); 
+            box-shadow: 0 4px 24px rgba(197, 160, 89, 0.06);
+        }
+        
+        body.dark-theme .leave-review-box {
+            background: rgba(26, 26, 26, 0.7);
+            border-color: rgba(255, 255, 255, 0.07);
         }
 
         .leave-review-title { 
@@ -2635,10 +2695,11 @@
             position: fixed; 
             bottom: 95px; 
             right: 25px; 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(10px); 
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); 
+            background: rgba(255, 255, 255, 0.88); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px; 
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(197, 160, 89, 0.1); 
             padding: 14px; 
             display: flex; 
             align-items: center; 
@@ -2648,9 +2709,14 @@
             transform: translateY(20px) scale(0.9); 
             pointer-events: none; 
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            border: 1px solid rgba(0, 0, 0, 0.05); 
+            border: 1px solid rgba(197, 160, 89, 0.15); 
             width: 250px; 
             box-sizing: border-box; 
+        }
+        
+        body.dark-theme .tg-chat-bubble {
+            background: rgba(22, 22, 22, 0.88);
+            border-color: rgba(197, 160, 89, 0.15);
         }
 
         .tg-chat-bubble.show { 
@@ -2714,9 +2780,9 @@
             position: fixed; 
             bottom: 30px; 
             right: 90px; 
-            background: rgba(255, 255, 255, 0.85); 
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(18px); 
+            -webkit-backdrop-filter: blur(18px);
             color: var(--text-dark); 
             border: 1px solid rgba(197, 160, 89, 0.3); 
             width: 46px; 
@@ -2724,7 +2790,7 @@
             border-radius: 50%; 
             cursor: pointer; 
             z-index: 1400; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(197,160,89,0.08); 
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             align-items: center;
             justify-content: center;
@@ -2906,10 +2972,17 @@ body.modal-open .cart-floating-btn {
     padding: 13px 20px;
     border: 1px solid rgba(197,160,89,0.35);
     border-radius: 10px;
-    background: rgba(197,160,89,0.04);
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
+    box-shadow: 0 2px 12px rgba(197, 160, 89, 0.07);
+}
+body.dark-theme .quiz-trigger {
+    background: rgba(26, 26, 26, 0.65);
+    border-color: rgba(197, 160, 89, 0.2);
 }
 .quiz-trigger:active { transform: scale(0.98); }
 .quiz-trigger-icon { font-size: 18px; }
