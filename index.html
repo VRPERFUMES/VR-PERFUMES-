@@ -1412,9 +1412,7 @@
             left: 0; 
             width: 100%; 
             height: 100%; 
-            background: rgba(0, 0, 0, 0.6); 
-            backdrop-filter: blur(8px); 
-            -webkit-backdrop-filter: blur(8px); 
+            background: rgba(0, 0, 0, 0.55); 
             z-index: 2000; 
             justify-content: center; 
             align-items: center; 
@@ -1423,7 +1421,7 @@
         }
 
         .modal.modal-visible {
-            animation: modalFadeIn 0.28s ease forwards;
+            animation: modalFadeIn 0.25s ease forwards;
         }
 
         @keyframes modalFadeIn {
@@ -1432,12 +1430,12 @@
         }
 
         .modal-content {
-            animation: modalSlideUp 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: modalSlideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         @keyframes modalSlideUp {
-            from { opacity: 0; transform: translateY(18px) scale(0.98); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(16px) translateZ(0); }
+            to   { opacity: 1; transform: translateY(0) translateZ(0); }
         }
 
         .modal-content { 
@@ -1447,10 +1445,13 @@
             border-radius: 12px; 
             position: relative; 
             max-height: 90vh; 
-            display: flex; /* Робимо контейнер гнучким */
-            flex-direction: column; /* Елементи йдуть зверху вниз */
-            overflow: hidden; /* Сама модалка не скролиться, тільки середина */
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); 
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            /* Власний compositing шар для стабільного рендерингу */
+            transform: translateZ(0);
+            will-change: auto;
         }
 /* ЦЕЙ БЛОК РОБИТЬ СЕРЕДИНУ СКРОЛЬНОЮ */
         .modal-scroll-area {
@@ -1479,7 +1480,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
-        /* ПУЛЬСУЮЧА АУРА - ТЕПЕР ПРАЦЮЄ */
+        /* ПУЛЬСУЮЧА АУРА - ізольований compositing шар */
         .aura-wrapper {
             position: relative;
             width: 200px;
@@ -1488,6 +1489,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            /* Ізолюємо від решти layout */
+            isolation: isolate;
         }
 
         .modal-aura {
@@ -1496,27 +1499,31 @@
             height: 130%;
             background-size: cover;
             background-position: center;
-            filter: blur(40px); /* Глибоке розмиття */
+            filter: blur(35px);
             border-radius: 50%;
             opacity: 0;
             z-index: 1;
-            transform: scale(0.9);
-            transition: opacity 1s ease;
+            transform: scale(0.9) translateZ(0);
+            transition: opacity 0.8s ease;
+            /* Власний compositing шар — не впливає на батьківський елемент */
+            will-change: transform, opacity;
+            contain: strict;
+            pointer-events: none;
         }
 
-        .modal-aura.active { opacity: 0.5; }
+        .modal-aura.active { opacity: 0.45; }
 
-        body.dark-theme .modal-aura.active { opacity: 0.25; }
+        body.dark-theme .modal-aura.active { opacity: 0.2; }
 
-        /* Анімація "дихання", яка активується при розмові */
+        /* Анімація "дихання" — тільки transform і opacity, без filter змін */
         .speaking-pulse {
             animation: auraBreath 4s infinite ease-in-out !important;
         }
 
         @keyframes auraBreath {
-            0% { transform: scale(0.9); opacity: 0.3; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-            100% { transform: scale(0.9); opacity: 0.3; }
+            0%   { transform: scale(0.9) translateZ(0);  opacity: 0.25; }
+            50%  { transform: scale(1.25) translateZ(0); opacity: 0.55; }
+            100% { transform: scale(0.9) translateZ(0);  opacity: 0.25; }
         }
 
         #mImg {
@@ -5091,9 +5098,9 @@ function renderGenderBar(value) {
         const volHTML = `<div class="vol-container">
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2px;">
                 <span class="vol-label" style="margin-bottom:0;">Оберіть об'єм:</span>
-                <button class="vol-advisor-btn" id="volAdvisorBtn" onclick="toggleVolAdvisor()" title="Дізнатися скільки вистачить">
+                <button class="vol-advisor-btn" id="volAdvisorBtn" onclick="toggleVolAdvisor()" title="Дізнатися на скільки вистачить">
                     <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                    Скільки вистачить?
+                    На скільки вистачить?
                 </button>
             </div>
             <div class="vol-grid">${volButtons}</div>
@@ -5165,10 +5172,10 @@ function renderGenderBar(value) {
         // Якщо режим порадника активний — коментуємо вибір
         if (window._volAdvisorActive && !isSpeaking && window.speechSynthesis) {
             const volComments = {
-                '2 мл':  ['Два мілілітри — це приблизно 10–15 пшиків. Вистачить на тиждень-два, щоб добре відчути аромат на шкірі.', 'Два мілілітри дадуть вам 10–12 пшиків. Гарний вибір для знайомства.'],
-                '5 мл':  ['П\'ять мілілітрів — близько 40–50 пшиків. Зазвичай це місяць-півтора активного носіння.', 'П\'ять мілілітрів — найпопулярніший формат. Вистачить на 5–6 тижнів.'],
-                '10 мл': ['Десять мілілітрів — це приблизно 100 пшиків. Вистачить на 3–4 місяці комфортного носіння.', 'Десять мілілітрів дадуть вам близько двох нанесень на день протягом двох місяців.'],
-                '20 мл': ['Двадцять мілілітрів — це близько 200 пшиків. Аромат буде з вами цілий сезон або навіть довше.', 'Двадцять мілілітрів — солідний запас. Вистачить на пів року щоденного носіння.'],
+                '2 мл':  ['Два мілілітри — це приблизно 16–20 пшиків. Вистачить на два-три тижні, щоб добре відчути аромат на шкірі.', 'Два мілілітри дадуть вам близько 18–20 пшиків. Гарний вибір для знайомства з ароматом.'],
+                '5 мл':  ['П\'ять мілілітрів — це близько 40–50 пшиків. Зазвичай це місяць-півтора активного носіння.', 'П\'ять мілілітрів — найпопулярніший формат. Близько 45 пшиків — вистачить на 5–6 тижнів комфортного використання.'],
+                '10 мл': ['Десять мілілітрів — це приблизно 80–100 пшиків. Вистачить на 3–4 місяці щоденного носіння.', 'Десять мілілітрів дадуть вам близько 90 пшиків — два-три нанесення на день протягом двох місяців.'],
+                '20 мл': ['Двадцять мілілітрів — це близько 160–200 пшиків. Аромат буде з вами цілий сезон і довше.', 'Двадцять мілілітрів — солідний запас. Близько 180 пшиків — вистачить на пів року щоденного носіння.'],
                 'Флакон': ['Щодо флакона — напишіть Вікторії, вона розкаже про наявність і підбере найкращий варіант саме для вас.'],
             };
             // Для рідного флакону
