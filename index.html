@@ -1422,6 +1422,24 @@
             box-sizing: border-box; 
         }
 
+        .modal.modal-visible {
+            animation: modalFadeIn 0.28s ease forwards;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .modal-content {
+            animation: modalSlideUp 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes modalSlideUp {
+            from { opacity: 0; transform: translateY(18px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         .modal-content { 
             background: var(--bg); 
             width: 100%; 
@@ -2159,6 +2177,38 @@
         }
         .vira-cta-pulse {
             animation: viraCTAPulse 0.7s ease-in-out 2;
+        }
+
+        /* Кнопка-порадник над селекторами об'єму */
+        .vol-advisor-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            padding: 0;
+            margin-bottom: 10px;
+            cursor: pointer;
+            color: var(--text-gray);
+            font-size: 10px;
+            font-family: var(--sans);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            transition: opacity 0.25s ease, color 0.25s ease;
+        }
+        .vol-advisor-btn:hover { opacity: 1; color: var(--gold); }
+        .vol-advisor-btn.active { color: var(--gold); opacity: 1; }
+        .vol-advisor-btn svg {
+            transition: transform 0.3s ease;
+        }
+        .vol-advisor-btn.active svg {
+            animation: advisorPulse 1.8s infinite ease-in-out;
+        }
+        @keyframes advisorPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.5; transform: scale(1.15); }
         }
         
         .other-projects { 
@@ -4099,7 +4149,10 @@ body.dark-theme .ig-story-ring.seen {
 
     function closeModalAudio() {
         document.body.classList.remove('modal-open');
-        document.getElementById('infoModal').style.display = 'none';
+        const infoModal = document.getElementById('infoModal');
+        infoModal.style.display = 'none';
+        infoModal.classList.remove('modal-visible');
+        window._volAdvisorActive = false;
         
         if (viraAmbient) handleViraAtmosphere('stop');
         
@@ -4704,15 +4757,17 @@ body.dark-theme .ig-story-ring.seen {
 
         // === ГЕНЕРАЦІЯ ОЛЬФАКТОРНОЇ КАРТИ (DNA) ===
    function generateDNA(l, s, sw, f, g) {
-    // Плавний запуск анімації через мікрозатримку
+    // Збільшена затримка — чекаємо поки модалка повністю відрендерилась
     setTimeout(() => {
-        const fills = document.querySelectorAll('.dna-bar-fill');
-        fills.forEach(bar => {
+        const dnaContainer = document.getElementById('dnaChartContainer');
+        if (!dnaContainer) return;
+        // Шукаємо тільки всередині контейнера, щоб не чіпати старі елементи
+        dnaContainer.querySelectorAll('.dna-bar-fill').forEach(bar => {
             bar.style.width = bar.getAttribute('data-width') + '%';
         });
-        const pointer = document.querySelector('.gender-pointer');
-        if(pointer) pointer.style.left = pointer.getAttribute('data-pos') + '%';
-    }, 100);
+        const pointer = dnaContainer.querySelector('.gender-pointer');
+        if (pointer) pointer.style.left = pointer.getAttribute('data-pos') + '%';
+    }, 350);
 
     return `
         <div style="background: rgba(128,128,128,0.03); padding: 18px; border-radius: 12px; margin: 15px 0; border: 1px solid rgba(197, 160, 89, 0.15);">
@@ -5033,7 +5088,16 @@ function renderGenderBar(value) {
                 ${isBottleAvailable ? `<div class="vol-chip bottle-special" onclick="selectVol(this, 'Рідний флакон (${bottleMl} мл)', ${bottlePrice})">Залишок у рідному флаконі (${bottleMl} мл) <small>${bottlePrice} грн</small></div>` : ''}`;
         }
         
-        const volHTML = `<div class="vol-container"><span class="vol-label">Оберіть об'єм:</span><div class="vol-grid">${volButtons}</div></div>`;
+        const volHTML = `<div class="vol-container">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2px;">
+                <span class="vol-label" style="margin-bottom:0;">Оберіть об'єм:</span>
+                <button class="vol-advisor-btn" id="volAdvisorBtn" onclick="toggleVolAdvisor()" title="Дізнатися скільки вистачить">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                    Скільки вистачить?
+                </button>
+            </div>
+            <div class="vol-grid">${volButtons}</div>
+        </div>`;
             
         const reviewFormHTML = `
             <div class="review-form-container" id="reviewFormBlock">
@@ -5070,7 +5134,10 @@ function renderGenderBar(value) {
         }
 
         updateModalStickyBar();
-        document.getElementById('infoModal').style.display = 'flex';
+        const infoModal = document.getElementById('infoModal');
+        infoModal.style.display = 'flex';
+        // Клас додаємо після display:flex щоб анімація спрацювала
+        requestAnimationFrame(() => infoModal.classList.add('modal-visible'));
     }
 
     function updateModalStickyBar() {
@@ -5095,26 +5162,51 @@ function renderGenderBar(value) {
         else currentFixedPrice = 0; 
         updateModalStickyBar();
 
-        // Голосовий коментар на вибір об'єму (тільки якщо ШІ не говорить зараз)
-        if (!isSpeaking && window.speechSynthesis) {
+        // Якщо режим порадника активний — коментуємо вибір
+        if (window._volAdvisorActive && !isSpeaking && window.speechSynthesis) {
             const volComments = {
-                '2 мл':  ['Два мілілітри — гарний спосіб познайомитися з ароматом.', 'Хороший вибір, щоб відчути аромат на шкірі.', 'Два мілілітри — тиждень для роздумів.'],
-                '5 мл':  ['П\'ять мілілітрів — мабуть, найзручніший формат для першого знайомства.', 'Хороший вибір. Вистачить, щоб добре відчути аромат.', 'П\'ять мілілітрів — можна носити і вирішувати не поспішаючи.'],
-                '10 мл': ['Десять мілілітрів — якщо аромат вже сподобався, це розумний вибір.', 'Гарний формат. Вистачить надовго.', 'Десять мілілітрів — для тих, хто хоче бути впевненим.'],
-                '20 мл': ['Двадцять мілілітрів — схоже, аромат вас дійсно зачепив.', 'Солідний вибір. Цього вистачить на цілий сезон.', 'Двадцять мілілітрів — щоб аромат завжди був поруч.'],
+                '2 мл':  ['Два мілілітри — це приблизно 10–15 пшиків. Вистачить на тиждень-два, щоб добре відчути аромат на шкірі.', 'Два мілілітри дадуть вам 10–12 пшиків. Гарний вибір для знайомства.'],
+                '5 мл':  ['П\'ять мілілітрів — близько 40–50 пшиків. Зазвичай це місяць-півтора активного носіння.', 'П\'ять мілілітрів — найпопулярніший формат. Вистачить на 5–6 тижнів.'],
+                '10 мл': ['Десять мілілітрів — це приблизно 100 пшиків. Вистачить на 3–4 місяці комфортного носіння.', 'Десять мілілітрів дадуть вам близько двох нанесень на день протягом двох місяців.'],
+                '20 мл': ['Двадцять мілілітрів — це близько 200 пшиків. Аромат буде з вами цілий сезон або навіть довше.', 'Двадцять мілілітрів — солідний запас. Вистачить на пів року щоденного носіння.'],
+                'Флакон': ['Щодо флакона — напишіть Вікторії, вона розкаже про наявність і підбере найкращий варіант саме для вас.'],
             };
-            const comments = volComments[vol];
+            // Для рідного флакону
+            const isBottle = vol.includes('Рідний флакон') || vol.includes('флакон');
+            const key = isBottle ? 'Флакон' : vol;
+            const comments = volComments[key];
             if (comments) {
                 const u = new SpeechSynthesisUtterance(pickRandom(comments));
-                u.lang = 'uk-UA';
-                u.rate = 0.9;
-                u.pitch = 1.0;
+                u.lang = 'uk-UA'; u.rate = 0.88; u.pitch = 1.0;
                 window.speechSynthesis.cancel();
                 window.speechSynthesis.speak(u);
             }
         }
     }
     
+    function toggleVolAdvisor() {
+        const btn = document.getElementById('volAdvisorBtn');
+        if (!btn) return;
+
+        window._volAdvisorActive = !window._volAdvisorActive;
+        btn.classList.toggle('active', window._volAdvisorActive);
+
+        if (window._volAdvisorActive && window.speechSynthesis) {
+            const prompt = pickRandom([
+                'Натисніть на об\'єм, що вас цікавить — і я розкажу, скільки вистачить.',
+                'Оберіть об\'єм нижче, і я підкажу, на який час його вистачить.',
+                'Торкніться будь-якого об\'єму — розкажу про кількість пшиків і тривалість.',
+            ]);
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(prompt);
+            u.lang = 'uk-UA'; u.rate = 0.88; u.pitch = 1.0;
+            u.onend = () => {}; 
+            window.speechSynthesis.speak(u);
+        } else if (!window._volAdvisorActive) {
+            window.speechSynthesis && window.speechSynthesis.cancel();
+        }
+    }
+
     function triggerCatalogAnimation() {
         const cat = document.getElementById('catalog');
         cat.style.opacity = '0';
@@ -6048,34 +6140,38 @@ function renderGenderBar(value) {
     }, 15000); 
     
     // 2. Плавне відображення кнопки вгору + паралакс на hero
+    let _scrollTicking = false;
     window.addEventListener('scroll', function() {
-        const scrollBtn = document.getElementById("scrollTopBtn");
-        if (scrollBtn) {
-            if (window.pageYOffset > 600) {
-                scrollBtn.classList.add('show-btn');
-                scrollBtn.style.display = 'flex';
-            } else {
-                scrollBtn.classList.remove('show-btn');
-                scrollBtn.style.display = 'none';
-            }
-        }
+        if (!_scrollTicking) {
+            requestAnimationFrame(function() {
+                const scrollBtn = document.getElementById("scrollTopBtn");
+                if (scrollBtn) {
+                    if (window.pageYOffset > 600) {
+                        scrollBtn.classList.add('show-btn');
+                        scrollBtn.style.display = 'flex';
+                    } else {
+                        scrollBtn.classList.remove('show-btn');
+                        scrollBtn.style.display = 'none';
+                    }
+                }
 
-        // Паралакс — тільки поки каруселі видно на екрані
-        const carousel = document.getElementById('heroCarousel');
-        if (carousel) {
-            const carouselBottom = carousel.getBoundingClientRect().bottom;
-            if (carouselBottom > 0) {
-                const offset = window.pageYOffset * 0.35;
-                // Рухаємо фонові шари (відео + зображення) повільніше
-                carousel.querySelectorAll('.bg-video, .banner-bg-img').forEach(el => {
-                    el.style.transform = `translateY(${offset}px)`;
-                    el.style.willChange = 'transform';
-                });
-                // Контент рухається ще повільніше — залишається ближче до центру
-                carousel.querySelectorAll('.logo, .hero-carousel h1, .banner-content').forEach(el => {
-                    el.style.transform = `translateY(${offset * 0.4}px)`;
-                });
-            }
+                // Паралакс — тільки поки каруселі видно на екрані
+                const carousel = document.getElementById('heroCarousel');
+                if (carousel) {
+                    const carouselBottom = carousel.getBoundingClientRect().bottom;
+                    if (carouselBottom > 0) {
+                        const offset = window.pageYOffset * 0.35;
+                        carousel.querySelectorAll('.bg-video, .banner-bg-img').forEach(el => {
+                            el.style.transform = `translateY(${offset}px)`;
+                        });
+                        carousel.querySelectorAll('.logo, .hero-carousel h1, .banner-content').forEach(el => {
+                            el.style.transform = `translateY(${offset * 0.4}px)`;
+                        });
+                    }
+                }
+                _scrollTicking = false;
+            });
+            _scrollTicking = true;
         }
     }, { passive: true });
 
