@@ -3244,35 +3244,14 @@ body.dark-theme .ig-story-ring.seen {
     background: linear-gradient(135deg, #444 0%, #555 100%);
 }
 
-/* === 1. PARALLAX TILT — Живий флакон === */
+/* === MODAL IMAGE === */
 .aura-wrapper {
     position: relative;
-    perspective: 600px;
-    cursor: grab;
-    user-select: none;
 }
-.aura-wrapper:active { cursor: grabbing; }
-
 #mImg {
     position: relative;
     z-index: 5;
     max-height: 180px;
-    transition: transform 0.1s ease-out;
-    will-change: transform;
-    transform-style: preserve-3d;
-}
-
-#modalAura {
-    transition: transform 0.15s ease-out;
-    will-change: transform;
-}
-
-/* === 2. COLOR MOOD — підсвітка під бренд === */
-.vol-chip {
-    transition: all 0.3s ease, border-color 0.5s ease, box-shadow 0.5s ease;
-}
-.mood-glow {
-    transition: box-shadow 0.6s ease, border-color 0.6s ease;
 }
 
 /* === 3. MIX LAB CERTIFICATE === */
@@ -3422,17 +3401,7 @@ body.dark-theme .ig-story-ring.seen {
 .cert-btn-secondary:active { transform: scale(0.97); }
 .cert-btn-primary:active { transform: scale(0.97); }
 
-/* === 4. DYNAMIC BG — Синестезія фону === */
-.synesthesia-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 1.5s ease;
-    background: transparent;
-}
-.synesthesia-overlay.active { opacity: 1; }
+
 
 /* === 5. АРОМАТ-ПАСПОРТ === */
 .passport-btn {
@@ -3485,6 +3454,276 @@ body.dark-theme .passport-card {
 }
 
         
+
+/* ═══════════════════════════════════════
+   BRAND GALLERY
+═══════════════════════════════════════ */
+.brands-gallery-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 15px;
+    background: rgba(197, 160, 89, 0.05);
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    border-radius: 8px;
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    box-sizing: border-box;
+}
+.brands-gallery-btn:active {
+    background: rgba(197, 160, 89, 0.12);
+}
+
+/* Overlay */
+.brand-gallery-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 3600;
+    background: var(--bg);
+    transform: translateY(100%);
+    transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.brand-gallery-overlay.open {
+    transform: translateY(0);
+}
+
+/* Header */
+.brand-gallery-header {
+    padding: 22px 20px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(128,128,128,0.1);
+    flex-shrink: 0;
+}
+.brand-gallery-title {
+    font-family: var(--cinzel);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--gold);
+}
+.brand-gallery-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-dark);
+    opacity: 0.45;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s;
+}
+.brand-gallery-close:hover { opacity: 0.9; }
+
+/* Scrollable body */
+.brand-gallery-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 14px 30px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 2-column grid of tiles */
+.brand-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.brand-tile {
+    background: #0d0d0d;
+    border-radius: 14px;
+    aspect-ratio: 3/2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    padding: 18px 10px;
+    box-sizing: border-box;
+    border: 1px solid rgba(197,160,89,0.12);
+    transition: transform 0.18s ease, border-color 0.18s ease;
+    position: relative;
+    overflow: hidden;
+}
+.brand-tile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(197,160,89,0.08) 0%, transparent 65%);
+    pointer-events: none;
+}
+.brand-tile:active {
+    transform: scale(0.96);
+    border-color: rgba(197,160,89,0.4);
+}
+.brand-tile-name {
+    font-family: var(--cinzel);
+    font-size: 12px;
+    font-weight: 800;
+    color: #f0f0f0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+    line-height: 1.25;
+    position: relative;
+    z-index: 1;
+}
+.brand-tile-count {
+    font-size: 9px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+/* Views */
+.brand-grid-view.hidden { display: none; }
+.brand-detail-view { display: none; }
+.brand-detail-view.active { display: block; }
+
+/* Detail */
+.brand-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    color: var(--gold);
+    padding: 0 0 18px 0;
+    opacity: 0.8;
+}
+.brand-back-btn:hover { opacity: 1; }
+.brand-detail-name {
+    font-family: var(--cinzel);
+    font-size: 24px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    color: var(--text-dark);
+    line-height: 1.15;
+}
+.brand-detail-divider {
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 14px;
+    opacity: 0.7;
+}
+.brand-detail-lore {
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--text-gray);
+    font-style: italic;
+    margin-bottom: 22px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(128,128,128,0.1);
+}
+.brand-detail-items-title {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--gold);
+    margin-bottom: 14px;
+}
+.brand-items-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.brand-item-mini {
+    background: var(--gray-light);
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    border: 1px solid rgba(128,128,128,0.07);
+    transition: border-color 0.2s ease, transform 0.15s ease;
+}
+.brand-item-mini:active {
+    border-color: var(--gold);
+    transform: scale(0.97);
+}
+.brand-item-mini img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    background: var(--bg);
+}
+.brand-item-mini-name {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    color: var(--text-dark);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.brand-item-mini-price {
+    font-size: 11px;
+    color: var(--gold);
+    font-weight: 700;
+}
+.brand-show-all-btn {
+    display: block;
+    width: 100%;
+    margin-top: 18px;
+    padding: 14px;
+    background: none;
+    border: 1px solid rgba(197,160,89,0.4);
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--cinzel);
+}
+.brand-show-all-btn:active {
+    background: var(--gold);
+    color: #fff;
+}
+
+/* Dark theme */
+body.dark-theme .brand-tile {
+    background: #0a0a0a;
+    border-color: rgba(197,160,89,0.18);
+}
+body.dark-theme .brand-item-mini {
+    background: #1a1a1a;
+    border-color: rgba(255,255,255,0.04);
+}
+body.dark-theme .brand-item-mini-name {
+    color: #e8e8e8;
+}
+body.dark-theme .brand-detail-name { color: #f5f5f5; }
+body.dark-theme .brand-gallery-close { color: #ccc; }
     </style>
 </head>
 <body>
@@ -3492,7 +3731,6 @@ body.dark-theme .passport-card {
     <div class="tt-hint">
         Не переходить у Telegram? Тисніть <b>(⋯)</b> та <b>«Відкрити у браузері»</b>.
     </div>
-    <div class="synesthesia-overlay" id="synesthesiaOverlay"></div>
 
     <!-- INSTAGRAM STORIES -->
     <div class="ig-stories-row" id="igStoriesRow" style="display:none;"></div>
@@ -3708,7 +3946,11 @@ body.dark-theme .passport-card {
             <span class="note-chip" onclick="searchByNote('Мускус', this)">Мускус</span>
         </div>
 
-        <div class="brand-slider" id="brandSlider"></div>
+        <div class="brand-slider" id="brandSlider" style="display:none;"></div>
+        <button class="brands-gallery-btn" onclick="openBrandGallery()">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            Огляд брендів
+        </button>
         <div class="tabs-container">
             <button class="tab-btn active" onclick="setCategory('all', this)">Усі</button>
             <button class="tab-btn" onclick="setCategory('new', this)">Новинки</button>
@@ -3955,6 +4197,151 @@ body.dark-theme .passport-card {
     const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=1478567043&single=true&output=csv';
     const PROMO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=572062257&single=true&output=csv';
     const TG_NICK = 'viktoriia_viktoriia_r'; 
+
+    // ═══════════════════════════════════════
+    // BRAND GALLERY — дані та функції
+    // ═══════════════════════════════════════
+    const brandLoreData = {
+        "Byredo": "Заснований у 2006 році шведом Беном Горхемом у Стокгольмі. Горхем виріс між Швецією та Індією — цей контраст культур відображається в кожному ароматі. Byredo — мистецтво розповідати сильні, але лаконічні історії через парфумерію. Культовий Gypsy Water і Mojave Ghost стали іконами покоління.",
+
+        "Tom Ford": "Том Форд запустив парфумерну колекцію Private Blend у 2006 році — революція: нішева якість у масовому люксі. Кожен аромат — маніфест сексуальності та сили. Oud Wood і Black Orchid досі залишаються найбажанішими ароматами світу.",
+
+        "By Kilian": "Калян Хеннессі — спадкоємець dynastії коньяку LVMH. Заснував бренд у 2007 році з місією: розкіш без жертв. Флакони перезаправляються — данина повазі до природних ресурсів. Love Don't Be Shy став гімном солодкої романтики.",
+
+        "Mancera": "Французький бренд із серцем Близького Сходу. Давід Де Пур поєднав французьку парфумерну традицію з арабською щедрістю на уді та мускусі. Mancera відомий неймовірною стійкістю — аромат тримається весь день.",
+
+        "Montale": "П'єр Монталь — французький парфумер, закоханий в Аравійський півострів. Після 20 років у Саудівській Аравії він повернувся до Парижу і заснував Montale у 2003 році. Уд, троянда і деревні акорди — серце його всесвіту.",
+
+        "Nishane": "Турецький бренд із Стамбула, заснований у 2012 році. Назва — від турецького «знак». Поєднують турецькі традиції з сучасним баченням нішевої парфумерії. Hacivat і Ani — мастхеви для цінителів якості.",
+
+        "Lattafa": "Дубайський дім ароматів, відомий неймовірним співвідношенням ціни та якості. Один з провідних виробників Близького Сходу, що пропонує розкіш арабської парфумерії для широкої аудиторії.",
+
+        "Maison Alhambra": "Преміальний бренд із ОАЕ, що відтворює відомі нішеві аромати з якісними інгредієнтами та доступною ціною. Улюбленець тих, хто хоче відчути престиж топових парфумів без переплати.",
+
+        "Attar Collection": "Дубайський дім розкоші, натхненний стародавніми арабськими традиціями атару — концентрованих олійних парфумів. Кожен аромат — поєднання рідкісних інгредієнтів та майстерності Сходу.",
+
+        "Juliette Has A Gun": "Заснований у 2005 році Романо Річчі — онуком Ніни Річчі. Провокаційна назва символізує владу жінки. Аромати балансують між класичною елегантністю і сучасним бунтарством. Not a Perfume — культовий маніфест бренду.",
+
+        "Jo Malone": "Джо Малоун розпочала кар'єру в лондонській кухні, змішуючи олії для догляду. Її бренд, заснований у 1994 році, відомий мистецтвом Cologne Combining — шарування ароматів для унікальної індивідуальної комбінації.",
+
+        "Initio": "Французький бренд, заснований у 2015 році, що вивчає потаємні сили ароматів. Від латинського «початок». Спеціалізується на феромоноподібних молекулах і надстійких композиціях. Hedonist і Oud for Greatness — топ продажів.",
+
+        "Tiziana Terenzi": "Родинний бренд із Сорренто, Італія. Тіціана і Паоло Терецці — майстри мозаїчного скла, що перенесли мистецтво у парфумерію. Їх флакони — витвори мистецтва, а аромати — незабутні подорожі.",
+
+        "Nasomatto": "«Нос навіжений» — так перекладається бренд Сандро Мастріальє. Кожен аромат розробляється самостійно, ігноруючи комерційні правила. Кожен флакон — акт художньої провокації. Black Afgano — легенда.",
+
+        "Xerjoff": "Засновано у Туріні, Італія у 2003 році. Серджо Момо створює парфуми як ювелірні вироби — кожен флакон виготовляється вручну з дорогоцінних матеріалів. Бренд використовує найрідкісніші інгредієнти у світі.",
+
+        "Zarkoperfume": "Данський бренд, заснований у 2009 році Жоргосом Елефтеріадісом. Бренд відомий Molecule 090.09 і Pink Molecule — ультрасучасними мінімалістичними ароматами, що підсилюють природний запах шкіри.",
+
+        "Memo Paris": "Паризький бренд подружжя Кларою і Жон-Крістофом Камю. Кожен аромат — «memo» — яскраве спогадування про подорож: Іспанія, Марокко, Арктика. Натуральні інгредієнти + французька майстерність.",
+
+        "Essential Parfums": "Паризький бренд, заснований у 2019 році. Місія — стала нішева парфумерія: флакони наповнюються повторно, склад мінімалістичний і натуральний. Nice Bergamote і Bois Imperial — сучасні класики.",
+
+        "Kajal": "Близькосхідний бренд з витонченими унісекс ароматами. Kajal поєднує традиції арабської парфумерії з сучасним французьким підходом. Стійкість та унікальний характер — їх підпис.",
+
+        "V Canto": "Дочірній бренд Tiziana Terenzi — пристрасний і доступніший. V Canto — «п'ятий голос» музичного акорду. Аромати будуються як музичні твори — з відкриттям, серединою і незабутнім фіналом.",
+
+        "Chopard": "Швейцарський ювелірний дім з 1860 року. Chopard Perfumes відомий коштовними інгредієнтами та флаконами, натхненними власними ювелірними виробами. Розкіш, що можна відчути на шкірі.",
+
+        "Gritti": "Венеціанський будинок ароматів, натхненний Grand Hotel de Londres у Венеції. Унікальне поєднання мистецтва Сходу і Заходу — важкі, характерні аромати з тривалим шлейфом.",
+
+        "Prada": "Міланський модний дім Prada зайшов у парфумерію з гаслом «це парфуми для думаючих». Парфумер Даніела Андрієр створює інтелектуальні, нестандартні аромати. L'Homme Prada і Candy — культові.",
+
+        "Hermès": "Паризький дім Hermès заснований у 1837 році. Парфумерна лінія очолюється Крістін Нагель з 2016 року. Аромати Hermès відрізняються натуральністю, витонченістю і вишуканою шкіряною суперпозицією.",
+
+        "Gucci": "Флорентійський дім моди Gucci знаний еклектичністю. У парфумерії — від свіжих Flora до гіпнотичних Bloom. Аромати-емоції, що перетинають межі між сезонами та стилями.",
+
+        "Chloé": "Французький бренд Chloé відомий золотим ароматом Chloé de Parfum — елегантним флоральним коктейлем з квіткової чистоти та мускусної теплоти. Ніжність як жіноча сила.",
+
+        "Trussardi": "Міланський модний дім Trussardi з 1911 року поєднує традиції шкіряного ремесла з вишуканою парфумерією. Делікатні аромати для тих, хто цінує стриману розкіш.",
+
+        "Ella K Parfums": "Французький нішевий дім, заснований Ельзою де Клерк. Невеликий тираж, рідкісні натуральні інгредієнти, виняткова якість. Кожен аромат — маленький шедевr.",
+
+        "Obvious": "Паризький бренд, що повертає простоту і відчуття природності в нішеву парфумерію. Obvious — це чесність у кожному флаконі. Тільки якісні молекули та натуральні екстракти.",
+
+        "Giardini Di Toscana": "Тосканський бренд, натхненний пейзажами Флоренції. Аромати передають красу і спокій італійських садів — квіти, земля, сонячне повітря. Романтика в кожній краплі.",
+
+        "Les Liquides Imaginaires": "Паризький сюрреалістичний бренд. Аромати розповідають фантастичні, майже казкові історії. Кожна колекція — окрема вигадана всесвіт з власними персонажами і настроєм.",
+
+        "Emporio Armani": "Лінія Giorgio Armani для молодших покупців, що поєднує мінімалізм дизайну з витонченою парфумерією. Stronger With You і Diamonds — хіти, знані в усьому світі.",
+
+        "Zadig & Voltaire": "Паризький бренд із бунтарським духом. Заснований у 1997 році. Поєднує рок-н-рольну естетику з паризькою витонченістю. This is Her і This is Him — яскраві унісекс провокації.",
+
+        "Hormone Paris": "Авторський французький бренд, що вивчає зв'язок між ароматом і емоціями. Базується на концепції феромонів та природного зваблення. Нішевий, рідкісний, запам'ятовується надовго.",
+    };
+
+    function openBrandGallery() {
+        document.getElementById('brandGalleryOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+        // Завжди показуємо grid при відкритті
+        showBrandGrid();
+    }
+
+    function closeBrandGallery() {
+        document.getElementById('brandGalleryOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function showBrandGrid() {
+        document.getElementById('brandGridView').classList.remove('hidden');
+        document.getElementById('brandDetailView').classList.remove('active');
+    }
+
+    function showBrandPage(brandName) {
+        const lore = brandLoreData[brandName] || 'Преміальний нішевий бренд з унікальними ароматами. Кожна композиція — це окрема парфумерна історія.';
+        const brandItems = globalCatalogData.filter(c => c[0] === brandName).slice(0, 6);
+
+        document.getElementById('brandDetailName').textContent = brandName;
+        document.getElementById('brandDetailLore').textContent = lore;
+
+        const itemsContainer = document.getElementById('brandDetailItems');
+        itemsContainer.innerHTML = '';
+        brandItems.forEach(item => {
+            const [brand, name, price, minVol, desc, img] = item;
+            const safeImg = (img || '').replace(/'/g, '%27');
+            const pPerMl = parseFloat(String(price).replace(',', '.')) || 0;
+            const volForPrice = minVol && String(minVol).includes('5') ? '5 мл' : '2 мл';
+            const priceStr = calculatePrice(pPerMl, volForPrice);
+            const div = document.createElement('div');
+            div.className = 'brand-item-mini';
+            div.innerHTML = `
+                <img src="${safeImg}" alt="${name}" loading="lazy" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                <div class="brand-item-mini-name">${name}</div>
+                <div class="brand-item-mini-price">від ${priceStr}</div>`;
+            div.onclick = () => { closeBrandGallery(); showModal(item); };
+            itemsContainer.appendChild(div);
+        });
+
+        document.getElementById('brandShowAllBtn').onclick = () => {
+            closeBrandGallery();
+            // Скидаємо стан каталогу
+            currentCategory = 'all';
+            document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+            const firstTab = document.querySelector('.tab-btn');
+            if (firstTab) firstTab.classList.add('active');
+            // Встановлюємо фільтр бренду
+            currentBrand = brandName;
+            document.querySelectorAll('.brand-btn').forEach(x => x.classList.remove('active'));
+            const matchBtn = [...document.querySelectorAll('.brand-btn')].find(b => b.innerText === brandName);
+            if (matchBtn) matchBtn.classList.add('active');
+            // Показуємо лор бренду
+            const loreBox = document.getElementById('brandLoreBox');
+            if (loreBox && brandLoreData[brandName]) {
+                document.getElementById('brandLoreTitle').innerText = 'Про бренд ' + brandName;
+                document.getElementById('brandLoreText').innerText = brandLoreData[brandName];
+                loreBox.style.display = 'block';
+            }
+            triggerCatalogAnimation();
+            scrollToFirstCards();
+        };
+
+        document.getElementById('brandGridView').classList.add('hidden');
+        document.getElementById('brandDetailView').classList.add('active');
+        // Скролимо детальний вигляд вгору
+        document.querySelector('.brand-gallery-body').scrollTop = 0;
+    }
+
     
     let carouselIndex = 0;
     let carouselInterval;
@@ -4408,9 +4795,6 @@ body.dark-theme .passport-card {
         if (viraAmbient) handleViraAtmosphere('stop');
         if (isSpeaking) { synth.cancel(); isSpeaking = false; updateVoiceBtn(false); }
 
-        // Прибираємо синестезію
-        const overlay = document.getElementById('synesthesiaOverlay');
-        if (overlay) { overlay.classList.remove('active'); overlay.style.background = 'transparent'; }
     }
 
     // === ОЛЬФАКТОРНА ЛАБОРАТОРІЯ (ОНОВЛЕНА ЛОГІКА ПРОПОРЦІЙ) ===
@@ -4671,133 +5055,11 @@ body.dark-theme .passport-card {
         }, {passive:true});
     }
 
-    // === 1. PARALLAX TILT — Живий флакон ===
-    function initParallaxTilt() {
-        const wrapper = document.querySelector('.aura-wrapper');
-        const img = document.getElementById('mImg');
-        const aura = document.getElementById('modalAura');
-        if (!wrapper || !img) return;
 
-        // Прибираємо старі listeners
-        wrapper.replaceWith(wrapper.cloneNode(true));
-        const newWrapper = document.querySelector('.aura-wrapper');
-        const newImg = document.getElementById('mImg');
-        const newAura = document.getElementById('modalAura');
 
-        function applyTilt(x, y, rect) {
-            const cx = rect.width / 2, cy = rect.height / 2;
-            const dx = (x - cx) / cx, dy = (y - cy) / cy;
-            const tiltX = dy * 12, tiltY = -dx * 12;
-            if (newImg) newImg.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(10px)`;
-            if (newAura) newAura.style.transform = `rotateX(${tiltX * 0.4}deg) rotateY(${tiltY * 0.4}deg) translateZ(0px)`;
-        }
 
-        function resetTilt() {
-            if (newImg) newImg.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
-            if (newAura) newAura.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
-        }
 
-        newWrapper.addEventListener('mousemove', e => {
-            const rect = newWrapper.getBoundingClientRect();
-            applyTilt(e.clientX - rect.left, e.clientY - rect.top, rect);
-        });
-        newWrapper.addEventListener('mouseleave', resetTilt);
 
-        newWrapper.addEventListener('touchmove', e => {
-            const touch = e.touches[0];
-            const rect = newWrapper.getBoundingClientRect();
-            applyTilt(touch.clientX - rect.left, touch.clientY - rect.top, rect);
-        }, { passive: true });
-        newWrapper.addEventListener('touchend', resetTilt, { passive: true });
-    }
-
-    // === 2. COLOR MOOD — підсвітка під бренд ===
-    const brandMoods = {
-        'baccarat':   { h: 197, s: 60 }, 'xerjoff':    { h: 45,  s: 70 },
-        'byredo':     { h: 220, s: 20 }, 'mancera':    { h: 35,  s: 65 },
-        'tom ford':   { h: 0,   s: 0  }, 'nishane':    { h: 160, s: 40 },
-        'initio':     { h: 280, s: 30 }, 'kilian':     { h: 45,  s: 80 },
-        'montale':    { h: 30,  s: 60 }, 'tiziana':    { h: 330, s: 50 },
-        'nasomatto':  { h: 15,  s: 55 }, 'ganymede':   { h: 195, s: 55 },
-        'memo':       { h: 150, s: 35 }, 'gritti':     { h: 55,  s: 70 },
-        'lattafa':    { h: 35,  s: 80 }, 'attar':      { h: 40,  s: 75 },
-    };
-
-    // Mood за нотами якщо бренд невідомий
-    function getMoodFromDesc(desc) {
-        const d = (desc || '').toLowerCase();
-        if (d.includes('уд') || d.includes('смол') || d.includes('ладан')) return { h: 20, s: 50 };
-        if (d.includes('троянд') || d.includes('жасмин')) return { h: 340, s: 55 };
-        if (d.includes('ваніл') || d.includes('карамел')) return { h: 35, s: 70 };
-        if (d.includes('цитрус') || d.includes('бергамот') || d.includes('лимон')) return { h: 50, s: 75 };
-        if (d.includes('мускус')) return { h: 300, s: 15 };
-        if (d.includes('деревн') || d.includes('кедр') || d.includes('сандал')) return { h: 25, s: 45 };
-        return { h: 45, s: 40 }; // золото за замовчуванням
-    }
-
-    function applyColorMood(brand, desc) {
-        const key = (brand || '').toLowerCase();
-        const mood = Object.keys(brandMoods).find(k => key.includes(k))
-            ? brandMoods[Object.keys(brandMoods).find(k => key.includes(k))]
-            : getMoodFromDesc(desc);
-
-        const { h, s } = mood;
-        const color = `hsl(${h}, ${s}%, 55%)`;
-        const colorLight = `hsla(${h}, ${s}%, 55%, 0.15)`;
-        const colorMid = `hsla(${h}, ${s}%, 55%, 0.25)`;
-
-        // Vol chips
-        document.querySelectorAll('.vol-chip').forEach(chip => {
-            chip.style.setProperty('--mood-color', color);
-            chip.style.setProperty('--mood-bg', colorLight);
-        });
-        document.querySelectorAll('.vol-chip.active').forEach(chip => {
-            chip.style.borderColor = color;
-            chip.style.color = color;
-            chip.style.background = colorLight;
-        });
-
-        // Order button glow
-        const btn = document.getElementById('modalOrderBtn');
-        if (btn) btn.style.boxShadow = `0 10px 30px ${colorMid}`;
-
-        // Aura посилення
-        const aura = document.getElementById('modalAura');
-        if (aura) aura.style.filter = `hue-rotate(${h - 45}deg) saturate(${1 + s/100})`;
-    }
-
-    // === 3. SYNESTHESIA — Динамічний фон ===
-    function applySynesthesia(desc, brand) {
-        const overlay = document.getElementById('synesthesiaOverlay');
-        if (!overlay) return;
-        const d = (desc || '').toLowerCase();
-        const b = (brand || '').toLowerCase();
-
-        let gradient = '';
-
-        if (d.includes('уд') || d.includes('смол') || b.includes('baccarat') || b.includes('xerjoff')) {
-            // Важкий уд — темний дим
-            gradient = 'radial-gradient(ellipse at 20% 50%, rgba(40,15,5,0.55) 0%, transparent 60%), radial-gradient(ellipse at 80% 50%, rgba(20,5,30,0.4) 0%, transparent 60%)';
-        } else if (d.includes('цитрус') || d.includes('бергамот') || d.includes('грейпфрут')) {
-            // Цитрус — сонячні бліки
-            gradient = 'radial-gradient(ellipse at 60% 20%, rgba(255,220,80,0.18) 0%, transparent 50%), radial-gradient(ellipse at 30% 80%, rgba(255,180,0,0.1) 0%, transparent 40%)';
-        } else if (d.includes('ваніл') || d.includes('карамел') || d.includes('шоколад')) {
-            // Гурманіка — бурштин
-            gradient = 'radial-gradient(ellipse at 50% 60%, rgba(180,100,20,0.2) 0%, transparent 55%), radial-gradient(ellipse at 70% 30%, rgba(220,140,50,0.12) 0%, transparent 45%)';
-        } else if (d.includes('троянд') || d.includes('жасмин') || d.includes('іонон')) {
-            // Квіти — пудрово-рожевий
-            gradient = 'radial-gradient(ellipse at 40% 40%, rgba(220,130,150,0.15) 0%, transparent 55%), radial-gradient(ellipse at 70% 70%, rgba(180,100,130,0.1) 0%, transparent 40%)';
-        } else if (d.includes('морськ') || d.includes('свіж') || d.includes('aqua')) {
-            // Морський — синьо-зелений
-            gradient = 'radial-gradient(ellipse at 50% 30%, rgba(50,150,200,0.15) 0%, transparent 50%), radial-gradient(ellipse at 30% 70%, rgba(30,100,150,0.1) 0%, transparent 45%)';
-        } else {
-            // Нейтральний — золоте мерехтіння
-            gradient = 'radial-gradient(ellipse at 60% 40%, rgba(197,160,89,0.08) 0%, transparent 55%)';
-        }
-
-        overlay.style.background = gradient;
-        overlay.classList.add('active');
-    }
 
     // === 4. ПАСПОРТ АРОМАТУ ===
     function renderPassport(brand, name, rawDesc) {
@@ -5213,7 +5475,7 @@ body.dark-theme .passport-card {
                 container.appendChild(div);
             });
 
-            renderBrandSlider(catalogData); 
+            renderBrandGallery(catalogData); 
             initCarousel(); initSwipe(); init3DEffect(); formatNews(rows[0][10]); renderGeneralReviews(reviewsData.slice(1));
             if (promoDataRow) renderPremiumPromo(promoDataRow);
             populateLayeringSelects();
@@ -5642,15 +5904,6 @@ function renderGenderBar(value) {
 
         // Паспорт аромату
         renderPassport(brand, name, rawText);
-
-        // Синестезія фону
-        applySynesthesia(rawText, brand);
-
-        // Color Mood
-        applyColorMood(brand, rawText);
-
-        // Parallax tilt на фото
-        initParallaxTilt();
     }
 
     function updateModalStickyBar() {
@@ -6244,15 +6497,30 @@ function renderGenderBar(value) {
         s[carouselIndex].classList.add('active'); dots[carouselIndex].classList.add('active');
     }
     
-    function renderBrandSlider(cat) {
+    function renderBrandGallery(cat) {
         const brs = [...new Set(cat.map(c => c[0]))].sort();
+        // Наповнюємо приховані brand-btn для сумісності з setBrand/setCategory
         const s = document.getElementById('brandSlider');
-        s.innerHTML = '';
-        const btnAll = document.createElement('button');
-        btnAll.className = 'brand-btn active'; btnAll.innerText = 'Усі бренди'; btnAll.onclick = function() { setBrand('', this); };
-        s.appendChild(btnAll);
-        brs.forEach(b => { 
-            const btn = document.createElement('button'); btn.className = 'brand-btn'; btn.innerText = b; btn.onclick = function() { setBrand(b, this); }; s.appendChild(btn); 
+        if (s) {
+            s.innerHTML = '';
+            const btnAll = document.createElement('button');
+            btnAll.className = 'brand-btn active'; btnAll.innerText = 'Усі бренди'; btnAll.onclick = function() { setBrand('', this); };
+            s.appendChild(btnAll);
+            brs.forEach(b => {
+                const btn = document.createElement('button'); btn.className = 'brand-btn'; btn.innerText = b; btn.onclick = function() { setBrand(b, this); }; s.appendChild(btn);
+            });
+        }
+        // Наповнюємо плитки галереї брендів
+        const grid = document.getElementById('brandTilesGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        brs.forEach(b => {
+            const count = cat.filter(c => c[0] === b).length;
+            const tile = document.createElement('div');
+            tile.className = 'brand-tile';
+            tile.innerHTML = `<div class="brand-tile-name">${b}</div><div class="brand-tile-count">${count} ${count === 1 ? 'аромат' : count < 5 ? 'аромати' : 'ароматів'}</div>`;
+            tile.onclick = () => showBrandPage(b);
+            grid.appendChild(tile);
         });
     }
     
@@ -6903,5 +7171,38 @@ updateWeather();
             <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
     </button>
+
+    <!-- ═══ BRAND GALLERY OVERLAY ═══ -->
+    <div class="brand-gallery-overlay" id="brandGalleryOverlay">
+        <div class="brand-gallery-header">
+            <span class="brand-gallery-title">Бренди</span>
+            <button class="brand-gallery-close" onclick="closeBrandGallery()" aria-label="Закрити">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="brand-gallery-body">
+
+            <!-- GRID VIEW: всі бренди -->
+            <div class="brand-grid-view" id="brandGridView">
+                <div class="brand-grid" id="brandTilesGrid"></div>
+            </div>
+
+            <!-- DETAIL VIEW: конкретний бренд -->
+            <div class="brand-detail-view" id="brandDetailView">
+                <button class="brand-back-btn" onclick="showBrandGrid()">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    Всі бренди
+                </button>
+                <div class="brand-detail-name" id="brandDetailName"></div>
+                <div class="brand-detail-divider"></div>
+                <div class="brand-detail-lore" id="brandDetailLore"></div>
+                <div class="brand-detail-items-title">Аромати бренду</div>
+                <div class="brand-items-grid" id="brandDetailItems"></div>
+                <button class="brand-show-all-btn" id="brandShowAllBtn">Переглянути всі аромати →</button>
+            </div>
+
+        </div>
+    </div>
+
 </body>
 </html>
