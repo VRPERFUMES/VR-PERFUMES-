@@ -4253,7 +4253,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     // ═══════════════════════════════════════
     // BRAND GALLERY — дані та функції
     // ═══════════════════════════════════════
-    let _currentBrandDetailName = '';
     const brandLoreData = {
         "Byredo": "Заснований у 2006 році шведом Беном Горхемом у Стокгольмі. Горхем виріс між Швецією та Індією — цей контраст культур відображається в кожному ароматі. Byredo — мистецтво розповідати сильні, але лаконічні історії через парфумерію. Культовий Gypsy Water і Mojave Ghost стали іконами покоління.",
 
@@ -5697,8 +5696,8 @@ function renderGenderBar(value) {
         </div>`;
 }
 
-    function showModal(pArr, isWeekly = false) {
-        document.body.classList.add('modal-open');
+    function showModal(pArr, isWeekly = false) 
+    {document.body.classList.add('modal-open');
         const [brand, name, price, minVol, desc, img, , top, weekText, , , bottleMl, bottlePrice, , stockCol] = pArr;
         
         const itemId = brand + ' ' + name;
@@ -6722,6 +6721,8 @@ function renderGenderBar(value) {
         // iOS потребує невеликої затримки після cancel()
         setTimeout(() => window.speechSynthesis.speak(utter), 120);
     }
+
+    let _currentBrandDetailName = '';
 
     function speakBrandLoreFromDetail() {
         const btn = document.getElementById('brandViraBtn');
