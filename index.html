@@ -7512,7 +7512,94 @@ updateWeather();
         animateDust();
     }, 1500); // Запускаємо через 1.5 сек після завантаження сторінки
 
-    
+        // ═══════════════════════════════════════
+    // AESTHETIC MATCHER LOGIC
+    // ═══════════════════════════════════════
+    const aestheticsData = {
+        'old_money': {
+            title: 'Old Money',
+            desc: 'Кашемір, спокійна розкіш, бездоганний смак. Аромати, що звучать дорого, елегантно та аристократично, але ніколи не кричать про це.',
+            keywords: ['ganymede', 'bois imperial', 'baccarat', 'tom ford', 'creed', 'білі квіти', 'ірис']
+        },
+        'mob_wife': {
+            title: 'Mob Wife',
+            desc: 'Зухвалість, хутро, червона помада та абсолютна впевненість у собі. Густі, шлейфові, гіпнотичні та трохи хижі композиції.',
+            keywords: ['black orchid', 'libre', 'intense', 'уд', 'шкір', 'тубероза', 'bade']
+        },
+        'dark_academia': {
+            title: 'Dark Academia',
+            desc: 'Старовинні бібліотеки, шкіряні палітурки, інтелектуальність та осіння меланхолія. Деревні, смолисті та містичні аромати.',
+            keywords: ['oud wood', 'tobacco', 'пачулі', 'ладан', 'смол', 'дерев', 'encre']
+        },
+        'minimalism': {
+            title: 'Сексуальний мінімалізм',
+            desc: 'Біла сорочка на голе тіло, чистота, легка недбалість. Аромати, які зливаються зі шкірою, підсилюючи ваш власний магнетизм.',
+            keywords: ['molecule', 'not a perfume', 'musc', 'пудр', 'чист', 'білий мускус', 'zarkoperfume']
+        }
+    };
+
+    function openAesthetic(key) {
+        if (globalCatalogData.length === 0) return;
+        
+        const data = aestheticsData[key];
+        document.getElementById('aesTitle').innerText = data.title;
+        document.getElementById('aesDesc').innerText = data.desc;
+
+        // Шукаємо збіги по ключових словах
+        let matched = globalCatalogData.filter(c => {
+            const searchStr = (c[0] + ' ' + c[1] + ' ' + (c[4] || '')).toLowerCase();
+            return data.keywords.some(kw => searchStr.includes(kw.toLowerCase()));
+        });
+
+        // Якщо збігів мало, беремо популярні (топ/хіт), щоб гарантовано показати 4 аромати
+        if (matched.length < 4) {
+            const hits = globalCatalogData.filter(c => c[7] && (c[7].toLowerCase().includes('топ') || c[7].toLowerCase().includes('хіт')));
+            matched = [...new Set([...matched, ...hits])];
+        }
+
+        // Перемішуємо і беремо рівно 4 картки
+        const selected = matched.sort(() => 0.5 - Math.random()).slice(0, 4);
+
+        const grid = document.getElementById('aesResultsGrid');
+        grid.innerHTML = '';
+
+        // Рендеримо картки (перевикористовуємо дизайн міні-карток з галереї брендів)
+        selected.forEach(item => {
+            const [brand, name, price, minVol, desc, img] = item;
+            const safeImg = (img || '').replace(/'/g, '%27');
+            const pPerMl = parseFloat(String(price).replace(',', '.')) || 0;
+            const volForPrice = minVol && String(minVol).includes('5') ? '5 мл' : '2 мл';
+            const priceStr = calculatePrice(pPerMl, volForPrice);
+            
+            const div = document.createElement('div');
+            div.className = 'brand-item-mini';
+            div.innerHTML = `
+                <img src="${safeImg}" alt="${name}" loading="lazy" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                <div class="brand-item-mini-name" style="font-size:10px; color:var(--gold); font-family:var(--cinzel);">${brand}</div>
+                <div class="brand-item-mini-name">${name}</div>
+                <div class="brand-item-mini-price">від ${priceStr}</div>`;
+            
+            div.onclick = () => { 
+                closeAestheticOverlay(); 
+                showModal(item); 
+            };
+            grid.appendChild(div);
+        });
+
+        document.getElementById('aesOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAesthetic(e) {
+        if (e && e.target !== document.getElementById('aesOverlay')) return;
+        closeAestheticOverlay();
+    }
+
+    function closeAestheticOverlay() {
+        document.getElementById('aesOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
 </script>
 
     <a href="https://t.me/viktoriia_viktoriia_r" class="floating-tg" id="floatingTg" target="_blank">
