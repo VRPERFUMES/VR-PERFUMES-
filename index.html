@@ -3821,6 +3821,8 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     scroll-snap-align: start;
     transition: transform 0.2s ease;
     border: 1.5px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
 }
 .acard:active { transform: scale(0.95); }
 .acard.selected { border-color: var(--gold); }
@@ -3829,6 +3831,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     position: relative;
     height: 170px;
     overflow: hidden;
+    flex-shrink: 0;
 }
 .acard-img {
     width: 100%;
@@ -3871,6 +3874,10 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     line-height: 1.3;
     background: rgba(10,10,10,0.85);
     font-style: italic;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .acard.selected .acard-vibe { background: rgba(30,20,0,0.9); color: rgba(197,160,89,0.8); }
 
@@ -4005,6 +4012,264 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
 .aresult-name { font-size: 13px; font-weight: 700; color: #fff; margin: 2px 0; line-height: 1.2; }
 .aresult-why { font-size: 10px; color: rgba(255,255,255,0.4); font-style: italic; line-height: 1.35; }
 .aresult-price { font-size: 10px; color: var(--gold); font-weight: 700; margin-top: 3px; }
+
+/* ═══════════════════════════════════════════
+   SCENT MEMORY MAP
+═══════════════════════════════════════════ */
+.memory-map-shortcut {
+    display: block;
+    width: fit-content;
+    background: rgba(197, 160, 89, 0.08);
+    border: 1px solid rgba(197, 160, 89, 0.5);
+    color: var(--gold);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    font-family: var(--cinzel);
+}
+
+/* Overlay */
+.smap-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 3700;
+    background: #060606;
+    transform: translateY(100%);
+    transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.smap-overlay.open { transform: translateY(0); }
+
+/* Header */
+.smap-header {
+    padding: 22px 20px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: #060606;
+}
+.smap-header-text {}
+.smap-label {
+    font-family: var(--cinzel);
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(197,160,89,0.5);
+    display: block;
+    margin-bottom: 5px;
+}
+.smap-title {
+    font-family: var(--cinzel);
+    font-size: 17px;
+    font-weight: 900;
+    color: rgba(240,240,240,0.95);
+    line-height: 1.25;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    max-width: 260px;
+}
+.smap-close {
+    background: none;
+    border: none;
+    color: rgba(197,160,89,0.5);
+    cursor: pointer;
+    padding: 4px;
+    flex-shrink: 0;
+    margin-top: -2px;
+    transition: color 0.2s;
+}
+.smap-close:hover { color: var(--gold); }
+
+/* Grid зі сценами */
+.smap-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 16px 14px 0;
+    overflow-y: auto;
+    flex: 1;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 30px;
+}
+
+.smap-card {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 3/4;
+    border: 1px solid rgba(197,160,89,0.1);
+    transition: transform 0.18s ease, border-color 0.2s ease;
+}
+.smap-card:active {
+    transform: scale(0.96);
+    border-color: rgba(197,160,89,0.4);
+}
+
+/* Кольоровий градієнт-фон замість відео (відео поки через YouTube/poster) */
+.smap-card-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.7) saturate(0.85);
+    transition: filter 0.4s ease;
+}
+.smap-card:active .smap-card-bg { filter: brightness(0.55) saturate(1.1); }
+
+/* Темний overlay для читання тексту */
+.smap-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 45%, transparent 100%);
+}
+
+.smap-card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    padding: 12px 10px;
+    z-index: 2;
+}
+.smap-card-scene {
+    font-family: var(--cinzel);
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #fff;
+    line-height: 1.3;
+    margin-bottom: 3px;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+}
+.smap-card-mood {
+    font-size: 8px;
+    color: rgba(197,160,89,0.75);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* Result sheet */
+.smap-result-sheet {
+    position: absolute;
+    inset: 0;
+    background: rgba(6,6,6,0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 10;
+    transform: translateY(100%);
+    transition: transform 0.38s cubic-bezier(0.22,1,0.36,1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 28px 20px 40px;
+    box-sizing: border-box;
+}
+.smap-result-sheet.open { transform: translateY(0); }
+
+.smap-result-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: rgba(197,160,89,0.6);
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    padding: 0 0 20px 0;
+    font-family: var(--cinzel);
+    transition: color 0.2s;
+}
+.smap-result-back:hover { color: var(--gold); }
+
+.smap-result-ticket {
+    font-family: var(--cinzel);
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: rgba(197,160,89,0.45);
+    margin-bottom: 6px;
+    display: block;
+}
+.smap-result-headline {
+    font-family: var(--cinzel);
+    font-size: 22px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #f0f0f0;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+.smap-result-sub {
+    font-size: 12px;
+    color: rgba(197,160,89,0.55);
+    font-style: italic;
+    margin-bottom: 22px;
+    line-height: 1.5;
+}
+
+.smap-perfume-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.smap-perfume-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(197,160,89,0.04);
+    border: 1px solid rgba(197,160,89,0.12);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+.smap-perfume-item:active { border-color: rgba(197,160,89,0.4); }
+.smap-perfume-img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(197,160,89,0.04);
+    flex-shrink: 0;
+}
+.smap-perfume-brand {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 2px;
+    font-family: var(--cinzel);
+}
+.smap-perfume-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(240,240,240,0.92);
+    margin-bottom: 3px;
+    line-height: 1.2;
+}
+.smap-perfume-why {
+    font-size: 11px;
+    color: rgba(255,255,255,0.38);
+    font-style: italic;
+    line-height: 1.4;
+}
     </style>
 </head>
 <body>
@@ -4260,9 +4525,14 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
 
     <div id="stickyControls" class="sticky-active glass-panel">
         
-        <button class="lab-shortcut" onclick="document.querySelector('.layering-section').scrollIntoView({behavior: 'smooth'})">
-            MIX LAB
-        </button>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:nowrap;">
+            <button class="lab-shortcut" onclick="document.querySelector('.layering-section').scrollIntoView({behavior: 'smooth'})">
+                MIX LAB
+            </button>
+            <button class="memory-map-shortcut" onclick="openScentMemoryMap()">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MEMORY MAP
+            </button>
+        </div>
         
         <button class="theme-switch" onclick="toggleTheme()" id="themeBtn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
         
@@ -7775,6 +8045,185 @@ updateWeather();
     }, 1500); // Запускаємо через 1.5 сек після завантаження сторінки
 
     
+
+    // ═══════════════════════════════════════════
+    // SCENT MEMORY MAP
+    // ═══════════════════════════════════════════
+    const scentScenes = [
+        {
+            id: 'amalfi',
+            scene: 'Спекотний вечір на Амальфі',
+            mood: 'Сонце · Сіль · Свобода',
+            headline: 'Ваш квиток в Італію',
+            sub: 'Цитруси, морський бриз і розігріта шкіра під сонцем Середземномор\'я',
+            bg: 'linear-gradient(160deg, #1a3a2a 0%, #0d2218 40%, #0a1a10 100%)',
+            emoji: '🌊',
+            perfumes: [
+                { brand: 'Tom Ford', name: 'Soleil de Capri', why: 'Морський бриз Капрі — цитруси та сіль у флаконі Tom Ford' },
+                { brand: 'Jo Malone', name: 'Wood Sage', why: 'Морська сіль та шавлія — британська версія середземноморської свіжості' },
+                { brand: 'Essential Parfums', name: 'Nice Bergamote', why: 'Бергамот із Ніцци — чисте середземноморське сонце' },
+                { brand: 'Memo Paris', name: 'Sintra', why: 'Флердоранж і морський вітер — подорож узбережжям' },
+            ]
+        },
+        {
+            id: 'cabin',
+            scene: 'Камін у горах після лижного дня',
+            mood: 'Тепло · Деревина · Спокій',
+            headline: 'Ваш притулок у горах',
+            sub: 'Деревний дим, гаряче какао і вовняний светр біля живого вогню',
+            bg: 'linear-gradient(160deg, #1a0e08 0%, #120908 40%, #0a0605 100%)',
+            emoji: '🔥',
+            perfumes: [
+                { brand: 'Hermès', name: 'Terre d\'Hermes', why: 'Земля, дерево, мінерал — ідеальний зимовий аромат' },
+                { brand: 'By Kilian', name: 'Princess', why: 'Тепла ваніль і мускус — затишок у флаконі' },
+                { brand: 'Mancera', name: 'Amore Caffe', why: 'Кава і деревна амбра — гарячий напій біля каміну' },
+                { brand: 'Tom Ford', name: 'Noir Extreme', why: 'Темний, деревний, зігріваючий — для зимових вечорів' },
+            ]
+        },
+        {
+            id: 'nightcity',
+            scene: 'Нічне мегаполіс у дощ',
+            mood: 'Місто · Неон · Таємниця',
+            headline: 'Ваш нічний город',
+            sub: 'Мокрий асфальт, неонові відображення і запах міста після опівночі',
+            bg: 'linear-gradient(160deg, #060d1a 0%, #040910 40%, #020508 100%)',
+            emoji: '🌆',
+            perfumes: [
+                { brand: 'Nishane', name: 'Hacivat', why: 'Складний та магнетичний — запах міста, що ніколи не спить' },
+                { brand: 'Byredo', name: 'Bal d\'Afrique', why: 'Міська богема — витончена та незалежна' },
+                { brand: 'Hormone Paris', name: 'This is not GABA', why: 'Молекулярна чистота — як повітря після нічного дощу' },
+                { brand: 'Les Liquides Imaginaires', name: 'Fortis', why: 'Інтелектуальний нішевий — для тих, хто любить ніч' },
+            ]
+        },
+        {
+            id: 'forest',
+            scene: 'Дощ у сосновому лісі',
+            mood: 'Земля · Смола · Тиша',
+            headline: 'Ваша лісова тиша',
+            sub: 'Петрікор, хвоя і вологий мох — перші краплі літнього дощу в лісі',
+            bg: 'linear-gradient(160deg, #0a1408 0%, #080e06 40%, #050a04 100%)',
+            emoji: '🌲',
+            perfumes: [
+                { brand: 'Chloé', name: 'Cedrus', why: 'Кедр і мох — лісова глибина у флаконі' },
+                { brand: 'Essential Parfums', name: 'Fig Infusion', why: 'Зелена інжирна тінь — вогкість після дощу' },
+                { brand: 'Zarkoperfume', name: 'MOLéCULE 234.38', why: 'Тонкий молекулярний — запах лісового повітря' },
+                { brand: 'Obvious', name: 'Une Pistache', why: 'Зелений, природний, тихий — як ліс у тумані' },
+            ]
+        },
+        {
+            id: 'desert',
+            scene: 'Захід сонця в пустелі',
+            mood: 'Пісок · Уд · Містика',
+            headline: 'Ваша пустельна магія',
+            sub: 'Теплий пісок, золоте небо і загадкова орієнтальна глибина',
+            bg: 'linear-gradient(160deg, #1a0e00 0%, #120900 40%, #0a0600 100%)',
+            emoji: '🌅',
+            perfumes: [
+                { brand: 'Attar Collection', name: 'The Queen of Sheba', why: 'Розкіш Сходу — уд і троянда в пустельному золоті' },
+                { brand: 'Montale', name: 'Musk Kashmir', why: 'Кашмірський мускус — м\'яка пустельна магія' },
+                { brand: 'Lattafa', name: 'TERIAQ', why: 'Арабська розкіш — уд, амбра і золотий пісок' },
+                { brand: 'Kajal', name: 'Orchid K', why: 'Східна орхідея та уд — захід сонця Аравії' },
+            ]
+        },
+        {
+            id: 'paris',
+            scene: 'Ранковий Париж у кав\'ярні',
+            mood: 'Кава · Флори · Шарм',
+            headline: 'Ваш паризький ранок',
+            sub: 'Круасан, кава і запах квітів з ринку — магія французького ранку',
+            bg: 'linear-gradient(160deg, #18140a 0%, #100e08 40%, #0a0904 100%)',
+            emoji: '☕',
+            perfumes: [
+                { brand: 'Memo Paris', name: 'Sintra', why: 'Паризький нішевий — бездоганний як французьке ранкове повітря' },
+                { brand: 'Hormone Paris', name: 'Good Vibes', why: 'Паризький шарм — квітковий з нотою кави' },
+                { brand: 'Byredo', name: 'Bal d\'Afrique', why: 'Богемний Париж — трохи джазу, трохи флорену' },
+                { brand: 'Chloé', name: 'Cedrus', why: 'Французька стриманість — як архітектура Парижу' },
+            ]
+        },
+    ];
+
+    function openScentMemoryMap() {
+        const overlay = document.getElementById('smapOverlay');
+        const grid = document.getElementById('smapGrid');
+        grid.innerHTML = '';
+
+        scentScenes.forEach(scene => {
+            const card = document.createElement('div');
+            card.className = 'smap-card';
+            card.innerHTML = `
+                <div class="smap-card-bg" style="background:${scene.bg};"></div>
+                <div class="smap-card-overlay"></div>
+                <div class="smap-card-content">
+                    <div class="smap-card-scene">${scene.scene}</div>
+                    <div class="smap-card-mood">${scene.mood}</div>
+                </div>`;
+            card.onclick = () => openScentResult(scene);
+            grid.appendChild(card);
+        });
+
+        overlay.classList.add('open');
+        document.body.classList.add('modal-open');
+    }
+
+    function closeScentMemoryMap() {
+        document.getElementById('smapOverlay').classList.remove('open');
+        document.getElementById('smapResultSheet').classList.remove('open');
+        document.body.classList.remove('modal-open');
+    }
+
+    function openScentResult(scene) {
+        document.getElementById('smapResultHeadline').textContent = scene.headline;
+        document.getElementById('smapResultSub').textContent = scene.sub;
+        document.getElementById('smapTicketLabel').textContent = '✦ Ваш квиток ✦';
+
+        const list = document.getElementById('smapPerfumeList');
+        list.innerHTML = '';
+
+        const results = [];
+        for (const p of scene.perfumes) {
+            const found = globalCatalogData.find(c =>
+                c[0] && c[1] &&
+                c[0].toLowerCase().includes(p.brand.toLowerCase()) &&
+                c[1].toLowerCase().includes(p.name.toLowerCase().split(' ')[0])
+            );
+            if (found && !results.find(r => r.item === found)) {
+                results.push({ item: found, why: p.why });
+            }
+        }
+        // Якщо знайдено менше 2 — доповнюємо з каталогу
+        if (results.length < 2) {
+            globalCatalogData
+                .filter(c => c[0] && c[1] && !results.find(r => r.item === c))
+                .slice(0, 4 - results.length)
+                .forEach(c => results.push({ item: c, why: 'Підходить до цього настрою' }));
+        }
+
+        results.slice(0, 4).forEach(({ item, why }) => {
+            const img = (item[5] || '').replace(/'/g, '%27');
+            const price = parseFloat(String(item[2]).replace(',', '.')) || 0;
+            const priceStr = price ? 'від ' + Math.round(price * 2) + ' грн' : '';
+            const el = document.createElement('div');
+            el.className = 'smap-perfume-item';
+            el.innerHTML = `
+                <img class="smap-perfume-img" src="${img}" alt="${item[0]} ${item[1]}" loading="lazy" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                <div style="flex:1;min-width:0;">
+                    <div class="smap-perfume-brand">${item[0]}</div>
+                    <div class="smap-perfume-name">${item[1]}</div>
+                    <div class="smap-perfume-why">${why}</div>
+                    ${priceStr ? '<div style="font-size:10px;color:var(--gold);font-weight:700;margin-top:4px;">' + priceStr + '</div>' : ''}
+                </div>
+                <svg viewBox="0 0 24 24" width="14" fill="none" stroke="rgba(197,160,89,0.3)" stroke-width="1.5"><polyline points="9 18 15 12 9 6"/></svg>`;
+            el.onclick = () => { closeScentMemoryMap(); showModal(item); };
+            list.appendChild(el);
+        });
+
+        document.getElementById('smapResultSheet').classList.add('open');
+    }
+
+    function closeScentResult() {
+        document.getElementById('smapResultSheet').classList.remove('open');
+    }
+
 </script>
 
     <a href="https://t.me/viktoriia_viktoriia_r" class="floating-tg" id="floatingTg" target="_blank">
@@ -7840,6 +8289,33 @@ updateWeather();
                 </button>
             </div>
 
+        </div>
+    </div>
+
+
+    <!-- ═══ SCENT MEMORY MAP ═══ -->
+    <div class="smap-overlay" id="smapOverlay">
+        <div class="smap-header">
+            <div class="smap-header-text">
+                <span class="smap-label">Scent Memory Map</span>
+                <div class="smap-title">Куди ви хочете<br>перенестися сьогодні?</div>
+            </div>
+            <button class="smap-close" onclick="closeScentMemoryMap()" aria-label="Закрити">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="smap-grid" id="smapGrid"></div>
+
+        <!-- Result sheet всередині overlay -->
+        <div class="smap-result-sheet" id="smapResultSheet">
+            <button class="smap-result-back" onclick="closeScentResult()">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                Повернутися
+            </button>
+            <span class="smap-result-ticket" id="smapTicketLabel">Ваш квиток</span>
+            <div class="smap-result-headline" id="smapResultHeadline"></div>
+            <div class="smap-result-sub" id="smapResultSub"></div>
+            <div class="smap-perfume-list" id="smapPerfumeList"></div>
         </div>
     </div>
 
