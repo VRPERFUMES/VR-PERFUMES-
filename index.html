@@ -6667,6 +6667,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 div.className = 'card'; 
                 div.setAttribute('data-original-index', index);
                 div.setAttribute('data-brand', brand); 
+                div.setAttribute('data-name', name.toLowerCase());
                 div.setAttribute('data-id', cardId); 
                 div.setAttribute('data-desc', safeDesc); 
                 div.setAttribute('data-reviews-count', totalRev || 0);
@@ -7447,9 +7448,8 @@ function renderGenderBar(value) {
     // === РОЗУМНИЙ ГОЛОСОВИЙ ПОШУК ===
     function startVoiceSearch() {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        
         if (!SpeechRecognition) {
-            alert("На жаль, ваш браузер не підтримує голосовий пошук. Спробуйте Google Chrome або Safari.");
+            alert("Голосовий пошук не підтримується. Спробуйте Google Chrome.");
             return;
         }
 
@@ -7460,21 +7460,15 @@ function renderGenderBar(value) {
 
         const micBtn = document.getElementById('micBtn');
 
-        // Відкриваємо пошукову оверлею
-        openSearchOverlay();
-
-        const glassField = document.getElementById('searchGlassInput');
-
         recognition.onstart = function() {
-            if (micBtn) micBtn.classList.add('cart-pulse-anim');
-            if (glassField) {
-                glassField.value = '';
-                glassField.placeholder = "Слухаю...";
-            }
+            if (micBtn) micBtn.style.opacity = '0.4';
+            const glassField = document.getElementById('searchGlassInput');
+            if (glassField) glassField.placeholder = "Слухаю...";
         };
 
         recognition.onresult = function(event) {
             const transcript = event.results[0][0].transcript;
+            const glassField = document.getElementById('searchGlassInput');
             if (glassField) {
                 glassField.value = transcript;
                 handleGlassSearch(transcript);
@@ -7482,15 +7476,23 @@ function renderGenderBar(value) {
         };
 
         recognition.onerror = function(event) {
+            const glassField = document.getElementById('searchGlassInput');
             if (glassField) glassField.placeholder = "Не розчув. Спробуйте ще";
+            if (micBtn) micBtn.style.opacity = '1';
         };
 
         recognition.onend = function() {
-            if (micBtn) micBtn.classList.remove('cart-pulse-anim');
-            if (glassField) glassField.placeholder = "Бренд, аромат, нота...";
+            if (micBtn) micBtn.style.opacity = '1';
+            const glassField = document.getElementById('searchGlassInput');
+            if (glassField && !glassField.value) glassField.placeholder = "Бренд, аромат, нота...";
         };
 
-        recognition.start();
+        // Спочатку відкриваємо оверлей, потім запускаємо мікрофон
+        openSearchOverlay();
+        setTimeout(() => {
+            try { recognition.start(); }
+            catch(e) { console.error('Voice error:', e); }
+        }, 300);
     }
     function handleSearchInput() {
         // Сумісність: просто тригеримо фільтрацію каталогу по прихованому полю
@@ -7569,13 +7571,22 @@ function renderGenderBar(value) {
     }
     
     function filterCatalog() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
-        document.querySelectorAll('.card').forEach(c => {
-            const searchData = (c.innerText + " " + (c.getAttribute('data-desc') || "")).toLowerCase();
-            const mS = searchData.includes(q);
+        const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(c => {
+            // Використовуємо data-атрибути — НЕ innerText (не викликає reflow)
+            const brand = (c.getAttribute('data-brand') || '').toLowerCase();
+            const name  = (c.getAttribute('data-name') || '').toLowerCase();
+            const id    = (c.getAttribute('data-id') || '').toLowerCase();
+            const desc  = (c.getAttribute('data-desc') || '').toLowerCase();
+            const cat   = (c.getAttribute('data-category') || '').toLowerCase();
+
+            const mS = !q || brand.includes(q) || name.includes(q) || id.includes(q) || desc.includes(q);
             const mB = currentBrand === '' || c.getAttribute('data-brand') === currentBrand;
             const isWished = wishlist.includes(c.getAttribute('data-id'));
-            const mC = currentCategory === 'all' || (currentCategory === 'wishlist' ? isWished : c.getAttribute('data-category').includes(currentCategory));
+            const mC = currentCategory === 'all' ||
+                       (currentCategory === 'wishlist' ? isWished : cat.includes(currentCategory));
+
             c.style.display = (mS && mB && mC) ? 'flex' : 'none';
         });
         sortCatalog();
