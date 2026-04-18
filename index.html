@@ -198,6 +198,9 @@
         }
         
         .theme-switch { 
+            position: absolute; 
+            right: 20px; 
+            top: 20px; 
             font-size: 20px; 
             cursor: pointer; 
             z-index: 1010; 
@@ -206,8 +209,7 @@
             background: none; 
             border: none; 
             padding: 0; 
-            outline: none;
-            flex-shrink: 0;
+            outline: none; 
         }
 
         body.dark-theme .theme-switch { 
@@ -514,129 +516,17 @@
             z-index: 1000; 
         }
 
-        /* ══ STICKY CONTROLS — Compact + Expandable ══ */
         #stickyControls {
             display: flex;
             flex-direction: column;
-            padding: 0;
-            gap: 0;
-            background: transparent;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            border-bottom: none;
-            transition: none;
-        }
-
-        /* Компактний рядок — завжди видимий */
-        .sticky-compact-bar {
-            display: flex;
-            align-items: center;
+            padding: 12px 15px;
             gap: 8px;
-            padding: 8px 14px;
-            background: rgba(255,255,255,0.92);
+            background: rgba(255, 255, 255, 0.82);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: padding 0.25s ease;
-            position: relative;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
-        body.dark-theme .sticky-compact-bar {
-            background: rgba(18,18,18,0.92);
-            border-bottom-color: rgba(255,255,255,0.05);
-        }
-
-        /* Пошуковий input в компактній панелі */
-        .sticky-compact-bar #searchInput {
-            flex: 1;
-            padding: 9px 68px 9px 14px;
-            border: 1px solid rgba(0,0,0,0.07);
-            border-radius: 20px;
-            font-size: 12px;
-            outline: none;
-            letter-spacing: 0.5px;
-            box-sizing: border-box;
-            background: rgba(255,255,255,0.7);
-            transition: all 0.25s ease;
-        }
-        body.dark-theme .sticky-compact-bar #searchInput {
-            background: rgba(255,255,255,0.06);
-            color: #fff;
-            border-color: rgba(255,255,255,0.1);
-        }
-        .sticky-compact-bar #searchInput:focus {
-            border-color: var(--gold);
-        }
-
-        /* Кнопка розгортання панелі */
-        .sticky-expand-btn {
-            width: 34px;
-            height: 34px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(197,160,89,0.08);
-            border: 1px solid rgba(197,160,89,0.3);
-            border-radius: 50%;
-            cursor: pointer;
-            color: var(--gold);
-            transition: background 0.2s ease, transform 0.3s ease;
-        }
-        .sticky-expand-btn:active { background: rgba(197,160,89,0.18); }
-        .sticky-expand-btn svg {
-            transition: transform 0.3s ease;
-        }
-        #stickyControls.expanded .sticky-expand-btn {
-            background: rgba(197,160,89,0.15);
-            border-color: rgba(197,160,89,0.5);
-        }
-        #stickyControls.expanded .sticky-expand-btn svg {
-            transform: rotate(90deg);
-        }
-        /* Золота крапка-індикатор на кнопці */
-        .sticky-expand-btn::after {
-            content: '';
-            position: absolute;
-            width: 6px; height: 6px;
-            background: var(--gold);
-            border-radius: 50%;
-            top: 6px; right: 6px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        /* Показуємо крапку якщо активний фільтр */
-        #stickyControls.has-filter .sticky-expand-btn::after {
-            opacity: 1;
-        }
-        .sticky-expand-btn { position: relative; }
-
-        /* Розгортальна панель */
-        .sticky-expanded-panel {
-            background: rgba(255,255,255,0.96);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-            overflow: visible;
-            max-height: 0;
-            clip-path: inset(0 0 0 0);
-            transition: max-height 0.35s cubic-bezier(0.22,1,0.36,1), padding 0.3s ease;
-            padding: 0 14px;
-        }
-        body.dark-theme .sticky-expanded-panel {
-            background: rgba(18,18,18,0.96);
-            border-bottom-color: rgba(255,255,255,0.05);
-        }
-        body.dark-theme .sticky-expanded-panel {
-            background: rgba(18,18,18,0.96);
-            border-bottom-color: rgba(255,255,255,0.05);
-        }
-        #stickyControls.expanded .sticky-expanded-panel {
-            max-height: 320px;
-            padding: 8px 14px 14px;
-        }
-
-        /* Приховуємо search-wrapper в expanded panel (він вже в compact bar) */
-        .sticky-expanded-panel .search-wrapper { display: none; }
         
         body.dark-theme #stickyControls {
             background: rgba(18, 18, 18, 0.88);
@@ -1139,7 +1029,6 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); 
             display: none; 
             overflow: hidden; 
-                    z-index: 2000;
         }
 
         .custom-sort-options.show { 
@@ -2570,38 +2459,26 @@
         .cart-items { 
             flex: 1; 
             overflow-y: auto; 
-            padding: 12px 16px; 
-            scrollbar-width: none;
+            padding: 15px 20px; 
         }
-        .cart-items::-webkit-scrollbar { display: none; }
 
         .cart-item { 
             display: flex; 
-            align-items: center;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(128,128,128,0.08); 
-        }
-        .cart-item:last-child { border-bottom: none; }
-
-        .cart-item-img {
-            width: 58px;
-            height: 58px;
-            object-fit: cover;
-            border-radius: 10px;
-            flex-shrink: 0;
-            background: rgba(128,128,128,0.06);
-            backdrop-filter: blur(8px);
+            justify-content: space-between; 
+            align-items: center; 
+            padding-bottom: 15px; 
+            margin-bottom: 15px; 
+            border-bottom: 1px solid rgba(128, 128, 128, 0.1); 
         }
 
         .cart-item-info { 
             flex: 1; 
-            min-width: 0;
+            padding-right: 15px; 
         }
 
         .cart-item-brand { 
             font-family: var(--cinzel); 
-            font-size: 9px; 
+            font-size: 10px; 
             color: var(--gold); 
             text-transform: uppercase; 
             letter-spacing: 1px; 
@@ -2609,50 +2486,36 @@
         }
 
         .cart-item-name { 
-            font-size: 13px; 
+            font-size: 14px; 
+            font-family: var(--serif); 
             font-weight: 700; 
             line-height: 1.2; 
-            margin: 3px 0 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin: 4px 0; 
         }
 
         .cart-item-vol { 
-            font-size: 11px; 
-            color: var(--text-gray);
-            letter-spacing: 0.3px;
-        }
-
-        .cart-item-right {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 8px;
-            flex-shrink: 0;
+            font-size: 12px; 
+            color: #777; 
         }
 
         .cart-item-price { 
-            font-size: 13px; 
-            font-weight: 800;
-            color: var(--text-dark);
+            font-size: 14px; 
+            font-weight: 700; 
         }
 
         .cart-item-remove { 
-            background: rgba(255,70,70,0.08);
+            background: none; 
             border: none; 
-            color: rgba(255,80,80,0.7);
-            font-size: 14px; 
+            color: #ff4d4d; 
+            font-size: 24px; 
             cursor: pointer; 
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
+            padding: 5px; 
+            opacity: 0.6; 
         }
-        .cart-item-remove:active { background: rgba(255,70,70,0.2); color: #ff4d4d; }
+
+        .cart-item-remove:hover { 
+            opacity: 1; 
+        }
         
         .cart-empty-msg { 
             text-align: center; 
@@ -3167,22 +3030,29 @@ body.modal-open .cart-floating-btn {
 .quiz-trigger {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 0 18px;
-    padding: 10px 0;
-    border: none;
-    border-top: 1px solid rgba(197,160,89,0.1);
-    border-bottom: 1px solid rgba(197,160,89,0.1);
-    background: transparent;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 15px 0;
+    padding: 13px 20px;
+    border: 1px solid rgba(197,160,89,0.35);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(197, 160, 89, 0.07);
 }
-.quiz-trigger:active { opacity: 0.7; }
-
-.quiz-trigger-icon { display: flex; align-items: center; color: var(--gold); flex-shrink: 0; }
-.quiz-trigger-text { display: flex; flex-direction: column; align-items: flex-start; flex: 1; }
-.quiz-trigger-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); }
-.quiz-trigger-sub { font-size: 10px; color: var(--text-gray); letter-spacing: 0.3px; margin-top: 2px; }
+body.dark-theme .quiz-trigger {
+    background: rgba(26, 26, 26, 0.65);
+    border-color: rgba(197, 160, 89, 0.2);
+}
+.quiz-trigger:active { transform: scale(0.98); }
+.quiz-trigger-icon { font-size: 18px; }
+.quiz-trigger-text { display: flex; flex-direction: column; align-items: flex-start; }
+.quiz-trigger-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); }
+.quiz-trigger-sub { font-size: 10px; color: var(--text-gray); letter-spacing: 0.5px; margin-top: 1px; }
 
 /* Overlay */
 .quiz-overlay {
@@ -3921,7 +3791,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
 
 /* === AESTHETIC MATCHER — inline carousel === */
 .aesthetic-section {
-    padding: 14px 15px 4px;
+    padding: 0 15px 4px;
 }
 .aesthetic-section-label {
     font-family: var(--cinzel);
@@ -4406,31 +4276,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     font-style: italic;
     line-height: 1.45;
 }
-
-        /* Sort row — завжди видимий між compact bar і expanded */
-        .sticky-sort-row {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: 6px 14px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            position: relative;
-            z-index: 1001;
-        }
-        body.dark-theme .sticky-sort-row {
-            background: rgba(18,18,18,0.95);
-            border-bottom-color: rgba(255,255,255,0.05);
-        }
-        .sticky-sort-row .custom-sort-wrapper {
-            width: 100% !important;
-            margin-left: 0 !important;
-        }
-        .sticky-sort-row .custom-sort-header {
-            border: 1px solid rgba(197,160,89,0.25);
-        }
-        .sticky-sort-row .custom-sort-options {
-            z-index: 2000 !important;
-        }
     </style>
 </head>
 <body>
@@ -4684,94 +4529,75 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         </div>
     </div>
 
-    <div id="stickyControls" class="sticky-active">
-
-        <!-- ══ COMPACT BAR — завжди видима ══ -->
-        <div class="sticky-compact-bar">
-            <!-- Кнопки MIX LAB + MEMORY MAP -->
-            <button class="lab-shortcut" onclick="document.querySelector('.layering-section').scrollIntoView({behavior:'smooth'})" style="margin-bottom:0; flex-shrink:0;">MIX LAB</button>
-            <button class="memory-map-shortcut" onclick="openScentMemoryMap()" style="margin-bottom:0; flex-shrink:0;">
-                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MAP
+    <div id="stickyControls" class="sticky-active glass-panel">
+        
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:nowrap;">
+            <button class="lab-shortcut" onclick="document.querySelector('.layering-section').scrollIntoView({behavior: 'smooth'})">
+                MIX LAB
             </button>
-
-            <!-- Пошуковий input -->
-            <div class="search-wrapper" style="flex:1; position:relative; min-width:0;">
-                <input type="text" id="searchInput" placeholder="Пошук аромату або бренду..." oninput="handleSearchInput()" onfocus="showSearchHint()">
-                <svg class="mic-btn" id="micBtn" viewBox="0 0 24 24" onclick="startVoiceSearch()">
-                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                    <line x1="12" y1="19" x2="12" y2="23"></line>
-                    <line x1="8" y1="23" x2="16" y2="23"></line>
-                </svg>
-                <span id="clearSearchBtn" onclick="clearSearch()" style="display:flex;align-items:center;right:10px;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
-                <div id="searchResults" class="search-dropdown"></div>
-            </div>
-
-            <!-- Кнопка теми -->
-            <button class="theme-switch" onclick="toggleTheme()" id="themeBtn" style="position:static; flex-shrink:0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
-
-            <!-- Кнопка розгортання -->
-            <button class="sticky-expand-btn" onclick="toggleStickyPanel()" aria-label="Фільтри та категорії" id="stickyExpandBtn">
-                <svg id="expandBtnIcon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="4" y1="6" x2="20" y2="6"/>
-                    <line x1="4" y1="12" x2="14" y2="12"/>
-                    <line x1="4" y1="18" x2="9" y2="18"/>
-                </svg>
+            <button class="memory-map-shortcut" onclick="openScentMemoryMap()">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MEMORY MAP
             </button>
         </div>
+        
+        <button class="theme-switch" onclick="toggleTheme()" id="themeBtn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+        
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="ПОШУК АРОМАТУ АБО БРЕНДУ..." oninput="handleSearchInput()">
+            <svg class="mic-btn" id="micBtn" viewBox="0 0 24 24" onclick="startVoiceSearch()">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+            <span id="clearSearchBtn" onclick="clearSearch()" style="display:flex;align-items:center;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+            <div id="searchResults" class="search-dropdown"></div>
+        </div>
+        
+        <div class="note-suggestions" id="noteSuggestions">
+            <span class="note-label">Ноти:</span>
+            <span class="note-chip" onclick="searchByNote('Ваніль', this)">Ваніль</span>
+            <span class="note-chip" onclick="searchByNote('Вишня', this)">Вишня</span>
+            <span class="note-chip" onclick="searchByNote('Шкіра', this)">Шкіра</span>
+            <span class="note-chip" onclick="searchByNote('Троянда', this)">Троянда</span>
+            <span class="note-chip" onclick="searchByNote('Бергамот', this)">Бергамот</span>
+            <span class="note-chip" onclick="searchByNote('Мускус', this)">Мускус</span>
+        </div>
 
-        <!-- ══ SORT ROW — завжди видимий під compact bar при розгортанні ══ -->
-        <div class="sticky-sort-row" id="stickySortRow">
-            <div class="sort-wrapper" style="padding:0; width:100%;">
-                <div class="custom-sort-wrapper" style="width:100%; margin-left:0;">
-                    <div class="custom-sort-header" onclick="toggleSortMenu(event)">
-                        <span id="currentSortText">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</span>
-                        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M7 10l5 5 5-5z" fill="var(--gold)"/></svg>
-                    </div>
-                    <div class="custom-sort-options" id="sortOptionsList">
-                        <div class="sort-option active" onclick="applySort('default', 'ЗА ЗАМОВЧУВАННЯМ (НОВІ)', event)">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</div>
-                        <div class="sort-option" onclick="applySort('popularity', 'ЗА ПОПУЛЯРНІСТЮ (ВІДГУКИ)', event)">ЗА ПОПУЛЯРНІСТЮ (ВІДГУКИ)</div>
-                        <div class="sort-option" onclick="applySort('price-asc', 'ЦІНА: ВІД ДЕШЕВИХ', event)">ЦІНА: ВІД ДЕШЕВИХ</div>
-                        <div class="sort-option" onclick="applySort('price-desc', 'ЦІНА: ВІД ДОРОГИХ', event)">ЦІНА: ВІД ДОРОГИХ</div>
-                        <div class="sort-option" onclick="applySort('name-asc', 'ЗА АЛФАВІТОМ (А-Я)', event)">ЗА АЛФАВІТОМ (А-Я)</div>
-                    </div>
-                    <select id="sortSelect" style="display:none;" onchange="sortCatalog()">
-                        <option value="default">default</option>
-                        <option value="popularity">popularity</option>
-                        <option value="price-asc">price-asc</option>
-                        <option value="price-desc">price-desc</option>
-                        <option value="name-asc">name-asc</option>
-                    </select>
+        <div class="brand-slider" id="brandSlider" style="display:none;"></div>
+        <button class="brands-gallery-btn" onclick="openBrandGallery()">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            Огляд брендів
+        </button>
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="setCategory('all', this)">Усі</button>
+            <button class="tab-btn" onclick="setCategory('new', this)">Новинки</button>
+            <button class="tab-btn" onclick="setCategory('top', this)">Хіти</button>
+            <button class="tab-btn" onclick="setCategory('set', this)">Сети</button>
+            <button class="tab-btn" onclick="setCategory('bottle', this)">Залишки у флаконі</button>
+            <button class="tab-btn" onclick="setCategory('wishlist', this)">Улюблені ♡</button>
+        </div>
+        
+        <div class="sort-wrapper">
+            <div class="custom-sort-wrapper">
+                <div class="custom-sort-header" onclick="toggleSortMenu(event)">
+                    <span id="currentSortText">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</span>
+                    <svg viewBox="0 0 24 24" width="16" height="16"><path d="M7 10l5 5 5-5z" fill="var(--gold)"/></svg>
                 </div>
-            </div>
-        </div>
-
-        <!-- ══ EXPANDED PANEL — ноти, бренди, табки ══ -->
-        <div class="sticky-expanded-panel" id="stickyExpandedPanel">
-            <div class="note-suggestions" id="noteSuggestions" style="padding:4px 0 8px; border-bottom:1px solid rgba(128,128,128,0.07);">
-                <span class="note-label">Ноти:</span>
-                <span class="note-chip" onclick="searchByNote('Ваніль', this)">Ваніль</span>
-                <span class="note-chip" onclick="searchByNote('Вишня', this)">Вишня</span>
-                <span class="note-chip" onclick="searchByNote('Шкіра', this)">Шкіра</span>
-                <span class="note-chip" onclick="searchByNote('Троянда', this)">Троянда</span>
-                <span class="note-chip" onclick="searchByNote('Бергамот', this)">Бергамот</span>
-                <span class="note-chip" onclick="searchByNote('Мускус', this)">Мускус</span>
-            </div>
-
-            <div class="brand-slider" id="brandSlider" style="display:none;"></div>
-
-            <button class="brands-gallery-btn" onclick="openBrandGallery()" style="margin: 8px 0 6px;">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                Огляд брендів
-            </button>
-
-            <div class="tabs-container" style="margin-bottom:6px;">
-                <button class="tab-btn active" onclick="setCategory('all', this)">Усі</button>
-                <button class="tab-btn" onclick="setCategory('new', this)">Новинки</button>
-                <button class="tab-btn" onclick="setCategory('top', this)">Хіти</button>
-                <button class="tab-btn" onclick="setCategory('set', this)">Сети</button>
-                <button class="tab-btn" onclick="setCategory('bottle', this)">Залишки у флаконі</button>
-                <button class="tab-btn" onclick="setCategory('wishlist', this)">Улюблені ♡</button>
+                <div class="custom-sort-options" id="sortOptionsList">
+                    <div class="sort-option active" onclick="applySort('default', 'ЗА ЗАМОВЧУВАННЯМ (НОВІ)', event)">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</div>
+                    <div class="sort-option" onclick="applySort('popularity', 'ЗА ПОПУЛЯРНІСТЮ (ВІДГУКИ)', event)">ЗА ПОПУЛЯРНІСТЮ (ВІДГУКИ)</div>
+                    <div class="sort-option" onclick="applySort('price-asc', 'ЦІНА: ВІД ДЕШЕВИХ', event)">ЦІНА: ВІД ДЕШЕВИХ</div>
+                    <div class="sort-option" onclick="applySort('price-desc', 'ЦІНА: ВІД ДОРОГИХ', event)">ЦІНА: ВІД ДОРОГИХ</div>
+                    <div class="sort-option" onclick="applySort('name-asc', 'ЗА АЛФАВІТОМ (А-Я)', event)">ЗА АЛФАВІТОМ (А-Я)</div>
+                </div>
+                <select id="sortSelect" style="display:none;" onchange="sortCatalog()">
+                    <option value="default">default</option>
+                    <option value="popularity">popularity</option>
+                    <option value="price-asc">price-asc</option>
+                    <option value="price-desc">price-desc</option>
+                    <option value="name-asc">name-asc</option>
+                </select>
             </div>
         </div>
     </div>
@@ -6150,35 +5976,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         }
     }
 
-    function toggleStickyPanel() {
-        const ctrl = document.getElementById('stickyControls');
-        ctrl.classList.toggle('expanded');
-        const isExpanded = ctrl.classList.contains('expanded');
-        sessionStorage.setItem('vr_panel_expanded', isExpanded ? '1' : '0');
-        updateFilterIndicator();
-    }
-
-    function updateFilterIndicator() {
-        const ctrl = document.getElementById('stickyControls');
-        if (!ctrl) return;
-        const hasActiveFilter = document.querySelector('.tab-btn.active:not(:first-child)') ||
-            (document.getElementById('searchInput') && document.getElementById('searchInput').value.trim()) ||
-            (typeof currentBrand !== 'undefined' && currentBrand !== '');
-        if (hasActiveFilter) ctrl.classList.add('has-filter');
-        else ctrl.classList.remove('has-filter');
-    }
-
-    function initStickyPanel() {
-        const ctrl = document.getElementById('stickyControls');
-        if (!ctrl) return;
-        // За замовчуванням — розгорнута панель при першому відвідуванні
-        const saved = sessionStorage.getItem('vr_panel_expanded');
-        if (saved === null || saved === '1') {
-            ctrl.classList.add('expanded');
-        }
-    }
-
-        async function load() {
+    async function load() {
         showSkeletons(6);
         try {
             const urls = [SHEET_CSV + '&v=' + Date.now(), REVIEWS_CSV + '&v=' + Date.now()];
@@ -6900,10 +6698,8 @@ function renderGenderBar(value) {
         const pText = document.getElementById('modalPriceLabel').innerText;
         let priceNum = parseInt(pText.replace(/\D/g, ''));
         if(isNaN(priceNum)) priceNum = 0; 
-        const imgEl = document.getElementById('mImg');
-        const imgSrc = imgEl ? imgEl.src : '';
         
-        cart.push({ brand: b, name: n, volume: selectedVol, price: priceNum, priceText: pText, img: imgSrc });
+        cart.push({ brand: b, name: n, volume: selectedVol, price: priceNum, priceText: pText });
         saveCart(); animateFlyToCart();
         
         const btn = document.getElementById('modalOrderBtn');
@@ -6952,29 +6748,15 @@ function renderGenderBar(value) {
         } else {
             let html = '';
             cart.forEach((item, index) => {
-                // Шукаємо зображення товару в каталозі
-                const catalogItem = globalCatalogData.find(c => c[0] === item.brand && c[1] === item.name);
-                const imgSrc = item.img || (catalogItem ? (catalogItem[5] || '').replace(/'/g, '%27') : '');
-                const fallbackImg = 'https://i.postimg.cc/CxkmFFJ3/logo.png';
-
                 html += `
                     <div class="cart-item">
-                        <img class="cart-item-img" 
-                             src="${imgSrc}" 
-                             alt="${item.brand} ${item.name}"
-                             onerror="this.src='${fallbackImg}'"
-                             loading="lazy">
                         <div class="cart-item-info">
                             <div class="cart-item-brand">${item.brand}</div>
                             <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-vol">${item.volume}</div>
+                            <div class="cart-item-vol">Об'єм: ${item.volume}</div>
                         </div>
-                        <div class="cart-item-right">
-                            <div class="cart-item-price">${item.priceText}</div>
-                            <button class="cart-item-remove" onclick="removeFromCart(${index})" aria-label="Видалити">
-                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                            </button>
-                        </div>
+                        <div class="cart-item-price">${item.priceText}</div>
+                        <button class="cart-item-remove" onclick="removeFromCart(${index})">×</button>
                     </div>`;
                 total += item.price;
             });
@@ -7053,29 +6835,9 @@ function renderGenderBar(value) {
 
         if (!contact) { alert('Будь ласка, вкажіть ваш Telegram нік або номер телефону для зв\'язку!'); return; }
         if (!/[0-9@]/.test(contact)) { alert('Будь ласка, вкажіть коректний номер телефону або Telegram нік (починається з @)!'); return; }
-
-        // Google Ads конверсія — відправляємо ПЕРШИМ, до fetch
+        
         if (typeof gtag === 'function') {
-            gtag('event', 'conversion', {
-                'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D',
-                'value': totalSumNum,
-                'currency': 'UAH',
-                'transaction_id': Date.now().toString()
-            });
-        }
-
-        // Також стандартна подія purchase для GA4
-        if (typeof gtag === 'function') {
-            gtag('event', 'purchase', {
-                'currency': 'UAH',
-                'value': totalSumNum,
-                'items': cart.map(item => ({
-                    'item_name': item.name,
-                    'item_brand': item.brand,
-                    'price': item.price,
-                    'quantity': 1
-                }))
-            });
+            gtag('event', 'conversion', { 'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D', 'value': totalSumNum, 'currency': 'UAH', 'transaction_id': '' });
         }
         
         const btn = document.getElementById('checkoutBtn');
@@ -7178,162 +6940,16 @@ function renderGenderBar(value) {
 
         recognition.start();
     }
-    // Зберігаємо останні пошуки
-    let recentSearches = JSON.parse(localStorage.getItem('vr_recent_searches') || '[]');
-
-    function saveRecentSearch(brand, name, item) {
-        recentSearches = recentSearches.filter(r => r.name !== name);
-        recentSearches.unshift({ brand, name, item });
-        if (recentSearches.length > 5) recentSearches.pop();
-        localStorage.setItem('vr_recent_searches', JSON.stringify(
-            recentSearches.map(r => ({ brand: r.brand, name: r.name }))
-        ));
-    }
-
-    function showSearchHint() {
-        const resContainer = document.getElementById('searchResults');
-        const inputVal = document.getElementById('searchInput').value;
-        if (inputVal.trim()) return; // не показувати якщо є текст
-
-        let html = '';
-
-        // Нещодавні пошуки
-        if (recentSearches.length > 0) {
-            html += `<div style="padding:8px 14px 4px; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-gray); opacity:0.6;">Нещодавні</div>`;
-            recentSearches.slice(0, 3).forEach(r => {
-                const found = globalCatalogData.find(c => c[0] === r.brand && c[1] === r.name);
-                if (!found) return;
-                const img = (found[5] || '').replace(/'/g, '%27');
-                html += `<div class="search-item search-recent-item" onclick="showSearchResult('${r.brand.replace(/'/g,"\\'").replace(/"/g,'&quot;')}','${r.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">
-                    <img src="${img}" alt="${r.brand} ${r.name}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
-                    <div class="search-item-info">
-                        <div class="search-item-brand">${r.brand}</div>
-                        <div class="search-item-name">${r.name}</div>
-                    </div>
-                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="var(--text-gray)" stroke-width="1.5" stroke-linecap="round" style="opacity:0.4;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
-                </div>`;
-            });
-        }
-
-        // Трендові теги
-        html += `<div style="padding:8px 14px 6px; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-gray); opacity:0.6; margin-top:${recentSearches.length ? '4px' : '0'};">Популярні ноти</div>
-        <div style="display:flex; flex-wrap:wrap; gap:6px; padding:0 12px 12px;">
-            ${['Ваніль','Уд','Мускус','Троянда','Кедр','Бергамот'].map(n => 
-                `<span onclick="searchByNote('${n}'); document.getElementById('searchResults').style.display='none';" style="padding:5px 10px; border:1px solid rgba(197,160,89,0.25); border-radius:20px; font-size:10px; cursor:pointer; color:var(--gold); font-weight:600; background:rgba(197,160,89,0.05);">${n}</span>`
-            ).join('')}
-        </div>`;
-
-        if (html) {
-            resContainer.innerHTML = html;
-            resContainer.style.display = 'block';
-        }
-    }
-
-    function showSearchResult(brand, name) {
-        const found = globalCatalogData.find(c => c[0] === brand && c[1] === name);
-        if (found) {
-            showModal(found);
-            document.getElementById('searchResults').style.display = 'none';
-            document.getElementById('searchInput').value = '';
-            document.getElementById('clearSearchBtn').style.display = 'none';
-            triggerCatalogAnimation();
-        }
-    }
-
     function handleSearchInput() {
         const inputVal = document.getElementById('searchInput').value;
         const resContainer = document.getElementById('searchResults');
         const clearBtn = document.getElementById('clearSearchBtn');
 
-        if (clearBtn) clearBtn.style.display = inputVal ? 'flex' : 'none';
+        if (clearBtn) clearBtn.style.display = inputVal ? 'block' : 'none';
 
         triggerCatalogAnimation();
 
-        if (!inputVal.trim()) {
-            showSearchHint();
-            return;
-        }
-
-        let cleanQ = inputVal.toLowerCase().replace(/(хочу|шукаю|знайди|підкажіть|покажи|мені|аромат|парфум|духи|купити|якийсь|щось|стійкий|найди)/gi, ' ').trim();
-        let qForSearch = cleanQ.length > 1 ? cleanQ : inputVal.toLowerCase().trim();
-        let qFixedLayout = fixKeyboardLayout(qForSearch);
-        let q1 = applySynonyms(qForSearch);
-        let q2 = applySynonyms(qFixedLayout);
-
-        let results = globalCatalogData.filter(p => {
-            let searchableText = (p[0] + " " + p[1] + " " + (p[4] || "")).toLowerCase();
-            return searchableText.includes(q1) || searchableText.includes(q2);
-        });
-
-        results.sort((a, b) => {
-            let titleA = (a[0] + " " + a[1]).toLowerCase();
-            let titleB = (b[0] + " " + b[1]).toLowerCase();
-            let aIsTitleMatch = titleA.includes(q1) || titleA.includes(q2);
-            let bIsTitleMatch = titleB.includes(q1) || titleB.includes(q2);
-            if (aIsTitleMatch && !bIsTitleMatch) return -1;
-            if (!aIsTitleMatch && bIsTitleMatch) return 1;
-            return 0;
-        });
-
-        resContainer.innerHTML = '';
-
-        if (results.length > 0) {
-            // Лічильник результатів
-            resContainer.innerHTML = `<div style="padding:8px 14px 4px; font-size:9px; color:var(--text-gray); opacity:0.5; letter-spacing:0.5px;">${results.length} ${results.length === 1 ? 'аромат' : results.length < 5 ? 'аромати' : 'ароматів'}</div>`;
-
-            results.slice(0, 8).forEach(c => {
-                const [brand, name, price, minVol, desc, img] = c;
-                const startsFrom5 = minVol && String(minVol).includes('5');
-                const minPriceLabel = calculatePrice(price, startsFrom5 ? '5 мл' : '2 мл');
-
-                const item = document.createElement('div');
-                item.className = 'search-item';
-                item.innerHTML = `
-                    <img src="${img.replace(/'/g, "%27")}" alt="${brand} ${name}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
-                    <div class="search-item-info">
-                        <div class="search-item-brand">${brand}</div>
-                        <div class="search-item-name">${name}</div>
-                    </div>
-                    <div class="search-item-price">від ${minPriceLabel}</div>`;
-
-                item.onclick = () => { 
-                    saveRecentSearch(brand, name, c);
-                    showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; triggerCatalogAnimation(); 
-                };
-                resContainer.appendChild(item);
-            });
-        } else {
-            resContainer.innerHTML = `<div class="search-empty" style="padding-bottom: 8px;">За запитом <b>"${inputVal}"</b> нічого не знайдено<br><div style="margin-top: 10px; font-size:10px; color:var(--gold); font-weight:800; text-transform:uppercase; letter-spacing:1px;">Можливо, вам сподобається:</div></div>`;
-
-            let suggestions = globalCatalogData.filter(p => p[7] && (p[7].toLowerCase().includes('топ') || p[7].toLowerCase().includes('хіт')));
-            if (suggestions.length < 3) suggestions = globalCatalogData; 
-            let shuffled = suggestions.sort(() => 0.5 - Math.random()).slice(0, 3);
-
-            shuffled.forEach(c => {
-                const [brand, name, price, minVol, desc, img] = c;
-                const startsFrom5 = minVol && String(minVol).includes('5');
-                const minPriceLabel = calculatePrice(price, startsFrom5 ? '5 мл' : '2 мл');
-
-                const item = document.createElement('div');
-                item.className = 'search-item';
-                item.style.background = 'rgba(197,160,89,0.04)';
-                item.innerHTML = `
-                    <img src="${img.replace(/'/g, "%27")}" alt="${brand} ${name}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
-                    <div class="search-item-info">
-                        <div class="search-item-brand">${brand}</div>
-                        <div class="search-item-name">${name}</div>
-                    </div>
-                    <div class="search-item-price" style="color: var(--gold);">від ${minPriceLabel}</div>`;
-
-                item.onclick = () => { 
-                    saveRecentSearch(brand, name, c);
-                    showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; triggerCatalogAnimation(); 
-                };
-                resContainer.appendChild(item);
-            });
-        }
-        resContainer.style.display = 'block';
-    }
+        if (!inputVal.trim()) { resContainer.style.display = 'none'; return; }
 
         let cleanQ = inputVal.toLowerCase().replace(/(хочу|шукаю|знайди|підкажіть|покажи|мені|аромат|парфум|духи|купити|якийсь|щось|стійкий|найди)/gi, ' ').trim();
         let qForSearch = cleanQ.length > 1 ? cleanQ : inputVal.toLowerCase().trim();
@@ -7451,8 +7067,6 @@ function renderGenderBar(value) {
         if (wBtn) wBtn.style.display = (c === 'wishlist' && wishlist.length > 0) ? 'block' : 'none';
 
         triggerCatalogAnimation(); scrollToFirstCards();
-        // Оновлюємо індикатор фільтру
-        updateFilterIndicator();
     }
     
     function setBrand(b, btn) {
@@ -8103,7 +7717,6 @@ function renderGenderBar(value) {
 
     load();
     initTheme();
-    initStickyPanel();
 
     // === СОЦІАЛЬНИЙ ДОКАЗ: "Сьогодні купили" сповіщення ===
     (function initSocialProofToasts() {
@@ -8234,8 +7847,6 @@ function renderGenderBar(value) {
                         scrollBtn.style.display = 'none';
                     }
                 }
-                // Панель не закривається автоматично при скролі
-                // (користувач сам керує через кнопку ☰)
 
                 // Паралакс — тільки поки каруселі видно на екрані
                 const carousel = document.getElementById('heroCarousel');
