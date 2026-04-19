@@ -2352,305 +2352,419 @@
             opacity: 1;
         }
 
-        .cart-drawer { 
-            position: fixed; 
-            top: 0; 
-            right: -100%; 
-            width: 100%; 
-            max-width: 400px; 
-            height: 100%; 
-            background: rgba(255, 255, 255, 0.88); 
-            backdrop-filter: blur(30px); 
-            -webkit-backdrop-filter: blur(30px); 
-            z-index: 3500; 
-            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            display: flex; 
-            flex-direction: column; 
-            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1); 
-            border-left: 1px solid rgba(197, 160, 89, 0.12); 
+        /* ═══════════════════════════════════════
+           MODERN CART DRAWER
+        ═══════════════════════════════════════ */
+        .cart-drawer {
+            position: fixed;
+            top: 0; right: -100%;
+            width: 100%; max-width: 420px;
+            height: 100%;
+            background: #fafaf8;
+            z-index: 3500;
+            transition: right 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -20px 0 60px rgba(0,0,0,0.12);
         }
-        
         body.dark-theme .cart-drawer {
-            background: rgba(16, 16, 16, 0.92);
-            border-left-color: rgba(255, 255, 255, 0.05);
+            background: #0f0f0f;
+        }
+        .cart-drawer.open { right: 0; }
+
+        .cart-drawer-backdrop {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 3499;
+            display: none;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .cart-drawer-backdrop.show { display: block; }
+
+        /* ── Header ── */
+        .cart-header {
+            padding: 20px 20px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            flex-shrink: 0;
+            background: #fafaf8;
+        }
+        body.dark-theme .cart-header { background: #0f0f0f; border-color: rgba(255,255,255,0.06); }
+
+        .cart-header-left { display: flex; align-items: baseline; gap: 10px; }
+        .cart-title {
+            font-family: var(--cinzel);
+            font-size: 13px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+            color: var(--text-dark);
+        }
+        body.dark-theme .cart-title { color: #f0f0f0; }
+        .cart-count-badge {
+            font-size: 10px;
+            color: var(--gold);
+            font-weight: 700;
+            font-family: var(--cinzel);
+            letter-spacing: 0.5px;
+        }
+        .cart-close {
+            width: 34px; height: 34px;
+            background: rgba(0,0,0,0.05);
+            border: none;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            color: rgba(0,0,0,0.4);
+            transition: background 0.2s, color 0.2s;
+            flex-shrink: 0;
+        }
+        body.dark-theme .cart-close { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+        .cart-close:active { background: rgba(0,0,0,0.1); color: rgba(0,0,0,0.7); }
+
+        /* ── Shipping progress ── */
+        .shipping-progress-container {
+            margin: 0;
+            padding: 10px 20px;
+            display: none;
+            background: rgba(197,160,89,0.05);
+            border-bottom: 1px solid rgba(197,160,89,0.1);
+        }
+        .shipping-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .shipping-progress-text {
+            font-size: 11px;
+            color: var(--text-dark);
+            font-weight: 600;
+            flex: 1;
+            opacity: 0.65;
+        }
+        body.dark-theme .shipping-progress-text { color: #ccc; }
+        .shipping-progress-bar {
+            flex: 1;
+            height: 3px;
+            background: rgba(128,128,128,0.15);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .shipping-progress-fill {
+            height: 100%;
+            background: var(--gold);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 2px;
         }
 
-        .cart-drawer.open { 
-            right: 0; 
+        /* ── Items area ── */
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 6px 0;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .cart-drawer-backdrop { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0, 0, 0, 0.6); 
-            z-index: 3499; 
-            display: none; 
-            backdrop-filter: blur(3px); 
-            -webkit-backdrop-filter: blur(3px); 
+        /* ── Item card ── */
+        .cart-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            transition: background 0.15s;
+            position: relative;
         }
+        body.dark-theme .cart-item { border-color: rgba(255,255,255,0.04); }
+        .cart-item:last-child { border-bottom: none; }
 
-        .cart-drawer-backdrop.show { 
-            display: block; 
+        .cart-item-img-wrap {
+            position: relative;
+            flex-shrink: 0;
+            width: 76px; height: 76px;
         }
-        
-        .cart-header { 
-            padding: 25px 20px 20px; 
-            border-bottom: 1px solid rgba(128, 128, 128, 0.1); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+        .cart-item-img {
+            width: 76px; height: 76px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: rgba(128,128,128,0.06);
+            display: block;
         }
+        body.dark-theme .cart-item-img { background: rgba(255,255,255,0.04); }
 
-        .cart-title { 
-            font-family: var(--cinzel); 
-            font-size: 18px; 
-            font-weight: 800; 
-            margin: 0; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
+        .cart-item-info { flex: 1; min-width: 0; padding-top: 2px; }
+        .cart-item-brand {
+            font-family: var(--cinzel);
+            font-size: 9px;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            display: block;
         }
+        .cart-item-name {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        body.dark-theme .cart-item-name { color: #f0f0f0; }
+        .cart-item-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cart-item-vol {
+            font-size: 11px;
+            color: rgba(128,128,128,0.7);
+            background: rgba(128,128,128,0.07);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .cart-item-price {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-dark);
+            font-family: var(--cinzel);
+        }
+        body.dark-theme .cart-item-price { color: #f0f0f0; }
 
-        .cart-close { 
-            background: none; 
-            border: none; 
-            font-size: 28px; 
-            color: #999; 
-            cursor: pointer; 
-            padding: 0 10px; 
+        .cart-item-remove {
+            position: absolute;
+            top: 14px; right: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgba(128,128,128,0.3);
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
         }
-        
-        .shipping-progress-container { 
-            margin: 15px 20px 5px; 
-            background: rgba(128, 128, 128, 0.05); 
-            border-radius: 8px; 
-            border: 1px solid rgba(128, 128, 128, 0.1); 
-            padding: 14px; 
-            text-align: center; 
-            display: none; 
-        }
+        .cart-item-remove:active { color: #e55; }
 
-        .shipping-progress-text { 
-            font-size: 11px; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            color: #777; 
-            margin-bottom: 10px; 
-            font-weight: 700; 
+        /* ── Empty state ── */
+        .cart-empty-msg {
+            text-align: center;
+            padding: 60px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
-
-        .shipping-progress-bar { 
-            width: 100%; 
-            height: 4px; 
-            background: #e0e0e0; 
-            border-radius: 2px; 
-            overflow: hidden; 
+        .cart-empty-icon {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: rgba(197,160,89,0.08);
+            display: flex; align-items: center; justify-content: center;
         }
-
-        .shipping-progress-fill { 
-            height: 100%; 
-            background: var(--gold); 
-            width: 0%; 
-            transition: width 0.5s ease; 
+        .cart-empty-title {
+            font-family: var(--cinzel);
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-dark);
+            opacity: 0.4;
         }
-
-        .cart-items { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 15px 20px; 
-        }
-
-        .cart-item { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding-bottom: 15px; 
-            margin-bottom: 15px; 
-            border-bottom: 1px solid rgba(128, 128, 128, 0.1); 
-        }
-
-        .cart-item-info { 
-            flex: 1; 
-            padding-right: 15px; 
-        }
-
-        .cart-item-brand { 
-            font-family: var(--cinzel); 
-            font-size: 10px; 
-            color: var(--gold); 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            font-weight: 800; 
-        }
-
-        .cart-item-name { 
-            font-size: 14px; 
-            font-family: var(--serif); 
-            font-weight: 700; 
-            line-height: 1.2; 
-            margin: 4px 0; 
-        }
-
-        .cart-item-vol { 
-            font-size: 12px; 
-            color: #777; 
-        }
-
-        .cart-item-price { 
-            font-size: 14px; 
-            font-weight: 700; 
-        }
-
-        .cart-item-remove { 
-            background: none; 
-            border: none; 
-            color: #ff4d4d; 
-            font-size: 24px; 
-            cursor: pointer; 
-            padding: 5px; 
-            opacity: 0.6; 
-        }
-
-        .cart-item-remove:hover { 
-            opacity: 1; 
-        }
-        
-        .cart-empty-msg { 
-            text-align: center; 
-            color: #999; 
-            font-size: 14px; 
-            margin-top: 50px; 
-            font-family: var(--serif); 
+        .cart-empty-sub {
+            font-size: 12px;
+            color: rgba(128,128,128,0.5);
             font-style: italic;
         }
-        
-        .cart-footer { 
-            padding: 25px 20px; 
-            border-top: 1px solid rgba(197, 160, 89, 0.1); 
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+
+        /* ── Footer ── */
+        .cart-footer {
+            padding: 16px 20px 28px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            background: #fafaf8;
+            flex-shrink: 0;
         }
-        
-        .gift-wrap-container { 
-            display: flex; 
-            align-items: center; 
-            margin-bottom: 20px; 
-            cursor: pointer; 
-            padding: 14px; 
-            border: 1px dashed rgba(128, 128, 128, 0.3); 
-            border-radius: 8px; 
-            transition: 0.3s; 
+        body.dark-theme .cart-footer {
+            background: #0f0f0f;
+            border-color: rgba(255,255,255,0.06);
         }
 
-        .gift-wrap-container:hover { 
-            border-color: var(--gold); 
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 14px;
         }
+        .cart-total-label {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-dark);
+            opacity: 0.35;
+        }
+        .cart-total-value {
+            font-family: var(--cinzel);
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--text-dark);
+        }
+        body.dark-theme .cart-total-label,
+        body.dark-theme .cart-total-value { color: #f0f0f0; }
 
-        .gift-wrap-container input { 
-            display: none; 
+        /* ── Inputs ── */
+        .cart-comment-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1.5px solid rgba(0,0,0,0.08);
+            border-radius: 12px;
+            font-family: var(--sans);
+            font-size: 13px;
+            resize: none;
+            margin-bottom: 10px;
+            outline: none;
+            background: rgba(255,255,255,0.7);
+            color: var(--text-dark);
+            transition: border-color 0.2s;
         }
+        body.dark-theme .cart-comment-input {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+            color: #f0f0f0;
+        }
+        .cart-comment-input:focus { border-color: var(--gold); }
+        .cart-comment-input::placeholder { color: rgba(128,128,128,0.45); }
 
-        .gift-wrap-box { 
-            width: 18px; 
-            height: 18px; 
-            border: 1px solid #ccc; 
-            border-radius: 4px; 
-            margin-right: 12px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            transition: 0.2s; 
+        /* ── Checkout btn ── */
+        .cart-checkout-btn {
+            display: flex;
+            width: 100%;
+            padding: 17px 0;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: 2.5px;
+            background: #111;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 14px;
+            transition: transform 0.18s, opacity 0.18s;
+            font-family: var(--cinzel);
         }
+        body.dark-theme .cart-checkout-btn { background: var(--gold); color: #000; }
+        .cart-checkout-btn:active { transform: scale(0.97); opacity: 0.85; }
 
-        .gift-wrap-container input:checked + .gift-wrap-box { 
-            background: var(--gold); 
-            border-color: var(--gold); 
-        }
-
-        .gift-wrap-container input:checked + .gift-wrap-box::after { 
-            content: '✓'; 
-            color: #fff; 
-            font-size: 12px; 
-            font-weight: bold; 
-        }
-
-        .gift-wrap-text { 
-            font-size: 11px; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            font-weight: 700; 
-        }
-
-        .cart-total-row { 
-            display: flex; 
-            justify-content: space-between; 
-            font-size: 20px; 
-            font-family: var(--serif); 
-            font-weight: 800; 
-            margin-bottom: 20px; 
-        }
-        
-        .cart-comment-input { 
-            width: 100%; 
-            box-sizing: border-box; 
-            padding: 14px; 
-            border: 1px solid rgba(128, 128, 128, 0.2); 
-            border-radius: 8px; 
-            font-family: var(--sans); 
-            font-size: 14px; 
-            resize: none; 
-            margin-bottom: 15px; 
-            outline: none; 
+        .cart-return-btn {
+            display: flex;
+            width: 100%;
+            padding: 13px 0;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1.5px;
             background: transparent;
+            color: rgba(128,128,128,0.5);
+            border: 1.5px solid rgba(128,128,128,0.12);
+            cursor: pointer;
+            border-radius: 14px;
+            transition: border-color 0.2s;
+            margin-top: 8px;
+            font-family: var(--cinzel);
         }
+        .cart-return-btn:active { border-color: rgba(128,128,128,0.3); }
 
-        .cart-comment-input:focus { 
-            border-color: var(--gold); 
+        /* ── Gift wrap ── */
+        .gift-wrap-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            padding: 12px 14px;
+            border: 1.5px solid rgba(197,160,89,0.15);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+            background: rgba(197,160,89,0.03);
         }
+        .gift-wrap-container:active { border-color: var(--gold); }
+        .gift-wrap-container input { display: none; }
+        .gift-wrap-box {
+            width: 20px; height: 20px;
+            border-radius: 6px;
+            border: 1.5px solid rgba(197,160,89,0.4);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .gift-wrap-container input:checked + .gift-wrap-box {
+            background: var(--gold); border-color: var(--gold);
+        }
+        .gift-wrap-container input:checked + .gift-wrap-box::after {
+            content: '✓'; color: #fff; font-size: 11px; font-weight: 900;
+        }
+        .gift-wrap-text { font-size: 12px; font-weight: 700; color: var(--text-dark); }
+        body.dark-theme .gift-wrap-text { color: #e8e8e8; }
 
-        .cart-checkout-btn { 
-            display: flex; 
-            width: 100%; 
-            padding: 20px 0; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 13px; 
-            text-transform: uppercase; 
-            font-weight: 900; 
-            letter-spacing: 2px; 
-            background: var(--gold); 
-            color: #fff; 
-            border: none; 
-            cursor: pointer; 
-            border-radius: 8px; 
-            transition: 0.3s; 
+        /* ── Upsell ── */
+        .cart-upsell {
+            margin: 0 0 12px;
+            padding: 12px 14px;
+            background: rgba(197,160,89,0.05);
+            border: 1.5px solid rgba(197,160,89,0.18);
+            border-radius: 12px;
+            display: none;
         }
-
-        .cart-checkout-btn:active { 
-            transform: scale(0.98); 
+        .cart-upsell-label {
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: block;
+            font-family: var(--cinzel);
         }
-        
-        .cart-return-btn { 
-            display: flex; 
-            width: 100%; 
-            padding: 16px 0; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 11px; 
-            text-transform: uppercase; 
-            font-weight: 700; 
-            letter-spacing: 1.5px; 
-            background: transparent; 
-            color: #777; 
-            border: 1px solid rgba(128, 128, 128, 0.2); 
-            cursor: pointer; 
-            border-radius: 8px; 
-            transition: 0.3s; 
-            margin-top: 10px; 
+        .cart-upsell-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
+        .cart-upsell-img {
+            width: 52px; height: 52px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: rgba(128,128,128,0.06);
+            flex-shrink: 0;
+        }
+        .cart-upsell-add {
+            background: #111;
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            font-size: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+            flex-shrink: 0;
+            font-family: var(--cinzel);
+            letter-spacing: 0.5px;
+        }
+        body.dark-theme .cart-upsell-add { background: var(--gold); color: #000; }
 
         .reviews-section { 
             padding: 60px 20px; 
@@ -4720,45 +4834,71 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     <div class="cart-drawer-backdrop" id="cartBackdrop" onclick="toggleCart()"></div>
 
     <div class="cart-drawer" id="cartDrawer">
+        <!-- ── Header ── -->
         <div class="cart-header">
-            <h3 class="cart-title">Ваш кошик</h3>
-            <button class="cart-close" onclick="toggleCart()">×</button>
+            <div class="cart-header-left">
+                <h3 class="cart-title">Кошик</h3>
+                <span class="cart-count-badge" id="cartCountLabel"></span>
+            </div>
+            <button class="cart-close" onclick="toggleCart()" aria-label="Закрити">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
         </div>
+
+        <!-- ── Shipping progress ── -->
         <div class="shipping-progress-container" id="shippingContainer">
-            <div class="shipping-progress-text" id="shippingText">До безкоштовної доставки ще 1500 грн ✨</div>
-            <div class="shipping-progress-bar"><div class="shipping-progress-fill" id="shippingFill"></div></div>
+            <div class="shipping-progress-row">
+                <div class="shipping-progress-text" id="shippingText">До безкоштовної доставки ще 1500 грн</div>
+                <div class="shipping-progress-bar"><div class="shipping-progress-fill" id="shippingFill"></div></div>
+            </div>
         </div>
-        <div class="cart-body" style="flex: 1; overflow-y: auto; padding: 15px 20px;">
-            <div class="cart-items" id="cartItemsList"></div>
-            <div id="cartUpsellBlock" style="display: none; margin-bottom: 20px; padding: 12px; border: 1px dashed var(--gold); border-radius: 8px; background: rgba(197, 160, 89, 0.05);">
-                <div style="font-size: 11px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; font-weight: 800; text-align: center; letter-spacing: 1px;">Рекомендуємо</div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <img id="upsellImg" src="" alt="" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px;">
-                    <div style="flex: 1; overflow: hidden;">
-                        <div id="upsellBrand" style="font-size: 9px; color: #999; text-transform: uppercase; font-weight: 800;"></div>
-                        <div id="upsellName" style="font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></div>
-                        <div id="upsellPrice" style="font-size: 12px; font-weight: 700; color: var(--gold);"></div>
+
+        <!-- ── Items list ── -->
+        <div class="cart-items" id="cartItemsList"></div>
+
+        <!-- ── Footer ── -->
+        <div class="cart-footer">
+            <!-- Upsell -->
+            <div class="cart-upsell" id="cartUpsellBlock">
+                <span class="cart-upsell-label">✦ Можливо вподобаєте</span>
+                <div class="cart-upsell-row">
+                    <img id="upsellImg" class="cart-upsell-img" src="" alt="">
+                    <div style="flex:1;min-width:0;">
+                        <div id="upsellBrand" style="font-size:9px;color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;font-family:var(--cinzel);"></div>
+                        <div id="upsellName" style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-dark);"></div>
+                        <div id="upsellPrice" style="font-size:12px;font-weight:800;color:var(--gold);margin-top:2px;"></div>
                     </div>
-                    <button id="upsellAddBtn" style="background: var(--text-dark); color: var(--bg); border: none; padding: 8px 12px; font-size: 10px; border-radius: 6px; cursor: pointer; font-weight: 800;">+ 2 мл</button>
+                    <button id="upsellAddBtn" class="cart-upsell-add">+ 2 мл</button>
                 </div>
             </div>
-            <input type="text" id="cartContact" class="cart-comment-input" placeholder="Telegram @нік або телефон *" required>
-            <textarea id="cartComment" class="cart-comment-input" rows="2" placeholder="Місто, відділення НП..."></textarea>
-            <label class="gift-wrap-container" style="margin-top:10px; display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid rgba(197,160,89,0.2); border-radius:10px; cursor:pointer; background:rgba(197,160,89,0.03);">
-                <input type="checkbox" id="giftWrapCheckbox" style="display:none;" onchange="updateCartUI()">
-                <div class="gift-wrap-box" style="width:20px; height:20px; border-radius:5px; border:1.5px solid rgba(197,160,89,0.4); display:flex; align-items:center; justify-content:center; transition:all 0.2s; flex-shrink:0;" id="giftWrapBox">
-                    <svg id="giftWrapCheck" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><polyline points="20 6 9 17 4 12"/></svg>
+
+            <!-- Gift wrap -->
+            <label class="gift-wrap-container">
+                <input type="checkbox" id="giftWrapCheckbox" onchange="updateCartUI()">
+                <div class="gift-wrap-box" id="giftWrapBox">
+                    <svg id="giftWrapCheck" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
-                <div>
-                    <div class="gift-wrap-text" style="font-size:12px; font-weight:700; color:var(--text-dark);">Подарункове пакування</div>
-                    <div style="font-size:10px; color:var(--gold); font-weight:700; margin-top:2px;">+100 грн · Стрічка, крафт-папір, листівка</div>
+                <div style="flex:1;">
+                    <div class="gift-wrap-text">Подарункове пакування</div>
+                    <div style="font-size:10px;color:var(--gold);font-weight:700;margin-top:2px;">+100 грн · Стрічка, крафт-папір, листівка</div>
                 </div>
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(197,160,89,0.5)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto; flex-shrink:0;"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(197,160,89,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
             </label>
-        </div>
-        <div class="cart-footer">
-            <div class="cart-total-row"><span>Всього:</span><strong id="cartTotalSum">0 грн</strong></div>
-            <button class="cart-checkout-btn" id="checkoutBtn" onclick="checkoutCart()">Відправити замовлення</button>
+
+            <!-- Contacts -->
+            <input type="text" id="cartContact" class="cart-comment-input" placeholder="Telegram @нік або номер телефону *" required>
+            <textarea id="cartComment" class="cart-comment-input" rows="2" placeholder="Місто та відділення Нової Пошти..."></textarea>
+
+            <!-- Total + CTA -->
+            <div class="cart-total-row">
+                <span class="cart-total-label">Разом</span>
+                <span class="cart-total-value" id="cartTotalSum">0 грн</span>
+            </div>
+            <button class="cart-checkout-btn" id="checkoutBtn" onclick="checkoutCart()">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                Оформити замовлення
+            </button>
+            <button class="cart-return-btn" onclick="toggleCart()">← Продовжити покупки</button>
         </div>
     </div>
 
@@ -6699,7 +6839,8 @@ function renderGenderBar(value) {
         let priceNum = parseInt(pText.replace(/\D/g, ''));
         if(isNaN(priceNum)) priceNum = 0; 
         
-        cart.push({ brand: b, name: n, volume: selectedVol, price: priceNum, priceText: pText });
+        const _cartImg = currentModalImg || '';
+        cart.push({ brand: b, name: n, volume: selectedVol, price: priceNum, priceText: pText, img: _cartImg });
         saveCart(); animateFlyToCart();
         
         const btn = document.getElementById('modalOrderBtn');
@@ -6740,27 +6881,49 @@ function renderGenderBar(value) {
         
         let total = 0;
         
+        // Оновлюємо лічильник у заголовку
+        const countLabel = document.getElementById('cartCountLabel');
+        if (countLabel) {
+            countLabel.textContent = cart.length > 0 ? cart.length + ' ' + (cart.length === 1 ? 'товар' : cart.length < 5 ? 'товари' : 'товарів') : '';
+        }
+
         if (cart.length === 0) {
-            list.innerHTML = `<div class="cart-empty-msg">Ваш кошик порожній<br><span style="font-size:12px; display:block; margin-top:15px; cursor:pointer; color:var(--gold); font-weight:700; text-transform:uppercase; letter-spacing:1px;" onclick="toggleCart()">Повернутися до каталогу</span></div>`;
+            list.innerHTML = `<div class="cart-empty-msg">
+                <div class="cart-empty-icon">
+                    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="rgba(197,160,89,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                </div>
+                <div class="cart-empty-title">Кошик порожній</div>
+                <div class="cart-empty-sub">Додайте аромати, які вас зачарували</div>
+            </div>`;
             shippingContainer.style.display = 'none';
             if (giftBox) giftBox.checked = false;
-            if (upsellBlock) upsellBlock.style.display = 'none'; 
+            if (upsellBlock) upsellBlock.style.display = 'none';
         } else {
-            let html = '';
+            const frag = document.createDocumentFragment();
             cart.forEach((item, index) => {
-                html += `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <div class="cart-item-brand">${item.brand}</div>
-                            <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-vol">Об'єм: ${item.volume}</div>
+                const imgSrc = item.img ? item.img.replace(/'/g,'%27') : 'https://i.postimg.cc/CxkmFFJ3/logo.png';
+                const el = document.createElement('div');
+                el.className = 'cart-item';
+                el.innerHTML = `
+                    <div class="cart-item-img-wrap">
+                        <img class="cart-item-img" src="${imgSrc}" alt="${item.name}" loading="lazy" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                    </div>
+                    <div class="cart-item-info">
+                        <span class="cart-item-brand">${item.brand}</span>
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-meta">
+                            <span class="cart-item-vol">${item.volume}</span>
+                            <span class="cart-item-price">${item.priceText}</span>
                         </div>
-                        <div class="cart-item-price">${item.priceText}</div>
-                        <button class="cart-item-remove" onclick="removeFromCart(${index})">×</button>
-                    </div>`;
+                    </div>
+                    <button class="cart-item-remove" onclick="removeFromCart(${index})" aria-label="Видалити">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>`;
+                frag.appendChild(el);
                 total += item.price;
             });
-            list.innerHTML = html;
+            list.innerHTML = '';
+            list.appendChild(frag);
             
             shippingContainer.style.display = 'block';
             let progress = (total / 1500) * 100;
@@ -6772,7 +6935,7 @@ function renderGenderBar(value) {
                 shippingText.style.color = 'var(--gold)';
             } else {
                 shippingText.innerHTML = `Додайте ще на <b>${1500 - total} грн</b> для безкоштовної доставки`;
-                shippingText.style.color = 'inherit';
+                shippingText.style.color = '';
             }
 
             if(upsellBlock && globalCatalogData.length > 0) {
@@ -6804,7 +6967,8 @@ function renderGenderBar(value) {
                     document.getElementById('upsellPrice').innerText = price2mlText;
                     
                     document.getElementById('upsellAddBtn').onclick = function() {
-                        cart.push({ brand: brand, name: name, volume: '2 мл', price: priceNum, priceText: price2mlText });
+                        const _upImg = (img || '').replace(/'/g,'%27');
+                        cart.push({ brand: brand, name: name, volume: '2 мл', price: priceNum, priceText: price2mlText, img: _upImg });
                         saveCart(); 
                     };
                     upsellBlock.style.display = 'block';
@@ -7883,7 +8047,8 @@ function renderGenderBar(value) {
                 let pricePerMl = parseFloat(String(item[2]).replace(',', '.')) || 0;
                 let priceText = calculatePrice(pricePerMl, '5 мл');
                 let priceNum = parseInt(priceText.replace(/\D/g, '')) || 0;
-                cart.push({ brand: item[0], name: item[1], volume: '5 мл', price: priceNum, priceText: priceText });
+                const _mixImg = (item[5] || '').replace(/'/g,'%27');
+                cart.push({ brand: item[0], name: item[1], volume: '5 мл', price: priceNum, priceText: priceText, img: _mixImg });
                 added = true;
             }
         });
