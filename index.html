@@ -7247,6 +7247,32 @@ function renderGenderBar(value) {
         </div>`;
 }
 
+    function buildModalNavList() {
+        _modalNavList = Array.from(document.querySelectorAll('.card'))
+            .filter(c => c.style.display !== 'none')
+            .map(c => {
+                const id = c.getAttribute('data-id') || '';
+                return globalCatalogData.find(p => p[0] + ' ' + p[1] === id) || null;
+            })
+            .filter(Boolean);
+    }
+
+    function updateModalNavUI() {
+        const prev = document.getElementById('modalNavPrev');
+        const next = document.getElementById('modalNavNext');
+        const counter = document.getElementById('modalNavCounter');
+        if (prev) prev.style.opacity = _modalNavIdx > 0 ? '1' : '0.3';
+        if (next) next.style.opacity = _modalNavIdx < _modalNavList.length - 1 ? '1' : '0.3';
+        if (counter) counter.textContent = _modalNavList.length > 1 ? `${_modalNavIdx + 1} / ${_modalNavList.length}` : '';
+    }
+
+    function modalSwipeNav(dir) {
+        const newIdx = _modalNavIdx + dir;
+        if (newIdx < 0 || newIdx >= _modalNavList.length) return;
+        _modalNavIdx = newIdx;
+        showModal(_modalNavList[_modalNavIdx]);
+    }
+
     function showModal(pArr, isWeekly = false) 
     {document.body.classList.add('modal-open');
         const [brand, name, price, minVol, desc, img, , top, weekText, , , bottleMl, bottlePrice, , stockCol] = pArr;
@@ -9465,22 +9491,4 @@ updateWeather();
                 <button class="brand-show-all-btn" id="brandShowAllBtn">Переглянути всі аромати →</button>
 
                 <!-- Кнопка повернення внизу -->
-                <button onclick="showBrandGrid()" style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin-top:24px; padding:14px; border:1px solid rgba(128,128,128,0.15); border-radius:10px; background:transparent; color:var(--text-gray); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; cursor:pointer; font-family:var(--cinzel);">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-                    Повернутись до списку брендів
-                </button>
-            </div>
-
-        </div>
-    </div>
-
-
-    <!-- ═══ SCENT MEMORY MAP ═══ -->
-    <div class="smap-overlay" id="smapOverlay">
-        <div class="smap-header">
-            <div class="smap-header-text">
-                <span class="smap-label">Scent Memory Map</span>
-                <div class="smap-title">Куди ви хочете<br>перенестися сьогодні?</div>
-            </div>
-            <button class="smap-close" onclick="closeScentMemoryMap()" aria-label="Закрити">
-                <svg viewBox="0 0 24 24" width
+                <button onclick="showBrandGrid()" sty
