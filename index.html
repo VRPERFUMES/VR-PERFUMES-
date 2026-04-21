@@ -183,9 +183,24 @@
             color: #f5f5f5; 
         }
 
-        
+        body.dark-theme .custom-sort-header { 
+            background: #1a1a1a; 
+        }
+
+        body.dark-theme .custom-sort-options { 
+            background: #1a1a1a; 
+            border-color: rgba(255, 255, 255, 0.1); 
+        }
+
+        body.dark-theme .sort-option { 
+            color: #f5f5f5; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+        }
         
         .theme-switch { 
+            position: absolute; 
+            right: 20px; 
+            top: 20px; 
             font-size: 20px; 
             cursor: pointer; 
             z-index: 1010; 
@@ -194,9 +209,7 @@
             background: none; 
             border: none; 
             padding: 0; 
-            outline: none;
-            flex-shrink: 0;
-            line-height: 1;
+            outline: none; 
         }
 
         body.dark-theme .theme-switch { 
@@ -503,243 +516,21 @@
             z-index: 1000; 
         }
 
-        /* ═══════════════════════════════════════
-           STICKY PANEL — 4 акуратних рядки
-        ═══════════════════════════════════════ */
         #stickyControls {
             display: flex;
             flex-direction: column;
-            padding: 12px 15px 10px;
-            gap: 10px;
-            background: rgba(255,255,255,0.92);
+            padding: 12px 15px;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.82);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(197,160,89,0.12);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
+        
         body.dark-theme #stickyControls {
-            background: rgba(18,18,18,0.94);
-            border-bottom-color: rgba(255,255,255,0.05);
-        }
-
-        /* Рядок 2: Ярлики + тема */
-        .sc-shortcuts {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .sc-moon {
-            margin-left: auto;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 2px;
-            color: var(--text-dark);
-            transition: color 0.3s;
-            line-height: 1;
-        }
-        body.dark-theme .sc-moon { color: var(--gold); }
-
-        /* Рядок 3: Ноти + слайдер ціни */
-        .sc-notes-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-        }
-        .sc-notes-row::-webkit-scrollbar { display: none; }
-        .sc-notes-scroll {
-            display: inline-flex;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-        .sc-vline {
-            width: 1px;
-            height: 18px;
-            background: rgba(128,128,128,0.2);
-            flex-shrink: 0;
-        }
-        /* Слайдер — займає весь вільний простір */
-        .sc-price-wrap {
-            flex: 1;
-            min-width: 60px;
-        }
-
-        /* Рядок 4: [Бренди] [═══════ТАБИ═══════] [≡] */
-        .sc-catalog-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .sc-brands-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            padding: 0 9px;
-            height: 28px;
-            flex: 0 0 auto;
-            background: rgba(197,160,89,0.07);
-            border: 1px solid rgba(197,160,89,0.3);
-            border-radius: 7px;
-            color: var(--gold);
-            font-size: 9px;
-            font-weight: 800;
-            font-family: var(--cinzel);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-        .sc-brands-icon:active { background: rgba(197,160,89,0.15); }
-        body.dark-theme .sc-brands-icon { border-color: rgba(197,160,89,0.2); }
-
-        /* Таби — весь вільний простір між кнопками */
-        .sc-tabs-compact {
-            flex: 1 1 0% !important;
-            min-width: 0 !important;
-            overflow-x: auto !important;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            padding: 0 !important;
-            gap: 24px !important;
-            /* Перебиваємо media-query justify-content:center */
-            justify-content: flex-start !important;
-            display: flex !important;
-            align-items: center !important;
-        }
-        @media (min-width: 768px) {
-            .sc-tabs-compact { justify-content: flex-start !important; }
-        }
-        .sc-tabs-compact::-webkit-scrollbar { display: none; }
-
-        /* Сортування — іконка впритул до правого краю */
-        .sc-sort-wrap {
-            flex: 0 0 auto;
-            position: relative;
-            margin-left: auto; /* гарантує правий край */
-        }
-        .sc-sort-icon {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 28px !important;
-            height: 28px !important;
-            padding: 0 !important;
-            border: 1px solid rgba(197,160,89,0.3) !important;
-            border-radius: 7px !important;
-            background: transparent !important;
-            cursor: pointer;
-        }
-        body.dark-theme .sc-sort-icon { border-color: rgba(197,160,89,0.2) !important; }
-
-        /* Випадний список сортування — ширший, бо містить слайдер */
-        .sc-sort-drop {
-            right: 0 !important;
-            left: auto !important;
-            width: 230px !important;
-            top: calc(100% + 5px) !important;
-            border-radius: 12px !important;
-            box-shadow: 0 14px 36px rgba(0,0,0,0.14) !important;
-            overflow: visible !important;
-        }
-
-        /* Блок слайдера ціни всередині dropdown */
-        .sort-price-block {
-            padding: 12px 14px 10px;
-        }
-        .sort-price-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            font-family: var(--cinzel);
-            font-size: 9px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--gold);
-        }
-        .sort-price-vals {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--text-dark);
-            font-family: var(--serif);
-        }
-        body.dark-theme .sort-price-vals { color: #f5f5f5; }
-        .sort-price-block .price-range-wrap {
-            position: relative;
-            height: 22px;
-            display: flex;
-            align-items: center;
-        }
-        .sort-divider {
-            height: 1px;
-            background: rgba(128,128,128,0.1);
-            margin: 0;
-        }
-
-        /* Sort shared */
-        .custom-sort-wrapper {
-            position: relative;
-            font-family: var(--cinzel);
-            font-size: 10px;
-            letter-spacing: 1px;
-            z-index: 100;
-        }
-        .custom-sort-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            border: 1px solid var(--gold);
-            border-radius: 6px;
-            background: var(--bg);
-            color: var(--gold);
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        body.dark-theme .custom-sort-header { background: #1a1a1a; }
-        .custom-sort-options {
-            position: absolute;
-            top: 100%;
-            left: 0; right: 0;
-            background: var(--bg);
-            border: 1px solid rgba(197,160,89,0.3);
-            border-radius: 8px;
-            box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-            display: none;
-            overflow: hidden;
-        }
-        body.dark-theme .custom-sort-options {
-            background: #1a1a1a;
-            border-color: rgba(255,255,255,0.1);
-        }
-        .custom-sort-options.show {
-            display: block;
-            animation: fadeIn 0.2s ease;
-        }
-        .sort-option {
-            padding: 12px 14px;
-            color: var(--text-dark);
-            cursor: pointer;
-            border-bottom: 1px solid rgba(128,128,128,0.08);
-            font-size: 10px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        body.dark-theme .sort-option {
-            color: #f5f5f5;
-            border-bottom-color: rgba(255,255,255,0.05);
-        }
-        .sort-option:last-child { border-bottom: none; }
-        .sort-option:hover, .sort-option.active {
-            color: var(--gold);
-            background: rgba(197,160,89,0.05);
+            background: rgba(18, 18, 18, 0.88);
+            border-bottom-color: rgba(255, 255, 255, 0.05);
         }
 
         .search-wrapper { 
@@ -4744,7 +4535,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     letter-spacing: 0.3px;
 }
 
-/* === 3. WHATSAPP / TELEGRAM QUICK ORDER в модалці === */
+/* === QUICK ORDER BUTTONS — преміум моно === */
 .quick-order-row {
     display: flex;
     gap: 8px;
@@ -4755,40 +4546,43 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+    gap: 6px;
     padding: 11px 8px;
     border-radius: 10px;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
+    border: 1px solid rgba(197,160,89,0.3);
     text-decoration: none;
     font-family: var(--cinzel);
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
     background: rgba(197,160,89,0.06);
-    border: 1px solid rgba(197,160,89,0.4);
     color: var(--gold);
+    position: relative;
+    overflow: hidden;
 }
-.quick-order-btn:active { 
+.quick-order-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(197,160,89,0.12) 0%, transparent 60%);
+    pointer-events: none;
+}
+.quick-order-btn:active {
     transform: scale(0.97);
-    background: rgba(197,160,89,0.12);
+    background: rgba(197,160,89,0.14);
 }
-.quick-order-tg { }
-.quick-order-wa { }
-.quick-order-tg svg, .quick-order-wa svg { 
-    opacity: 0.85; 
+body.dark-theme .quick-order-btn {
+    background: rgba(197,160,89,0.05);
+    border-color: rgba(197,160,89,0.2);
 }
 
-/* Підпис над кнопками */
-.quick-order-hint {
-    font-size: 10px;
-    color: var(--text-gray);
-    text-align: center;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-    margin-top: 8px;
-    font-style: italic;
+.quick-order-btn svg {
+    flex-shrink: 0;
+    stroke: var(--gold);
+    fill: none;
 }
 
 body.dark-theme .thankyou-overlay { background: #0a0a0a; }
@@ -5351,71 +5145,78 @@ input[type=range].price-range-input { background: transparent; }
     </div>
 
     <div id="stickyControls" class="sticky-active glass-panel">
-
-        <!-- ══ Рядок 1: Пошук — на повну ширину ══ -->
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="ПОШУК АРОМАТУ АБО БРЕНДУ..." oninput="handleSearchInput()">
-            <svg class="mic-btn" id="micBtn" viewBox="0 0 24 24" onclick="startVoiceSearch()">
-                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                <line x1="12" y1="19" x2="12" y2="23"></line>
-                <line x1="8" y1="23" x2="16" y2="23"></line>
-            </svg>
-            <span id="clearSearchBtn" onclick="clearSearch()" style="display:flex;align-items:center;">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </span>
-            <div id="searchResults" class="search-dropdown"></div>
+        <!-- Рядок 1: пошук на всю ширину -->
+        <div style="display:flex; gap:7px; align-items:center;">
+            <div class="search-wrapper" style="flex:1;">
+                <input type="text" id="searchInput" placeholder="Пошук аромату або бренду..." oninput="handleSearchInput()">
+                <svg class="mic-btn" id="micBtn" viewBox="0 0 24 24" onclick="startVoiceSearch()">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+                <span id="clearSearchBtn" onclick="clearSearch()" style="display:flex;align-items:center;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                <div id="searchResults" class="search-dropdown"></div>
+            </div>
+            <button class="theme-switch" onclick="toggleTheme()" id="themeBtn" style="flex-shrink:0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
         </div>
 
-        <!-- ══ Рядок 2: Ярлики + тема ══ -->
-        <div class="sc-shortcuts">
-            <button class="lab-shortcut" onclick="document.querySelector('.layering-section').scrollIntoView({behavior:'smooth'})">MIX LAB</button>
-            <button class="memory-map-shortcut" onclick="openScentMemoryMap()">
-                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MEMORY MAP
+        <!-- Рядок 2: MIX LAB + MAP + Бренди + ноти + ціна (скрол) -->
+        <div style="display:flex; gap:6px; align-items:center; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; padding-bottom:1px;">
+            <button class="lab-shortcut" style="flex-shrink:0;" onclick="document.querySelector('.layering-section').scrollIntoView({behavior:'smooth'})">MIX LAB</button>
+            <button class="memory-map-shortcut" style="flex-shrink:0;" onclick="openScentMemoryMap()">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MAP
             </button>
-            <button class="theme-switch sc-moon" onclick="toggleTheme()" id="themeBtn">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <button class="brands-gallery-btn" style="flex-shrink:0; margin:0;" onclick="openBrandGallery()">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="display:inline;vertical-align:middle;margin-right:3px;"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Бренди
             </button>
-        </div>
-
-        <!-- ══ Рядок 3: НОТИ (горизонтальний скрол) │ ₴/мл [====] ══ -->
-        <div class="sc-notes-row">
-            <span class="note-label" style="flex-shrink:0;">Ноти:</span>
-            <div class="sc-notes-scroll" id="noteSuggestions">
+            <div style="width:1px; height:14px; background:rgba(128,128,128,0.12); flex-shrink:0;"></div>
+            <div class="note-suggestions" id="noteSuggestions" style="flex-shrink:0; border-bottom:none; padding:0; gap:5px; display:flex; align-items:center; margin:0;">
+                <span class="note-label" style="white-space:nowrap; font-size:8px;">Ноти:</span>
                 <span class="note-chip" onclick="searchByNote('Ваніль', this)">Ваніль</span>
                 <span class="note-chip" onclick="searchByNote('Вишня', this)">Вишня</span>
                 <span class="note-chip" onclick="searchByNote('Шкіра', this)">Шкіра</span>
                 <span class="note-chip" onclick="searchByNote('Троянда', this)">Троянда</span>
                 <span class="note-chip" onclick="searchByNote('Бергамот', this)">Бергамот</span>
                 <span class="note-chip" onclick="searchByNote('Мускус', this)">Мускус</span>
-                <span class="note-chip" onclick="searchByNote('Уд', this)">Уд</span>
+            </div>
+            <div style="width:1px; height:14px; background:rgba(128,128,128,0.12); flex-shrink:0;"></div>
+            <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
+                <span style="font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-gray); white-space:nowrap;">₴/мл</span>
+                <div class="price-range-wrap" style="width:70px; min-width:70px;">
+                    <div class="price-range-track"></div>
+                    <div class="price-range-fill" id="priceRangeFill"></div>
+                    <input type="range" class="price-range-input" id="priceRangeMin" min="0" max="500" value="0" step="5" oninput="onPriceRange()">
+                    <input type="range" class="price-range-input" id="priceRangeMax" min="0" max="500" value="500" step="5" oninput="onPriceRange()">
+                </div>
+                <span class="price-filter-val" id="priceValMin" style="font-size:9px; min-width:16px;">0</span>
+                <span style="color:var(--text-gray);font-size:8px;">—</span>
+                <span class="price-filter-val" id="priceValMax" style="font-size:9px; min-width:26px;">500+</span>
             </div>
         </div>
 
-        <!-- ══ Рядок 4: [⊞ Бренди] [══════ ТАБИ ══════] [≡] ══ -->
-        <div class="sc-catalog-row">
-            <button class="sc-brands-icon" onclick="openBrandGallery()" title="Огляд брендів">
-                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                Бренди
-            </button>
-            <div class="tabs-container sc-tabs-compact">
-                <button class="tab-btn active" onclick="setCategory('all', this)">Усі</button>
-                <button class="tab-btn" onclick="setCategory('new', this)">Новинки</button>
-                <button class="tab-btn" onclick="setCategory('top', this)">Хіти</button>
-                <button class="tab-btn" onclick="setCategory('set', this)">Сети</button>
-                <button class="tab-btn" onclick="setCategory('bottle', this)">Флакони</button>
-                <button class="tab-btn" onclick="setCategory('wishlist', this)">Улюблені ♡</button>
-            </div>
-            <div class="custom-sort-wrapper sc-sort-wrap">
-                <div class="custom-sort-header sc-sort-icon" onclick="toggleSortMenu(event)" title="Сортування">
-                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
+        <div class="brand-slider" id="brandSlider" style="display:none;"></div>
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="setCategory('all', this)">Усі</button>
+            <button class="tab-btn" onclick="setCategory('new', this)">Новинки</button>
+            <button class="tab-btn" onclick="setCategory('top', this)">Хіти</button>
+            <button class="tab-btn" onclick="setCategory('set', this)">Сети</button>
+            <button class="tab-btn" onclick="setCategory('bottle', this)">Залишки у флаконі</button>
+            <button class="tab-btn" onclick="setCategory('wishlist', this)">Улюблені ♡</button>
+        </div>
+        
+        <div class="sort-wrapper">
+            <div class="custom-sort-wrapper">
+                <div class="custom-sort-header" onclick="toggleSortMenu(event)">
+                    <span id="currentSortText">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</span>
+                    <svg viewBox="0 0 24 24" width="16" height="16"><path d="M7 10l5 5 5-5z" fill="var(--gold)"/></svg>
                 </div>
-                <div class="custom-sort-options sc-sort-drop" id="sortOptionsList">
-                    <div class="sort-option active" onclick="applySort('default','ЗА ЗАМОВЧУВАННЯМ',event)">✦ За замовчуванням</div>
-                    <div class="sort-option" onclick="applySort('price-asc','ЦІНА: ВІД ДЕШЕВИХ',event)">↑ Ціна: від дешевих</div>
-                    <div class="sort-option" onclick="applySort('price-desc','ЦІНА: ВІД ДОРОГИХ',event)">↓ Ціна: від дорогих</div>
-                    <div class="sort-option" onclick="applySort('popularity','ЗА ПОПУЛЯРНІСТЮ',event)">★ За популярністю</div>
-                    <div class="sort-option" onclick="applySort('name-asc','ЗА АЛФАВІТОМ',event)">А За алфавітом</div>
+                <div class="custom-sort-options" id="sortOptionsList">
+                    <div class="sort-option active" onclick="applySort('default', 'ЗА ЗАМОВЧУВАННЯМ (НОВІ)', event)">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</div>
+                    <div class="sort-option" onclick="applySort('popularity', 'ЗА ПОПУЛЯРНІСТЮ (ВІДГУКИ)', event)">ЗА ПОПУЛЯРНІСТЮ (ВІДГУКИ)</div>
+                    <div class="sort-option" onclick="applySort('price-asc', 'ЦІНА: ВІД ДЕШЕВИХ', event)">ЦІНА: ВІД ДЕШЕВИХ</div>
+                    <div class="sort-option" onclick="applySort('price-desc', 'ЦІНА: ВІД ДОРОГИХ', event)">ЦІНА: ВІД ДОРОГИХ</div>
+                    <div class="sort-option" onclick="applySort('name-asc', 'ЗА АЛФАВІТОМ (А-Я)', event)">ЗА АЛФАВІТОМ (А-Я)</div>
                 </div>
                 <select id="sortSelect" style="display:none;" onchange="sortCatalog()">
                     <option value="default">default</option>
@@ -5426,8 +5227,6 @@ input[type=range].price-range-input { background: transparent; }
                 </select>
             </div>
         </div>
-
-        <div class="brand-slider" id="brandSlider" style="display:none;"></div>
     </div>
 
     <div id="weekPerfumeContainer"></div>
@@ -5649,10 +5448,8 @@ input[type=range].price-range-input { background: transparent; }
                 <div style="text-align: center;">
                     <h3 id="mB" style="font-family: var(--cinzel); font-size: 12px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase;"></h3>
                     <p id="mN" style="font-family: var(--serif); font-size: 24px; font-weight: 700; margin: 10px 0;"></p>
-                    <div id="mViewCount" style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text-gray);letter-spacing:0.5px;margin-bottom:8px;opacity:0.7;">
-                        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        <span id="mViewNum">0</span> переглядів
-                    </div>
+                    
+                    <span id="socialProof" class="social-proof-tag"></span>
                     <div id="scarcityMsg"></div>
                     
                     <div id="olfactoryDNA" class="olfactory-dna" style="display:none;">
@@ -5674,14 +5471,14 @@ input[type=range].price-range-input { background: transparent; }
                 <button id="modalOrderBtn" class="modal-btn-full modal-order-btn" style="flex: 1.2;">Додати в кошик</button>
             </div>
             <div style="padding: 0 20px 16px; background: var(--bg);">
-                <div class="quick-order-hint">або замовити миттєво</div>
+                <div style="font-size:8px; color:var(--text-gray); text-align:center; letter-spacing:1px; text-transform:uppercase; margin-bottom:7px; opacity:0.6;">або замовити миттєво</div>
                 <div class="quick-order-row">
-                    <a id="quickOrderTg" href="#" target="_blank" class="quick-order-btn quick-order-tg" onclick="return buildQuickOrderLink('tg')">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.28-.02-.12.02-1.96 1.25-5.54 3.67-.52.36-1 .54-1.42.53-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.41-1.41-.87.03-.24.37-.49 1.01-.75 3.97-1.73 6.62-2.87 7.96-3.42 3.79-1.58 4.58-1.85 5.09-1.86.11 0 .37.03.53.17.14.12.18.28.2.4-.01.07.01.27 0 .38z"/></svg>
+                    <a id="quickOrderTg" href="#" target="_blank" class="quick-order-btn" onclick="return buildQuickOrderLink('tg')">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5L2 12.5l7 1M21 5l-2.5 15L9 13.5M21 5L9 13.5m0 0v5l3.5-3"/></svg>
                         Telegram
                     </a>
-                    <a id="quickOrderWa" href="#" target="_blank" class="quick-order-btn quick-order-wa" onclick="return buildQuickOrderLink('wa')">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.552 4.116 1.522 5.847L.057 24l6.305-1.654A11.954 11.954 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.659-.52-5.17-1.425l-.37-.22-3.835 1.006 1.025-3.743-.24-.386A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                    <a id="quickOrderWa" href="#" target="_blank" class="quick-order-btn" onclick="return buildQuickOrderLink('wa')">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
                         WhatsApp
                     </a>
                 </div>
@@ -6562,55 +6359,58 @@ input[type=range].price-range-input { background: transparent; }
     }
 
     function applySort(val, text, e) {
+        document.getElementById('currentSortText').innerText = text;
+        document.getElementById('sortSelect').value = val;
+        
         document.querySelectorAll('.sort-option').forEach(el => el.classList.remove('active'));
         if(e && e.currentTarget) e.currentTarget.classList.add('active');
+        
         document.getElementById('sortOptionsList').classList.remove('show');
-        document.getElementById('sortSelect').value = val;
         sortCatalog();
     }
-
-    function sortCatalog() {
-        const val = document.getElementById('sortSelect').value;
-        const container = document.getElementById('catalog');
-        // Сортуємо тільки видимі картки
-        const cards = Array.from(container.querySelectorAll('.card'));
-
-        cards.sort((a, b) => {
-            if (val === 'default') {
-                return parseInt(a.getAttribute('data-original-index') || 0) - parseInt(b.getAttribute('data-original-index') || 0);
-            }
-            if (val === 'popularity') {
-                return (parseInt(b.getAttribute('data-reviews-count')) || 0) - (parseInt(a.getAttribute('data-reviews-count')) || 0);
-            }
-            // Ціна — беремо з data-price атрибута (завжди числовий)
-            const pA = parseFloat(a.getAttribute('data-price') || '0') || 0;
-            const pB = parseFloat(b.getAttribute('data-price') || '0') || 0;
-            if (val === 'price-asc')  return pA - pB;
-            if (val === 'price-desc') return pB - pA;
-            // Алфавіт
-            if (val === 'name-asc') {
-                const nA = (a.getAttribute('data-name') || '').trim();
-                const nB = (b.getAttribute('data-name') || '').trim();
-                return nA.localeCompare(nB, 'uk');
-            }
-            return 0;
-        });
-
-        cards.forEach(card => container.appendChild(card));
-    }
-
-    document.addEventListener('click', function(e) {
-        const controls = document.getElementById('stickyControls');
-        if (controls && !controls.contains(e.target)) {
-            const res = document.getElementById('searchResults');
-            if (res) res.style.display = 'none';
+    
+    document.addEventListener('click', function(e) { 
+        const controls = document.getElementById('stickyControls'); 
+        if (controls && !controls.contains(e.target)) { 
+            const res = document.getElementById('searchResults'); 
+            if (res) res.style.display = 'none'; 
         }
-        const sortWrapper = document.querySelector('.sc-sort-wrap');
+        
+        const sortWrapper = document.querySelector('.custom-sort-wrapper');
         if (sortWrapper && !sortWrapper.contains(e.target)) {
             const sortOptions = document.getElementById('sortOptionsList');
             if (sortOptions) sortOptions.classList.remove('show');
         }
     });
+
+    function sortCatalog() {
+        const val = document.getElementById('sortSelect').value;
+        const container = document.getElementById('catalog');
+        const cards = Array.from(container.querySelectorAll('.card'));
+        
+        cards.sort((a, b) => {
+            if (val === 'default') {
+                return parseInt(a.getAttribute('data-original-index')) - parseInt(b.getAttribute('data-original-index'));
+            }
+            if (val === 'popularity') {
+                const revA = parseInt(a.getAttribute('data-reviews-count')) || 0;
+                const revB = parseInt(b.getAttribute('data-reviews-count')) || 0;
+                return revB - revA; 
+            }
+            
+            let priceA = parseFloat(a.querySelector('.card-price-label').innerText.replace(/\D/g, '')) || 0;
+            let priceB = parseFloat(b.querySelector('.card-price-label').innerText.replace(/\D/g, '')) || 0;
+            let nameA = a.querySelector('.name').innerText.trim();
+            let nameB = b.querySelector('.name').innerText.trim();
+            
+            if (val === 'price-asc') return priceA - priceB;
+            if (val === 'price-desc') return priceB - priceA;
+            if (val === 'name-asc') return nameA.localeCompare(nameB);
+            return 0;
+        });
+        
+        cards.forEach(card => container.appendChild(card));
+    }
 
     function renderRecentlyViewed() {
         const sec = document.getElementById('recentSection');
@@ -6875,10 +6675,11 @@ input[type=range].price-range-input { background: transparent; }
             </div>`;
     }
 
-    async function fetchWithRetry(url, retries = 2, delay = 1500) {
+    async function fetchWithRetry(url, retries = 1, delay = 800) {
         for (let attempt = 0; attempt <= retries; attempt++) {
             try {
-                const res = await fetch(url);
+                // Без &v= - Google Sheets CDN краще обробляє без cache-bust
+                const res = await fetch(url, { cache: 'no-store' });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 return res;
             } catch (e) {
@@ -6891,94 +6692,29 @@ input[type=range].price-range-input { background: transparent; }
         }
     }
 
-    const CATALOG_CACHE_KEY = 'vr_catalog_cache';
-    const CATALOG_CACHE_TS  = 'vr_catalog_ts';
-    const CACHE_TTL_MS      = 1000 * 60 * 60 * 6; // 6 годин
-
-    function saveCatalogCache(prodText, revText) {
-        try {
-            localStorage.setItem(CATALOG_CACHE_KEY, JSON.stringify({ prod: prodText, rev: revText }));
-            localStorage.setItem(CATALOG_CACHE_TS, Date.now());
-        } catch(e) {}
-    }
-
-    function loadCatalogCache() {
-        try {
-            const ts  = parseInt(localStorage.getItem(CATALOG_CACHE_TS) || '0');
-            const age = Date.now() - ts;
-            if (age > CACHE_TTL_MS) return null;
-            const raw = localStorage.getItem(CATALOG_CACHE_KEY);
-            return raw ? JSON.parse(raw) : null;
-        } catch(e) { return null; }
-    }
-
-
     async function load() {
         showSkeletons(6);
-
-        let dataProd, dataRev, promoResp = null, fromCache = false;
-
-        // ── 1. Мережевий блок ──────────────────────────────────────
         try {
-            const urls = [SHEET_CSV + '&v=' + Date.now(), REVIEWS_CSV + '&v=' + Date.now()];
-            if (PROMO_CSV !== '') urls.push(PROMO_CSV + '&v=' + Date.now());
+            // Завантажуємо каталог і відгуки паралельно, PROMO — окремо (не блокує)
+            const [prodRes, revRes] = await Promise.all([
+                fetchWithRetry(SHEET_CSV),
+                fetchWithRetry(REVIEWS_CSV)
+            ]);
 
-            const responses = await Promise.all(urls.map(u => fetchWithRetry(u)));
-            dataProd  = await responses[0].text();
-            dataRev   = await responses[1].text();
-            promoResp = responses[2] || null;
-            saveCatalogCache(dataProd, dataRev);     // зберігаємо свіжі дані
-        } catch (netErr) {
-            console.error('[VR-PERFUMES] Мережева помилка:', netErr.message || netErr);
-            const cached = loadCatalogCache();
-            if (cached) {
-                dataProd  = cached.prod;
-                dataRev   = cached.rev;
-                promoResp = null;
-                fromCache = true;
-            } else {
-                showOfflineScreen();
-                return;
-            }
-        }
-
-        if (fromCache) showCacheBanner();
-
-        // ── 2. Блок обробки / рендерингу ───────────────────────────
-        try {
-            await processCatalogData(dataProd, dataRev, promoResp);
-        } catch (procErr) {
-            // Лише логуємо — не показуємо банер кешу при помилках рендерингу
-            console.error('[VR-PERFUMES] Помилка обробки каталогу:', procErr.message || procErr);
-        }
-    }
-
-
-    function showCacheBanner() {
-        const el = document.createElement('div');
-        el.id = 'cacheBanner';
-        el.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(30,30,30,0.92);color:#fff;font-size:11px;padding:8px 16px;border-radius:20px;z-index:9999;letter-spacing:0.5px;display:flex;align-items:center;gap:8px;backdrop-filter:blur(10px);box-shadow:0 4px 16px rgba(0,0,0,0.2);';
-        el.innerHTML = '<svg viewBox="0 0 24 24" width="13" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0"/></svg>Показано збережений каталог · <span onclick="retryLoad()" style="color:var(--gold);font-weight:700;cursor:pointer;text-decoration:underline;">Оновити</span>';
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 8000);
-    }
-
-    function retryLoad() {
-        const b = document.getElementById('cacheBanner');
-        if (b) b.remove();
-        showSkeletons(6);
-        setTimeout(load, 300);
-    }
-
-    async function processCatalogData(dataProd, dataRev, promoResponse) {
+            const dataProd = await prodRes.text();
             const rows = safeParseCSV(dataProd);
+            const dataRev = await revRes.text();
             const reviewsData = safeParseCSV(dataRev);
 
+            // PROMO завантажуємо окремо — якщо впаде, каталог вже показаний
             let promoDataRow = null;
-            if (promoResponse) {
-                const dataPromo = await promoResponse.text();
-                const promoRows = safeParseCSV(dataPromo);
-                promoDataRow = promoRows.find((row, index) => index > 0 && row[0] && String(row[0]).trim().toUpperCase() === 'ON');
+            if (PROMO_CSV !== '') {
+                try {
+                    const promoRes = await fetchWithRetry(PROMO_CSV, 0);
+                    const dataPromo = await promoRes.text();
+                    const promoRows = safeParseCSV(dataPromo);
+                    promoDataRow = promoRows.find((row, index) => index > 0 && row[0] && String(row[0]).trim().toUpperCase() === 'ON');
+                } catch(e) { /* promo не критичний */ }
             }
 
             const newsTickerElem = document.getElementById('newsTicker');
@@ -6991,12 +6727,9 @@ input[type=range].price-range-input { background: transparent; }
             let catalogData = rows.slice(1).filter(c => c[0]);
             globalCatalogData = catalogData;
 
-            // Безпечне клонування логотипного слайду
-            const existingLogo = carousel ? carousel.querySelector('.logo-slide') : null;
-            const logoSlide = existingLogo ? existingLogo.cloneNode(true) : null;
-            if (carousel) { carousel.innerHTML = ''; if (logoSlide) carousel.appendChild(logoSlide); }
-            if (container) container.innerHTML = '';
-            if (wContainer) wContainer.innerHTML = '';
+            const logoSlide = carousel.querySelector('.logo-slide').cloneNode(true);
+            carousel.innerHTML = ''; carousel.appendChild(logoSlide);
+            container.innerHTML = ''; wContainer.innerHTML = '';
 
             catalogData.sort((a, b) => new Date(b[6]) - new Date(a[6]));
             
@@ -7110,10 +6843,8 @@ input[type=range].price-range-input { background: transparent; }
                 div.className = 'card'; 
                 div.setAttribute('data-original-index', index);
                 div.setAttribute('data-brand', brand); 
-                div.setAttribute('data-name', name);
                 div.setAttribute('data-id', cardId); 
-                div.setAttribute('data-desc', safeDesc);
-                div.setAttribute('data-price', currentPricePerMl || 0);
+                div.setAttribute('data-desc', safeDesc); 
                 div.setAttribute('data-reviews-count', totalRev || 0);
                 
                 let categories = [];
@@ -7138,6 +6869,13 @@ input[type=range].price-range-input { background: transparent; }
                     <div class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist(event, '${brand.replace(/'/g, "\\'")}', '${name.replace(/'/g, "\\'")}', this)">
                         ${isWished ? '♥' : '♡'}
                     </div>
+                    <div class="card-view-count">
+                        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        ${viewCount}
+                    </div>
+                    <div class="compare-btn" onclick="event.stopPropagation(); toggleCompare('${brand.replace(/'/g,"\\'")}','${name.replace(/'/g,"\\'")}',this)" title="Порівняти">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    </div>
                     <img loading="lazy" src="${safeImg}" alt="${brand} ${name} — розпив оригінальної парфумерії" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
                     <div class="card-info">
                         <div class="price-display-wrapper">${oldPriceHTML}<div class="card-price-label">${isOutOfStock ? 'Тимчасово відсутній' : displayPriceStr}</div></div>
@@ -7161,6 +6899,7 @@ input[type=range].price-range-input { background: transparent; }
             initCarousel(); initSwipe(); init3DEffect(); formatNews(rows[0][10]); renderGeneralReviews(reviewsData.slice(1));
             if (promoDataRow) renderPremiumPromo(promoDataRow);
             populateLayeringSelects();
+            initPriceFilter();
             
             setTimeout(() => {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -7190,6 +6929,15 @@ input[type=range].price-range-input { background: transparent; }
             }, 500);
 
             updateCartUI(); renderRecentlyViewed();
+        } catch (e) { 
+            console.error('[VR-PERFUMES] Помилка завантаження каталогу:', e.message || e);
+            showOfflineScreen();
+        }
+    }
+
+    function retryLoad() {
+        showSkeletons(6);
+        setTimeout(load, 300);
     }
 
         // === ГЕНЕРАЦІЯ ОЛЬФАКТОРНОЇ КАРТИ (DNA) ===
@@ -7247,32 +6995,6 @@ function renderGenderBar(value) {
         </div>`;
 }
 
-    function buildModalNavList() {
-        _modalNavList = Array.from(document.querySelectorAll('.card'))
-            .filter(c => c.style.display !== 'none')
-            .map(c => {
-                const id = c.getAttribute('data-id') || '';
-                return globalCatalogData.find(p => p[0] + ' ' + p[1] === id) || null;
-            })
-            .filter(Boolean);
-    }
-
-    function updateModalNavUI() {
-        const prev = document.getElementById('modalNavPrev');
-        const next = document.getElementById('modalNavNext');
-        const counter = document.getElementById('modalNavCounter');
-        if (prev) prev.style.opacity = _modalNavIdx > 0 ? '1' : '0.3';
-        if (next) next.style.opacity = _modalNavIdx < _modalNavList.length - 1 ? '1' : '0.3';
-        if (counter) counter.textContent = _modalNavList.length > 1 ? `${_modalNavIdx + 1} / ${_modalNavList.length}` : '';
-    }
-
-    function modalSwipeNav(dir) {
-        const newIdx = _modalNavIdx + dir;
-        if (newIdx < 0 || newIdx >= _modalNavList.length) return;
-        _modalNavIdx = newIdx;
-        showModal(_modalNavList[_modalNavIdx]);
-    }
-
     function showModal(pArr, isWeekly = false) 
     {document.body.classList.add('modal-open');
         const [brand, name, price, minVol, desc, img, , top, weekText, , , bottleMl, bottlePrice, , stockCol] = pArr;
@@ -7295,11 +7017,6 @@ function renderGenderBar(value) {
         
         document.getElementById('mB').innerText = brand; 
         document.getElementById('mN').innerText = name;
-
-        // Лічильник переглядів у модалці
-        const vc = getViewCount(brand, name);
-        const vcEl = document.getElementById('mViewNum');
-        if (vcEl) vcEl.textContent = vc;
         
         const mImgEl = document.getElementById('mImg');
         mImgEl.src = safeImg;
@@ -8226,8 +7943,9 @@ function renderGenderBar(value) {
             const isWished = wishlist.includes(c.getAttribute('data-id'));
             const mC = currentCategory === 'all' ||
                        (currentCategory === 'wishlist' ? isWished : cat.includes(currentCategory));
+            const mP = priceAttr === 0 || (priceAttr >= _priceMin && priceAttr <= _priceMax);
 
-            c.style.display = (mS && mB && mC) ? 'flex' : 'none';
+            c.style.display = (mS && mB && mC && mP) ? 'flex' : 'none';
         });
         sortCatalog();
     }
@@ -9491,4 +9209,41 @@ updateWeather();
                 <button class="brand-show-all-btn" id="brandShowAllBtn">Переглянути всі аромати →</button>
 
                 <!-- Кнопка повернення внизу -->
-                <button onclick="showBrandGrid()" sty
+                <button onclick="showBrandGrid()" style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin-top:24px; padding:14px; border:1px solid rgba(128,128,128,0.15); border-radius:10px; background:transparent; color:var(--text-gray); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; cursor:pointer; font-family:var(--cinzel);">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    Повернутись до списку брендів
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ═══ SCENT MEMORY MAP ═══ -->
+    <div class="smap-overlay" id="smapOverlay">
+        <div class="smap-header">
+            <div class="smap-header-text">
+                <span class="smap-label">Scent Memory Map</span>
+                <div class="smap-title">Куди ви хочете<br>перенестися сьогодні?</div>
+            </div>
+            <button class="smap-close" onclick="closeScentMemoryMap()" aria-label="Закрити">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="smap-grid" id="smapGrid"></div>
+
+        <!-- Result sheet всередині overlay -->
+        <div class="smap-result-sheet" id="smapResultSheet">
+            <button class="smap-result-back" onclick="closeScentResult()">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                Повернутися
+            </button>
+            <span class="smap-result-ticket" id="smapTicketLabel">Ваш квиток</span>
+            <div class="smap-result-headline" id="smapResultHeadline"></div>
+            <div class="smap-result-sub" id="smapResultSub"></div>
+            <div class="smap-perfume-list" id="smapPerfumeList"></div>
+        </div>
+    </div>
+
+</body>
+</html>
