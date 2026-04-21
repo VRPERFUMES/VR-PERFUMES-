@@ -6727,13 +6727,20 @@ input[type=range].price-range-input { background: transparent; }
             let catalogData = rows.slice(1).filter(c => c[0]);
             globalCatalogData = catalogData;
 
-            const logoSlide = carousel.querySelector('.logo-slide').cloneNode(true);
-            carousel.innerHTML = ''; carousel.appendChild(logoSlide);
-            container.innerHTML = ''; wContainer.innerHTML = '';
+            // Безпечно клонуємо logo-slide якщо є
+            if (carousel) {
+                const logoSlide = carousel.querySelector('.logo-slide');
+                const logoClone = logoSlide ? logoSlide.cloneNode(true) : null;
+                carousel.innerHTML = '';
+                if (logoClone) carousel.appendChild(logoClone);
+            }
+            if (container) container.innerHTML = '';
+            if (wContainer) wContainer.innerHTML = '';
 
             catalogData.sort((a, b) => new Date(b[6]) - new Date(a[6]));
             
             catalogData.forEach((c, index) => {
+              try {
                 const [brand, name, price, minVol, desc, img, dateStr, top, weekText, , , bottleMl, bottlePrice, , stockCol] = c;
                 
                 const oldPricePerMl = c[15] ? parseFloat(String(c[15]).replace(',', '.')) || 0 : 0;
@@ -6892,7 +6899,10 @@ input[type=range].price-range-input { background: transparent; }
                 
                 div.querySelector('img').onclick = () => showModal(c);
                 if(!isOutOfStock) div.querySelector('.order-btn').onclick = () => showModal(c);
-                container.appendChild(div);
+                if (container) container.appendChild(div);
+              } catch(cardErr) {
+                console.warn('[VR-PERFUMES] Помилка картки:', c[0], c[1], cardErr.message);
+              }
             });
 
             renderBrandGallery(catalogData); 
@@ -6930,8 +6940,14 @@ input[type=range].price-range-input { background: transparent; }
 
             updateCartUI(); renderRecentlyViewed();
         } catch (e) { 
-            console.error('[VR-PERFUMES] Помилка завантаження каталогу:', e.message || e);
-            showOfflineScreen();
+            console.error('[VR-PERFUMES] Помилка завантаження:', e.message || e, e.stack);
+            // Якщо дані вже є в globalCatalogData — не показуємо офлайн
+            if (globalCatalogData.length > 0) {
+                console.warn('[VR-PERFUMES] Дані вже є, пропускаємо офлайн-екран');
+                triggerCatalogAnimation();
+            } else {
+                showOfflineScreen();
+            }
         }
     }
 
@@ -7592,13 +7608,17 @@ function renderGenderBar(value) {
 
     // === VIEW COUNTER ===
     function getViewCount(brand, name) {
-        const key = 'vc_' + (brand + name).replace(/\s/g, '').toLowerCase().slice(0, 20);
-        let counts = JSON.parse(localStorage.getItem('vr_views') || '{}');
-        // Додаємо реалістичну базу + власні перегляди
-        const base = ((brand.length * 7 + name.length * 11) % 40) + 12;
-        counts[key] = (counts[key] || 0) + 1;
-        localStorage.setItem('vr_views', JSON.stringify(counts));
-        return base + Math.min(counts[key], 8);
+        try {
+            const key = 'vc_' + (brand + name).replace(/\s/g, '').toLowerCase().slice(0, 20);
+            let counts = JSON.parse(localStorage.getItem('vr_views') || '{}');
+            const base = ((brand.length * 7 + name.length * 11) % 40) + 12;
+            counts[key] = (counts[key] || 0) + 1;
+            localStorage.setItem('vr_views', JSON.stringify(counts));
+            return base + Math.min(counts[key], 8);
+        } catch(e) {
+            // localStorage недоступний (private mode) — повертаємо статичне число
+            return ((brand.length * 7 + name.length * 11) % 40) + 12;
+        }
     }
 
     // === WHATSAPP / TELEGRAM QUICK ORDER ===
