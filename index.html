@@ -6885,31 +6885,47 @@ input[type=range].price-range-input { background: transparent; }
         } catch(e) { return null; }
     }
 
+
     async function load() {
         showSkeletons(6);
+
+        let dataProd, dataRev, promoResp = null, fromCache = false;
+
+        // ── 1. Мережевий блок ──────────────────────────────────────
         try {
             const urls = [SHEET_CSV + '&v=' + Date.now(), REVIEWS_CSV + '&v=' + Date.now()];
             if (PROMO_CSV !== '') urls.push(PROMO_CSV + '&v=' + Date.now());
 
             const responses = await Promise.all(urls.map(u => fetchWithRetry(u)));
-            const dataProd = await responses[0].text();
-            const dataRev  = await responses[1].text();
-            // Зберігаємо свіжий кеш
-            saveCatalogCache(dataProd, dataRev);
-            await processCatalogData(dataProd, dataRev, responses[2] || null);
-        } catch (e) {
-            console.error('[VR-PERFUMES] Помилка завантаження каталогу:', e.message || e);
-            // Пробуємо кеш
+            dataProd  = await responses[0].text();
+            dataRev   = await responses[1].text();
+            promoResp = responses[2] || null;
+            saveCatalogCache(dataProd, dataRev);     // зберігаємо свіжі дані
+        } catch (netErr) {
+            console.error('[VR-PERFUMES] Мережева помилка:', netErr.message || netErr);
             const cached = loadCatalogCache();
             if (cached) {
-                console.warn('[VR-PERFUMES] Відображаємо кешовані дані');
-                showCacheBanner();
-                await processCatalogData(cached.prod, cached.rev, null);
+                dataProd  = cached.prod;
+                dataRev   = cached.rev;
+                promoResp = null;
+                fromCache = true;
             } else {
                 showOfflineScreen();
+                return;
             }
         }
+
+        if (fromCache) showCacheBanner();
+
+        // ── 2. Блок обробки / рендерингу ───────────────────────────
+        try {
+            await processCatalogData(dataProd, dataRev, promoResp);
+        } catch (procErr) {
+            // Лише логуємо — не показуємо банер кешу при помилках рендерингу
+            console.error('[VR-PERFUMES] Помилка обробки каталогу:', procErr.message || procErr);
+        }
     }
+
 
     function showCacheBanner() {
         const el = document.createElement('div');
@@ -6948,9 +6964,12 @@ input[type=range].price-range-input { background: transparent; }
             let catalogData = rows.slice(1).filter(c => c[0]);
             globalCatalogData = catalogData;
 
-            const logoSlide = carousel.querySelector('.logo-slide').cloneNode(true);
-            carousel.innerHTML = ''; carousel.appendChild(logoSlide);
-            container.innerHTML = ''; wContainer.innerHTML = '';
+            // Безпечне клонування логотипного слайду
+            const existingLogo = carousel ? carousel.querySelector('.logo-slide') : null;
+            const logoSlide = existingLogo ? existingLogo.cloneNode(true) : null;
+            if (carousel) { carousel.innerHTML = ''; if (logoSlide) carousel.appendChild(logoSlide); }
+            if (container) container.innerHTML = '';
+            if (wContainer) wContainer.innerHTML = '';
 
             catalogData.sort((a, b) => new Date(b[6]) - new Date(a[6]));
             
@@ -9438,13 +9457,4 @@ updateWeather();
                 <span class="smap-label">Scent Memory Map</span>
                 <div class="smap-title">Куди ви хочете<br>перенестися сьогодні?</div>
             </div>
-            <button class="smap-close" onclick="closeScentMemoryMap()" aria-label="Закрити">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-        </div>
-        <div class="smap-grid" id="smapGrid"></div>
-
-        <!-- Result sheet всередині overlay -->
-        <div class="smap-result-sheet" id="smapResultSheet">
-            <button class="smap-result-back" onclick="closeScentResult()">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="ro
+            <button class="smap-close" onclick="closeScentMe
