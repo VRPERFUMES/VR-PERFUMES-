@@ -5145,14 +5145,10 @@ input[type=range].price-range-input { background: transparent; }
     </div>
 
     <div id="stickyControls" class="sticky-active glass-panel">
-        <!-- Рядок 1: ярлики + пошук + тема -->
-        <div style="display:flex; gap:8px; align-items:center;">
-            <button class="lab-shortcut" onclick="document.querySelector('.layering-section').scrollIntoView({behavior:'smooth'})">MIX LAB</button>
-            <button class="memory-map-shortcut" onclick="openScentMemoryMap()">
-                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MAP
-            </button>
+        <!-- Рядок 1: пошук на всю ширину -->
+        <div style="display:flex; gap:7px; align-items:center;">
             <div class="search-wrapper" style="flex:1;">
-                <input type="text" id="searchInput" placeholder="Пошук аромату..." oninput="handleSearchInput()">
+                <input type="text" id="searchInput" placeholder="Пошук аромату або бренду..." oninput="handleSearchInput()">
                 <svg class="mic-btn" id="micBtn" viewBox="0 0 24 24" onclick="startVoiceSearch()">
                     <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
                     <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
@@ -5165,10 +5161,18 @@ input[type=range].price-range-input { background: transparent; }
             <button class="theme-switch" onclick="toggleTheme()" id="themeBtn" style="flex-shrink:0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
         </div>
 
-        <!-- Рядок 2: ноти + ціна (прокручуваний горизонтально) -->
-        <div style="display:flex; gap:0; align-items:center; overflow-x:auto; scrollbar-width:none; padding-bottom:1px;">
-            <div class="note-suggestions" id="noteSuggestions" style="flex-shrink:0; border-bottom:none; padding:0; gap:5px; display:flex; align-items:center;">
-                <span class="note-label" style="white-space:nowrap;">Ноти:</span>
+        <!-- Рядок 2: MIX LAB + MAP + Бренди + ноти + ціна (скрол) -->
+        <div style="display:flex; gap:6px; align-items:center; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; padding-bottom:1px;">
+            <button class="lab-shortcut" style="flex-shrink:0;" onclick="document.querySelector('.layering-section').scrollIntoView({behavior:'smooth'})">MIX LAB</button>
+            <button class="memory-map-shortcut" style="flex-shrink:0;" onclick="openScentMemoryMap()">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MAP
+            </button>
+            <button class="brands-gallery-btn" style="flex-shrink:0; margin:0;" onclick="openBrandGallery()">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="display:inline;vertical-align:middle;margin-right:3px;"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Бренди
+            </button>
+            <div style="width:1px; height:14px; background:rgba(128,128,128,0.12); flex-shrink:0;"></div>
+            <div class="note-suggestions" id="noteSuggestions" style="flex-shrink:0; border-bottom:none; padding:0; gap:5px; display:flex; align-items:center; margin:0;">
+                <span class="note-label" style="white-space:nowrap; font-size:8px;">Ноти:</span>
                 <span class="note-chip" onclick="searchByNote('Ваніль', this)">Ваніль</span>
                 <span class="note-chip" onclick="searchByNote('Вишня', this)">Вишня</span>
                 <span class="note-chip" onclick="searchByNote('Шкіра', this)">Шкіра</span>
@@ -5176,27 +5180,22 @@ input[type=range].price-range-input { background: transparent; }
                 <span class="note-chip" onclick="searchByNote('Бергамот', this)">Бергамот</span>
                 <span class="note-chip" onclick="searchByNote('Мускус', this)">Мускус</span>
             </div>
-            <div style="width:1px; height:14px; background:rgba(128,128,128,0.15); flex-shrink:0; margin:0 8px;"></div>
-            <!-- PRICE FILTER inline -->
-            <div style="display:flex; align-items:center; gap:6px; flex-shrink:0; min-width:160px;">
-                <span class="price-filter-label" style="white-space:nowrap; font-size:8px;">₴/мл</span>
-                <div class="price-range-wrap" style="width:80px; min-width:80px;">
+            <div style="width:1px; height:14px; background:rgba(128,128,128,0.12); flex-shrink:0;"></div>
+            <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
+                <span style="font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-gray); white-space:nowrap;">₴/мл</span>
+                <div class="price-range-wrap" style="width:70px; min-width:70px;">
                     <div class="price-range-track"></div>
                     <div class="price-range-fill" id="priceRangeFill"></div>
                     <input type="range" class="price-range-input" id="priceRangeMin" min="0" max="500" value="0" step="5" oninput="onPriceRange()">
                     <input type="range" class="price-range-input" id="priceRangeMax" min="0" max="500" value="500" step="5" oninput="onPriceRange()">
                 </div>
-                <span class="price-filter-val" id="priceValMin" style="font-size:9px; min-width:20px;">0</span>
+                <span class="price-filter-val" id="priceValMin" style="font-size:9px; min-width:16px;">0</span>
                 <span style="color:var(--text-gray);font-size:8px;">—</span>
-                <span class="price-filter-val" id="priceValMax" style="font-size:9px; min-width:28px;">500+</span>
+                <span class="price-filter-val" id="priceValMax" style="font-size:9px; min-width:26px;">500+</span>
             </div>
         </div>
 
         <div class="brand-slider" id="brandSlider" style="display:none;"></div>
-        <button class="brands-gallery-btn" onclick="openBrandGallery()">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-            Огляд брендів
-        </button>
         <div class="tabs-container">
             <button class="tab-btn active" onclick="setCategory('all', this)">Усі</button>
             <button class="tab-btn" onclick="setCategory('new', this)">Новинки</button>
@@ -6676,10 +6675,11 @@ input[type=range].price-range-input { background: transparent; }
             </div>`;
     }
 
-    async function fetchWithRetry(url, retries = 2, delay = 1500) {
+    async function fetchWithRetry(url, retries = 1, delay = 800) {
         for (let attempt = 0; attempt <= retries; attempt++) {
             try {
-                const res = await fetch(url);
+                // Без &v= - Google Sheets CDN краще обробляє без cache-bust
+                const res = await fetch(url, { cache: 'no-store' });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 return res;
             } catch (e) {
@@ -6695,20 +6695,26 @@ input[type=range].price-range-input { background: transparent; }
     async function load() {
         showSkeletons(6);
         try {
-            const urls = [SHEET_CSV + '&v=' + Date.now(), REVIEWS_CSV + '&v=' + Date.now()];
-            if (PROMO_CSV !== '') urls.push(PROMO_CSV + '&v=' + Date.now());
+            // Завантажуємо каталог і відгуки паралельно, PROMO — окремо (не блокує)
+            const [prodRes, revRes] = await Promise.all([
+                fetchWithRetry(SHEET_CSV),
+                fetchWithRetry(REVIEWS_CSV)
+            ]);
 
-            const responses = await Promise.all(urls.map(u => fetchWithRetry(u)));
-            const dataProd = await responses[0].text();
+            const dataProd = await prodRes.text();
             const rows = safeParseCSV(dataProd);
-            const dataRev = await responses[1].text();
+            const dataRev = await revRes.text();
             const reviewsData = safeParseCSV(dataRev);
 
+            // PROMO завантажуємо окремо — якщо впаде, каталог вже показаний
             let promoDataRow = null;
-            if (responses[2]) {
-                const dataPromo = await responses[2].text();
-                const promoRows = safeParseCSV(dataPromo);
-                promoDataRow = promoRows.find((row, index) => index > 0 && row[0] && String(row[0]).trim().toUpperCase() === 'ON');
+            if (PROMO_CSV !== '') {
+                try {
+                    const promoRes = await fetchWithRetry(PROMO_CSV, 0);
+                    const dataPromo = await promoRes.text();
+                    const promoRows = safeParseCSV(dataPromo);
+                    promoDataRow = promoRows.find((row, index) => index > 0 && row[0] && String(row[0]).trim().toUpperCase() === 'ON');
+                } catch(e) { /* promo не критичний */ }
             }
 
             const newsTickerElem = document.getElementById('newsTicker');
