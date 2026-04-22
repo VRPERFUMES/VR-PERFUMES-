@@ -1055,12 +1055,6 @@
             background: rgba(197, 160, 89, 0.05); 
         }
 
-        .price-filter-opt.active-price {
-            color: var(--gold);
-            background: rgba(197, 160, 89, 0.08);
-            font-weight: 800;
-        }
-
         /* ОПТИМІЗОВАНИЙ КАТАЛОГ ДЛЯ ПК ТА МОБІЛОК + ЕФЕКТ РІДКОГО СКЛА + РІВНІ КАРТКИ */
         #catalog { 
             display: grid; 
@@ -5186,6 +5180,19 @@ input[type=range].price-range-input { background: transparent; }
                 <span class="note-chip" onclick="searchByNote('Бергамот', this)">Бергамот</span>
                 <span class="note-chip" onclick="searchByNote('Мускус', this)">Мускус</span>
             </div>
+            <div style="width:1px; height:14px; background:rgba(128,128,128,0.12); flex-shrink:0;"></div>
+            <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
+                <span style="font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-gray); white-space:nowrap;">₴/мл</span>
+                <div class="price-range-wrap" style="width:70px; min-width:70px;">
+                    <div class="price-range-track"></div>
+                    <div class="price-range-fill" id="priceRangeFill"></div>
+                    <input type="range" class="price-range-input" id="priceRangeMin" min="0" max="500" value="0" step="5" oninput="onPriceRange()">
+                    <input type="range" class="price-range-input" id="priceRangeMax" min="0" max="500" value="500" step="5" oninput="onPriceRange()">
+                </div>
+                <span class="price-filter-val" id="priceValMin" style="font-size:9px; min-width:16px;">0</span>
+                <span style="color:var(--text-gray);font-size:8px;">—</span>
+                <span class="price-filter-val" id="priceValMax" style="font-size:9px; min-width:26px;">500+</span>
+            </div>
         </div>
 
         <div class="brand-slider" id="brandSlider" style="display:none;"></div>
@@ -5205,31 +5212,11 @@ input[type=range].price-range-input { background: transparent; }
                     <svg viewBox="0 0 24 24" width="16" height="16"><path d="M7 10l5 5 5-5z" fill="var(--gold)"/></svg>
                 </div>
                 <div class="custom-sort-options" id="sortOptionsList">
-                    <!-- Сортування -->
-                    <div style="padding:8px 15px 4px; font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold); opacity:0.7;">Сортування</div>
-                    <div class="sort-option active" onclick="applySort('default', 'ЗА ЗАМОВЧУВАННЯМ (НОВІ)', event)">За замовчуванням (нові)</div>
-                    <div class="sort-option" onclick="applySort('popularity', 'ЗА ПОПУЛЯРНІСТЮ', event)">За популярністю (відгуки)</div>
-                    <div class="sort-option" onclick="applySort('price-asc', 'ЦІНА: ВІД ДЕШЕВИХ', event)">Ціна: від дешевих</div>
-                    <div class="sort-option" onclick="applySort('price-desc', 'ЦІНА: ВІД ДОРОГИХ', event)">Ціна: від дорогих</div>
-                    <div class="sort-option" onclick="applySort('name-asc', 'ЗА АЛФАВІТОМ', event)">За алфавітом (А–Я)</div>
-
-                    <!-- Фільтр за ціною/мл -->
-                    <div style="padding:10px 15px 4px; margin-top:4px; font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold); opacity:0.7; border-top:1px solid rgba(128,128,128,0.08);">Ціна за 1 мл</div>
-                    <div class="sort-option price-filter-opt active-price" id="pf-all" onclick="applyPriceFilter(0,9999,'pf-all',event)">
-                        Всі ціни
-                    </div>
-                    <div class="sort-option price-filter-opt" id="pf-1" onclick="applyPriceFilter(0,30,'pf-1',event)">
-                        до 30 грн/мл <span style="opacity:0.45;font-size:9px;float:right;">~60 грн за 2 мл</span>
-                    </div>
-                    <div class="sort-option price-filter-opt" id="pf-2" onclick="applyPriceFilter(30,70,'pf-2',event)">
-                        30–70 грн/мл <span style="opacity:0.45;font-size:9px;float:right;">~150–350 грн за 5 мл</span>
-                    </div>
-                    <div class="sort-option price-filter-opt" id="pf-3" onclick="applyPriceFilter(70,150,'pf-3',event)">
-                        70–150 грн/мл <span style="opacity:0.45;font-size:9px;float:right;">~350–750 грн за 5 мл</span>
-                    </div>
-                    <div class="sort-option price-filter-opt" id="pf-4" onclick="applyPriceFilter(150,9999,'pf-4',event)">
-                        від 150 грн/мл <span style="opacity:0.45;font-size:9px;float:right;">нішева розкіш</span>
-                    </div>
+                    <div class="sort-option active" onclick="applySort('default', 'ЗА ЗАМОВЧУВАННЯМ (НОВІ)', event)">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</div>
+                    <div class="sort-option" onclick="applySort('popularity', 'ЗА ПОПУЛЯРНІСТЮ (ВІДГУКИ)', event)">ЗА ПОПУЛЯРНІСТЮ (ВІДГУКИ)</div>
+                    <div class="sort-option" onclick="applySort('price-asc', 'ЦІНА: ВІД ДЕШЕВИХ', event)">ЦІНА: ВІД ДЕШЕВИХ</div>
+                    <div class="sort-option" onclick="applySort('price-desc', 'ЦІНА: ВІД ДОРОГИХ', event)">ЦІНА: ВІД ДОРОГИХ</div>
+                    <div class="sort-option" onclick="applySort('name-asc', 'ЗА АЛФАВІТОМ (А-Я)', event)">ЗА АЛФАВІТОМ (А-Я)</div>
                 </div>
                 <select id="sortSelect" style="display:none;" onchange="sortCatalog()">
                     <option value="default">default</option>
@@ -5476,33 +5463,28 @@ input[type=range].price-range-input { background: transparent; }
                 </div>
             </div>
 
-            <!-- STICKY FOOTER — завжди видно -->
-            <div id="modalStickyFooter" style="flex-shrink:0; background:var(--bg); border-top:1px solid rgba(128,128,128,0.1); box-shadow:0 -4px 20px rgba(0,0,0,0.06);">
-                <!-- Вибір об'єму -->
-                <div id="modalVolGrid" style="padding:10px 16px 6px; display:flex; gap:6px; flex-wrap:wrap; justify-content:center;"></div>
-                <!-- Ціна + кнопка -->
-                <div style="padding:0 16px 12px; display:flex; align-items:center; gap:12px;">
-                    <div style="flex-shrink:0;">
-                        <div id="modalPriceLabel" style="font-family:var(--serif); font-weight:800; color:var(--gold); font-size:20px; line-height:1;"></div>
-                        <div id="modalVolLabel" style="font-size:9px; color:#999; text-transform:uppercase; letter-spacing:0.5px; margin-top:2px;">Оберіть об'єм</div>
-                    </div>
-                    <button id="modalOrderBtn" class="modal-btn-full modal-order-btn" style="flex:1;">Додати в кошик</button>
+            <div style="padding: 15px 20px; background: var(--bg); border-top: 1px solid rgba(128,128,128,0.1); display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                <div style="flex: 1;">
+                    <div id="modalPriceLabel" style="font-family: var(--serif); font-weight: 800; color: var(--gold); font-size: 18px;"></div>
+                    <div id="modalVolLabel" style="font-size: 10px; color: #999; text-transform: uppercase;">Оберіть об'єм</div>
                 </div>
-                <!-- Миттєве замовлення -->
-                <div style="padding:0 16px 14px;">
-                    <div style="font-size:8px; color:var(--text-gray); text-align:center; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; opacity:0.55;">або замовити миттєво</div>
-                    <div class="quick-order-row">
-                        <a id="quickOrderTg" href="#" target="_blank" class="quick-order-btn" onclick="return buildQuickOrderLink('tg')">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5L2 12.5l7 1M21 5l-2.5 15L9 13.5M21 5L9 13.5m0 0v5l3.5-3"/></svg>
-                            Telegram
-                        </a>
-                        <a id="quickOrderWa" href="#" target="_blank" class="quick-order-btn" onclick="return buildQuickOrderLink('wa')">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                            WhatsApp
-                        </a>
-                    </div>
+                <button id="modalOrderBtn" class="modal-btn-full modal-order-btn" style="flex: 1.2;">Додати в кошик</button>
+            </div>
+            <div style="padding: 0 20px 16px; background: var(--bg);">
+                <div style="font-size:8px; color:var(--text-gray); text-align:center; letter-spacing:1px; text-transform:uppercase; margin-bottom:7px; opacity:0.6;">або замовити миттєво</div>
+                <div class="quick-order-row">
+                    <a id="quickOrderTg" href="#" target="_blank" class="quick-order-btn" onclick="return buildQuickOrderLink('tg')">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5L2 12.5l7 1M21 5l-2.5 15L9 13.5M21 5L9 13.5m0 0v5l3.5-3"/></svg>
+                        Telegram
+                    </a>
+                    <a id="quickOrderWa" href="#" target="_blank" class="quick-order-btn" onclick="return buildQuickOrderLink('wa')">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                        WhatsApp
+                    </a>
                 </div>
-            </div> 
+            </div>
+     </div> 
+    </div> 
             
     <!-- COMPARE DOCK -->
     <div class="compare-dock" id="compareDock">
@@ -6189,9 +6171,10 @@ input[type=range].price-range-input { background: transparent; }
         infoModal.style.display = 'none';
         infoModal.classList.remove('modal-visible');
         window._volAdvisorActive = false;
-        _resetSEOMeta();
+        
         if (viraAmbient) handleViraAtmosphere('stop');
         if (isSpeaking) { synth.cancel(); isSpeaking = false; updateVoiceBtn(false); }
+
     }
 
     // === ОЛЬФАКТОРНА ЛАБОРАТОРІЯ (ОНОВЛЕНА ЛОГІКА ПРОПОРЦІЙ) ===
@@ -6374,33 +6357,6 @@ input[type=range].price-range-input { background: transparent; }
         e.stopPropagation();
         document.getElementById('sortOptionsList').classList.toggle('show');
     }
-
-    // === PRICE FILTER via dropdown ===
-    function applyPriceFilter(min, max, activeId, e) {
-        if (e) e.stopPropagation();
-        _priceMin = min;
-        _priceMax = max;
-
-        // Підсвічуємо активний діапазон
-        document.querySelectorAll('.price-filter-opt').forEach(el => el.classList.remove('active-price'));
-        const activeEl = document.getElementById(activeId);
-        if (activeEl) activeEl.classList.add('active-price');
-
-        // Оновлюємо заголовок dropdown
-        const sortHeader = document.getElementById('currentSortText');
-        if (sortHeader) {
-            const currentSort = sortHeader.textContent.split(' · ')[0];
-            const priceLabel = (min === 0 && max === 9999) ? '' : (' · ' + (max === 9999 ? `від ${min} ₴/мл` : `${min}–${max} ₴/мл`));
-            sortHeader.textContent = currentSort + priceLabel;
-        }
-
-        // Закриваємо dropdown і фільтруємо
-        document.getElementById('sortOptionsList').classList.remove('show');
-        triggerCatalogAnimation();
-    }
-
-    function onPriceRange() {}    // заглушка для сумісності
-    function initPriceFilter() {} // заглушка для сумісності
 
     function applySort(val, text, e) {
         document.getElementById('currentSortText').innerText = text;
@@ -7311,28 +7267,31 @@ function renderGenderBar(value) {
         const isBottleAvailable = bottleMl && parseInt(bottleMl) > 0;
         const isSetType = (minVol && String(minVol).toLowerCase().includes('тільки')) || brand.toLowerCase().includes('set') || brand.toLowerCase().includes('сет') || name.toLowerCase().includes('сет');
 
-        // Рендеримо vol-chips у sticky footer
-        const volGrid = document.getElementById('modalVolGrid');
-        if (volGrid) {
-            volGrid.innerHTML = '';
-            if (isSetType) {
-                selectedVol = "Набір";
-                volGrid.innerHTML = `<div class="vol-chip active" onclick="selectVol(this, 'Набір')">${minVol} <small>${calculatePrice(price, '2 мл')}</small></div>`;
-            } else {
-                selectedVol = "5 мл";
-                const chips = [
-                    !disable2ml ? `<div class="vol-chip" onclick="selectVol(this, '2 мл')">2 мл <small>${calculatePrice(price, '2 мл')}</small></div>` : `<div class="vol-chip disabled">2 мл</div>`,
-                    `<div class="vol-chip active" onclick="selectVol(this, '5 мл')">5 мл <small>${calculatePrice(price, '5 мл')}</small></div>`,
-                    `<div class="vol-chip" onclick="selectVol(this, '10 мл')">10 мл <small>${calculatePrice(price, '10 мл')}</small></div>`,
-                    `<div class="vol-chip" onclick="selectVol(this, '20 мл')">20 мл <small>${calculatePrice(price, '20 мл')}</small></div>`,
-                    `<div class="vol-chip" onclick="selectVol(this, 'Флакон')">Флакон <small>Запит</small></div>`,
-                    isBottleAvailable ? `<div class="vol-chip bottle-special" onclick="selectVol(this, 'Рідний флакон (${bottleMl} мл)', ${bottlePrice})">Флакон ${bottleMl} мл <small>${bottlePrice} грн</small></div>` : '',
-                ];
-                volGrid.innerHTML = chips.join('');
-            }
+        let volButtons = '';
+        if (isSetType) {
+            selectedVol = "Набір";
+            volButtons = `<div class="vol-chip active" onclick="selectVol(this, 'Набір')">${minVol} <small>${calculatePrice(price, '2 мл')}</small></div>`;
+        } else {
+            selectedVol = "5 мл";
+            volButtons = `
+                <div class="vol-chip ${disable2ml ? 'disabled' : ''}" onclick="selectVol(this, '2 мл')">2 мл <small>${calculatePrice(price, '2 мл')}</small></div>
+                <div class="vol-chip active" onclick="selectVol(this, '5 мл')">5 мл <small>${calculatePrice(price, '5 мл')}</small></div>
+                <div class="vol-chip" onclick="selectVol(this, '10 мл')">10 мл <small>${calculatePrice(price, '10 мл')}</small></div>
+                <div class="vol-chip" onclick="selectVol(this, '20 мл')">20 мл <small>${calculatePrice(price, '20 мл')}</small></div>
+                <div class="vol-chip" onclick="selectVol(this, 'Флакон')">Флакон <small>Запит</small></div>
+                ${isBottleAvailable ? `<div class="vol-chip bottle-special" onclick="selectVol(this, 'Рідний флакон (${bottleMl} мл)', ${bottlePrice})">Залишок у рідному флаконі (${bottleMl} мл) <small>${bottlePrice} грн</small></div>` : ''}`;
         }
-
-        const volHTML = `<div class="vol-container" style="display:none;"></div>`; // заглушка — vol вже в footer
+        
+        const volHTML = `<div class="vol-container">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2px;">
+                <span class="vol-label" style="margin-bottom:0;">Оберіть об'єм:</span>
+                <button class="vol-advisor-btn" id="volAdvisorBtn" onclick="toggleVolAdvisor()" title="Дізнатися на скільки вистачить">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                    На скільки вистачить?
+                </button>
+            </div>
+            <div class="vol-grid">${volButtons}</div>
+        </div>`;
             
         const reviewFormHTML = `
             <div class="review-form-container" id="reviewFormBlock">
@@ -7381,59 +7340,6 @@ function renderGenderBar(value) {
 
         // Паспорт аромату
         renderPassport(brand, name, rawText);
-
-        // === SEO: динамічні meta теги ===
-        updateSEOMeta(brand, name, desc, img);
-    }
-
-    function updateSEOMeta(brand, name, desc, img) {
-        const title = `${brand} ${name} | VR-PERFUMES — розпив оригінальної парфумерії`;
-        const cleanDesc = (desc || '')
-            .replace(/<[^>]*>/g, ' ')
-            .replace(/\[[^\]]*\]/g, '')
-            .replace(/\s+/g, ' ')
-            .trim()
-            .slice(0, 155);
-        const description = cleanDesc || `${brand} ${name} — оригінальний аромат у розпиві від 2 мл. VR-PERFUMES, Хмельницький.`;
-        const url = `${location.origin}${location.pathname}?p=${encodeURIComponent(brand + ' ' + name)}`;
-
-        document.title = title;
-
-        const setMeta = (sel, val) => {
-            const el = document.querySelector(sel);
-            if (el) el.setAttribute(el.hasAttribute('content') ? 'content' : 'href', val);
-        };
-        const setOrCreate = (attr, attrVal, content) => {
-            let el = document.querySelector(`meta[${attr}="${attrVal}"]`);
-            if (!el) { el = document.createElement('meta'); el.setAttribute(attr, attrVal); document.head.appendChild(el); }
-            el.setAttribute('content', content);
-        };
-
-        setOrCreate('name', 'description', description);
-        setOrCreate('property', 'og:title', title);
-        setOrCreate('property', 'og:description', description);
-        setOrCreate('property', 'og:image', img || 'https://i.postimg.cc/CxkmFFJ3/logo.png');
-        setOrCreate('property', 'og:url', url);
-        setOrCreate('property', 'og:type', 'product');
-        setOrCreate('name', 'twitter:card', 'summary_large_image');
-        setOrCreate('name', 'twitter:title', title);
-        setOrCreate('name', 'twitter:description', description);
-        setOrCreate('name', 'twitter:image', img || 'https://i.postimg.cc/CxkmFFJ3/logo.png');
-
-        // Canonical URL
-        let canonical = document.querySelector('link[rel="canonical"]');
-        if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-        canonical.href = url;
-
-        // Повертаємо при закритті
-        window._origTitle = window._origTitle || document.title;
-    }
-
-    function _resetSEOMeta() {
-        if (window._origTitle) document.title = 'VR-PERFUMES | Premium Showcase';
-        const canonical = document.querySelector('link[rel="canonical"]');
-        if (canonical) canonical.href = `${location.origin}${location.pathname}`;
-        window.history.replaceState({}, '', location.pathname);
     }
 
     function updateModalStickyBar() {
