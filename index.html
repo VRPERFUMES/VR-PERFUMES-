@@ -3581,20 +3581,20 @@ body.dark-theme .passport-card {
 .brands-gallery-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    width: 100%;
-    padding: 11px 15px;
+    gap: 5px;
+    padding: 4px 10px;
     background: rgba(197, 160, 89, 0.05);
     border: 1px solid rgba(197, 160, 89, 0.25);
-    border-radius: 8px;
+    border-radius: 15px;
     color: var(--gold);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     cursor: pointer;
     transition: background 0.2s ease;
     box-sizing: border-box;
+    white-space: nowrap;
 }
 .brands-gallery-btn:active {
     background: rgba(197, 160, 89, 0.12);
@@ -5167,7 +5167,7 @@ input[type=range].price-range-input { background: transparent; }
             <button class="memory-map-shortcut" style="flex-shrink:0;" onclick="openScentMemoryMap()">
                 <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MAP
             </button>
-            <button class="brands-gallery-btn" style="flex-shrink:0; margin:0;" onclick="openBrandGallery()">
+            <button class="brands-gallery-btn" style="flex-shrink:0; margin:0; padding:4px 10px; width:auto;" onclick="openBrandGallery()">
                 <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="display:inline;vertical-align:middle;margin-right:3px;"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Бренди
             </button>
             <div style="width:1px; height:14px; background:rgba(128,128,128,0.12); flex-shrink:0;"></div>
@@ -6876,13 +6876,6 @@ input[type=range].price-range-input { background: transparent; }
                     <div class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist(event, '${brand.replace(/'/g, "\\'")}', '${name.replace(/'/g, "\\'")}', this)">
                         ${isWished ? '♥' : '♡'}
                     </div>
-                    <div class="card-view-count">
-                        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        ${viewCount}
-                    </div>
-                    <div class="compare-btn" onclick="event.stopPropagation(); toggleCompare('${brand.replace(/'/g,"\\'")}','${name.replace(/'/g,"\\'")}',this)" title="Порівняти">
-                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                    </div>
                     <img loading="lazy" src="${safeImg}" alt="${brand} ${name} — розпив оригінальної парфумерії" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
                     <div class="card-info">
                         <div class="price-display-wrapper">${oldPriceHTML}<div class="card-price-label">${isOutOfStock ? 'Тимчасово відсутній' : displayPriceStr}</div></div>
@@ -7690,12 +7683,6 @@ function renderGenderBar(value) {
         if (!contact) { alert('Будь ласка, вкажіть ваш Telegram нік або номер телефону!'); return; }
         if (!/[0-9@]/.test(contact)) { alert('Вкажіть коректний номер або Telegram нік (з @)'); return; }
 
-        // Google Ads конверсія — першою
-        if (typeof gtag === 'function') {
-            gtag('event', 'conversion', { 'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D', 'value': totalSumNum, 'currency': 'UAH', 'transaction_id': Date.now().toString() });
-            gtag('event', 'purchase', { 'currency': 'UAH', 'value': totalSumNum, 'items': cart.map(i => ({ 'item_name': i.name, 'item_brand': i.brand, 'price': i.price, 'quantity': 1 })) });
-        }
-
         const btn = document.getElementById('checkoutBtn');
         const origText = btn.innerText;
         btn.innerText = 'ВІДПРАВКА...'; btn.style.opacity = '0.7'; btn.style.pointerEvents = 'none';
@@ -7711,6 +7698,32 @@ function renderGenderBar(value) {
         try {
             const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxwI4YS1nrjizwkUJ4-Eay9iFcFIQB8pW8ehgJNaiVRZiItsMcjfzD4t4MmqfO6AQ42Ag/exec';
             await fetch(WEBAPP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+
+            // ✅ Конверсія ПІСЛЯ підтвердження замовлення (fetch виконаний успішно)
+            // Тепер у нас є Thank You Screen — конверсія відповідає реальній дії
+            const txId = Date.now().toString();
+            if (typeof gtag === 'function') {
+                // Google Ads конверсія
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D',
+                    'value': totalSumNum,
+                    'currency': 'UAH',
+                    'transaction_id': txId  // унікальний ID — захищає від дублікатів
+                });
+                // GA4 purchase подія
+                gtag('event', 'purchase', {
+                    'transaction_id': txId,
+                    'currency': 'UAH',
+                    'value': totalSumNum,
+                    'items': cartSnapshot.map((i, idx) => ({
+                        'item_id': txId + '_' + idx,
+                        'item_name': i.name,
+                        'item_brand': i.brand,
+                        'price': i.price,
+                        'quantity': 1
+                    }))
+                });
+            }
 
             // Закриваємо кошик
             cart = []; saveCart();
