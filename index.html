@@ -5832,47 +5832,47 @@ input[type=range].price-range-input { background: transparent; }
     }
 
     function getVolumePhrase(pricePerMl) {
-        const chips = document.querySelectorAll('.vol-chip:not(.disabled):not(.bottle-special)');
-        const available = [];
-        chips.forEach(chip => {
-            const txt = chip.innerText || chip.textContent;
-            const mlMatch = txt.match(/(\d+)\s*мл/);
-            if (mlMatch) available.push(parseInt(mlMatch[1]));
-        });
+    const chips = document.querySelectorAll('.vol-chip:not(.disabled):not(.bottle-special)');
+    const available = [];
+    chips.forEach(chip => {
+        const txt = chip.innerText || chip.textContent;
+        const mlMatch = txt.match(/(\d+)\s*мл/);
+        if (mlMatch) available.push(parseInt(mlMatch[1]));
+    });
 
-        const phrases = [];
+    const phrases = [];
 
-        if (available.includes(2)) phrases.push(
-            pickRandom([
-                'два мілілітри — ідеальне знайомство, вистачить на тиждень',
-                'два мілілітри для першого побачення з ароматом'
-            ])
-        );
-        if (available.includes(5)) phrases.push(
-            pickRandom([
-                'п\'ять мілілітрів — для повноцінного знайомства на два-три тижні',
-                'п\'ять мілілітрів — найпопулярніший вибір, вистачить на місяць'
-            ])
-        );
-        if (available.includes(10)) phrases.push(
-            pickRandom([
-                'десять мілілітрів — для тих, хто вже закоханий, вистачить на два місяці',
-                'десять мілілітрів — справжня колекційна доза на місяць-два'
-            ])
-        );
-        if (available.includes(20)) phrases.push(
-            pickRandom([
-                'двадцять мілілітрів — якщо серце вже вирішило, вистачить на сезон',
-                'двадцять мілілітрів — ваш особистий аромат на кілька місяців'
-            ])
-        );
+    if (available.includes(2)) phrases.push(
+        pickRandom([
+            'два мілілітри — близько 20 пшиків, вистачить на 7–10 днів',
+            'два мілілітри — тиждень щоденного носіння, ідеально для знайомства'
+        ])
+    );
+    if (available.includes(5)) phrases.push(
+        pickRandom([
+            'п\'ять мілілітрів — близько 50 пшиків, вистачить на 2–3 тижні',
+            'п\'ять мілілітрів — найпопулярніший формат, два-три тижні носіння'
+        ])
+    );
+    if (available.includes(10)) phrases.push(
+        pickRandom([
+            'десять мілілітрів — близько 100 пшиків, вистачить на місяць-півтора',
+            'десять мілілітрів — місяць-півтора щоденного носіння'
+        ])
+    );
+    if (available.includes(20)) phrases.push(
+        pickRandom([
+            'двадцять мілілітрів — близько 200 пшиків, вистачить на 2–3 місяці',
+            'двадцять мілілітрів — серйозний запас на два-три місяці'
+        ])
+    );
 
-        if (phrases.length === 0) return 'Це ідеальний вибір для вашої колекції.';
+    if (phrases.length === 0) return 'Це ідеальний вибір для вашої колекції.';
 
-        const count = Math.min(phrases.length, 2);
-        const chosen = phrases.slice(0, count);
-        return 'Доступні об\'єми: ' + chosen.join('; ') + '.';
-    }
+    const count = Math.min(phrases.length, 2);
+    const chosen = phrases.slice(0, count);
+    return 'Доступні об\'єми: ' + chosen.join('; ') + '.';
+}
 
     function generateViraSpeech(brand, name, rawDesc) {
         const sBrand = getSmartName(brand);
