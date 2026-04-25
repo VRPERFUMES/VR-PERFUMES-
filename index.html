@@ -7685,6 +7685,7 @@ const volComments = {
         document.getElementById('thankyouOverlay').classList.remove('open');
     }
 
+
     async function shareOrderToStories() {
         const snap = window._lastOrderSnapshot || [];
         const items = snap.map(i => `${i.brand} ${i.name} ${i.volume}`).join('\n');
@@ -7695,6 +7696,87 @@ const volComments = {
             navigator.clipboard && navigator.clipboard.writeText(text);
             alert('Текст скопійовано — вставте у Stories!');
         }
+    }
+
+        // === API НОВОЇ ПОШТИ ===
+    const NP_API_KEY = 'bee3a1f10c8e5a15c0f5bc3be137843c'; // Замініть на свій ключ
+    let npCityTimeout;
+
+    async function fetchNPCities(query) {
+        if (query.length < 2) return; // Починаємо шукати від 2 символів
+        clearTimeout(npCityTimeout);
+        
+        npCityTimeout = setTimeout(async () => {
+            try {
+                const res = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        apiKey: NP_API_KEY,
+                        modelName: 'Address',
+                        calledMethod: 'searchSettlements',
+                        methodProperties: { CityName: query, Limit: 15 }
+                    })
+                });
+                const data = await res.json();
+                const datalist = document.getElementById('np-cities');
+                datalist.innerHTML = '';
+                
+                if (data.success) {
+                    data.data[0].Addresses.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.Present; // Наприклад: "Київ, Київська обл."
+                        option.dataset.ref = city.DeliveryCity; // Унікальний код міста для пошуку відділень
+                        datalist.appendChild(option);
+                    });
+                }
+            } catch (e) { console.error('Помилка НП:', e); }
+        }, 400); // Затримка, щоб не спамити запитами поки людина друкує
+    }
+
+    async function fetchNPBranches() {
+        const cityInput = document.getElementById('cartCity').value;
+        const datalist = document.getElementById('np-cities');
+        const branchInput = document.getElementById('cartBranch');
+        let cityRef = '';
+
+        // Шукаємо Ref міста, яке вибрав клієнт
+        for (let option of datalist.options) {
+            if (option.value === cityInput) {
+                cityRef = option.dataset.ref;
+                break;
+            }
+        }
+
+        if (!cityRef) {
+            branchInput.placeholder = "Спочатку оберіть місто зі списку!";
+            return; 
+        }
+
+        branchInput.placeholder = "Завантаження відділень...";
+
+        try {
+            const res = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+                method: 'POST',
+                body: JSON.stringify({
+                    apiKey: NP_API_KEY,
+                    modelName: 'Address',
+                    calledMethod: 'getWarehouses',
+                    methodProperties: { SettlementRef: cityRef, Limit: 200 }
+                })
+            });
+            const data = await res.json();
+            const branchDatalist = document.getElementById('np-branches');
+            branchDatalist.innerHTML = '';
+
+            if (data.success) {
+                data.data.forEach(branch => {
+                    const option = document.createElement('option');
+                    option.value = branch.Description;
+                    branchDatalist.appendChild(option);
+                });
+                branchInput.placeholder = "Оберіть відділення або поштомат...";
+            }
+        } catch (e) { console.error('Помилка НП:', e); }
     }
 
     async function checkoutCart() {
