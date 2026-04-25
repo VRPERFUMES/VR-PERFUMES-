@@ -6904,32 +6904,35 @@ input[type=range].price-range-input { background: transparent; }
             populateLayeringSelects();
             initPriceFilter();
             
-            setTimeout(() => {
-                const urlParams = new URLSearchParams(window.location.search);
-                const shareP = urlParams.get('p');
-                const shareW = urlParams.get('w');
-                if (shareP) {
-                    const foundItem = globalCatalogData.find(p => (p[0] + " " + p[1]).toLowerCase() === shareP.toLowerCase());
-                    if (foundItem) showModal(foundItem);
-                }
-                if (shareW) {
-                    try {
-                        const importedIds = JSON.parse(decodeURIComponent(shareW));
-                        if (Array.isArray(importedIds) && importedIds.length > 0) {
-                            let addedCount = 0;
-                            importedIds.forEach(id => {
-                                if (!wishlist.includes(id)) { wishlist.push(id); addedCount++; }
-                            });
-                            if (addedCount > 0) {
-                                localStorage.setItem('vr_wishlist', JSON.stringify(wishlist));
-                                triggerCatalogAnimation();
-                                alert(`Успішно додано ${addedCount} ароматів до ваших Улюблених`);
-                            }
-                        }
-                    } catch(e) { console.error('Помилка імпорту Wishlist', e); }
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                }
-            }, 500);
+            const urlParams = new URLSearchParams(window.location.search);
+const shareP = urlParams.get('p');
+const shareW = urlParams.get('w');
+if (shareP) {
+    const searchStr = shareP.trim().toLowerCase();
+    const foundItem = globalCatalogData.find(p =>
+        ((p[0] || '').trim() + ' ' + (p[1] || '').trim()).toLowerCase() === searchStr
+    );
+    if (foundItem) {
+        requestAnimationFrame(() => showModal(foundItem));
+    }
+}
+if (shareW) {
+    try {
+        const importedIds = JSON.parse(decodeURIComponent(shareW));
+        if (Array.isArray(importedIds) && importedIds.length > 0) {
+            let addedCount = 0;
+            importedIds.forEach(id => {
+                if (!wishlist.includes(id)) { wishlist.push(id); addedCount++; }
+            });
+            if (addedCount > 0) {
+                localStorage.setItem('vr_wishlist', JSON.stringify(wishlist));
+                triggerCatalogAnimation();
+                alert(`Успішно додано ${addedCount} ароматів до ваших Улюблених`);
+            }
+        }
+    } catch(e) { console.error('Помилка імпорту Wishlist', e); }
+    window.history.replaceState({}, document.title, window.location.pathname);
+}
 
             updateCartUI(); renderRecentlyViewed();
         } catch (e) { 
