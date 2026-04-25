@@ -8664,8 +8664,32 @@ function renderGenderBar(value) {
     }
 
     load();
-    initTheme();
-    initSeasonalBanner();
+initTheme();
+initSeasonalBanner();
+
+// === DEEP LINK: відкриття модалки по URL ===
+(function() {
+    const shareP = new URLSearchParams(window.location.search).get('p');
+    if (!shareP) return;
+
+    let attempts = 0;
+    const timer = setInterval(function() {
+        attempts++;
+        if (attempts > 40) { clearInterval(timer); return; }
+        if (globalCatalogData.length === 0) return;
+
+        clearInterval(timer);
+
+        const searchStr = shareP.trim().toLowerCase();
+        const foundItem = globalCatalogData.find(function(p) {
+            return ((p[0] || '').trim() + ' ' + (p[1] || '').trim()).toLowerCase() === searchStr;
+        });
+
+        if (foundItem) {
+            setTimeout(function() { showModal(foundItem); }, 300);
+        }
+    }, 200);
+})();
 
     // === СОЦІАЛЬНИЙ ДОКАЗ: "Сьогодні купили" сповіщення ===
     (function initSocialProofToasts() {
