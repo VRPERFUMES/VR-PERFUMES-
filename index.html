@@ -5410,8 +5410,13 @@ input[type=range].price-range-input { background: transparent; }
             </label>
 
             <!-- Contacts -->
-            <input type="text" id="cartContact" class="cart-comment-input" placeholder="Telegram @нік або номер телефону *" required>
-            <textarea id="cartComment" class="cart-comment-input" rows="2" placeholder="Місто та відділення Нової Пошти..."></textarea>
+            <input type="text" id="cartContact" class="cart-comment-input" placeholder="Telegram @нік або телефон *" required style="margin-bottom: 10px;">
+
+<input list="np-cities" id="cartCity" class="cart-comment-input" placeholder="Почніть вводити місто..." oninput="fetchNPCities(this.value)" autocomplete="off" style="margin-bottom: 10px;">
+<datalist id="np-cities"></datalist>
+
+<input list="np-branches" id="cartBranch" class="cart-comment-input" placeholder="Клікніть, щоб обрати відділення..." onfocus="fetchNPBranches()" autocomplete="off" style="margin-bottom: 15px;">
+<datalist id="np-branches"></datalist>
 
             <!-- Total + CTA -->
             <div class="cart-total-row">
