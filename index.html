@@ -7701,6 +7701,15 @@ const volComments = {
         if (!contact) { alert('Будь ласка, вкажіть ваш Telegram нік або номер телефону!'); return; }
         if (!/[0-9@]/.test(contact)) { alert('Вкажіть коректний номер або Telegram нік (з @)'); return; }
 
+        
+if (typeof gtag === 'function') {
+    gtag('event', 'conversion', {
+        'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D',
+        'value': parseInt((document.getElementById('cartTotalSum')?.innerText || '0').replace(/\D/g,'')),
+        'currency': 'UAH'
+    });
+}
+
         const btn = document.getElementById('checkoutBtn');
         const origText = btn.innerText;
         btn.innerText = 'ВІДПРАВКА...'; btn.style.opacity = '0.7'; btn.style.pointerEvents = 'none';
