@@ -7843,8 +7843,9 @@ const comment = (city && branch) ? `Місто: ${city}\nВідділення: $
 
             // Закриваємо кошик
             cart = []; saveCart();
-            document.getElementById('cartContact').value = '';
-            document.getElementById('cartComment').value = '';
+            document.getElementById('cartContact').value = ''; 
+document.getElementById('cartCity').value = ''; 
+document.getElementById('cartBranch').value = '';
             if (giftBox) giftBox.checked = false;
             btn.innerText = origText; btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
             btn.style.background = 'var(--gold)'; btn.style.color = '#fff';
