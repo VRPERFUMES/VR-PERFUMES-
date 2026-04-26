@@ -1261,8 +1261,27 @@
             font-family: var(--serif); 
             color: var(--gold); 
             font-weight: 700; 
-            margin: 10px 0 2px; 
+            margin: 10px 0 4px; 
             text-align: center; 
+        }
+
+        .card-price-per-ml {
+            display: block;
+            width: fit-content;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            padding: 3px 9px 3px 8px;
+            border-radius: 20px;
+            margin: 0 auto 5px;
+            font-family: var(--serif);
+        }
+
+        body.dark-theme .card-price-per-ml {
+            background: rgba(255,255,255,0.14);
+            color: #ddd;
         }
 
         .brand { 
@@ -4922,14 +4941,14 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             <div class="cart-items" id="cartItemsList" style="flex:1; overflow-y:auto;"></div>
 
             <!-- Рекомендація -->
-            <div class="cart-upsell" id="cartUpsellBlock">
+            <div class="cart-upsell" id="cartUpsellBlock" style="display:none; margin:0 0 0; padding:10px 14px; background:rgba(197,160,89,0.04); border-top:1px solid rgba(197,160,89,0.1); flex-shrink:0;">
                 <span class="cart-upsell-label">✦ Можливо вподобаєте</span>
                 <div class="cart-upsell-row">
-                    <img id="upsellImg" class="cart-upsell-img" src="" alt="">
-                    <div style="flex:1;min-width:0;">
-                        <div id="upsellBrand" style="font-size:9px;color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;font-family:var(--cinzel);"></div>
-                        <div id="upsellName" style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-dark);"></div>
-                        <div id="upsellPrice" style="font-size:12px;font-weight:800;color:var(--gold);margin-top:2px;"></div>
+                    <img id="upsellImg" src="" alt="" style="width:48px; height:48px; object-fit:cover; border-radius:8px; flex-shrink:0; background:rgba(128,128,128,0.06);">
+                    <div style="flex:1; min-width:0;">
+                        <div id="upsellBrand" style="font-size:9px; color:var(--gold); font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; font-family:var(--cinzel);"></div>
+                        <div id="upsellName" style="font-size:13px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text-dark);"></div>
+                        <div id="upsellPrice" style="font-size:11px; font-weight:800; color:var(--gold); margin-top:2px;"></div>
                     </div>
                     <button id="upsellAddBtn" class="cart-upsell-add">+ 2 мл</button>
                 </div>
@@ -6472,7 +6491,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                     <img loading="lazy" src="${safeImg}" alt="${brand} ${name} — розпив оригінальної парфумерії" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
                     <div class="card-info">
                         <div class="price-display-wrapper">${oldPriceHTML}<div class="card-price-label">${isOutOfStock ? 'Тимчасово відсутній' : displayPriceStr}</div></div>
-                        <div style="font-size: 10px; color: #999; text-align: center; margin-top: -2px; margin-bottom: 5px; opacity: 0.6;">${currentPricePerMl} грн / 1 мл</div>
+                        <div style="text-align:center;"><span class="card-price-per-ml">${currentPricePerMl} грн/мл</span></div>
                         <div class="brand">${brand}</div>
                         <div class="name">${name}</div>
                         ${cardStarsHTML}
@@ -7060,97 +7079,129 @@ function renderGenderBar(value) {
         const shippingText = document.getElementById('shippingText');
         const shippingFill = document.getElementById('shippingFill');
         const giftBox = document.getElementById('giftWrapCheckbox');
-        const upsellBlock = document.getElementById('cartUpsellBlock'); 
-        
+        const upsellBlock = document.getElementById('cartUpsellBlock');
+
         let total = 0;
-        
+
+        // Лічильник у заголовку
+        const countLabel = document.getElementById('cartCountLabel');
+        if (countLabel) {
+            countLabel.textContent = cart.length > 0
+                ? cart.length + ' ' + (cart.length === 1 ? 'товар' : cart.length < 5 ? 'товари' : 'товарів')
+                : '';
+        }
+
         if (cart.length === 0) {
-            list.innerHTML = `<div class="cart-empty-msg">Ваш кошик порожній<br><span style="font-size:12px; display:block; margin-top:15px; cursor:pointer; color:var(--gold); font-weight:700; text-transform:uppercase; letter-spacing:1px;" onclick="toggleCart()">Повернутися до каталогу</span></div>`;
-            shippingContainer.style.display = 'none';
+            list.innerHTML = `
+                <div class="cart-empty-msg">
+                    <div class="cart-empty-icon">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="rgba(197,160,89,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                    </div>
+                    <div class="cart-empty-title">Кошик порожній</div>
+                    <div class="cart-empty-sub">Додайте аромати, які вас зачарували</div>
+                </div>`;
+            if (shippingContainer) shippingContainer.style.display = 'none';
             if (giftBox) giftBox.checked = false;
-            if (upsellBlock) upsellBlock.style.display = 'none'; 
+            if (upsellBlock) upsellBlock.style.display = 'none';
         } else {
-            let html = '';
+            // Будуємо картки товарів
+            const frag = document.createDocumentFragment();
             cart.forEach((item, index) => {
-                html += `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <div class="cart-item-brand">${item.brand}</div>
-                            <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-vol">Об'єм: ${item.volume}</div>
+                const imgSrc = item.img ? item.img.replace(/'/g, '%27') : 'https://i.postimg.cc/CxkmFFJ3/logo.png';
+                const el = document.createElement('div');
+                el.className = 'cart-item';
+                el.innerHTML = `
+                    <div class="cart-item-img-wrap">
+                        <img class="cart-item-img" src="${imgSrc}" alt="${item.name}" loading="lazy"
+                            onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                    </div>
+                    <div class="cart-item-info">
+                        <span class="cart-item-brand">${item.brand}</span>
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-meta">
+                            <span class="cart-item-vol">${item.volume}</span>
+                            <span class="cart-item-price">${item.priceText}</span>
                         </div>
-                        <div class="cart-item-price">${item.priceText}</div>
-                        <button class="cart-item-remove" onclick="removeFromCart(${index})">×</button>
-                    </div>`;
+                    </div>
+                    <button class="cart-item-remove" onclick="removeFromCart(${index})" aria-label="Видалити">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>`;
+                frag.appendChild(el);
                 total += item.price;
             });
-            list.innerHTML = html;
-            
-            shippingContainer.style.display = 'block';
-            let progress = (total / 1500) * 100;
-            if(progress > 100) progress = 100;
-            shippingFill.style.width = progress + '%';
-            
-            if(total >= 1500) {
-                shippingText.innerHTML = 'Безкоштовна доставка активована';
-                shippingText.style.color = 'var(--gold)';
-            } else {
-                shippingText.innerHTML = `Додайте ще на <b>${1500 - total} грн</b> для безкоштовної доставки`;
-                shippingText.style.color = 'inherit';
+            list.innerHTML = '';
+            list.appendChild(frag);
+
+            // Прогрес доставки
+            if (shippingContainer) shippingContainer.style.display = 'block';
+            if (shippingFill) {
+                const progress = Math.min((total / 1500) * 100, 100);
+                shippingFill.style.width = progress + '%';
+            }
+            if (shippingText) {
+                if (total >= 1500) {
+                    shippingText.innerHTML = '🎉 Безкоштовна доставка активована!';
+                    shippingText.style.color = 'var(--gold)';
+                } else {
+                    shippingText.innerHTML = `Додайте ще <b>${1500 - total} грн</b> для безкоштовної доставки`;
+                    shippingText.style.color = '';
+                }
             }
 
-            if(upsellBlock && globalCatalogData.length > 0) {
-                const cartItemNames = cart.map(item => item.name);
-                let allCandidates = globalCatalogData.filter(c => {
+            // Upsell — компактний, без великого фото
+            if (upsellBlock && globalCatalogData.length > 0) {
+                const cartItemNames = cart.map(i => i.name);
+                let candidates = globalCatalogData.filter(c => {
                     const isTop = c[7] && (c[7].toLowerCase().includes('топ') || c[7].toLowerCase().includes('хіт'));
-                    const has2ml = c[3] && !String(c[3]).includes('5');
-                    return isTop && has2ml && !cartItemNames.includes(c[1]) && !c[1].toLowerCase().includes('сет');
+                    return isTop && !cartItemNames.includes(c[1]) && !c[1].toLowerCase().includes('сет');
                 });
-                let candidates = allCandidates.filter(c => {
-                    let price2ml = parseFloat(c[2]) * 2;
-                    return price2ml <= 250 || price2ml <= (total * 0.3);
-                });
-                if (candidates.length === 0 && allCandidates.length > 0) {
-                    candidates = allCandidates.sort((a, b) => parseFloat(a[2]) - parseFloat(b[2])).slice(0, 3);
-                }
-                if (candidates.length > 0) {
-                    const candidate = candidates[Math.floor(Math.random() * candidates.length)]; 
-                    const [brand, name, price, minVol, desc, img] = candidate;
-                    const price2mlText = calculatePrice(price, '2 мл');
-                    const priceNum = parseInt(price2mlText.replace(/\D/g, ''));
+                if (!candidates.length) candidates = globalCatalogData.filter(c => !cartItemNames.includes(c[1]));
 
-                    const upImg = document.getElementById('upsellImg');
-                    upImg.src = img.replace(/'/g, "%27");
-                    upImg.onerror = function() { this.src = 'https://i.postimg.cc/CxkmFFJ3/logo.png'; };
-                    
-                    document.getElementById('upsellBrand').innerText = brand;
-                    document.getElementById('upsellName').innerText = name;
-                    document.getElementById('upsellPrice').innerText = price2mlText;
-                    
-                    document.getElementById('upsellAddBtn').onclick = function() {
-                        cart.push({ brand: brand, name: name, volume: '2 мл', price: priceNum, priceText: price2mlText });
-                        saveCart(); 
+                if (candidates.length > 0) {
+                    const pick = candidates[Math.floor(Math.random() * Math.min(candidates.length, 10))];
+                    const price2mlText = calculatePrice(pick[2], '2 мл');
+                    const priceNum = parseInt(price2mlText.replace(/\D/g, '')) || 0;
+                    const upImgEl = document.getElementById('upsellImg');
+                    if (upImgEl) {
+                        upImgEl.src = (pick[5] || '').replace(/'/g, '%27');
+                        upImgEl.onerror = () => { upImgEl.src = 'https://i.postimg.cc/CxkmFFJ3/logo.png'; };
+                    }
+                    const ubrand = document.getElementById('upsellBrand');
+                    const uname  = document.getElementById('upsellName');
+                    const uprice = document.getElementById('upsellPrice');
+                    const uadd   = document.getElementById('upsellAddBtn');
+                    if (ubrand) ubrand.innerText = pick[0];
+                    if (uname)  uname.innerText  = pick[1];
+                    if (uprice) uprice.innerText  = price2mlText;
+                    if (uadd) uadd.onclick = () => {
+                        const img = (pick[5] || '').replace(/'/g, '%27');
+                        cart.push({ brand: pick[0], name: pick[1], volume: '2 мл', price: priceNum, priceText: price2mlText, img });
+                        saveCart();
                     };
                     upsellBlock.style.display = 'block';
-                } else { upsellBlock.style.display = 'none'; }
+                } else {
+                    upsellBlock.style.display = 'none';
+                }
             }
         }
-        
-        let finalTotal = total;
-        if(cart.length > 0 && giftBox && giftBox.checked) { finalTotal += 100; }
-        const totalStr = finalTotal > 0 ? finalTotal + ' грн' : '0 грн';
-        document.getElementById('cartTotalSum').innerText = totalStr;
-        const s2el = document.getElementById('cartTotalSum2');
-        if (s2el) s2el.innerText = totalStr;
 
-        // Візуальний стан чекбоксу пакування
-        const giftCheck = document.getElementById('giftWrapCheck');
+        // Підсумок
+        let finalTotal = total;
+        if (cart.length > 0 && giftBox && giftBox.checked) finalTotal += 100;
+        const totalStr = finalTotal > 0 ? finalTotal + ' грн' : '0 грн';
+        const ts1 = document.getElementById('cartTotalSum');
+        const ts2 = document.getElementById('cartTotalSum2');
+        if (ts1) ts1.innerText = totalStr;
+        if (ts2) ts2.innerText = totalStr;
+
+        // Чекбокс пакування
+        const giftCheck  = document.getElementById('giftWrapCheck');
         const giftWrapBox = document.getElementById('giftWrapBox');
         if (giftBox && giftCheck && giftWrapBox) {
             const checked = giftBox.checked;
             giftCheck.style.display = checked ? 'block' : 'none';
-            giftWrapBox.style.background = checked ? 'rgba(197,160,89,0.15)' : 'transparent';
-            giftWrapBox.style.borderColor = checked ? 'var(--gold)' : 'rgba(197,160,89,0.4)';
+            giftWrapBox.style.background    = checked ? 'rgba(197,160,89,0.15)' : 'transparent';
+            giftWrapBox.style.borderColor   = checked ? 'var(--gold)' : 'rgba(197,160,89,0.4)';
         }
     }
 
