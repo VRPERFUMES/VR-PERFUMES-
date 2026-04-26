@@ -17,11 +17,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18051738791"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8MB6XVFQ1Y"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+      gtag('config', 'G-8MB6XVFQ1Y');
       gtag('config', 'AW-18051738791');
     </script>
 
@@ -7145,7 +7146,7 @@ function renderGenderBar(value) {
         let priceNum = parseInt(pText.replace(/\D/g, ''));
         if(isNaN(priceNum)) priceNum = 0; 
         
-        cart.push({ brand: b, name: n, volume: selectedVol, price: priceNum, priceText: pText });
+        cart.push({ brand: b, name: n, volume: selectedVol, price: priceNum, priceText: pText, img: currentModalImg || '' });
         saveCart(); animateFlyToCart();
         
         const btn = document.getElementById('modalOrderBtn');
@@ -7540,11 +7541,7 @@ function renderGenderBar(value) {
         const totalSumNum = parseInt(totalSumText.replace(/\D/g, '')) || 0;
 
         if (!contact) { alert('Будь ласка, вкажіть ваш Telegram нік або номер телефону для зв\'язку!'); return; }
-        if (!/[0-9@]/.test(contact)) { alert('Будь ласка, вкажіть коректний номер телефону або Telegram нік (починається з @)!'); return; }
-        
-        if (typeof gtag === 'function') {
-            gtag('event', 'conversion', { 'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D', 'value': totalSumNum, 'currency': 'UAH', 'transaction_id': '' });
-        }
+        if (!/[0-9@+]/.test(contact) || contact.length < 5) { alert('Будь ласка, вкажіть коректний номер телефону або Telegram нік (наприклад: @name або +380XXXXXXXXX)!'); return; }
         
         const btn = document.getElementById('checkoutBtn');
         const originalText = btn.innerText;
@@ -7582,6 +7579,33 @@ function renderGenderBar(value) {
             const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxwI4YS1nrjizwkUJ4-Eay9iFcFIQB8pW8ehgJNaiVRZiItsMcjfzD4t4MmqfO6AQ42Ag/exec';
             await fetch(WEBAPP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 
+            // Конверсія фіксується ПІСЛЯ успішної відправки
+            if (typeof gtag === 'function') {
+                const txId = Date.now().toString();
+
+                // 1. Google Ads — пряма конверсія
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D',
+                    'value': totalSumNum,
+                    'currency': 'UAH',
+                    'transaction_id': txId
+                });
+
+                // 2. GA4 — подія purchase (навчає алгоритми Google Ads)
+                gtag('event', 'purchase', {
+                    'send_to': 'G-8MB6XVFQ1Y',
+                    'transaction_id': txId,
+                    'value': totalSumNum,
+                    'currency': 'UAH',
+                    'items': cart.map(item => ({
+                        'item_name': item.name,
+                        'item_brand': item.brand,
+                        'price': item.price,
+                        'quantity': 1
+                    }))
+                });
+            }
+
             btn.innerText = '✓ ЗАМОВЛЕННЯ ПРИЙНЯТО';
             btn.style.background = 'var(--text-dark)';
             btn.style.color = 'var(--bg)';
@@ -7599,8 +7623,7 @@ function renderGenderBar(value) {
                 selectDelivery('np'); // скидаємо до НП
                 goToCartStep1();
                 btn.innerText = originalText; btn.style.background = 'var(--gold)'; btn.style.color = '#fff'; btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
-                toggleCart();
-                alert('Дякуємо! Ваше замовлення прийнято. Вікторія скоро з вами зв\'яжеться');
+                showThankYouScreen();
             }, 2000);
 
         } catch (error) {
@@ -8623,7 +8646,8 @@ function renderGenderBar(value) {
                 let pricePerMl = parseFloat(String(item[2]).replace(',', '.')) || 0;
                 let priceText = calculatePrice(pricePerMl, '5 мл');
                 let priceNum = parseInt(priceText.replace(/\D/g, '')) || 0;
-                cart.push({ brand: item[0], name: item[1], volume: '5 мл', price: priceNum, priceText: priceText });
+                let imgUrl = (item[5] || '').replace(/'/g, '%27');
+                cart.push({ brand: item[0], name: item[1], volume: '5 мл', price: priceNum, priceText: priceText, img: imgUrl });
                 added = true;
             }
         });
@@ -8974,6 +8998,152 @@ updateWeather();
 
     function closeScentResult() {
         document.getElementById('smapResultSheet').classList.remove('open');
+    }
+
+    // === ЕКРАН ПОДЯКИ ЗА ЗАМОВЛЕННЯ ===
+    function showThankYouScreen() {
+        const overlay = document.createElement('div');
+        overlay.id = 'thankYouOverlay';
+        Object.assign(overlay.style, {
+            position: 'fixed', inset: '0', zIndex: '9999',
+            background: 'rgba(0,0,0,0.65)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '20px', boxSizing: 'border-box',
+            animation: 'modalFadeIn 0.4s ease forwards'
+        });
+
+        const isDark = document.body.classList.contains('dark-theme');
+
+        overlay.innerHTML = `
+            <div style="
+                background: ${isDark ? '#141414' : '#ffffff'};
+                border: 1px solid rgba(197,160,89,0.35);
+                border-radius: 22px;
+                padding: 44px 32px 36px;
+                max-width: 360px;
+                width: 100%;
+                text-align: center;
+                box-shadow: 0 40px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+                animation: modalSlideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+                position: relative;
+                overflow: hidden;
+            ">
+                <!-- Декоративний верхній градієнт -->
+                <div style="
+                    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+                    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+                "></div>
+
+                <!-- Іконка успіху -->
+                <div style="
+                    width: 72px; height: 72px;
+                    background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.04));
+                    border: 1px solid rgba(197,160,89,0.4);
+                    border-radius: 50%;
+                    display: flex; align-items: center; justify-content: center;
+                    margin: 0 auto 24px;
+                    box-shadow: 0 8px 24px rgba(197,160,89,0.15);
+                ">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none"
+                        stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                </div>
+
+                <!-- Логотип -->
+                <div style="
+                    font-family: var(--cinzel);
+                    font-size: 9px;
+                    letter-spacing: 5px;
+                    color: rgba(197,160,89,0.55);
+                    text-transform: uppercase;
+                    margin-bottom: 18px;
+                    font-weight: 700;
+                ">VR PERFUMES</div>
+
+                <!-- Заголовок -->
+                <div style="
+                    font-family: var(--cinzel);
+                    font-size: 21px;
+                    font-weight: 900;
+                    color: ${isDark ? '#f5f5f5' : '#1a1a1a'};
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    margin-bottom: 8px;
+                    line-height: 1.25;
+                ">Дякуємо<br>за замовлення!</div>
+
+                <!-- Золотий розділювач -->
+                <div style="
+                    width: 48px; height: 1px;
+                    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+                    margin: 18px auto;
+                "></div>
+
+                <!-- Основний текст -->
+                <div style="
+                    font-size: 13px;
+                    line-height: 1.75;
+                    color: ${isDark ? '#aaa' : '#666'};
+                    margin-bottom: 6px;
+                ">Вікторія отримала ваше замовлення<br>і незабаром зв'яжеться з вами.</div>
+
+                <!-- Підтекст -->
+                <div style="
+                    font-size: 11px;
+                    color: rgba(197,160,89,0.7);
+                    font-style: italic;
+                    margin-bottom: 32px;
+                    letter-spacing: 0.3px;
+                    line-height: 1.5;
+                ">Зазвичай відповідаємо протягом кількох годин ✨</div>
+
+                <!-- Кнопка -->
+                <button onclick="document.getElementById('thankYouOverlay').remove();" style="
+                    width: 100%;
+                    padding: 17px;
+                    background: var(--gold);
+                    color: #fff;
+                    border: none;
+                    border-radius: 12px;
+                    font-family: var(--cinzel);
+                    font-size: 11px;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    cursor: pointer;
+                    box-shadow: 0 10px 25px rgba(197,160,89,0.35);
+                    transition: all 0.2s ease;
+                    margin-bottom: 14px;
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 14px 30px rgba(197,160,89,0.45)';"
+                   onmouseout="this.style.transform=''; this.style.boxShadow='0 10px 25px rgba(197,160,89,0.35)';">
+                    Продовжити покупки
+                </button>
+
+                <!-- Instagram посилання -->
+                <a href="https://www.instagram.com/vrshopping.khm" target="_blank" style="
+                    display: block;
+                    font-size: 10px;
+                    color: ${isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.35)'};
+                    text-decoration: none;
+                    letter-spacing: 1.5px;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    font-family: var(--cinzel);
+                    transition: color 0.2s;
+                " onmouseover="this.style.color='var(--gold)';" onmouseout="this.style.color='${isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.35)'}';">
+                    Слідкуйте в Instagram →
+                </a>
+            </div>`;
+
+        // Закриття по кліку на фон
+        overlay.addEventListener('click', e => {
+            if (e.target === overlay) overlay.remove();
+        });
+
+        document.body.appendChild(overlay);
     }
 
 </script>
