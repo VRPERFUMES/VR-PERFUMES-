@@ -5096,7 +5096,12 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
 
                 <!-- Контакт -->
                 <div style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-gray); margin-bottom:6px; opacity:0.6;">Контакт для зв'язку *</div>
-                <input type="text" id="cartContact" class="cart-comment-input" placeholder="Telegram @нік або телефон" required style="margin-bottom:16px;">
+                <input type="text" id="cartContact" class="cart-comment-input" placeholder="Telegram @нік або телефон" required style="margin-bottom:10px;">
+
+                <!-- ПІБ та телефон отримувача -->
+                <div style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-gray); margin-bottom:6px; opacity:0.6;">Отримувач *</div>
+                <input type="text" id="cartRecipientName" class="cart-comment-input" placeholder="Прізвище Ім'я По-батькові" required style="margin-bottom:10px;">
+                <input type="tel" id="cartRecipientPhone" class="cart-comment-input" placeholder="+380 __ ___ __ __" required style="margin-bottom:16px;">
 
                 <!-- Спосіб доставки -->
                 <div style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-gray); margin-bottom:8px; opacity:0.6;">Доставка</div>
@@ -7536,12 +7541,15 @@ function renderGenderBar(value) {
 
     async function checkoutCart() {
         if (cart.length === 0) return;
-        const contact = document.getElementById('cartContact').value.trim();
-        const totalSumText = document.getElementById('cartTotalSum').innerText;
-        const totalSumNum = parseInt(totalSumText.replace(/\D/g, '')) || 0;
+        const contact       = document.getElementById('cartContact').value.trim();
+        const recipientName = (document.getElementById('cartRecipientName')?.value || '').trim();
+        const recipientPhone= (document.getElementById('cartRecipientPhone')?.value || '').trim();
+        const totalSumText  = document.getElementById('cartTotalSum').innerText;
+        const totalSumNum   = parseInt(totalSumText.replace(/\D/g, '')) || 0;
 
         if (!contact) { alert('Будь ласка, вкажіть ваш Telegram нік або номер телефону для зв\'язку!'); return; }
-        if (!/[0-9@+]/.test(contact) || contact.length < 5) { alert('Будь ласка, вкажіть коректний номер телефону або Telegram нік (наприклад: @name або +380XXXXXXXXX)!'); return; }
+        if (!recipientName) { alert('Будь ласка, вкажіть ПІБ отримувача!'); return; }
+        if (!recipientPhone) { alert('Будь ласка, вкажіть номер телефону отримувача!'); return; }
         
         const btn = document.getElementById('checkoutBtn');
         const originalText = btn.innerText;
@@ -7554,56 +7562,48 @@ function renderGenderBar(value) {
         
         // Формуємо рядок доставки залежно від типу
         const deliveryType = window._selectedDelivery || 'np';
-        let comment = '';
+        let deliveryStr = '';
         if (deliveryType === 'np') {
             const city   = (document.getElementById('cartCity')?.value   || '').trim();
             const branch = (document.getElementById('cartBranch')?.value || '').trim();
-            comment = '🚚 Нова Пошта';
-            if (city)   comment += '\nМісто: ' + city;
-            if (branch) comment += '\nВідділення: ' + branch;
+            deliveryStr = '🚚 Нова Пошта';
+            if (city)   deliveryStr += '\nМісто: ' + city;
+            if (branch) deliveryStr += '\nВідділення: ' + branch;
         } else if (deliveryType === 'ukr') {
             const city   = (document.getElementById('cartUkrCity')?.value   || '').trim();
             const branch = (document.getElementById('cartUkrBranch')?.value || '').trim();
-            comment = '✉️ Укрпошта';
-            if (city)   comment += '\nМісто: ' + city;
-            if (branch) comment += '\nВідділення: ' + branch;
+            deliveryStr = '✉️ Укрпошта';
+            if (city)   deliveryStr += '\nМісто: ' + city;
+            if (branch) deliveryStr += '\nВідділення: ' + branch;
         } else {
-            comment = '🤝 Самовивіз (Хмельницький)';
+            deliveryStr = '🤝 Самовивіз (Хмельницький)';
         }
         const userComment = (document.getElementById('cartComment')?.value || '').trim();
-        if (userComment) comment += '\n💬 Коментар: ' + userComment;
+        const comment = deliveryStr + (recipientName ? '\nОтримувач: ' + recipientName : '') + (recipientPhone ? '\nТелефон: ' + recipientPhone : '') + (userComment ? '\n💬 ' + userComment : '');
 
-        const payload = { contact: contact, order: orderDetails, total: totalSumText, comment: comment };
+        const payload = { contact, order: orderDetails, total: totalSumText, comment };
+
+        // Знімок замовлення для екрану "Дякуємо"
+        const orderSnapshot = {
+            items: [...cart],
+            total: totalSumText,
+            recipient: recipientName,
+            phone: recipientPhone,
+            contact,
+            delivery: deliveryStr,
+            comment: userComment,
+            gift: giftBox && giftBox.checked,
+            date: new Date().toLocaleString('uk-UA', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })
+        };
 
         try {
             const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxwI4YS1nrjizwkUJ4-Eay9iFcFIQB8pW8ehgJNaiVRZiItsMcjfzD4t4MmqfO6AQ42Ag/exec';
             await fetch(WEBAPP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 
-            // Конверсія фіксується ПІСЛЯ успішної відправки
             if (typeof gtag === 'function') {
                 const txId = Date.now().toString();
-
-                // 1. Google Ads — пряма конверсія
-                gtag('event', 'conversion', {
-                    'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D',
-                    'value': totalSumNum,
-                    'currency': 'UAH',
-                    'transaction_id': txId
-                });
-
-                // 2. GA4 — подія purchase (навчає алгоритми Google Ads)
-                gtag('event', 'purchase', {
-                    'send_to': 'G-8MB6XVFQ1Y',
-                    'transaction_id': txId,
-                    'value': totalSumNum,
-                    'currency': 'UAH',
-                    'items': cart.map(item => ({
-                        'item_name': item.name,
-                        'item_brand': item.brand,
-                        'price': item.price,
-                        'quantity': 1
-                    }))
-                });
+                gtag('event', 'conversion', { 'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D', 'value': totalSumNum, 'currency': 'UAH', 'transaction_id': txId });
+                gtag('event', 'purchase', { 'send_to': 'G-8MB6XVFQ1Y', 'transaction_id': txId, 'value': totalSumNum, 'currency': 'UAH', 'items': cart.map(i => ({ 'item_name': i.name, 'item_brand': i.brand, 'price': i.price, 'quantity': 1 })) });
             }
 
             btn.innerText = '✓ ЗАМОВЛЕННЯ ПРИЙНЯТО';
@@ -7612,19 +7612,16 @@ function renderGenderBar(value) {
 
             setTimeout(() => {
                 cart = []; saveCart();
-                document.getElementById('cartContact').value = '';
-                if (document.getElementById('cartCity'))      document.getElementById('cartCity').value = '';
-                if (document.getElementById('cartBranch'))    document.getElementById('cartBranch').value = '';
-                if (document.getElementById('cartUkrCity'))   document.getElementById('cartUkrCity').value = '';
-                if (document.getElementById('cartUkrBranch')) document.getElementById('cartUkrBranch').value = '';
-                if (document.getElementById('cartComment'))   document.getElementById('cartComment').value = '';
+                ['cartContact','cartRecipientName','cartRecipientPhone','cartCity','cartBranch','cartUkrCity','cartUkrBranch','cartComment']
+                    .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
                 window._npSelectedCityRef = '';
                 window._npAllBranches = [];
-                selectDelivery('np'); // скидаємо до НП
+                selectDelivery('np');
                 goToCartStep1();
+                toggleCart();
                 btn.innerText = originalText; btn.style.background = 'var(--gold)'; btn.style.color = '#fff'; btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
-                showThankYouScreen();
-            }, 2000);
+                showThankYouScreen(orderSnapshot);
+            }, 1200);
 
         } catch (error) {
             alert('Сталася помилка при відправці. Перевірте з\'єднання з інтернетом.');
@@ -9001,149 +8998,143 @@ updateWeather();
     }
 
     // === ЕКРАН ПОДЯКИ ЗА ЗАМОВЛЕННЯ ===
-    function showThankYouScreen() {
+    function showThankYouScreen(order) {
+        const existing = document.getElementById('thankYouOverlay');
+        if (existing) existing.remove();
+
+        const isDark = document.body.classList.contains('dark-theme');
+        const bg  = isDark ? '#141414' : '#ffffff';
+        const txt = isDark ? '#f0f0f0' : '#1a1a1a';
+        const sub = isDark ? '#999' : '#666';
+
+        // Список товарів для відображення
+        const itemsHtml = (order.items || []).map(item => `
+            <div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(128,128,128,0.08);">
+                <img src="${(item.img||'').replace(/'/g,'%27') || 'https://i.postimg.cc/CxkmFFJ3/logo.png'}"
+                     style="width:38px; height:38px; object-fit:cover; border-radius:7px; flex-shrink:0;"
+                     onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+                <div style="flex:1; min-width:0;">
+                    <div style="font-size:11px; font-weight:800; color:var(--gold); font-family:var(--cinzel); text-transform:uppercase; letter-spacing:0.5px;">${item.brand}</div>
+                    <div style="font-size:13px; font-weight:700; color:${txt}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.name}</div>
+                </div>
+                <div style="text-align:right; flex-shrink:0;">
+                    <div style="font-size:11px; color:${sub};">${item.volume}</div>
+                    <div style="font-size:13px; font-weight:800; color:${txt}; font-family:var(--cinzel);">${item.priceText}</div>
+                </div>
+            </div>`).join('');
+
+        // Деталі доставки
+        const deliveryLines = (order.delivery || '').split('\n').filter(Boolean);
+        const deliveryHtml = deliveryLines.map((l,i) => `<div style="font-size:${i===0?'12px':'11px'}; font-weight:${i===0?'700':'500'}; color:${i===0?txt:sub}; line-height:1.5;">${l}</div>`).join('');
+
         const overlay = document.createElement('div');
         overlay.id = 'thankYouOverlay';
         Object.assign(overlay.style, {
-            position: 'fixed', inset: '0', zIndex: '9999',
-            background: 'rgba(0,0,0,0.65)',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '20px', boxSizing: 'border-box',
-            animation: 'modalFadeIn 0.4s ease forwards'
+            position:'fixed', inset:'0', zIndex:'9999',
+            background:'rgba(0,0,0,0.7)', backdropFilter:'blur(10px)', WebkitBackdropFilter:'blur(10px)',
+            display:'flex', alignItems:'center', justifyContent:'center',
+            padding:'16px', boxSizing:'border-box', overflowY:'auto',
+            animation:'modalFadeIn 0.35s ease forwards'
         });
-
-        const isDark = document.body.classList.contains('dark-theme');
 
         overlay.innerHTML = `
-            <div style="
-                background: ${isDark ? '#141414' : '#ffffff'};
-                border: 1px solid rgba(197,160,89,0.35);
-                border-radius: 22px;
-                padding: 44px 32px 36px;
-                max-width: 360px;
-                width: 100%;
-                text-align: center;
-                box-shadow: 0 40px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
-                animation: modalSlideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
-                position: relative;
-                overflow: hidden;
-            ">
-                <!-- Декоративний верхній градієнт -->
-                <div style="
-                    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-                    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-                "></div>
+        <div style="background:${bg}; border:1px solid rgba(197,160,89,0.3); border-radius:20px; width:100%; max-width:380px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 40px 80px rgba(0,0,0,0.4); animation:modalSlideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards; position:relative;">
 
-                <!-- Іконка успіху -->
-                <div style="
-                    width: 72px; height: 72px;
-                    background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.04));
-                    border: 1px solid rgba(197,160,89,0.4);
-                    border-radius: 50%;
-                    display: flex; align-items: center; justify-content: center;
-                    margin: 0 auto 24px;
-                    box-shadow: 0 8px 24px rgba(197,160,89,0.15);
-                ">
-                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none"
-                        stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
+            <!-- Золота лінія зверху -->
+            <div style="height:3px; background:linear-gradient(90deg,transparent,var(--gold),transparent); flex-shrink:0;"></div>
+
+            <!-- Скролиться -->
+            <div style="overflow-y:auto; padding:28px 24px 20px; -webkit-overflow-scrolling:touch;">
+
+                <!-- Іконка + заголовок -->
+                <div style="text-align:center; margin-bottom:20px;">
+                    <div style="width:64px; height:64px; background:linear-gradient(135deg,rgba(197,160,89,0.15),rgba(197,160,89,0.04)); border:1px solid rgba(197,160,89,0.4); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; box-shadow:0 8px 24px rgba(197,160,89,0.15);">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <div style="font-family:var(--cinzel); font-size:9px; letter-spacing:5px; color:rgba(197,160,89,0.55); text-transform:uppercase; margin-bottom:10px; font-weight:700;">VR PERFUMES</div>
+                    <div style="font-family:var(--cinzel); font-size:19px; font-weight:900; color:${txt}; text-transform:uppercase; letter-spacing:1px; line-height:1.25;">Дякуємо<br>за замовлення!</div>
+                    <div style="width:40px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:14px auto;"></div>
+                    <div style="font-size:12px; color:${sub}; line-height:1.6;">Вікторія отримала ваше замовлення і незабаром зв'яжеться з вами.</div>
                 </div>
 
-                <!-- Логотип -->
-                <div style="
-                    font-family: var(--cinzel);
-                    font-size: 9px;
-                    letter-spacing: 5px;
-                    color: rgba(197,160,89,0.55);
-                    text-transform: uppercase;
-                    margin-bottom: 18px;
-                    font-weight: 700;
-                ">VR PERFUMES</div>
+                <!-- Деталі замовлення -->
+                <div style="background:rgba(197,160,89,0.04); border:1px solid rgba(197,160,89,0.15); border-radius:14px; padding:16px; margin-bottom:14px;">
+                    <div style="font-family:var(--cinzel); font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:var(--gold); margin-bottom:12px;">Ваше замовлення · ${order.date || ''}</div>
 
-                <!-- Заголовок -->
-                <div style="
-                    font-family: var(--cinzel);
-                    font-size: 21px;
-                    font-weight: 900;
-                    color: ${isDark ? '#f5f5f5' : '#1a1a1a'};
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                    margin-bottom: 8px;
-                    line-height: 1.25;
-                ">Дякуємо<br>за замовлення!</div>
+                    <!-- Товари -->
+                    <div style="margin-bottom:12px;">${itemsHtml}</div>
 
-                <!-- Золотий розділювач -->
-                <div style="
-                    width: 48px; height: 1px;
-                    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-                    margin: 18px auto;
-                "></div>
+                    <!-- Підсумок -->
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; padding:8px 0 0; border-top:1px solid rgba(197,160,89,0.15);">
+                        <span style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:${sub}; opacity:0.7;">Разом</span>
+                        <span style="font-family:var(--cinzel); font-size:18px; font-weight:900; color:${txt};">${order.total}</span>
+                    </div>
+                    ${order.gift ? `<div style="font-size:10px; color:var(--gold); margin-top:4px; font-weight:700;">+ Подарункове пакування (100 грн)</div>` : ''}
+                </div>
 
-                <!-- Основний текст -->
-                <div style="
-                    font-size: 13px;
-                    line-height: 1.75;
-                    color: ${isDark ? '#aaa' : '#666'};
-                    margin-bottom: 6px;
-                ">Вікторія отримала ваше замовлення<br>і незабаром зв'яжеться з вами.</div>
+                <!-- Отримувач + доставка -->
+                <div style="background:rgba(128,128,128,0.04); border:1px solid rgba(128,128,128,0.1); border-radius:14px; padding:14px; margin-bottom:14px;">
+                    <div style="font-family:var(--cinzel); font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:var(--gold); margin-bottom:10px;">Деталі доставки</div>
+                    ${order.recipient ? `<div style="display:flex; gap:8px; margin-bottom:6px;"><span style="font-size:10px; color:${sub}; min-width:70px;">Отримувач</span><span style="font-size:12px; font-weight:700; color:${txt};">${order.recipient}</span></div>` : ''}
+                    ${order.phone ? `<div style="display:flex; gap:8px; margin-bottom:8px;"><span style="font-size:10px; color:${sub}; min-width:70px;">Телефон</span><span style="font-size:12px; font-weight:700; color:${txt};">${order.phone}</span></div>` : ''}
+                    <div style="border-top:1px solid rgba(128,128,128,0.08); padding-top:8px;">${deliveryHtml}</div>
+                    ${order.comment ? `<div style="font-size:11px; color:${sub}; margin-top:6px; font-style:italic;">💬 ${order.comment}</div>` : ''}
+                </div>
 
-                <!-- Підтекст -->
-                <div style="
-                    font-size: 11px;
-                    color: rgba(197,160,89,0.7);
-                    font-style: italic;
-                    margin-bottom: 32px;
-                    letter-spacing: 0.3px;
-                    line-height: 1.5;
-                ">Зазвичай відповідаємо протягом кількох годин ✨</div>
+            </div>
 
-                <!-- Кнопка -->
-                <button onclick="document.getElementById('thankYouOverlay').remove();" style="
-                    width: 100%;
-                    padding: 17px;
-                    background: var(--gold);
-                    color: #fff;
-                    border: none;
-                    border-radius: 12px;
-                    font-family: var(--cinzel);
-                    font-size: 11px;
-                    font-weight: 800;
-                    text-transform: uppercase;
-                    letter-spacing: 2px;
-                    cursor: pointer;
-                    box-shadow: 0 10px 25px rgba(197,160,89,0.35);
-                    transition: all 0.2s ease;
-                    margin-bottom: 14px;
-                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 14px 30px rgba(197,160,89,0.45)';"
-                   onmouseout="this.style.transform=''; this.style.boxShadow='0 10px 25px rgba(197,160,89,0.35)';">
+            <!-- Фіксовані кнопки знизу -->
+            <div style="padding:14px 24px 24px; border-top:1px solid rgba(128,128,128,0.08); flex-shrink:0; background:${bg};">
+                <button id="tyDownloadBtn" style="width:100%; padding:14px; background:var(--gold); color:#fff; border:none; border-radius:12px; font-family:var(--cinzel); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px; cursor:pointer; box-shadow:0 8px 20px rgba(197,160,89,0.3); margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Зберегти деталі
+                </button>
+                <button onclick="document.getElementById('thankYouOverlay').remove();" style="width:100%; padding:12px; background:transparent; color:${sub}; border:1px solid rgba(128,128,128,0.15); border-radius:12px; font-family:var(--cinzel); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; cursor:pointer;">
                     Продовжити покупки
                 </button>
+            </div>
+        </div>`;
 
-                <!-- Instagram посилання -->
-                <a href="https://www.instagram.com/vrshopping.khm" target="_blank" style="
-                    display: block;
-                    font-size: 10px;
-                    color: ${isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.35)'};
-                    text-decoration: none;
-                    letter-spacing: 1.5px;
-                    text-transform: uppercase;
-                    font-weight: 600;
-                    font-family: var(--cinzel);
-                    transition: color 0.2s;
-                " onmouseover="this.style.color='var(--gold)';" onmouseout="this.style.color='${isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.35)'}';">
-                    Слідкуйте в Instagram →
-                </a>
-            </div>`;
-
-        // Закриття по кліку на фон
-        overlay.addEventListener('click', e => {
-            if (e.target === overlay) overlay.remove();
-        });
-
+        overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
         document.body.appendChild(overlay);
+
+        // Функція збереження — генерує текстовий файл
+        document.getElementById('tyDownloadBtn').addEventListener('click', () => {
+            const lines = [
+                '═══════════════════════════════════',
+                '       VR PERFUMES — Замовлення    ',
+                '═══════════════════════════════════',
+                `Дата: ${order.date || ''}`,
+                '',
+                '─── Товари ───────────────────────',
+                ...(order.items || []).map((it, i) => `${i+1}. ${it.brand} — ${it.name}\n   ${it.volume} · ${it.priceText}`),
+                '',
+                `РАЗОМ: ${order.total}`,
+                order.gift ? '+ Подарункове пакування: 100 грн' : '',
+                '',
+                '─── Отримувач ────────────────────',
+                order.recipient ? `ПІБ: ${order.recipient}` : '',
+                order.phone    ? `Тел: ${order.phone}`     : '',
+                '',
+                '─── Доставка ─────────────────────',
+                order.delivery || '',
+                order.comment  ? `Коментар: ${order.comment}` : '',
+                '',
+                '─── Контакт ──────────────────────',
+                `Telegram/тел: ${order.contact || ''}`,
+                '',
+                '═══════════════════════════════════',
+                'vrperfumes.github.io/VR-PERFUMES-/',
+            ].filter(l => l !== null && l !== undefined);
+
+            const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = `VR_Perfumes_Order_${Date.now()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
     }
 
 </script>
