@@ -2762,7 +2762,56 @@
         .cart-checkout-btn:active { 
             transform: scale(0.98); 
         }
-        
+
+        /* UPSELL БЛОК — компактний */
+        .cart-upsell {
+            flex-shrink: 0;
+            padding: 10px 14px;
+            background: rgba(197,160,89,0.04);
+            border-top: 1px solid rgba(197,160,89,0.12);
+        }
+        .cart-upsell-label {
+            display: block;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gold);
+            font-weight: 800;
+            margin-bottom: 8px;
+            font-family: var(--cinzel);
+        }
+        .cart-upsell-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cart-upsell-img {
+            width: 48px !important;
+            height: 48px !important;
+            max-width: 48px !important;
+            max-height: 48px !important;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+            background: rgba(128,128,128,0.06);
+            display: block;
+        }
+        .cart-upsell-add {
+            background: #111;
+            color: #fff;
+            border: none;
+            padding: 7px 12px;
+            font-size: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+            flex-shrink: 0;
+            font-family: var(--cinzel);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        body.dark-theme .cart-upsell-add { background: var(--gold); color: #000; }
+
         .delivery-method-btn {
             display: flex;
             flex-direction: column;
@@ -4941,10 +4990,10 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             <div class="cart-items" id="cartItemsList" style="flex:1; overflow-y:auto;"></div>
 
             <!-- Рекомендація -->
-            <div class="cart-upsell" id="cartUpsellBlock" style="display:none; margin:0 0 0; padding:10px 14px; background:rgba(197,160,89,0.04); border-top:1px solid rgba(197,160,89,0.1); flex-shrink:0;">
+            <div class="cart-upsell" id="cartUpsellBlock" style="display:none;">
                 <span class="cart-upsell-label">✦ Можливо вподобаєте</span>
                 <div class="cart-upsell-row">
-                    <img id="upsellImg" src="" alt="" style="width:48px; height:48px; object-fit:cover; border-radius:8px; flex-shrink:0; background:rgba(128,128,128,0.06);">
+                    <img id="upsellImg" class="cart-upsell-img" src="" alt="">
                     <div style="flex:1; min-width:0;">
                         <div id="upsellBrand" style="font-size:9px; color:var(--gold); font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; font-family:var(--cinzel);"></div>
                         <div id="upsellName" style="font-size:13px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text-dark);"></div>
@@ -7324,23 +7373,41 @@ function renderGenderBar(value) {
 
     async function npLoadBranches(cityRef) {
         if (!cityRef) return;
+        const list = document.getElementById('npBranchList');
         try {
-            const data = await npApiCall('AddressGeneral', 'getWarehouses', {
-                SettlementRef: cityRef,
-                Limit: 300,
+            // Правильний запит: Address + getWarehouses + CityRef
+            const data = await npApiCall('Address', 'getWarehouses', {
+                CityRef: cityRef,
+                Limit: 500,
                 Language: 'UA'
             });
-            window._npAllBranches = (data.data || []).map(w => ({
-                desc: w.DescriptionUA || w.Description,
-                shortAddr: w.ShortAddressUA || w.ShortAddress
-            }));
+            const warehouses = data.data || [];
+            window._npAllBranches = warehouses.map(w => ({
+                desc: w.DescriptionUA || w.Description || '',
+                shortAddr: w.ShortAddressUA || w.ShortAddress || ''
+            })).filter(w => w.desc);
+
+            if (!window._npAllBranches.length) {
+                if (list) {
+                    list.innerHTML = '<div style="padding:10px 14px; font-size:12px; color:#999;">Відділень не знайдено для цього міста</div>';
+                    list.style.display = 'block';
+                }
+                return;
+            }
             // Показуємо список якщо поле відділення у фокусі
             const branchInput = document.getElementById('cartBranch');
             if (document.activeElement === branchInput) {
                 npShowBranches();
+            } else if (list && list.style.display === 'block') {
+                // Список вже відкритий — оновлюємо
+                npRenderBranches('');
             }
         } catch(e) {
-            console.warn('НП відділення не завантажились:', e);
+            console.warn('НП відділення не завантажились:', e.message);
+            if (list) {
+                list.innerHTML = '<div style="padding:10px 14px; font-size:12px; color:#c00;">Помилка завантаження. Введіть номер відділення вручну.</div>';
+                list.style.display = 'block';
+            }
         }
     }
 
