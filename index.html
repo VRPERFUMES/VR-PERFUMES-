@@ -22,8 +22,23 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-8MB6XVFQ1Y');
-      gtag('config', 'AW-18051738791');
+      gtag('config', 'G-8MB6XVFQ1Y', {
+          'send_page_view': true,
+          'currency': 'UAH',
+          'country': 'UA'
+      });
+      gtag('config', 'AW-18051738791', {
+          'allow_enhanced_conversions': true
+      });
+
+      // Централізована функція трекінгу — безпечно обгортає gtag
+      window.track = function(eventName, params) {
+          try {
+              if (typeof gtag === 'function') {
+                  gtag('event', eventName, Object.assign({ currency: 'UAH' }, params || {}));
+              }
+          } catch(e) { /* не блокуємо основний код */ }
+      };
     </script>
 
     <style>
@@ -4560,7 +4575,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
 <body>
 
     <div class="tt-hint">
-        Труднощі з переходом на оплату, Telegram, Viber? Тисніть <b>(⋯)</b> та <b>«Відкрити у браузері»</b>.
+        Не переходить у Telegram? Тисніть <b>(⋯)</b> та <b>«Відкрити у браузері»</b>.
     </div>
 
     <!-- INSTAGRAM STORIES -->
@@ -4656,7 +4671,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             <div class="aesthetic-sheet-handle"></div>
             <div class="aesthetic-sheet-hero" id="aestheticSheetHero">
                 <img class="aesthetic-sheet-hero-img" id="aestheticSheetHeroImg" src="" alt="">
-                <div class="aesthetic-sheet-hero-overlay"></div>
+                                <div class="aesthetic-sheet-hero-overlay"></div>
                 <button class="aesthetic-sheet-close" onclick="closeAestheticSheet()">
                     <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
@@ -6350,7 +6365,9 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         } else { 
             wishlist.push(id); 
             btn.classList.add('active'); 
-            btn.innerText = '♥'; 
+            btn.innerText = '♥';
+            // GA4: add_to_wishlist
+            track('add_to_wishlist', { items: [{ item_id: b + '_' + n, item_name: n, item_brand: b }] });
         }
         localStorage.setItem('vr_wishlist', JSON.stringify(wishlist));
         if (currentCategory === 'wishlist') triggerCatalogAnimation(); 
@@ -6743,6 +6760,11 @@ function renderGenderBar(value) {
         mImgEl.onerror = function() { this.src = 'https://i.postimg.cc/CxkmFFJ3/logo.png'; };
         
         updateAura(mImgEl);
+
+        // GA4: view_item
+        track('view_item', {
+            items: [{ item_id: brand + '_' + name, item_name: name, item_brand: brand, item_category: top || 'general', price: parseFloat(price) || 0 }]
+        });
 
         const scarcityDiv = document.getElementById('scarcityMsg');
         if (stock > 0 && stock < 10) {
@@ -7153,6 +7175,12 @@ function renderGenderBar(value) {
         
         cart.push({ brand: b, name: n, volume: selectedVol, price: priceNum, priceText: pText, img: currentModalImg || '' });
         saveCart(); animateFlyToCart();
+
+        // GA4: add_to_cart
+        track('add_to_cart', {
+            value: priceNum,
+            items: [{ item_id: b + '_' + n, item_name: n, item_brand: b, item_variant: selectedVol, price: priceNum, quantity: 1 }]
+        });
         
         const btn = document.getElementById('modalOrderBtn');
         const originalText = btn.innerText;
@@ -7321,6 +7349,13 @@ function renderGenderBar(value) {
 
     function goToCartStep2() {
         if (cart.length === 0) return;
+
+        // GA4: begin_checkout
+        const total = cart.reduce((s, i) => s + i.price, 0);
+        track('begin_checkout', {
+            value: total,
+            items: cart.map(i => ({ item_id: i.brand + '_' + i.name, item_name: i.name, item_brand: i.brand, item_variant: i.volume, price: i.price, quantity: 1 }))
+        });
         // Заповнюємо міні-підсумок
         const summary = document.getElementById('checkoutOrderSummary');
         if (summary) {
@@ -7602,8 +7637,27 @@ function renderGenderBar(value) {
 
             if (typeof gtag === 'function') {
                 const txId = Date.now().toString();
-                gtag('event', 'conversion', { 'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D', 'value': totalSumNum, 'currency': 'UAH', 'transaction_id': txId });
-                gtag('event', 'purchase', { 'send_to': 'G-8MB6XVFQ1Y', 'transaction_id': txId, 'value': totalSumNum, 'currency': 'UAH', 'items': cart.map(i => ({ 'item_name': i.name, 'item_brand': i.brand, 'price': i.price, 'quantity': 1 })) });
+                // Google Ads конверсія
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-18051738791/n67FCM-Pz5ccEKfZ3p9D',
+                    'value': totalSumNum,
+                    'currency': 'UAH',
+                    'transaction_id': txId
+                });
+                // GA4 purchase — повна воронка з об'ємами
+                track('purchase', {
+                    transaction_id: txId,
+                    value: totalSumNum,
+                    shipping: 0,
+                    items: orderSnapshot.items.map((i, idx) => ({
+                        item_id: i.brand + '_' + i.name + '_' + idx,
+                        item_name: i.name,
+                        item_brand: i.brand,
+                        item_variant: i.volume,
+                        price: i.price,
+                        quantity: 1
+                    }))
+                });
             }
 
             btn.innerText = '✓ ЗАМОВЛЕННЯ ПРИЙНЯТО';
@@ -7699,12 +7753,15 @@ function renderGenderBar(value) {
         const inputVal = document.getElementById('searchInput').value;
         const resContainer = document.getElementById('searchResults');
         const clearBtn = document.getElementById('clearSearchBtn');
-
         if (clearBtn) clearBtn.style.display = inputVal ? 'block' : 'none';
-
         triggerCatalogAnimation();
-
         if (!inputVal.trim()) { resContainer.style.display = 'none'; return; }
+
+        // GA4: search (дебаунс — не спамимо при кожному символі)
+        clearTimeout(window._searchTrackTimer);
+        window._searchTrackTimer = setTimeout(() => {
+            track('search', { search_term: inputVal.trim() });
+        }, 1200);
 
         let cleanQ = inputVal.toLowerCase().replace(/(хочу|шукаю|знайди|підкажіть|покажи|мені|аромат|парфум|духи|купити|якийсь|щось|стійкий|найди)/gi, ' ').trim();
         let qForSearch = cleanQ.length > 1 ? cleanQ : inputVal.toLowerCase().trim();
@@ -8382,6 +8439,7 @@ function renderGenderBar(value) {
     };
 
     function openQuiz() {
+        track('select_content', { content_type: 'quiz', item_id: 'scent_quiz' });
         document.getElementById('quizOverlay').classList.add('open');
         setTimeout(() => document.getElementById('quizSheet').classList.add('open'), 10);
     }
@@ -8916,6 +8974,7 @@ updateWeather();
     ];
 
         function openScentMemoryMap() {
+        track('select_content', { content_type: 'feature', item_id: 'scent_memory_map' });
         const overlay = document.getElementById('smapOverlay');
         const grid = document.getElementById('smapGrid');
         grid.innerHTML = '';
@@ -9085,11 +9144,24 @@ updateWeather();
 
             <!-- Фіксовані кнопки знизу -->
             <div style="padding:14px 24px 24px; border-top:1px solid rgba(128,128,128,0.08); flex-shrink:0; background:${bg};">
-                <button id="tyDownloadBtn" style="width:100%; padding:14px; background:var(--gold); color:#fff; border:none; border-radius:12px; font-family:var(--cinzel); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px; cursor:pointer; box-shadow:0 8px 20px rgba(197,160,89,0.3); margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                <button id="tyDownloadBtn" style="width:100%; padding:13px; background:var(--gold); color:#fff; border:none; border-radius:12px; font-family:var(--cinzel); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px; cursor:pointer; box-shadow:0 8px 20px rgba(197,160,89,0.3); margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:8px;">
                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     Зберегти деталі
                 </button>
-                <button onclick="document.getElementById('thankYouOverlay').remove();" style="width:100%; padding:12px; background:transparent; color:${sub}; border:1px solid rgba(128,128,128,0.15); border-radius:12px; font-family:var(--cinzel); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; cursor:pointer;">
+
+                <!-- Поділитися в месенджерах -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                    <button id="tyTgBtn" style="padding:13px 8px; background:transparent; border:1px solid rgba(128,128,128,0.18); border-radius:12px; font-family:var(--cinzel); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; cursor:pointer; color:${txt}; display:flex; align-items:center; justify-content:center; gap:7px; transition:all 0.2s;">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5L2 12.5l7 1M21 5l-2.5 15L9 13.5M21 5L9 13.5m0 0v5l3.5-3"/></svg>
+                        Telegram
+                    </button>
+                    <button id="tyViberBtn" style="padding:13px 8px; background:transparent; border:1px solid rgba(128,128,128,0.18); border-radius:12px; font-family:var(--cinzel); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; cursor:pointer; color:${txt}; display:flex; align-items:center; justify-content:center; gap:7px; transition:all 0.2s;">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M11.87 2C6.59 2 2.5 6.08 2.5 11.36c0 2.67 1.05 5.08 2.77 6.84v3.3l3.15-1.73c.93.26 1.91.4 2.93.4 5.28 0 9.37-4.08 9.37-9.36S17.15 2 11.87 2zm1.03 12.64l-2.38-2.55-4.65 2.55 5.12-5.43 2.44 2.55 4.59-2.55-5.12 5.43z"/></svg>
+                        Viber
+                    </button>
+                </div>
+
+                <button onclick="document.getElementById('thankYouOverlay').remove();" style="width:100%; padding:12px; background:transparent; color:${sub}; border:1px solid rgba(128,128,128,0.12); border-radius:12px; font-family:var(--cinzel); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; cursor:pointer;">
                     Продовжити покупки
                 </button>
             </div>
@@ -9134,6 +9206,44 @@ updateWeather();
             a.download = `VR_Perfumes_Order_${Date.now()}.txt`;
             a.click();
             URL.revokeObjectURL(url);
+        });
+
+        // Формуємо текст для шерингу
+        function buildShareText() {
+            const itemsList = (order.items || []).map((it, i) => `${i+1}. ${it.brand} — ${it.name} (${it.volume}) ${it.priceText}`).join('\n');
+            return [
+                '🌹 VR PERFUMES — Моє замовлення',
+                `📅 ${order.date || ''}`,
+                '',
+                itemsList,
+                '',
+                `💰 Разом: ${order.total}`,
+                order.gift ? '🎁 + Подарункове пакування' : '',
+                '',
+                order.recipient ? `👤 ${order.recipient}` : '',
+                order.phone     ? `📞 ${order.phone}`      : '',
+                '',
+                order.delivery  ? `🚚 ${order.delivery.split('\n').join(', ')}` : '',
+            ].filter(Boolean).join('\n');
+        }
+
+        // Telegram
+        document.getElementById('tyTgBtn').addEventListener('click', () => {
+            const text = encodeURIComponent(buildShareText());
+            window.open(`https://t.me/share/url?url=vrperfumes.github.io&text=${text}`, '_blank');
+        });
+
+        // Viber
+        document.getElementById('tyViberBtn').addEventListener('click', () => {
+            const text = encodeURIComponent(buildShareText());
+            // Viber deep link для мобільних
+            window.open(`viber://forward?text=${text}`, '_blank');
+            // Fallback для десктопу через 600мс
+            setTimeout(() => {
+                if (document.hasFocus()) {
+                    window.open(`https://invite.viber.com/?text=${text}`, '_blank');
+                }
+            }, 600);
         });
     }
 
