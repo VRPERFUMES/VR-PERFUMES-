@@ -4812,7 +4812,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 <div class="quiz-q">Який у вас настрій?</div>
                 <div class="quiz-sub">Оберіть те, що резонує з вами зараз</div>
                 <div class="quiz-options">
-                    <div class="quiz-option" onclick="quizSelect(0,'romantic')">
+                            <div class="quiz-option" onclick="quizSelect(0,'romantic')">
                         <!-- Троянда -->
                         <svg class="quiz-opt-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c0 0-7-4.5-7-10a7 7 0 0 1 14 0c0 5.5-7 10-7 10z"/><path d="M12 8c0 0-2 1.5-2 4"/><path d="M12 8c0 0 2 1.5 2 4"/><path d="M12 3v5"/></svg>
                         <span class="quiz-option-label">Романтичний</span>
@@ -4953,6 +4953,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                     <line x1="8" y1="23" x2="16" y2="23"></line>
                 </svg>
                 <span id="clearSearchBtn" onclick="clearSearch()" style="display:flex;align-items:center;right:10px;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                <div id="searchResults" class="search-dropdown"></div>
             </div>
         </div>
 
@@ -9622,9 +9623,6 @@ updateWeather();
         </div>
     </div>
 
-    <!-- SEARCH DROPDOWN — окремий від sticky панелі, завжди поверх всього -->
-    <div id="searchResults" class="search-dropdown"></div>
-
 </body>
 </html>
-
+            
