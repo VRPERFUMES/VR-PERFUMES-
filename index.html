@@ -3285,6 +3285,11 @@
             from { opacity: 0; transform: translateY(-5px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
 /* === SKELETON LOADER === */
 .skeleton-card {
     background: var(--bg);
@@ -4728,7 +4733,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             </div>
         </div>
     </div>
-    
+
     <!-- SCENT QUIZ MODAL -->
     <div class="quiz-overlay" id="quizOverlay" onclick="handleQuizOverlayClick(event)">
         <div class="quiz-sheet" id="quizSheet">
@@ -4760,7 +4765,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                         <!-- Місяць -->
                         <svg class="quiz-opt-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                         <span class="quiz-option-label">Таємничий</span>
-                    </div>
+                                            </div>
                     <div class="quiz-option" onclick="quizSelect(0,'energetic')">
                         <!-- Іскра -->
                         <svg class="quiz-opt-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -8649,6 +8654,50 @@ function renderGenderBar(value) {
     initTheme();
     initStickyPanel();
 
+    // === PWA INSTALL PROMPT ===
+    (function initPWA() {
+        if (localStorage.getItem('pwa_dismissed') || window.navigator.standalone) return;
+        let _deferredPrompt = null;
+        const banner = document.getElementById('pwaInstallBanner');
+        const installBtn = document.getElementById('pwaInstallBtn');
+        const iosHint = document.getElementById('pwaIosHint');
+        if (!banner) return;
+
+        // Android/Chrome
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            _deferredPrompt = e;
+            setTimeout(() => {
+                if (!localStorage.getItem('pwa_dismissed')) banner.style.display = 'block';
+            }, 30000);
+            installBtn.addEventListener('click', async () => {
+                banner.style.display = 'none';
+                _deferredPrompt.prompt();
+                const { outcome } = await _deferredPrompt.userChoice;
+                if (outcome === 'accepted') localStorage.setItem('pwa_dismissed', '1');
+                _deferredPrompt = null;
+            });
+        });
+
+        // iOS Safari
+        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        const isSafari = /safari/i.test(navigator.userAgent) && !/chrome|crios/i.test(navigator.userAgent);
+        if (isIOS && isSafari && !window.navigator.standalone) {
+            setTimeout(() => {
+                if (!localStorage.getItem('pwa_dismissed')) {
+                    banner.style.display = 'block';
+                    if (installBtn) installBtn.style.display = 'none';
+                    if (iosHint) iosHint.style.display = 'block';
+                }
+            }, 35000);
+        }
+
+        window.addEventListener('appinstalled', () => {
+            banner.style.display = 'none';
+            localStorage.setItem('pwa_dismissed', '1');
+        });
+    })();
+
     // === СОЦІАЛЬНИЙ ДОКАЗ: "Сьогодні купили" сповіщення ===
     (function initSocialProofToasts() {
         const names = ['Аліна','Вікторія','Марія','Катерина','Наталія','Юлія','Дарина','Ірина','Оксана','Тетяна','Олена','Анна','Софія','Діана','Поліна'];
@@ -9363,6 +9412,30 @@ updateWeather();
     }
 
 </script>
+
+    <!-- PWA INSTALL BANNER -->
+    <div id="pwaInstallBanner" style="display:none; position:fixed; bottom:90px; left:50%; transform:translateX(-50%); z-index:2600; width:calc(100% - 32px); max-width:380px; background:var(--bg); border:1px solid rgba(197,160,89,0.3); border-radius:16px; box-shadow:0 12px 40px rgba(0,0,0,0.15); padding:14px 16px; box-sizing:border-box; animation:slideUpFade 0.4s cubic-bezier(0.22,1,0.36,1);">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <img src="https://i.postimg.cc/CxkmFFJ3/logo.png" style="width:44px; height:44px; border-radius:10px; border:1px solid rgba(197,160,89,0.2); flex-shrink:0;" alt="VR Perfumes">
+            <div style="flex:1; min-width:0;">
+                <div style="font-family:var(--cinzel); font-size:11px; font-weight:800; color:var(--text-dark); letter-spacing:0.5px;">VR Perfumes</div>
+                <div style="font-size:11px; color:var(--text-gray); margin-top:2px; line-height:1.4;">Додайте на головний екран — як додаток</div>
+            </div>
+            <button onclick="document.getElementById('pwaInstallBanner').style.display='none'; localStorage.setItem('pwa_dismissed','1');" style="background:none; border:none; color:rgba(128,128,128,0.4); font-size:20px; cursor:pointer; padding:4px; flex-shrink:0; line-height:1;">×</button>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:12px;">
+            <button id="pwaInstallBtn" style="flex:1; padding:11px; background:var(--gold); color:#fff; border:none; border-radius:10px; font-family:var(--cinzel); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; cursor:pointer;">
+                Встановити
+            </button>
+            <button onclick="document.getElementById('pwaInstallBanner').style.display='none'; localStorage.setItem('pwa_dismissed','1');" style="flex:1; padding:11px; background:transparent; color:var(--text-gray); border:1px solid rgba(128,128,128,0.15); border-radius:10px; font-family:var(--cinzel); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; cursor:pointer;">
+                Не зараз
+            </button>
+        </div>
+        <!-- Інструкція для iOS (Safari не підтримує beforeinstallprompt) -->
+        <div id="pwaIosHint" style="display:none; margin-top:10px; padding:10px 12px; background:rgba(197,160,89,0.06); border-radius:8px; font-size:11px; color:var(--text-gray); line-height:1.6; text-align:center;">
+            На iPhone: натисніть <b style="color:var(--gold);">⎋ Поділитися</b> → <b style="color:var(--gold);">На екран «Домів»</b>
+        </div>
+    </div>
 
     <a href="https://t.me/viktoriia_viktoriia_r" class="floating-tg" id="floatingTg" target="_blank">
         <svg viewBox="0 0 24 24">
