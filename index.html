@@ -603,56 +603,39 @@
             border-bottom-color: rgba(255,255,255,0.05);
         }
 
-        /* Пошуковий input в компактній панелі */
         .sticky-compact-bar #searchInput {
-            flex: 1;
-            padding: 9px 68px 9px 14px;
-            border: 1px solid rgba(0,0,0,0.07);
+            display: none;
+        }
+
+        /* ══ SEARCH ROW — окремий рядок пошуку на всю ширину ══ */
+        .sticky-search-row {
+            padding: 0 14px 8px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        body.dark-theme .sticky-search-row {
+            background: rgba(18,18,18,0.92);
+        }
+        .sticky-search-row #searchInput {
+            width: 100%;
+            padding: 10px 72px 10px 14px;
+            border: 1px solid rgba(0,0,0,0.08);
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 13px;
             outline: none;
             letter-spacing: 0.5px;
             box-sizing: border-box;
             background: rgba(255,255,255,0.7);
-            transition: all 0.25s ease;
+            transition: border-color 0.25s ease;
         }
-        body.dark-theme .sticky-compact-bar #searchInput {
+        body.dark-theme .sticky-search-row #searchInput {
             background: rgba(255,255,255,0.06);
             color: #fff;
             border-color: rgba(255,255,255,0.1);
         }
-        .sticky-compact-bar #searchInput:focus {
+        .sticky-search-row #searchInput:focus {
             border-color: var(--gold);
-        }
-
-        /* ══ ПОШУК НА ВСЮ ШИРИНУ ══ */
-        /* Кнопки MIX LAB і MAP ховаються при активному пошуку */
-        .sticky-compact-bar.search-active .lab-shortcut,
-        .sticky-compact-bar.search-active .memory-map-shortcut {
-            display: none !important;
-        }
-        /* Кнопки теми і розгортання ховаються при активному пошуку */
-        .sticky-compact-bar.search-active .theme-switch,
-        .sticky-compact-bar.search-active .sticky-expand-btn {
-            display: none !important;
-        }
-        /* search-wrapper розтягується на всю ширину */
-        .sticky-compact-bar.search-active .search-wrapper {
-            flex: 1 1 100%;
-        }
-        /* Кнопка "Назад" при активному пошуку */
-        .search-back-btn {
-            display: none;
-            background: none;
-            border: none;
-            padding: 4px 6px 4px 0;
-            cursor: pointer;
-            flex-shrink: 0;
-            color: var(--gold);
-            align-items: center;
-        }
-        .sticky-compact-bar.search-active .search-back-btn {
-            display: flex;
         }
 
         /* Кнопка розгортання панелі */
@@ -4910,26 +4893,8 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MAP
             </button>
 
-            <!-- Кнопка "назад" при активному пошуку -->
-            <button class="search-back-btn" id="searchBackBtn" onclick="exitSearch()" aria-label="Назад">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-
-            <!-- Пошуковий input -->
-            <div class="search-wrapper" style="flex:1; position:relative; min-width:0;">
-                <input type="text" id="searchInput" placeholder="Пошук аромату або бренду..." oninput="handleSearchInput()" onfocus="activateSearch()" onblur="scheduleDeactivateSearch()">
-                <svg class="mic-btn" id="micBtn" viewBox="0 0 24 24" onclick="startVoiceSearch()">
-                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                    <line x1="12" y1="19" x2="12" y2="23"></line>
-                    <line x1="8" y1="23" x2="16" y2="23"></line>
-                </svg>
-                <span id="clearSearchBtn" onclick="clearSearch()" style="display:flex;align-items:center;right:10px;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
-                <div id="searchResults" class="search-dropdown"></div>
-            </div>
-
             <!-- Кнопка теми -->
-            <button class="theme-switch" onclick="toggleTheme()" id="themeBtn" style="position:static; flex-shrink:0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            <button class="theme-switch" onclick="toggleTheme()" id="themeBtn" style="position:static; flex-shrink:0; margin-left:auto;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
 
             <!-- Кнопка розгортання -->
             <button class="sticky-expand-btn" onclick="toggleStickyPanel()" aria-label="Фільтри та категорії" id="stickyExpandBtn">
@@ -4939,6 +4904,21 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                     <line x1="4" y1="18" x2="9" y2="18"/>
                 </svg>
             </button>
+        </div>
+
+        <!-- ══ SEARCH ROW — окремий рядок пошуку на всю ширину ══ -->
+        <div class="sticky-search-row">
+            <div class="search-wrapper" style="position:relative; width:100%;">
+                <input type="text" id="searchInput" placeholder="Пошук аромату або бренду..." oninput="handleSearchInput()">
+                <svg class="mic-btn" id="micBtn" viewBox="0 0 24 24" onclick="startVoiceSearch()">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+                <span id="clearSearchBtn" onclick="clearSearch()" style="display:flex;align-items:center;right:10px;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                <div id="searchResults" class="search-dropdown"></div>
+            </div>
         </div>
 
         <!-- ══ SORT ROW — завжди видимий під compact bar при розгортанні ══ -->
@@ -6191,41 +6171,11 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         sortCatalog();
     }
     
-    // === ПОШУК НА ВСЮ ШИРИНУ ===
-    let _searchDeactivateTimer = null;
-
-    function activateSearch() {
-        const bar = document.querySelector('.sticky-compact-bar');
-        if (bar) bar.classList.add('search-active');
-    }
-
-    function scheduleDeactivateSearch() {
-        // Затримка, щоб не деактивувати при кліку на результати
-        _searchDeactivateTimer = setTimeout(() => {
-            const input = document.getElementById('searchInput');
-            if (input && input.value.trim() === '') {
-                exitSearch();
-            }
-        }, 300);
-    }
-
-    function exitSearch() {
-        if (_searchDeactivateTimer) clearTimeout(_searchDeactivateTimer);
-        const bar = document.querySelector('.sticky-compact-bar');
-        if (bar) bar.classList.remove('search-active');
-        clearSearch();
-    }
-
     document.addEventListener('click', function(e) { 
         const controls = document.getElementById('stickyControls'); 
         if (controls && !controls.contains(e.target)) { 
             const res = document.getElementById('searchResults'); 
-            if (res) res.style.display = 'none';
-            // При кліку поза пошуком — деактивуємо якщо поле порожнє
-            const input = document.getElementById('searchInput');
-            if (input && input.value.trim() === '') {
-                exitSearch();
-            }
+            if (res) res.style.display = 'none'; 
         }
         
         const sortWrapper = document.querySelector('.custom-sort-wrapper');
@@ -8719,62 +8669,89 @@ function renderGenderBar(value) {
     initStickyPanel();
 
     // === PWA INSTALL PROMPT ===
-    (function initPWA() {
-        if (localStorage.getItem('pwa_dismissed') || window.navigator.standalone) return;
-        let _deferredPrompt = null;
-        const banner = document.getElementById('pwaInstallBanner');
-        const installBtn = document.getElementById('pwaInstallBtn');
-        const iosHint = document.getElementById('pwaIosHint');
-        if (!banner) return;
+    // === ЯРЛИК НА ЕКРАН — завжди через 30 сек, без залежності від браузера ===
+    (function initShortcutBanner() {
+        // Не показуємо якщо вже відхилено або вже відкрито як додаток
+        if (localStorage.getItem('pwa_dismissed')) return;
+        if (window.navigator.standalone) return;
+        if (window.matchMedia('(display-mode: standalone)').matches) return;
 
         const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-        const isSafari = /safari/i.test(navigator.userAgent) && !/chrome|crios/i.test(navigator.userAgent);
-        const isAndroidChrome = /android/i.test(navigator.userAgent) && /chrome/i.test(navigator.userAgent);
+        const isAndroid = /android/i.test(navigator.userAgent);
 
-        // Android/Chrome — зберігаємо дефер промпт якщо є
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            _deferredPrompt = e;
-            if (installBtn) {
-                installBtn.addEventListener('click', async () => {
-                    banner.style.display = 'none';
-                    _deferredPrompt.prompt();
-                    const { outcome } = await _deferredPrompt.userChoice;
-                    if (outcome === 'accepted') localStorage.setItem('pwa_dismissed', '1');
-                    _deferredPrompt = null;
-                });
-            }
-        });
+        // Формуємо покрокову інструкцію залежно від пристрою
+        let steps = '';
+        let title = 'Додайте VR Perfumes на екран';
+        let subtitle = 'Швидкий доступ до каталогу — як звичайний додаток';
 
-        // Універсальний таймер 30 секунд — показуємо банер завжди
+        if (isIOS) {
+            steps = `
+                <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+                    <div style="width:22px;height:22px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:800;color:#fff;">1</div>
+                    <div style="font-size:12px;color:var(--text-dark);line-height:1.5;">Натисніть <b style="color:var(--gold);">⎋</b> кнопку «Поділитися» внизу браузера</div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:10px;">
+                    <div style="width:22px;height:22px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:800;color:#fff;">2</div>
+                    <div style="font-size:12px;color:var(--text-dark);line-height:1.5;">Оберіть <b style="color:var(--gold);">«На екран "Додому"»</b> зі списку</div>
+                </div>`;
+        } else if (isAndroid) {
+            steps = `
+                <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+                    <div style="width:22px;height:22px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:800;color:#fff;">1</div>
+                    <div style="font-size:12px;color:var(--text-dark);line-height:1.5;">Натисніть <b style="color:var(--gold);">⋮</b> меню у правому куті Chrome</div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:10px;">
+                    <div style="width:22px;height:22px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:800;color:#fff;">2</div>
+                    <div style="font-size:12px;color:var(--text-dark);line-height:1.5;">Оберіть <b style="color:var(--gold);">«Додати на головний екран»</b></div>
+                </div>`;
+        } else {
+            // Десктоп — не показуємо
+            return;
+        }
+
+        // Створюємо банер програмно
+        const banner = document.createElement('div');
+        banner.id = 'shortcutBanner';
+        banner.style.cssText = `
+            display:none; position:fixed; bottom:0; left:0; right:0;
+            z-index:2600; background:var(--bg);
+            border-top:1px solid rgba(197,160,89,0.3);
+            border-radius:20px 20px 0 0;
+            box-shadow:0 -8px 40px rgba(0,0,0,0.12);
+            padding:20px 20px 32px;
+            box-sizing:border-box;
+            animation:slideUpFade 0.4s cubic-bezier(0.22,1,0.36,1);
+        `;
+
+        banner.innerHTML = `
+            <div style="width:36px;height:4px;background:rgba(128,128,128,0.2);border-radius:2px;margin:0 auto 18px;"></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                <img src="https://i.postimg.cc/CxkmFFJ3/logo.png" style="width:48px;height:48px;border-radius:12px;border:1px solid rgba(197,160,89,0.25);flex-shrink:0;" alt="VR Perfumes">
+                <div>
+                    <div style="font-family:var(--cinzel);font-size:13px;font-weight:800;color:var(--text-dark);letter-spacing:0.5px;">${title}</div>
+                    <div style="font-size:11px;color:var(--text-gray);margin-top:3px;line-height:1.4;">${subtitle}</div>
+                </div>
+                <button onclick="document.getElementById('shortcutBanner').style.display='none';localStorage.setItem('pwa_dismissed','1');"
+                    style="background:none;border:none;color:rgba(128,128,128,0.4);font-size:22px;cursor:pointer;padding:4px;flex-shrink:0;line-height:1;margin-left:auto;">×</button>
+            </div>
+            <div style="background:rgba(197,160,89,0.06);border:1px solid rgba(197,160,89,0.15);border-radius:12px;padding:14px 16px;margin-bottom:16px;">
+                ${steps}
+            </div>
+            <button onclick="document.getElementById('shortcutBanner').style.display='none';localStorage.setItem('pwa_dismissed','1');"
+                style="width:100%;padding:13px;background:var(--gold);color:#fff;border:none;border-radius:12px;font-family:var(--cinzel);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;">
+                Зрозуміло, дякую!
+            </button>
+        `;
+
+        document.body.appendChild(banner);
+
+        // Показуємо через 30 секунд
         setTimeout(() => {
             if (localStorage.getItem('pwa_dismissed')) return;
             if (window.navigator.standalone) return;
-
+            if (window.matchMedia('(display-mode: standalone)').matches) return;
             banner.style.display = 'block';
-
-            if (isIOS && isSafari) {
-                // iOS: ховаємо кнопку встановити, показуємо інструкцію
-                if (installBtn) installBtn.style.display = 'none';
-                if (iosHint) iosHint.style.display = 'block';
-            } else if (!_deferredPrompt) {
-                // Android не PWA-ready або інший браузер — показуємо інструкцію вручну
-                if (installBtn) installBtn.style.display = 'none';
-                if (iosHint) {
-                    iosHint.style.display = 'block';
-                    // Показуємо загальну інструкцію для Chrome Android
-                    iosHint.innerHTML = isAndroidChrome
-                        ? 'Натисніть <b style="color:var(--gold);">⋮ Меню</b> → <b style="color:var(--gold);">Додати на головний екран</b>'
-                        : 'Відкрийте сайт у Chrome та натисніть <b style="color:var(--gold);">⋮ Меню</b> → <b style="color:var(--gold);">Додати на головний екран</b>';
-                }
-            }
-            // Якщо _deferredPrompt є — кнопка вже налаштована вище
         }, 30000);
-
-        window.addEventListener('appinstalled', () => {
-            banner.style.display = 'none';
-            localStorage.setItem('pwa_dismissed', '1');
-        });
     })();
 
     // === СОЦІАЛЬНИЙ ДОКАЗ: "Сьогодні купили" сповіщення ===
@@ -9491,30 +9468,6 @@ updateWeather();
     }
 
 </script>
-
-    <!-- PWA INSTALL BANNER -->
-    <div id="pwaInstallBanner" style="display:none; position:fixed; bottom:90px; left:50%; transform:translateX(-50%); z-index:2600; width:calc(100% - 32px); max-width:380px; background:var(--bg); border:1px solid rgba(197,160,89,0.3); border-radius:16px; box-shadow:0 12px 40px rgba(0,0,0,0.15); padding:14px 16px; box-sizing:border-box; animation:slideUpFade 0.4s cubic-bezier(0.22,1,0.36,1);">
-        <div style="display:flex; align-items:center; gap:12px;">
-            <img src="https://i.postimg.cc/CxkmFFJ3/logo.png" style="width:44px; height:44px; border-radius:10px; border:1px solid rgba(197,160,89,0.2); flex-shrink:0;" alt="VR Perfumes">
-            <div style="flex:1; min-width:0;">
-                <div style="font-family:var(--cinzel); font-size:11px; font-weight:800; color:var(--text-dark); letter-spacing:0.5px;">VR Perfumes</div>
-                <div style="font-size:11px; color:var(--text-gray); margin-top:2px; line-height:1.4;">Додайте на головний екран — як додаток</div>
-            </div>
-            <button onclick="document.getElementById('pwaInstallBanner').style.display='none'; localStorage.setItem('pwa_dismissed','1');" style="background:none; border:none; color:rgba(128,128,128,0.4); font-size:20px; cursor:pointer; padding:4px; flex-shrink:0; line-height:1;">×</button>
-        </div>
-        <div style="display:flex; gap:8px; margin-top:12px;">
-            <button id="pwaInstallBtn" style="flex:1; padding:11px; background:var(--gold); color:#fff; border:none; border-radius:10px; font-family:var(--cinzel); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; cursor:pointer;">
-                Встановити
-            </button>
-            <button onclick="document.getElementById('pwaInstallBanner').style.display='none'; localStorage.setItem('pwa_dismissed','1');" style="flex:1; padding:11px; background:transparent; color:var(--text-gray); border:1px solid rgba(128,128,128,0.15); border-radius:10px; font-family:var(--cinzel); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; cursor:pointer;">
-                Не зараз
-            </button>
-        </div>
-        <!-- Інструкція для iOS (Safari не підтримує beforeinstallprompt) -->
-        <div id="pwaIosHint" style="display:none; margin-top:10px; padding:10px 12px; background:rgba(197,160,89,0.06); border-radius:8px; font-size:11px; color:var(--text-gray); line-height:1.6; text-align:center;">
-            На iPhone: натисніть <b style="color:var(--gold);">⎋ Поділитися</b> → <b style="color:var(--gold);">На екран «Домів»</b>
-        </div>
-    </div>
 
     <a href="https://t.me/viktoriia_viktoriia_r" class="floating-tg" id="floatingTg" target="_blank">
         <svg viewBox="0 0 24 24">
