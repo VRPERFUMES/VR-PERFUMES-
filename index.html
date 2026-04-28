@@ -625,6 +625,36 @@
             border-color: var(--gold);
         }
 
+        /* ══ ПОШУК НА ВСЮ ШИРИНУ ══ */
+        /* Кнопки MIX LAB і MAP ховаються при активному пошуку */
+        .sticky-compact-bar.search-active .lab-shortcut,
+        .sticky-compact-bar.search-active .memory-map-shortcut {
+            display: none !important;
+        }
+        /* Кнопки теми і розгортання ховаються при активному пошуку */
+        .sticky-compact-bar.search-active .theme-switch,
+        .sticky-compact-bar.search-active .sticky-expand-btn {
+            display: none !important;
+        }
+        /* search-wrapper розтягується на всю ширину */
+        .sticky-compact-bar.search-active .search-wrapper {
+            flex: 1 1 100%;
+        }
+        /* Кнопка "Назад" при активному пошуку */
+        .search-back-btn {
+            display: none;
+            background: none;
+            border: none;
+            padding: 4px 6px 4px 0;
+            cursor: pointer;
+            flex-shrink: 0;
+            color: var(--gold);
+            align-items: center;
+        }
+        .sticky-compact-bar.search-active .search-back-btn {
+            display: flex;
+        }
+
         /* Кнопка розгортання панелі */
         .sticky-expand-btn {
             width: 34px;
@@ -4880,9 +4910,14 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MAP
             </button>
 
+            <!-- Кнопка "назад" при активному пошуку -->
+            <button class="search-back-btn" id="searchBackBtn" onclick="exitSearch()" aria-label="Назад">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+
             <!-- Пошуковий input -->
             <div class="search-wrapper" style="flex:1; position:relative; min-width:0;">
-                <input type="text" id="searchInput" placeholder="Пошук..." oninput="handleSearchInput()">
+                <input type="text" id="searchInput" placeholder="Пошук аромату або бренду..." oninput="handleSearchInput()" onfocus="activateSearch()" onblur="scheduleDeactivateSearch()">
                 <svg class="mic-btn" id="micBtn" viewBox="0 0 24 24" onclick="startVoiceSearch()">
                     <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
                     <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
@@ -5311,7 +5346,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             <button class="modal-btn-full" onclick="document.getElementById('newsModalWindow').style.display='none'">Закрити</button>
         </div>
     </div>
-
 <script>
     // === КОНСТАНТИ ТА БАЗОВІ НАЛАШТУВАННЯ ===
     const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=339534482&single=true&output=csv';
@@ -6157,11 +6191,41 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         sortCatalog();
     }
     
+    // === ПОШУК НА ВСЮ ШИРИНУ ===
+    let _searchDeactivateTimer = null;
+
+    function activateSearch() {
+        const bar = document.querySelector('.sticky-compact-bar');
+        if (bar) bar.classList.add('search-active');
+    }
+
+    function scheduleDeactivateSearch() {
+        // Затримка, щоб не деактивувати при кліку на результати
+        _searchDeactivateTimer = setTimeout(() => {
+            const input = document.getElementById('searchInput');
+            if (input && input.value.trim() === '') {
+                exitSearch();
+            }
+        }, 300);
+    }
+
+    function exitSearch() {
+        if (_searchDeactivateTimer) clearTimeout(_searchDeactivateTimer);
+        const bar = document.querySelector('.sticky-compact-bar');
+        if (bar) bar.classList.remove('search-active');
+        clearSearch();
+    }
+
     document.addEventListener('click', function(e) { 
         const controls = document.getElementById('stickyControls'); 
         if (controls && !controls.contains(e.target)) { 
             const res = document.getElementById('searchResults'); 
-            if (res) res.style.display = 'none'; 
+            if (res) res.style.display = 'none';
+            // При кліку поза пошуком — деактивуємо якщо поле порожнє
+            const input = document.getElementById('searchInput');
+            if (input && input.value.trim() === '') {
+                exitSearch();
+            }
         }
         
         const sortWrapper = document.querySelector('.custom-sort-wrapper');
@@ -8663,34 +8727,49 @@ function renderGenderBar(value) {
         const iosHint = document.getElementById('pwaIosHint');
         if (!banner) return;
 
-        // Android/Chrome
+        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        const isSafari = /safari/i.test(navigator.userAgent) && !/chrome|crios/i.test(navigator.userAgent);
+        const isAndroidChrome = /android/i.test(navigator.userAgent) && /chrome/i.test(navigator.userAgent);
+
+        // Android/Chrome — зберігаємо дефер промпт якщо є
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             _deferredPrompt = e;
-            setTimeout(() => {
-                if (!localStorage.getItem('pwa_dismissed')) banner.style.display = 'block';
-            }, 30000);
-            installBtn.addEventListener('click', async () => {
-                banner.style.display = 'none';
-                _deferredPrompt.prompt();
-                const { outcome } = await _deferredPrompt.userChoice;
-                if (outcome === 'accepted') localStorage.setItem('pwa_dismissed', '1');
-                _deferredPrompt = null;
-            });
+            if (installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    banner.style.display = 'none';
+                    _deferredPrompt.prompt();
+                    const { outcome } = await _deferredPrompt.userChoice;
+                    if (outcome === 'accepted') localStorage.setItem('pwa_dismissed', '1');
+                    _deferredPrompt = null;
+                });
+            }
         });
 
-        // iOS Safari
-        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-        const isSafari = /safari/i.test(navigator.userAgent) && !/chrome|crios/i.test(navigator.userAgent);
-        if (isIOS && isSafari && !window.navigator.standalone) {
-            setTimeout(() => {
-                if (!localStorage.getItem('pwa_dismissed')) {
-                    banner.style.display = 'block';
-                    if (installBtn) installBtn.style.display = 'none';
-                    if (iosHint) iosHint.style.display = 'block';
+        // Універсальний таймер 30 секунд — показуємо банер завжди
+        setTimeout(() => {
+            if (localStorage.getItem('pwa_dismissed')) return;
+            if (window.navigator.standalone) return;
+
+            banner.style.display = 'block';
+
+            if (isIOS && isSafari) {
+                // iOS: ховаємо кнопку встановити, показуємо інструкцію
+                if (installBtn) installBtn.style.display = 'none';
+                if (iosHint) iosHint.style.display = 'block';
+            } else if (!_deferredPrompt) {
+                // Android не PWA-ready або інший браузер — показуємо інструкцію вручну
+                if (installBtn) installBtn.style.display = 'none';
+                if (iosHint) {
+                    iosHint.style.display = 'block';
+                    // Показуємо загальну інструкцію для Chrome Android
+                    iosHint.innerHTML = isAndroidChrome
+                        ? 'Натисніть <b style="color:var(--gold);">⋮ Меню</b> → <b style="color:var(--gold);">Додати на головний екран</b>'
+                        : 'Відкрийте сайт у Chrome та натисніть <b style="color:var(--gold);">⋮ Меню</b> → <b style="color:var(--gold);">Додати на головний екран</b>';
                 }
-            }, 35000);
-        }
+            }
+            // Якщо _deferredPrompt є — кнопка вже налаштована вище
+        }, 30000);
 
         window.addEventListener('appinstalled', () => {
             banner.style.display = 'none';
@@ -9532,3 +9611,4 @@ updateWeather();
 
 </body>
 </html>
+
