@@ -638,6 +638,55 @@
             border-color: var(--gold);
         }
 
+        /* ══ НОТИ — завжди видимі ══ */
+        .sticky-notes-row {
+            padding: 4px 14px 6px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        body.dark-theme .sticky-notes-row {
+            background: rgba(18,18,18,0.92);
+            border-bottom-color: rgba(255,255,255,0.04);
+        }
+        .sticky-notes-row .note-suggestions {
+            border-bottom: none;
+            padding: 2px 0;
+        }
+
+        /* ══ БРЕНДИ — завжди видимі ══ */
+        .sticky-brands-row {
+            padding: 4px 14px 6px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        body.dark-theme .sticky-brands-row {
+            background: rgba(18,18,18,0.92);
+            border-bottom-color: rgba(255,255,255,0.04);
+        }
+        .sticky-brands-row .brands-gallery-btn {
+            margin: 2px 0;
+        }
+
+        /* ══ ТАБКИ — завжди видимі ══ */
+        .sticky-tabs-row {
+            padding: 4px 14px 8px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        body.dark-theme .sticky-tabs-row {
+            background: rgba(18,18,18,0.92);
+            border-bottom-color: rgba(255,255,255,0.05);
+        }
+        .sticky-tabs-row .tabs-container {
+            margin-bottom: 0;
+        }
+
         /* Кнопка розгортання панелі */
         .sticky-expand-btn {
             width: 34px;
@@ -942,20 +991,23 @@
 
         .search-dropdown { 
             display: none; 
-            position: absolute; 
-            top: 100%; 
+            position: fixed; 
             left: 0; 
             right: 0; 
-            background: rgba(255, 255, 255, 0.92); 
+            background: rgba(255, 255, 255, 0.97); 
             backdrop-filter: blur(20px); 
             -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
-            border-radius: 0 0 12px 12px; 
-            max-height: 320px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12); 
+            border-radius: 0 0 14px 14px; 
+            max-height: 55vh; 
             overflow-y: auto; 
-            z-index: 2000; 
-            border: 1px solid rgba(197, 160, 89, 0.12); 
-            border-top: none; 
+            z-index: 9999; 
+            border: 1px solid rgba(197, 160, 89, 0.18); 
+            border-top: 2px solid var(--gold); 
+        }
+        body.dark-theme .search-dropdown {
+            background: rgba(22,22,22,0.98);
+            border-color: rgba(197,160,89,0.2);
         }
 
         .search-item { 
@@ -4885,28 +4937,16 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
 
     <div id="stickyControls" class="sticky-active">
 
-        <!-- ══ COMPACT BAR — завжди видима ══ -->
+        <!-- ══ РЯДОК 1: MIX LAB + MAP + тема ══ -->
         <div class="sticky-compact-bar">
-            <!-- Кнопки MIX LAB + MEMORY MAP -->
             <button class="lab-shortcut" onclick="document.querySelector('.layering-section').scrollIntoView({behavior:'smooth'})" style="margin-bottom:0; flex-shrink:0;">MIX LAB</button>
             <button class="memory-map-shortcut" onclick="openScentMemoryMap()" style="margin-bottom:0; flex-shrink:0;">
                 <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MAP
             </button>
-
-            <!-- Кнопка теми -->
             <button class="theme-switch" onclick="toggleTheme()" id="themeBtn" style="position:static; flex-shrink:0; margin-left:auto;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
-
-            <!-- Кнопка розгортання -->
-            <button class="sticky-expand-btn" onclick="toggleStickyPanel()" aria-label="Фільтри та категорії" id="stickyExpandBtn">
-                <svg id="expandBtnIcon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="4" y1="6" x2="20" y2="6"/>
-                    <line x1="4" y1="12" x2="14" y2="12"/>
-                    <line x1="4" y1="18" x2="9" y2="18"/>
-                </svg>
-            </button>
         </div>
 
-        <!-- ══ SEARCH ROW — окремий рядок пошуку на всю ширину ══ -->
+        <!-- ══ РЯДОК 2: Пошук на всю ширину ══ -->
         <div class="sticky-search-row">
             <div class="search-wrapper" style="position:relative; width:100%;">
                 <input type="text" id="searchInput" placeholder="Пошук аромату або бренду..." oninput="handleSearchInput()">
@@ -4921,12 +4961,12 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             </div>
         </div>
 
-        <!-- ══ SORT ROW — завжди видимий під compact bar при розгортанні ══ -->
+        <!-- ══ РЯДОК 3: Сортування ══ -->
         <div class="sticky-sort-row" id="stickySortRow">
             <div class="sort-wrapper" style="padding:0; width:100%;">
                 <div class="custom-sort-wrapper" style="width:100%; margin-left:0;">
                     <div class="custom-sort-header" onclick="toggleSortMenu(event)">
-                        <span id="currentSortText">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</span>
+                        <span id="currentSortText">ЗА АЛФАВІТОМ (А-Я)</span>
                         <svg viewBox="0 0 24 24" width="16" height="16"><path d="M7 10l5 5 5-5z" fill="var(--gold)"/></svg>
                     </div>
                     <div class="custom-sort-options" id="sortOptionsList">
@@ -4947,9 +4987,9 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             </div>
         </div>
 
-        <!-- ══ EXPANDED PANEL — ноти, бренди, табки ══ -->
-        <div class="sticky-expanded-panel" id="stickyExpandedPanel">
-            <div class="note-suggestions" id="noteSuggestions" style="padding:4px 0 8px; border-bottom:1px solid rgba(128,128,128,0.07);">
+        <!-- ══ РЯДОК 4: Ноти ══ -->
+        <div class="sticky-notes-row">
+            <div class="note-suggestions" id="noteSuggestions">
                 <span class="note-label">Ноти:</span>
                 <span class="note-chip" onclick="searchByNote('Ваніль', this)">Ваніль</span>
                 <span class="note-chip" onclick="searchByNote('Вишня', this)">Вишня</span>
@@ -4958,15 +4998,20 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 <span class="note-chip" onclick="searchByNote('Бергамот', this)">Бергамот</span>
                 <span class="note-chip" onclick="searchByNote('Мускус', this)">Мускус</span>
             </div>
+        </div>
 
+        <!-- ══ РЯДОК 5: Огляд брендів ══ -->
+        <div class="sticky-brands-row">
             <div class="brand-slider" id="brandSlider" style="display:none;"></div>
-
-            <button class="brands-gallery-btn" onclick="openBrandGallery()" style="margin: 8px 0 6px;">
+            <button class="brands-gallery-btn" onclick="openBrandGallery()">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                 Огляд брендів
             </button>
+        </div>
 
-            <div class="tabs-container" style="margin-bottom:6px;">
+        <!-- ══ РЯДОК 6: Табки категорій ══ -->
+        <div class="sticky-tabs-row">
+            <div class="tabs-container">
                 <button class="tab-btn active" onclick="setCategory('all', this)">Усі</button>
                 <button class="tab-btn" onclick="setCategory('new', this)">Новинки</button>
                 <button class="tab-btn" onclick="setCategory('top', this)">Хіти</button>
@@ -4975,6 +5020,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 <button class="tab-btn" onclick="setCategory('wishlist', this)">Улюблені ♡</button>
             </div>
         </div>
+
     </div>
 
     <div id="weekPerfumeContainer"></div>
@@ -7934,6 +7980,12 @@ function renderGenderBar(value) {
             });
         }
         resContainer.style.display = 'block';
+        // Позиціонуємо dropdown точно під полем пошуку
+        const inputEl = document.getElementById('searchInput');
+        if (inputEl) {
+            const rect = inputEl.getBoundingClientRect();
+            resContainer.style.top = rect.bottom + 'px';
+        }
     }
 
     function clearSearch() { document.getElementById('searchInput').value = ''; handleSearchInput(); document.getElementById('searchResults').style.display = 'none'; document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note')); }
