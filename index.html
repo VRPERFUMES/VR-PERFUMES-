@@ -2,7 +2,6 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#c5a059">
     <meta name="mobile-web-app-capable" content="yes">
@@ -731,32 +730,7 @@
         }
         .sticky-expand-btn { position: relative; }
 
-        /* Розгортальна панель */
-        .sticky-expanded-panel {
-            background: rgba(255,255,255,0.96);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-            overflow: visible;
-            max-height: 0;
-            clip-path: inset(0 0 0 0);
-            transition: max-height 0.35s cubic-bezier(0.22,1,0.36,1), padding 0.3s ease;
-            padding: 0 14px;
-        }
-        body.dark-theme .sticky-expanded-panel {
-            background: rgba(18,18,18,0.96);
-            border-bottom-color: rgba(255,255,255,0.05);
-        }
-        body.dark-theme .sticky-expanded-panel {
-            background: rgba(18,18,18,0.96);
-            border-bottom-color: rgba(255,255,255,0.05);
-        }
-        #stickyControls.expanded .sticky-expanded-panel {
-            max-height: 320px;
-            padding: 8px 14px 14px;
-        }
-
-        /* Приховуємо search-wrapper в expanded panel (він вже в compact bar) */
+        /* Приховуємо search-wrapper в expanded panel (застарілий селектор — залишено для сумісності) */
         .sticky-expanded-panel .search-wrapper { display: none; }
         
         body.dark-theme #stickyControls {
@@ -885,30 +859,6 @@
             background: rgba(197, 160, 89, 0.05) !important; 
             font-weight: 800; 
         }
-
-        .filter-chip {
-            display: inline-block;
-            padding: 5px 12px;
-            background: transparent;
-            border: 1px solid rgba(128,128,128,0.2);
-            border-radius: 20px;
-            font-size: 11px;
-            color: var(--text-dark);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            flex-shrink: 0;
-            font-weight: 600;
-        }
-        .filter-chip:active { transform: scale(0.95); }
-        .filter-chip.active-filter {
-            border-color: var(--gold);
-            color: var(--gold);
-            background: rgba(197,160,89,0.07);
-            font-weight: 800;
-        }
-        body.dark-theme .filter-chip { border-color: rgba(255,255,255,0.12); color: #ccc; }
-        body.dark-theme .filter-chip.active-filter { color: var(--gold); border-color: var(--gold); background: rgba(197,160,89,0.08); }
         /* КОНТУРНІ SVG НОТИ ДЛЯ МОДАЛКИ (Золоті) */
         .note-header { 
             display: flex; 
@@ -4750,31 +4700,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         <div class="news-btn" onclick="document.getElementById('newsModalWindow').style.display='flex'">Новини та акції</div>
     </div>
 
-    <!-- ПІДПИСКА НА НОВИНИ -->
-    <div id="newsletterBlock" style="margin:0 15px 16px; padding:16px 18px; background:linear-gradient(135deg, rgba(197,160,89,0.07) 0%, rgba(197,160,89,0.03) 100%); border:1px solid rgba(197,160,89,0.22); border-radius:14px; box-sizing:border-box;">
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-            <div style="width:36px; height:36px; background:var(--gold); border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            </div>
-            <div>
-                <div style="font-family:var(--cinzel); font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-dark);">Новинки першими</div>
-                <div style="font-size:11px; color:var(--text-gray); margin-top:1px;">Нові аромати, акції та ексклюзиви</div>
-            </div>
-        </div>
-        <div id="newsletterForm" style="display:flex; gap:8px;">
-            <input type="text" id="newsletterContact" class="cart-comment-input" 
-                placeholder="@telegram або телефон" 
-                style="flex:1; margin-bottom:0; padding:10px 14px; font-size:13px;">
-            <button onclick="subscribeNewsletter()" 
-                style="flex-shrink:0; padding:10px 16px; background:var(--gold); color:#fff; border:none; border-radius:10px; font-family:var(--cinzel); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px; cursor:pointer; white-space:nowrap;">
-                Підписатись
-            </button>
-        </div>
-        <div id="newsletterSuccess" style="display:none; text-align:center; padding:8px 0; color:var(--gold); font-size:12px; font-weight:700; font-family:var(--cinzel);">
-            ✓ Підписку оформлено! Будемо на зв'язку
-        </div>
-    </div>
-
     <div class="quiz-trigger" onclick="openQuiz()">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
         <div class="quiz-trigger-text">
@@ -4901,7 +4826,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                         <span class="quiz-option-label">Осінь / Зима</span>
                     </div>
                     <div class="quiz-option" onclick="quizSelect(1,'evening')">
-                                                <!-- Свічка -->
+                        <!-- Свічка -->
                         <svg class="quiz-opt-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6v-2H9v2z"/><rect x="9" y="8" width="6" height="13" rx="1"/><path d="M12 8V4"/><path d="M10 4c0-1.1.9-2 2-2s2 .9 2 2c0 1.5-2 3-2 3S10 5.5 10 4z"/></svg>
                         <span class="quiz-option-label">Вечір / Вихід</span>
                     </div>
@@ -5003,7 +4928,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                     <line x1="8" y1="23" x2="16" y2="23"></line>
                 </svg>
                 <span id="clearSearchBtn" onclick="clearSearch()" style="display:flex;align-items:center;right:10px;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
-                <div id="searchResults" class="search-dropdown"></div>
             </div>
         </div>
 
@@ -5012,7 +4936,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             <div class="sort-wrapper" style="padding:0; width:100%;">
                 <div class="custom-sort-wrapper" style="width:100%; margin-left:0;">
                     <div class="custom-sort-header" onclick="toggleSortMenu(event)">
-                        <span id="currentSortText">ЗА АЛФАВІТОМ (А-Я)</span>
+                        <span id="currentSortText">ЗА ЗАМОВЧУВАННЯМ (НОВІ)</span>
                         <svg viewBox="0 0 24 24" width="16" height="16"><path d="M7 10l5 5 5-5z" fill="var(--gold)"/></svg>
                     </div>
                     <div class="custom-sort-options" id="sortOptionsList">
@@ -5044,17 +4968,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 <span class="note-chip" onclick="searchByNote('Бергамот', this)">Бергамот</span>
                 <span class="note-chip" onclick="searchByNote('Мускус', this)">Мускус</span>
             </div>
-        </div>
-
-        <!-- ══ РЯДОК 4b: Стать + Сезон ══ -->
-        <div style="display:flex; gap:6px; padding:0 15px 8px; overflow-x:auto; scrollbar-width:none; align-items:center; flex-wrap:nowrap;">
-            <span style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-gray); opacity:0.55; white-space:nowrap; flex-shrink:0;">Для:</span>
-            <span class="filter-chip" id="fc-жін" onclick="setGenderFilter('жін',this)">♀ Жінок</span>
-            <span class="filter-chip" id="fc-чол" onclick="setGenderFilter('чол',this)">♂ Чоловіків</span>
-            <span class="filter-chip" id="fc-уніс" onclick="setGenderFilter('уніс',this)">⚧ Унісекс</span>
-            <span style="width:1px; height:14px; background:rgba(128,128,128,0.15); flex-shrink:0;"></span>
-            <span class="filter-chip" id="fc-весна" onclick="setSeasonFilter('весна',this)">🌸 Весна/Літо</span>
-            <span class="filter-chip" id="fc-осінь" onclick="setSeasonFilter('осінь',this)">🍂 Осінь/Зима</span>
         </div>
 
         <!-- ══ РЯДОК 5: Огляд брендів ══ -->
@@ -5119,15 +5032,10 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         </div>
     </div>
 
-    <div class="about-section" id="aboutSection">
-        <!-- Фото + заголовок -->
+    <div class="about-section">
         <img src="Screenshot_20260328-171201.png" class="about-photo" loading="lazy" alt="Вікторія — засновниця VR Perfumes" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
-        <div style="font-family:var(--cinzel); font-size:9px; letter-spacing:4px; color:rgba(197,160,89,0.6); text-transform:uppercase; margin-bottom:6px;">Засновниця</div>
-        <div style="font-family:var(--cinzel); font-size:20px; font-weight:900; color:var(--text-dark); margin-bottom:4px;">Вікторія</div>
-        <div style="font-size:12px; color:var(--text-gray); margin-bottom:20px; font-style:italic;">Парфумерний бар · Хмельницький</div>
-
         <div class="about-content">
-            <!-- Instagram блок -->
+            <p style="text-align:center;"><strong>Вітаю всіх в нашому парфумерному барі! Мене звати Вікторія.</strong></p>
             <a href="https://www.instagram.com/vrshopping.khm?igsh=d3JybzJ6dW8yZmxh" target="_blank" class="ig-guarantee-block">
                 <div class="ig-guarantee-info">
                     <div class="ig-icon-wrap">
@@ -5140,95 +5048,54 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 </div>
                 <div class="ig-arrow">→</div>
             </a>
-
-            <!-- Лічильники -->
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:20px 0;">
-                <div style="text-align:center; padding:14px 8px; background:rgba(197,160,89,0.05); border:1px solid rgba(197,160,89,0.15); border-radius:12px;">
-                    <div style="font-family:var(--cinzel); font-size:22px; font-weight:900; color:var(--gold);">100+</div>
-                    <div style="font-size:10px; color:var(--text-gray); text-transform:uppercase; letter-spacing:0.5px; margin-top:3px;">Ароматів</div>
-                </div>
-                <div style="text-align:center; padding:14px 8px; background:rgba(197,160,89,0.05); border:1px solid rgba(197,160,89,0.15); border-radius:12px;">
-                    <div style="font-family:var(--cinzel); font-size:22px; font-weight:900; color:var(--gold);">500+</div>
-                    <div style="font-size:10px; color:var(--text-gray); text-transform:uppercase; letter-spacing:0.5px; margin-top:3px;">Клієнтів</div>
-                </div>
-                <div style="text-align:center; padding:14px 8px; background:rgba(197,160,89,0.05); border:1px solid rgba(197,160,89,0.15); border-radius:12px;">
-                    <div style="font-family:var(--cinzel); font-size:22px; font-weight:900; color:var(--gold);">3+</div>
-                    <div style="font-size:10px; color:var(--text-gray); text-transform:uppercase; letter-spacing:0.5px; margin-top:3px;">Роки досвіду</div>
-                </div>
+            <div style="text-align:center; margin-top: 15px;">
+                <span class="toggle-about" id="toggleBtn" onclick="toggleAbout()" style="color:var(--gold); cursor:pointer; text-transform:uppercase; font-size:11px; letter-spacing:1px; font-weight:700;">Наша історія ↓</span>
             </div>
-
-            <!-- Переваги -->
-            <div style="margin-bottom:20px;">
-                <div style="font-family:var(--cinzel); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:var(--gold); margin-bottom:12px; text-align:center;">Чому обирають нас</div>
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <div style="display:flex; align-items:flex-start; gap:12px; padding:12px; background:rgba(128,128,128,0.04); border-radius:10px;">
-                        <div style="width:32px; height:32px; background:rgba(197,160,89,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        </div>
-                        <div><div style="font-size:12px; font-weight:700; color:var(--text-dark); margin-bottom:2px;">100% оригінал</div><div style="font-size:11px; color:var(--text-gray); line-height:1.5;">Тільки оригінальна парфумерія з Європи та США. Перевіряємо кожен флакон перед розпивом.</div></div>
-                    </div>
-                    <div style="display:flex; align-items:flex-start; gap:12px; padding:12px; background:rgba(128,128,128,0.04); border-radius:10px;">
-                        <div style="width:32px; height:32px; background:rgba(197,160,89,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-                        </div>
-                        <div><div style="font-size:12px; font-weight:700; color:var(--text-dark); margin-bottom:2px;">Стерильний розпив</div><div style="font-size:11px; color:var(--text-gray); line-height:1.5;">Переливаємо без контакту з повітрям. Якість аромату зберігається повністю.</div></div>
-                    </div>
-                    <div style="display:flex; align-items:flex-start; gap:12px; padding:12px; background:rgba(128,128,128,0.04); border-radius:10px;">
-                        <div style="width:32px; height:32px; background:rgba(197,160,89,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                        </div>
-                        <div><div style="font-size:12px; font-weight:700; color:var(--text-dark); margin-bottom:2px;">Зручно та швидко</div><div style="font-size:11px; color:var(--text-gray); line-height:1.5;">Замовляй у кілька кліків. Відправка Новою Поштою та Укрпоштою по всій Україні.</div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Кнопка розгорнути -->
-            <div style="text-align:center; margin-bottom:16px;">
-                <span id="toggleBtn" onclick="toggleAbout()" style="color:var(--gold); cursor:pointer; text-transform:uppercase; font-size:11px; letter-spacing:1px; font-weight:700; border-bottom:1px dashed rgba(197,160,89,0.4); padding-bottom:2px;">Наша історія ↓</span>
-            </div>
-
-           <div id="aboutMore" style="display:none; margin-top:10px;">
-                <p style="text-align:center; font-size:13px; line-height:1.7; margin-bottom:20px; color:#666;">
-                    Парфумерний бар VR Perfumes народився з пристрасті до нішових ароматів і бажання зробити їх доступними кожному. Ми не просто продаємо парфуми — ми допомагаємо знайти ваш особистий підпис.
+           <div id="aboutMore" style="display:none; margin-top:15px;">
+                <p style="text-align:center; font-size: 13px; line-height: 1.6; margin-bottom: 20px; color: #555;">
+                    Ми створюємо культуру розпиву, де кожна крапля — це мистецтво. Тільки оригінальна ніша та люкс з Європи та США.
                 </p>
-                <p style="text-align:center; font-size:13px; line-height:1.7; margin-bottom:20px; color:#666;">
-                    Кожен аромат у нашому барі пройшов особистий відбір. Ми знаємо кожну ноту, кожну формулу і з радістю поділимось цими знаннями з вами.
-                </p>
+
                 <div class="faq-container">
                     <div class="faq-item">
                         <div class="faq-question" onclick="toggleFaq(this)">Що таке розпив?</div>
-                        <div class="faq-answer">Це можливість познайомитися з дорогим нішевим ароматом без необхідності купувати цілий флакон. Ми беремо оригінальний парфум та за допомогою стерильних інструментів (без контакту з повітрям) акуратно переміщаємо його у якісні скляні флакони (атомайзери).</div>
+                        <div class="faq-answer">
+                            Це можливість познайомитися з дорогим нішевим ароматом без необхідності купувати цілий флакон. Ми беремо оригінальний парфум та за допомогою стерильних інструментів (без контакту з повітрям) акуратно переміщаємо його у якісні скляні флакони (атомайзери).
+                        </div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question" onclick="toggleFaq(this)">Доступні об'єми</div>
-                        <div class="faq-answer">Ми пропонуємо зручні формати: <b>2 мл, 5 мл, 10 мл та 20 мл</b>. Також можна придбати залишок аромату в рідному дизайнерському флаконі.</div>
+                        <div class="faq-answer">
+                            Ми пропонуємо зручні формати для знайомства та повноцінного носіння: <b>2 мл, 5 мл, 10 мл та 20 мл</b>. Також ви маєте унікальну можливість придбати залишок аромату в його рідному дизайнерському флаконі.
+                        </div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question" onclick="toggleFaq(this)">Доставка та пакування</div>
-                        <div class="faq-answer">Відправляємо Новою Поштою та Укрпоштою. <b>При замовленні від 1500 грн — доставка безкоштовна!</b> Надійне пакування з подарунковим оформленням за бажанням.</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(this)">Як зв'язатись?</div>
-                        <div class="faq-answer">Пишіть у <a href="https://t.me/viktoriia_viktoriia_r" target="_blank" style="color:var(--gold)">Telegram</a> або WhatsApp +380962178464. Відповідаємо зазвичай протягом кількох годин.</div>
+                        <div class="faq-answer">
+                            Відправляємо замовлення Новою Поштою та Укрпоштою. <b>При замовленні на суму від 1500 грн — доставка безкоштовна!</b> Всі відправлення надійно  пакуються, щоб ви отримали справжнє  задоволення від розпаковки.
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="other-projects">
-            <span class="projects-title">Наші Проєкти</span>
-            <div class="projects-flex">
-                <a href="https://www.instagram.com/mysweetplanb/" class="project-item" target="_blank">
-                    <div class="project-circle"><img src="Screenshot_20260323-001755.png" alt="Sweet Plan B" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'"></div>
-                    <span class="project-name">Sweet<br>Plan B</span>
-                </a>
-                <a href="https://t.me/+yPwOWrT6zHo5ZDky" class="project-item" target="_blank">
-                    <div class="project-circle"><img src="Screenshot_20260327-210532.png" alt="VR Shopping" onerror="this.src='https://i.postimg.cc/mD8z4qW0/vr-shopping.jpg'"></div>
-                    <span class="project-name">VR<br>Shopping</span>
-                </a>
+<div class="other-projects">
+    <span class="projects-title">Наші Проєкти</span>
+    <div class="projects-flex">
+        <a href="https://www.instagram.com/mysweetplanb/" class="project-item" target="_blank">
+            <div class="project-circle">
+                <img src="Screenshot_20260323-001755.png" alt="Sweet Plan B" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
             </div>
-        </div>
+            <span class="project-name">Sweet<br>Plan B</span>
+        </a>
+        
+        <a href="https://t.me/+yPwOWrT6zHo5ZDky" class="project-item" target="_blank">
+            <div class="project-circle">
+                <img src="Screenshot_20260327-210532.png" alt="VR Shopping" onerror="this.src='https://i.postimg.cc/mD8z4qW0/vr-shopping.jpg'">
+            </div>
+            <span class="project-name">VR<br>Shopping</span>
+        </a>
     </div>
+</div>
+            
     <div class="reviews-section">
         <span class="reviews-header">Ольфакторні враження</span>
         <div id="reviewsListContainer"></div>
@@ -5678,8 +5545,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     let carouselInterval;
     let currentCategory = 'all';
     let currentBrand = '';
-    let currentGender = '';   // 'жін' | 'чол' | 'уніс' | ''
-    let currentSeason = '';   // 'весна' | 'літо' | 'осінь' | 'зима' | ''
     let globalCatalogData = []; 
     let cart = JSON.parse(localStorage.getItem('vr_cart')) || [];
     let wishlist = JSON.parse(localStorage.getItem('vr_wishlist')) || [];
@@ -6646,13 +6511,9 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         }
     }
 
-    function toggleStickyPanel() {
-        const ctrl = document.getElementById('stickyControls');
-        ctrl.classList.toggle('expanded');
-        const isExpanded = ctrl.classList.contains('expanded');
-        sessionStorage.setItem('vr_panel_expanded', isExpanded ? '1' : '0');
-        updateFilterIndicator();
-    }
+    // toggleStickyPanel і initStickyPanel залишені як заглушки для зворотної сумісності
+    // (expanded panel видалено — всі елементи тепер завжди видимі)
+    function toggleStickyPanel() { updateFilterIndicator(); }
 
     function updateFilterIndicator() {
         const ctrl = document.getElementById('stickyControls');
@@ -6665,13 +6526,8 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     }
 
     function initStickyPanel() {
-        const ctrl = document.getElementById('stickyControls');
-        if (!ctrl) return;
-        // За замовчуванням — розгорнута панель при першому відвідуванні
-        const saved = sessionStorage.getItem('vr_panel_expanded');
-        if (saved === null || saved === '1') {
-            ctrl.classList.add('expanded');
-        }
+        // Панель завжди розгорнута — expanded panel видалено
+        updateFilterIndicator();
     }
 
         async function load() {
@@ -6830,17 +6686,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 if (isSet) categories.push('set');
                 if (top) categories.push(top.toLowerCase());
                 div.setAttribute('data-category', categories.join(' '));
-
-                // Стать та сезон — з опису
-                const descLow = (desc || '').toLowerCase();
-                const genderAttr = descLow.includes('жіноч') ? 'жін' :
-                                   descLow.includes('чолові') ? 'чол' : 'уніс';
-                const seasonAttr = [
-                    descLow.includes('весн') || descLow.includes('літ') ? 'весна літо' : '',
-                    descLow.includes('осін') || descLow.includes('зим') ? 'осінь зима' : '',
-                ].filter(Boolean).join(' ') || 'весна літо осінь зима';
-                div.setAttribute('data-gender', genderAttr);
-                div.setAttribute('data-season', seasonAttr);
                 
                 div.innerHTML = `
                     <div class="badges-wrapper">
@@ -8185,41 +8030,15 @@ function renderGenderBar(value) {
         scrollToFirstCards();
     }
     
-    function setGenderFilter(val, btn) {
-        if (currentGender === val) {
-            currentGender = '';
-            document.querySelectorAll('.filter-chip[id^="fc-жін"], .filter-chip[id^="fc-чол"], .filter-chip[id^="fc-уніс"]').forEach(c => c.classList.remove('active-filter'));
-        } else {
-            currentGender = val;
-            document.querySelectorAll('.filter-chip[id^="fc-жін"], .filter-chip[id^="fc-чол"], .filter-chip[id^="fc-уніс"]').forEach(c => c.classList.remove('active-filter'));
-            if (btn) btn.classList.add('active-filter');
-        }
-        triggerCatalogAnimation();
-    }
-
-    function setSeasonFilter(val, btn) {
-        if (currentSeason === val) {
-            currentSeason = '';
-            document.querySelectorAll('.filter-chip[id^="fc-весна"], .filter-chip[id^="fc-осінь"]').forEach(c => c.classList.remove('active-filter'));
-        } else {
-            currentSeason = val;
-            document.querySelectorAll('.filter-chip[id^="fc-весна"], .filter-chip[id^="fc-осінь"]').forEach(c => c.classList.remove('active-filter'));
-            if (btn) btn.classList.add('active-filter');
-        }
-        triggerCatalogAnimation();
-    }
-
     function filterCatalog() {
         const q = document.getElementById('searchInput').value.toLowerCase();
         document.querySelectorAll('.card').forEach(c => {
             const searchData = (c.innerText + " " + (c.getAttribute('data-desc') || "")).toLowerCase();
-            const mS = !q || searchData.includes(q);
+            const mS = searchData.includes(q);
             const mB = currentBrand === '' || c.getAttribute('data-brand') === currentBrand;
             const isWished = wishlist.includes(c.getAttribute('data-id'));
-            const mC = currentCategory === 'all' || (currentCategory === 'wishlist' ? isWished : (c.getAttribute('data-category') || '').includes(currentCategory));
-            const mG = !currentGender || (c.getAttribute('data-gender') || '').includes(currentGender);
-            const mSeason = !currentSeason || (c.getAttribute('data-season') || '').includes(currentSeason);
-            c.style.display = (mS && mB && mC && mG && mSeason) ? 'flex' : 'none';
+            const mC = currentCategory === 'all' || (currentCategory === 'wishlist' ? isWished : c.getAttribute('data-category').includes(currentCategory));
+            c.style.display = (mS && mB && mC) ? 'flex' : 'none';
         });
         sortCatalog();
     }
@@ -8835,30 +8654,6 @@ function renderGenderBar(value) {
         document.getElementById('qstep0').classList.add('active');
     }
 
-    // === ПІДПИСКА НА НОВИНИ ===
-    async function subscribeNewsletter() {
-        const input = document.getElementById('newsletterContact');
-        const contact = (input?.value || '').trim();
-        if (!contact || contact.length < 3) {
-            input.style.borderColor = '#e55';
-            setTimeout(() => input.style.borderColor = '', 1500);
-            return;
-        }
-        const btn = document.querySelector('#newsletterBlock button');
-        if (btn) { btn.textContent = '...'; btn.style.opacity = '0.6'; }
-        try {
-            await fetch('https://script.google.com/macros/s/AKfycbxwI4YS1nrjizwkUJ4-Eay9iFcFIQB8pW8ehgJNaiVRZiItsMcjfzD4t4MmqfO6AQ42Ag/exec', {
-                method: 'POST', mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: 'newsletter', contact })
-            });
-            track('select_content', { content_type: 'newsletter_subscribe', item_id: contact.startsWith('@') ? 'telegram' : 'phone' });
-        } catch(e) { /* no-cors — ігноруємо */ }
-        document.getElementById('newsletterForm').style.display = 'none';
-        document.getElementById('newsletterSuccess').style.display = 'block';
-        localStorage.setItem('vr_newsletter', '1');
-    }
-
     // === СПОВІЩЕННЯ ПРО НАЯВНІСТЬ ===
     const NOTIFY_WEBAPP = 'https://script.google.com/macros/s/AKfycbxwI4YS1nrjizwkUJ4-Eay9iFcFIQB8pW8ehgJNaiVRZiItsMcjfzD4t4MmqfO6AQ42Ag/exec';
 
@@ -8898,14 +8693,6 @@ function renderGenderBar(value) {
     load();
     initTheme();
     initStickyPanel();
-
-    // Ховаємо форму підписки якщо вже підписані
-    if (localStorage.getItem('vr_newsletter')) {
-        const nf = document.getElementById('newsletterForm');
-        const ns = document.getElementById('newsletterSuccess');
-        if (nf) nf.style.display = 'none';
-        if (ns) ns.style.display = 'block';
-    }
 
     // === PWA INSTALL PROMPT ===
     // === ЯРЛИК НА ЕКРАН — завжди через 30 сек, без залежності від браузера ===
@@ -8993,111 +8780,6 @@ function renderGenderBar(value) {
         }, 30000);
     })();
 
-    // === СОЦІАЛЬНИЙ ДОКАЗ: "Сьогодні купили" сповіщення ===
-    (function initSocialProofToasts() {
-        const names = ['Аліна','Вікторія','Марія','Катерина','Наталія','Юлія','Дарина','Ірина','Оксана','Тетяна','Олена','Анна','Софія','Діана','Поліна'];
-        const cities = ['Києва','Харкова','Одеси','Львова','Дніпра','Запоріжжя','Вінниці','Полтави','Черкас','Хмельницького','Рівного','Луцька','Чернівців','Сум'];
-        // Розширено: і придбала, і поклала в кошик
-        const actions = [
-            'придбала', 'замовила', 'забрала',
-            'поклала в кошик', 'поклала в кошик', 'додала до кошика'
-        ];
-        const times = ['щойно','3 хв тому','7 хв тому','12 хв тому','20 хв тому','пів години тому'];
-        // Вагове розподілення об'єму: 5 мл — найчастіше, 20 мл — рідко
-        const volumes = ['2 мл','2 мл','5 мл','5 мл','5 мл','5 мл','10 мл','20 мл'];
-
-        // Створюємо контейнер
-        const toastContainer = document.createElement('div');
-        toastContainer.id = 'socialToastContainer';
-        Object.assign(toastContainer.style, {
-            position: 'fixed', bottom: '90px', left: '15px',
-            zIndex: '2500', display: 'flex', flexDirection: 'column', gap: '8px',
-            pointerEvents: 'none', maxWidth: '280px'
-        });
-        document.body.appendChild(toastContainer);
-
-        function showToast() {
-            if (globalCatalogData.length === 0) return;
-            const item = globalCatalogData[Math.floor(Math.random() * Math.min(globalCatalogData.length, 20))];
-            if (!item || !item[0] || !item[1]) return;
-
-            const name = names[Math.floor(Math.random() * names.length)];
-            const city = cities[Math.floor(Math.random() * cities.length)];
-            const action = actions[Math.floor(Math.random() * actions.length)];
-            const time = times[Math.floor(Math.random() * times.length)];
-            const vol = volumes[Math.floor(Math.random() * volumes.length)];
-            const img = item[5] ? item[5].replace(/'/g, "%27") : '';
-
-            const toast = document.createElement('div');
-            Object.assign(toast.style, {
-                background: 'rgba(255,255,255,0.97)',
-                backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(197,160,89,0.25)',
-                borderLeft: '3px solid #c5a059',
-                borderRadius: '10px',
-                padding: '10px 12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                opacity: '0',
-                transform: 'translateX(-20px)',
-                transition: 'all 0.4s cubic-bezier(0.22,1,0.36,1)',
-                pointerEvents: 'auto',
-                cursor: 'pointer',
-                maxWidth: '280px',
-            });
-
-            toast.innerHTML = `
-                ${img ? `<img src="${img}" alt="${item[1]}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0;" onerror="this.style.display='none'">` : ''}
-                <div style="flex:1;min-width:0;">
-                    <div style="font-size:11px;font-weight:800;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name} з ${city}</div>
-                    <div style="font-size:10px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${action} ${item[1]} ${vol}</div>
-                    <div style="font-size:9px;color:#c5a059;font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">${time}</div>
-                </div>`;
-
-            // Темна тема
-            if (document.body.classList.contains('dark-theme')) {
-                toast.style.background = 'rgba(26,26,26,0.97)';
-                toast.querySelector('div > div:first-child').style.color = '#f5f5f5';
-                toast.querySelector('div > div:nth-child(2)').style.color = '#aaa';
-            }
-
-            toastContainer.appendChild(toast);
-
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    toast.style.opacity = '1';
-                    toast.style.transform = 'translateX(0)';
-                });
-            });
-
-            toast.addEventListener('click', () => removeToast(toast));
-            setTimeout(() => removeToast(toast), 6000);
-        }
-
-        function removeToast(toast) {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateX(-20px)';
-            setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 400);
-        }
-
-        // Максимум 2 сповіщення за сесію
-        let toastCount = 0;
-        const MAX_TOASTS = 1;
-
-        function maybeShowToast() {
-            if (toastCount >= MAX_TOASTS) return;
-            toastCount++;
-            showToast();
-        }
-
-        // Перший показ через 90 секунд, другий — через 3 хвилини після першого
-        setTimeout(() => {
-            maybeShowToast();
-            setTimeout(() => { maybeShowToast(); }, 180000);
-        }, 90000);
-    })();
     // 1. Хмаринка Вікторії (показуємо завжди для перевірки, без sessionStorage)
     setTimeout(() => {
         const bubble = document.getElementById('tgChatBubble');
@@ -9801,5 +9483,9 @@ updateWeather();
         </div>
     </div>
 
+    <!-- SEARCH DROPDOWN — окремий від sticky панелі, завжди поверх всього -->
+    <div id="searchResults" class="search-dropdown"></div>
+
 </body>
 </html>
+            
