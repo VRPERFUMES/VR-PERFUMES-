@@ -5343,55 +5343,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         </div>
     </div>
 <script>
-    // ═══════════════════════════════════════════════
-    // КЕРУВАННЯ САЙТОМ — зчитуємо налаштування з адмін-панелі
-    // ═══════════════════════════════════════════════
-    function applySiteSettings() {
-        const s = JSON.parse(localStorage.getItem('vr_site_settings') || '{}');
-
-        // 1. Бігучий рядок
-        if (s.tickerText) {
-            const el = document.getElementById('newsTicker');
-            if (el) el.innerText = s.tickerText;
-        }
-
-        // 2. Заголовок героя
-        if (s.heroTitle) {
-            const el = document.querySelector('#heroCarousel h1');
-            if (el) el.innerText = s.heroTitle;
-        }
-
-        // 3. Вмикання/вимикання секцій
-        const sections = {
-            showWeather:  'weatherWidget',
-            showQuiz:     '.quiz-trigger',
-            showMixLab:   '.layering-section',
-            showWeekItem: 'weekPerfumeContainer',
-        };
-        Object.entries(sections).forEach(([key, sel]) => {
-            if (s[key] === false) {
-                const el = sel.startsWith('.') ? document.querySelector(sel) : document.getElementById(sel);
-                if (el) el.style.display = 'none';
-            }
-        });
-
-        // 4. Колір акцентів
-        if (s.accentColor) {
-            document.documentElement.style.setProperty('--gold', s.accentColor);
-        }
-
-        // 5. Промо-банер з адмін-панелі (якщо не перекритий з таблиці)
-        if (s.promoOn && s.promoBrand && s.promoName) {
-            // Буде підхоплено існуючою логікою промо якщо таблиця не повернула свій промо
-            window._adminPromo = {
-                brand: s.promoBrand, name: s.promoName,
-                img: s.promoImg || '', video: s.promoVideo || '',
-                btnText: s.promoBtnText || 'НОВИНКА', link: s.promoLink || ''
-            };
-        }
-    }
-    applySiteSettings();
-
     // === КОНСТАНТИ ТА БАЗОВІ НАЛАШТУВАННЯ ===
     const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=339534482&single=true&output=csv';
     const REVIEWS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=1478567043&single=true&output=csv';
@@ -7789,21 +7740,7 @@ function renderGenderBar(value) {
             const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxwI4YS1nrjizwkUJ4-Eay9iFcFIQB8pW8ehgJNaiVRZiItsMcjfzD4t4MmqfO6AQ42Ag/exec';
             await fetch(WEBAPP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 
-            // ── Синхронізація з адмін-панеллю ──
-            try {
-                const adminOrder = {
-                    contact, order: orderDetails, total: totalSumText,
-                    recipient: recipientName, phone: recipientPhone,
-                    delivery: deliveryStr, comment: userComment,
-                    gift: giftBox && giftBox.checked,
-                    timestamp: new Date().toISOString(), status: 'new'
-                };
-                const existing = JSON.parse(localStorage.getItem('vr_admin_orders') || '[]');
-                existing.unshift(adminOrder);
-                localStorage.setItem('vr_admin_orders', JSON.stringify(existing.slice(0, 300)));
-                localStorage.setItem('vr_new_order', JSON.stringify(adminOrder));
-                setTimeout(() => localStorage.removeItem('vr_new_order'), 2000);
-            } catch(e) {}
+            if (typeof gtag === 'function') {
                 const txId = Date.now().toString();
                 // Google Ads конверсія
                 gtag('event', 'conversion', {
@@ -9551,4 +9488,3 @@ updateWeather();
 
 </body>
 </html>
-
