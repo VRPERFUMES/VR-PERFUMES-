@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VR Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+    --gold:#c5a059;--gold-dim:rgba(197,160,89,0.1);--gold-b:rgba(197,160,89,0.22);
+    --bg:#0c0c0c;--s1:#141414;--s2:#1c1c1c;--s3:#242424;
+    --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+    --text:#efefef;--muted:#606060;--muted2:#888;
+    --green:#52c47a;--red:#e05555;--blue:#5b8dee;
+    --r:6px;--cinzel:'Montserrat',sans-serif;--sans:'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+button,input,select,textarea{font-family:var(--sans)}
+button{cursor:pointer}
+
+/* LOGIN */
+#loginWrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:9999}
+.lcard{width:min(340px,92vw);padding:40px 32px;background:var(--s1);border:1px solid var(--border2);border-top:2px solid var(--gold)}
+.lvr{font-family:var(--cinzel);font-size:22px;font-weight:900;color:var(--gold);text-align:center;letter-spacing:6px;margin-bottom:4px}
+.lsub{font-size:10px;color:var(--muted);text-align:center;letter-spacing:2px;text-transform:uppercase;margin-bottom:32px}
+.lcard input{width:100%;padding:13px 16px;background:var(--bg);border:1px solid var(--border2);color:var(--text);font-size:14px;outline:none;margin-bottom:12px;border-radius:var(--r);transition:border-color .2s}
+.lcard input:focus{border-color:var(--gold)}
+.lbtn{width:100%;padding:14px;background:var(--gold);border:none;color:#fff;font-family:var(--cinzel);font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;border-radius:var(--r);transition:opacity .2s}
+.lbtn:hover{opacity:.85}
+.lerr{color:var(--red);font-size:11px;text-align:center;margin-top:10px;display:none}
+
+/* APP */
+#app{display:none;padding-bottom:56px}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:200;height:52px;background:var(--s1);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 16px}
+.hdr-logo{font-family:var(--cinzel);font-size:13px;font-weight:900;letter-spacing:4px;color:var(--gold)}
+.hdr-pill{font-size:9px;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-b);padding:3px 9px;border-radius:20px;letter-spacing:1px;font-weight:700;text-transform:uppercase}
+.hdr-time{margin-left:auto;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.hdr-out{background:none;border:1px solid var(--border2);color:var(--muted);font-size:11px;padding:6px 12px;border-radius:var(--r);transition:all .2s}
+.hdr-out:hover{border-color:var(--red);color:var(--red)}
+
+/* NAV */
+.nav{background:var(--s1);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 8px;position:sticky;top:52px;z-index:199}
+.nav::-webkit-scrollbar{display:none}
+.nt{flex-shrink:0;padding:13px 14px;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.nt:hover{color:var(--text)}
+.nt.on{color:var(--gold);border-bottom-color:var(--gold)}
+.nbadge{background:var(--red);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:10px;display:none}
+.nbadge.vis{display:inline-block}
+
+/* CONTENT */
+.wrap{padding:16px 14px 20px;max-width:860px;margin:0 auto}
+.sec{display:none}.sec.on{display:block}
+
+/* SECTION TITLE */
+.stitle{font-family:var(--cinzel);font-size:9px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.stitle-btn{font-size:9px;color:var(--muted);background:none;border:1px solid var(--border);padding:4px 10px;border-radius:20px;letter-spacing:1px;font-weight:600;text-transform:uppercase;transition:all .2s;font-family:var(--cinzel)}
+.stitle-btn:hover{color:var(--gold);border-color:var(--gold-b)}
+
+/* STATS */
+.sgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+@media(min-width:540px){.sgrid{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);opacity:.35}
+.sl{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:700}
+.sv{font-size:26px;font-weight:900;font-family:var(--cinzel);color:var(--gold);line-height:1}
+.ss{font-size:10px;color:var(--muted);margin-top:5px}
+
+/* ORDERS */
+.olist{display:flex;flex-direction:column;gap:10px}
+.ocard{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
+.ocard:hover{border-color:var(--gold-b)}
+.ocard.new{border-color:rgba(82,196,122,.4);animation:glo 2s ease-in-out}
+@keyframes glo{0%,100%{box-shadow:none}50%{box-shadow:0 0 24px rgba(82,196,122,.12)}}
+.ohead{display:flex;align-items:center;gap:8px;padding:12px 14px;cursor:pointer;flex-wrap:wrap}
+.onum{font-family:var(--cinzel);font-size:11px;font-weight:800;color:var(--gold);flex-shrink:0}
+.ocont{font-size:13px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ototal{font-size:13px;font-weight:800;color:var(--green);flex-shrink:0}
+.otime{font-size:10px;color:var(--muted);flex-shrink:0}
+.ost{font-size:8px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:3px 8px;border-radius:12px;flex-shrink:0}
+.st-new{background:rgba(82,196,122,.12);color:var(--green);border:1px solid rgba(82,196,122,.25)}
+.st-done{background:rgba(96,96,96,.1);color:var(--muted);border:1px solid var(--border)}
+.obody{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
+.obody.open{display:block}
+.orow{font-size:12px;color:var(--muted2);padding:5px 0;border-bottom:1px solid var(--border);line-height:1.5}
+.orow:last-of-type{border-bottom:none}
+.orow b{color:var(--text)}
+.oact{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.obtn{flex:1;min-width:110px;padding:10px;border-radius:var(--r);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;font-family:var(--cinzel);transition:opacity .2s;border:none}
+.obtn:hover{opacity:.8}
+.ob-tg{background:rgba(91,141,238,.12);color:var(--blue);border:1px solid rgba(91,141,238,.22)}
+.ob-done{background:rgba(82,196,122,.1);color:var(--green);border:1px solid rgba(82,196,122,.22)}
+.ob-del{background:rgba(224,85,85,.08);color:var(--red);border:1px solid rgba(224,85,85,.18)}
+
+/* CATALOG */
+.csearch{width:100%;background:var(--s1);border:1px solid var(--border2);border-radius:var(--r);padding:11px 14px;color:var(--text);font-size:13px;outline:none;transition:border-color .2s;margin-bottom:12px}
+.csearch:focus{border-color:var(--gold)}
+.cfilters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.cfbtn{font-size:10px;padding:5px 12px;border:1px solid var(--border);border-radius:20px;background:none;color:var(--muted);font-weight:600;transition:all .2s}
+.cfbtn.on{background:var(--gold-dim);color:var(--gold);border-color:var(--gold-b)}
+.ccnt{font-size:11px;color:var(--muted);margin-bottom:12px}
+.clist{display:flex;flex-direction:column;gap:8px}
+.citem{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:11px 13px;display:flex;align-items:center;gap:11px;transition:border-color .2s}
+.citem.oos{opacity:.55;border-color:rgba(224,85,85,.2)}
+.citem:hover{border-color:var(--gold-b)}
+.cimg{width:42px;height:42px;object-fit:cover;border-radius:5px;flex-shrink:0;background:var(--s2)}
+.cinfo{flex:1;min-width:0}
+.cbrand{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:2px}
+.cname{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cprice{font-size:10px;color:var(--muted);margin-top:2px}
+.cbadges{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.bdg{font-size:8px;padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.b-new{background:rgba(91,141,238,.1);color:var(--blue);border:1px solid rgba(91,141,238,.2)}
+.b-top{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-b)}
+.b-sale{background:rgba(224,85,85,.08);color:var(--red);border:1px solid rgba(224,85,85,.18)}
+.b-out{background:rgba(224,85,85,.06);color:var(--red);border:1px solid rgba(224,85,85,.14)}
+.b-week{background:rgba(82,196,122,.08);color:var(--green);border:1px solid rgba(82,196,122,.18)}
+.cact{display:flex;gap:6px;flex-shrink:0}
+.icbtn{width:30px;height:30px;border:1px solid var(--border);background:none;border-radius:5px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.icbtn:hover{border-color:var(--red);color:var(--red)}
+.icbtn.marked{border-color:var(--green);color:var(--green)}
+
+/* REVIEWS */
+.rlist{display:flex;flex-direction:column;gap:10px}
+.rcard{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.rhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.rauthor{font-size:12px;font-weight:700}
+.rstars{color:var(--gold);font-size:13px;letter-spacing:1px}
+.rtext{font-size:13px;color:var(--muted2);line-height:1.55}
+.rdate{font-size:10px;color:var(--muted);margin-top:5px}
+
+/* PROMO */
+.pstatus{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:16px}
+.psl{font-size:13px;font-weight:600}
+.pss{font-size:11px;color:var(--muted);margin-top:2px}
+.toggle{width:46px;height:25px;background:var(--border2);border-radius:13px;position:relative;cursor:pointer;border:none;transition:background .3s;flex-shrink:0}
+.toggle.on{background:var(--gold)}
+.toggle::after{content:'';position:absolute;width:19px;height:19px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .3s}
+.toggle.on::after{transform:translateX(21px)}
+.ttext{font-size:11px;font-weight:700;margin-right:6px}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+.fc{width:100%;background:var(--s1);border:1px solid var(--border2);border-radius:var(--r);padding:11px 14px;color:var(--text);font-size:13px;outline:none;transition:border-color .2s}
+.fc:focus{border-color:var(--gold)}
+.hintbox{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:11px;color:var(--muted);line-height:1.7;margin-top:8px}
+.hintbox b{color:var(--gold)}
+
+/* ANALYTICS */
+.agrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+@media(min-width:540px){.agrid{grid-template-columns:repeat(3,1fr)}}
+.acard{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.alabel{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px}
+.aval{font-size:22px;font-weight:900;font-family:var(--cinzel);color:var(--gold)}
+.asub{font-size:10px;color:var(--muted);margin-top:4px}
+.titem{display:flex;align-items:center;gap:10px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:6px}
+.trank{width:24px;height:24px;background:var(--gold-dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:var(--gold);flex-shrink:0;font-family:var(--cinzel)}
+.tinfo{flex:1;min-width:0}
+.tname{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbrand{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.tprice{font-size:12px;font-weight:700;color:var(--green);flex-shrink:0}
+
+/* QUICK BTNS */
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.qbtn{display:flex;align-items:center;gap:10px;padding:14px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);color:var(--text);text-decoration:none;transition:border-color .2s;cursor:pointer}
+.qbtn:hover{border-color:var(--gold-b)}
+.qbtn svg{color:var(--gold);flex-shrink:0}
+.qlabel{font-size:12px;font-weight:600}
+.qsub{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* SAVE BTN */
+.savebtn{width:100%;padding:13px;background:var(--gold);border:none;color:#fff;font-family:var(--cinzel);font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;border-radius:var(--r);transition:opacity .2s;margin-top:4px}
+.savebtn:hover{opacity:.85}
+.savebtn.sec{background:none;border:1px solid var(--border);color:var(--muted)}
+.savebtn.sec:hover{border-color:var(--gold);color:var(--gold);opacity:1}
+
+/* STATUS */
+.statusbar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--s1);border-top:1px solid var(--border);padding:9px 16px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pu 2s infinite}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* TOAST */
+#atoast{position:fixed;bottom:52px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--gold-b);color:var(--gold);font-size:12px;font-weight:600;padding:10px 20px;border-radius:var(--r);z-index:9998;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
+#atoast.vis{opacity:1}
+
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r)}
+.tgl-label{font-size:13px;font-weight:600}
+.tgl-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* MISC */
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty p{font-size:12px;margin-top:12px}
+.loading{display:flex;align-items:center;justify-content:center;padding:40px;gap:10px;color:var(--muted);font-size:12px}
+.spin{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:rgba(197,160,89,.3);border-radius:4px}
+.inforow{font-size:12px;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+.inforow:last-child{border-bottom:none}
+.inforow span{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginWrap">
+  <div class="lcard">
+    <div class="lvr">VR</div>
+    <div class="lsub">Адмін · Панель керування</div>
+    <input type="password" id="passInput" placeholder="Пароль" onkeydown="if(event.key==='Enter')login()">
+    <button class="lbtn" onclick="login()">Увійти →</button>
+    <div class="lerr" id="loginErr">Невірний пароль</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="hdr">
+    <div class="hdr-logo">VR</div>
+    <div class="hdr-pill">Admin</div>
+    <div class="hdr-time" id="clock"></div>
+    <button class="hdr-out" onclick="logout()">Вийти</button>
+  </div>
+
+  <div class="nav">
+    <div class="nt on" onclick="go('dashboard')" id="nt-dashboard">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Огляд
+    </div>
+    <div class="nt" onclick="go('orders')" id="nt-orders">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Замовлення <span class="nbadge" id="ordBadge">0</span>
+    </div>
+    <div class="nt" onclick="go('catalog')" id="nt-catalog">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Каталог
+    </div>
+    <div class="nt" onclick="go('reviews')" id="nt-reviews">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Відгуки
+    </div>
+    <div class="nt" onclick="go('content')" id="nt-content">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Контент
+    </div>
+    <div class="nt" onclick="go('promo')" id="nt-promo">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Промо
+    </div>
+    <div class="nt" onclick="go('analytics')" id="nt-analytics">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Аналітика
+    </div>
+    <div class="nt" onclick="go('settings')" id="nt-settings">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06-.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Налашт.
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- DASHBOARD -->
+    <div class="sec on" id="sec-dashboard">
+      <div class="sgrid">
+        <div class="stat"><div class="sl">Позицій</div><div class="sv" id="s-total">—</div><div class="ss">у каталозі</div></div>
+        <div class="stat"><div class="sl">Брендів</div><div class="sv" id="s-brands">—</div><div class="ss">унікальних</div></div>
+        <div class="stat"><div class="sl">Новинки</div><div class="sv" id="s-new">—</div><div class="ss">за 10 днів</div></div>
+        <div class="stat"><div class="sl">Відсутні</div><div class="sv" id="s-out" style="color:var(--red)">—</div><div class="ss">товарів</div></div>
+      </div>
+      <div class="stitle">Швидкі дії</div>
+      <div class="qgrid" style="margin-bottom:20px">
+        <a class="qbtn" href="https://docs.google.com/spreadsheets" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <div><div class="qlabel">Google Sheets</div><div class="qsub">Редагувати каталог</div></div>
+        </a>
+        <a class="qbtn" href="https://analytics.google.com" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <div><div class="qlabel">GA4 Analytics</div><div class="qsub">Статистика сайту</div></div>
+        </a>
+        <a class="qbtn" href="https://vrperfumes.github.io/VR-PERFUMES-/" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <div><div class="qlabel">Відкрити сайт</div><div class="qsub">Як бачить клієнт</div></div>
+        </a>
+        <a class="qbtn" href="https://t.me/viktoriia_viktoriia_r" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          <div><div class="qlabel">Telegram</div><div class="qsub">Відкрити чат</div></div>
+        </a>
+      </div>
+      <div class="stitle">Топ-5 найдорожчих</div>
+      <div id="dash-top"><div class="loading"><div class="spin"></div> Завантаження...</div></div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="sec" id="sec-orders">
+      <div class="stitle">Замовлення <button class="stitle-btn" onclick="refreshOrders()">↻ Оновити</button></div>
+      <div class="hintbox" style="margin-bottom:14px">
+        💡 Замовлення зберігаються локально у браузері. Вони з'являються тут одразу після оформлення на сайті якщо ви відкрили адмін-панель у тому ж браузері. Також оновлюються автоматично кожні <b>60 сек</b>.
+      </div>
+      <div class="olist" id="ordersList"><div class="loading"><div class="spin"></div> Завантаження...</div></div>
+    </div>
+
+    <!-- CATALOG -->
+    <div class="sec" id="sec-catalog">
+      <div class="stitle">Каталог ароматів</div>
+      <input class="csearch" id="catQ" placeholder="Пошук за назвою або брендом..." oninput="renderCat()">
+      <div class="cfilters">
+        <button class="cfbtn on" onclick="setCF('all',this)">Всі</button>
+        <button class="cfbtn" onclick="setCF('new',this)">Новинки</button>
+        <button class="cfbtn" onclick="setCF('top',this)">Хіти</button>
+        <button class="cfbtn" onclick="setCF('out',this)">Відсутні</button>
+        <button class="cfbtn" onclick="setCF('sale',this)">Sale</button>
+      </div>
+      <div class="ccnt" id="catCnt"></div>
+      <div class="clist" id="catList"><div class="loading"><div class="spin"></div> Завантаження...</div></div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="sec" id="sec-reviews">
+      <div class="stitle">Відгуки клієнтів <button class="stitle-btn" onclick="loadReviews()">↻ Оновити</button></div>
+      <div class="rlist" id="revList"><div class="loading"><div class="spin"></div> Завантаження...</div></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="sec" id="sec-content">
+      <div class="stitle">Текстовий контент сайту</div>
+
+      <div class="fg">
+        <label>Заголовок героя (головний екран)</label>
+        <input class="fc" id="c-heroTitle" placeholder="VR PERFUMES">
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">За замовчуванням: VR PERFUMES</div>
+      </div>
+
+      <div class="fg">
+        <label>Бігучий рядок (ticker)</label>
+        <input class="fc" id="c-tickerText" placeholder="VR-PERFUMES — ТВІЙ ОЛЬФАКТОРНИЙ БАР">
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Текст що прокручується під слайдером</div>
+      </div>
+
+      <div class="fg">
+        <label>Колір акцентів (золотий)</label>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input class="fc" id="c-accentColor" placeholder="#c5a059" style="flex:1">
+          <input type="color" id="c-colorPicker" value="#c5a059" oninput="document.getElementById('c-accentColor').value=this.value;previewAccent(this.value)" style="width:44px;height:44px;border:1px solid var(--border2);border-radius:var(--r);background:none;cursor:pointer;padding:2px">
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Змінює колір кнопок, рамок і тексту по всьому сайту</div>
+      </div>
+
+      <div class="stitle" style="margin-top:20px">Вмикання / Вимикання розділів</div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <div class="toggle-row">
+          <div><div class="tgl-label">Погода і рекомендація аромату</div><div class="tgl-sub">Виджет погоди під слайдером</div></div>
+          <button class="toggle on" id="t-showWeather" onclick="tgl(this,'showWeather')"></button>
+        </div>
+        <div class="toggle-row">
+          <div><div class="tgl-label">Квіз "Знайди свій аромат"</div><div class="tgl-sub">Кнопка-тригер перед каталогом</div></div>
+          <button class="toggle on" id="t-showQuiz" onclick="tgl(this,'showQuiz')"></button>
+        </div>
+        <div class="toggle-row">
+          <div><div class="tgl-label">MixLab — конструктор аромату</div><div class="tgl-sub">Секція шарування парфумів</div></div>
+          <button class="toggle on" id="t-showMixLab" onclick="tgl(this,'showMixLab')"></button>
+        </div>
+        <div class="toggle-row">
+          <div><div class="tgl-label">Ексклюзив тижня</div><div class="tgl-sub">Блок з промо-ароматом тижня</div></div>
+          <button class="toggle on" id="t-showWeekItem" onclick="tgl(this,'showWeekItem')"></button>
+        </div>
+      </div>
+
+      <button class="savebtn" onclick="saveContent()">💾 Зберегти і застосувати на сайті</button>
+      <button class="savebtn sec" style="margin-top:8px" onclick="resetContent()">↺ Скинути до стандартних</button>
+
+      <div class="hintbox" style="margin-top:12px">
+        💡 Зміни застосовуються <b>миттєво</b> — просто оновіть сторінку сайту після збереження. Налаштування зберігаються в браузері.
+      </div>
+    </div>
+
+    <!-- PROMO -->
+    <div class="sec" id="sec-promo">
+      <div class="stitle">Промо-банер</div>
+      <div class="pstatus">
+        <div><div class="psl">Статус банера</div><div class="pss" id="pStatusTxt">Вимкнено</div></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="ttext" id="pToggleTxt" style="color:var(--muted)">OFF</span>
+          <button class="toggle" id="pToggle" onclick="togglePromo()"></button>
+        </div>
+      </div>
+      <div class="fg"><label>Бренд *</label><input class="fc" id="p-brand" placeholder="Tom Ford"></div>
+      <div class="fg"><label>Назва аромату *</label><input class="fc" id="p-name" placeholder="Black Orchid"></div>
+      <div class="fg"><label>Зображення (URL)</label><input class="fc" id="p-img" placeholder="https://...jpg"></div>
+      <div class="fg"><label>Відео фон (URL .mp4 — необов'язково)</label><input class="fc" id="p-video" placeholder="https://...mp4"></div>
+      <div class="fg"><label>Текст на кнопці</label><input class="fc" id="p-text" value="НОВИНКА" placeholder="НОВИНКА / АКЦІЯ / -20%"></div>
+      <div class="fg"><label>Посилання або назва для пошуку</label><input class="fc" id="p-link" placeholder="Black Orchid"></div>
+      <button class="savebtn" onclick="savePromo()">📋 Скопіювати рядок для Google Sheets</button>
+      <div class="hintbox">
+        Після копіювання: відкрийте таблицю <b>Promo</b> → вставте в рядок 2 (Ctrl+V).<br>
+        Колонка A: <b>ON</b> = активний · <b>OFF</b> = вимкнений.
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="sec" id="sec-analytics">
+      <div class="stitle">Аналітика каталогу</div>
+      <div class="agrid">
+        <div class="acard"><div class="alabel">Сер. ціна</div><div class="aval" id="an-avg">—</div><div class="asub">грн/мл</div></div>
+        <div class="acard"><div class="alabel">Мін. ціна</div><div class="aval" id="an-min">—</div><div class="asub">грн/мл</div></div>
+        <div class="acard"><div class="alabel">Макс. ціна</div><div class="aval" id="an-max">—</div><div class="asub">грн/мл</div></div>
+        <div class="acard"><div class="alabel">З флаконом</div><div class="aval" id="an-bottle">—</div><div class="asub">позицій</div></div>
+        <div class="acard"><div class="alabel">Відгуків</div><div class="aval" id="an-rev">—</div><div class="asub">в таблиці</div></div>
+        <div class="acard"><div class="alabel">Марковано відсутнім</div><div class="aval" id="an-marked" style="color:var(--red)">—</div><div class="asub">локально</div></div>
+      </div>
+      <div class="stitle">Топ-10 найдорожчих</div>
+      <div id="an-top"><div class="loading"><div class="spin"></div></div></div>
+      <div class="stitle" style="margin-top:20px">Розподіл по брендах</div>
+      <div id="an-brands"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="sec" id="sec-settings">
+      <div class="stitle">Зміна паролю</div>
+      <div class="fg"><label>Поточний пароль</label><input class="fc" type="password" id="oldP" placeholder="••••••"></div>
+      <div class="fg"><label>Новий пароль</label><input class="fc" type="password" id="newP" placeholder="мін. 6 символів"></div>
+      <div class="fg"><label>Підтвердити</label><input class="fc" type="password" id="cfmP" placeholder="повторіть пароль"></div>
+      <button class="savebtn" onclick="chPass()">Змінити пароль</button>
+
+      <div class="stitle" style="margin-top:24px">Інформація</div>
+      <div style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px">
+        <div class="inforow">GA4 <span>G-8MB6XVFQ1Y</span></div>
+        <div class="inforow">Google Ads <span>AW-18051738791</span></div>
+        <div class="inforow">Хостинг <span>GitHub Pages</span></div>
+        <div class="inforow">База даних <span>Google Sheets CSV</span></div>
+        <div class="inforow">Адмін-панель <span>v3.0</span></div>
+      </div>
+      <button class="savebtn sec" onclick="clearAllOrders()">🗑 Очистити локальні замовлення</button>
+    </div>
+
+  </div><!-- /wrap -->
+
+  <div class="statusbar"><div class="sdot"></div><span id="stxt">Підключено</span></div>
+</div><!-- /app -->
+
+<div id="atoast"></div>
+
+<script>
+const C = {
+    CSV:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=339534482&single=true&output=csv',
+    RCSV:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpreeDVfMb9m8VoH2fWjx3-P4e2XjpeFabLSODfQIBaLcXUA9T9xWfk4v_6R89JLgR-lvd0gwEakwM/pub?gid=1478567043&single=true&output=csv',
+    DP:'vr2024admin', PK:'vr_admin_pwd', SK:'vr_admin_sess', OK:'vr_admin_orders', SOK:'vr_stock_overrides'
+};
+
+// ── AUTH ──
+const getP = () => localStorage.getItem(C.PK) || C.DP;
+function login() {
+    const v = document.getElementById('passInput').value;
+    if (v === getP()) {
+        sessionStorage.setItem(C.SK,'1');
+        document.getElementById('loginWrap').style.display='none';
+        document.getElementById('app').style.display='block';
+        boot();
+    } else {
+        const e=document.getElementById('loginErr');
+        e.style.display='block';
+        document.getElementById('passInput').value='';
+        setTimeout(()=>e.style.display='none',3000);
+    }
+}
+function logout(){ sessionStorage.removeItem(C.SK); location.reload(); }
+function chPass(){
+    const o=document.getElementById('oldP').value,n=document.getElementById('newP').value,c=document.getElementById('cfmP').value;
+    if(o!==getP()){toast('❌ Поточний пароль невірний');return;}
+    if(n.length<6){toast('❌ Мінімум 6 символів');return;}
+    if(n!==c){toast('❌ Паролі не співпадають');return;}
+    localStorage.setItem(C.PK,n);
+    ['oldP','newP','cfmP'].forEach(id=>document.getElementById(id).value='');
+    toast('✅ Пароль змінено');
+}
+window.addEventListener('DOMContentLoaded',()=>{
+    if(sessionStorage.getItem(C.SK)==='1'){
+        document.getElementById('loginWrap').style.display='none';
+        document.getElementById('app').style.display='block';
+        boot();
+    }
+    document.getElementById('passInput').focus();
+});
+
+// ── BOOT ──
+let catalog=[], reviews=[], orders=[], catFilter='all';
+async function boot(){
+    startClock();
+    loadContentForm();
+    await Promise.all([loadCatalog(), loadReviews()]);
+    loadOrders();
+    setInterval(refreshOrders,60000);
+}
+
+// ── CLOCK ──
+function startClock(){
+    const t=()=>document.getElementById('clock').textContent=new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    t(); setInterval(t,1000);
+}
+
+// ── CSV ──
+function parseCSV(s){
+    const a=[['']];let r=0,c=0,q=false;
+    for(let i=0;i<s.length;i++){
+        const ch=s[i],nx=s[i+1];
+        if(ch==='"'&&q&&nx==='"'){a[r][c]=(a[r][c]||'')+ch;i++;continue;}
+        if(ch==='"'){q=!q;continue;}
+        if(ch===','&&!q){c++;if(!a[r][c])a[r][c]='';continue;}
+        if(ch==='\n'&&!q){r++;c=0;a[r]=[''];continue;}
+        a[r][c]=(a[r][c]||'')+ch;
+    }
+    return a.map(row=>row.map(v=>(v||'').trim()));
+}
+
+// ── CATALOG ──
+async function loadCatalog(){
+    try{
+        const t=await(await fetch(C.CSV+'&v='+Date.now())).text();
+        catalog=parseCSV(t).slice(1).filter(r=>r[0]&&r[1]);
+        const brands=new Set(catalog.map(r=>r[0]));
+        const newI=catalog.filter(r=>{const d=new Date(r[6]);return !isNaN(d)&&(Date.now()-d)/864e5<=10;});
+        const so=JSON.parse(localStorage.getItem(C.SOK)||'{}');
+        const outI=catalog.filter(r=>{const s=parseFloat(r[14]);return so[r[0]+'|'+r[1]]==='out'||(!isNaN(s)&&s<=0);});
+        document.getElementById('s-total').textContent=catalog.length;
+        document.getElementById('s-brands').textContent=brands.size;
+        document.getElementById('s-new').textContent=newI.length;
+        document.getElementById('s-out').textContent=outI.length;
+        renderDashTop(); renderCat(); renderAnalytics();
+        setStatus('Каталог: '+catalog.length+' позицій, '+brands.size+' брендів');
+    }catch(e){setStatus('⚠️ Помилка завантаження каталогу');}
+}
+
+function renderDashTop(){
+    const top=[...catalog].sort((a,b)=>(parseFloat(b[2])||0)-(parseFloat(a[2])||0)).slice(0,5);
+    document.getElementById('dash-top').innerHTML=top.map((item,i)=>`
+        <div class="titem">
+            <div class="trank">${i+1}</div>
+            <img src="${(item[5]||'').replace(/'/g,'%27')}" style="width:36px;height:36px;object-fit:cover;border-radius:4px;flex-shrink:0" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+            <div class="tinfo"><div class="tbrand">${item[0]}</div><div class="tname">${item[1]}</div></div>
+            <div class="tprice">${parseFloat(item[2])||0} грн/мл</div>
+        </div>`).join('');
+}
+
+function setCF(f,btn){
+    catFilter=f;
+    document.querySelectorAll('.cfbtn').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    renderCat();
+}
+
+function renderCat(){
+    const q=(document.getElementById('catQ')?.value||'').toLowerCase();
+    const so=JSON.parse(localStorage.getItem(C.SOK)||'{}');
+    const list=catalog.filter(r=>{
+        if(q&&!r[0].toLowerCase().includes(q)&&!r[1].toLowerCase().includes(q))return false;
+        const sn=parseFloat(r[14]);
+        const isOut=so[r[0]+'|'+r[1]]==='out'||(!isNaN(sn)&&sn<=0);
+        const isNew=(()=>{const d=new Date(r[6]);return !isNaN(d)&&(Date.now()-d)/864e5<=10;})();
+        const isTop=r[7]&&/топ|хіт/i.test(r[7]);
+        const isSale=r[7]&&/sale/i.test(r[7]);
+        if(catFilter==='new')return isNew;
+        if(catFilter==='top')return isTop;
+        if(catFilter==='out')return isOut;
+        if(catFilter==='sale')return isSale;
+        return true;
+    });
+    document.getElementById('catCnt').textContent='Показано '+list.length+' з '+catalog.length;
+    if(!list.length){
+        document.getElementById('catList').innerHTML='<div class="empty"><p>Нічого не знайдено</p></div>';
+        return;
+    }
+    document.getElementById('catList').innerHTML=list.map(item=>buildCatItem(item,so)).join('');
+}
+
+function buildCatItem(item,so){
+    const[brand,name,price,,,img,dateStr,top,,,,bottleMl,,,stock]=item;
+    const key=brand+'|'+name;
+    const pn=parseFloat(price)||0;
+    const si=Math.round(pn*5);
+    const img2=(img||'').replace(/'/g,'%27');
+    const isNew=(()=>{const d=new Date(dateStr);return !isNaN(d)&&(Date.now()-d)/864e5<=10;})();
+    const isTop=top&&/топ|хіт/i.test(top);
+    const isSale=top&&/sale/i.test(top);
+    const isWeek=top&&/тиждень/i.test(top);
+    const sn=parseFloat(stock);
+    const isOutSheet=!isNaN(sn)&&sn<=0;
+    const isOutLocal=so[key]==='out';
+    const isOut=isOutSheet||isOutLocal;
+    const hasBotl=bottleMl&&parseInt(bottleMl)>0;
+    const badges=[
+        isNew?'<span class="bdg b-new">Нове</span>':'',
+        isTop?'<span class="bdg b-top">Хіт</span>':'',
+        isSale?'<span class="bdg b-sale">Sale</span>':'',
+        isWeek?'<span class="bdg b-week">Тижня</span>':'',
+        isOut?'<span class="bdg b-out">Відсутній</span>':'',
+        hasBotl?'<span class="bdg b-new">Флакон</span>':'',
+    ].filter(Boolean).join('');
+    const bn=brand.replace(/'/g,"\\'"),nn=name.replace(/'/g,"\\'");
+    return`<div class="citem${isOut?' oos':''}">
+        <img class="cimg" src="${img2}" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'" alt="">
+        <div class="cinfo">
+            <div class="cbrand">${brand}</div>
+            <div class="cname">${name}</div>
+            <div class="cprice">${pn} грн/мл · від ${si} грн (5 мл)</div>
+            ${badges?`<div class="cbadges">${badges}</div>`:''}
+        </div>
+        <div class="cact">
+            <button class="icbtn${isOutLocal?' marked':''}" title="${isOutLocal?'Скасувати позначення':'Позначити як відсутній'}" onclick="toggleStock('${bn}','${nn}',this)">
+                ${isOutLocal
+                    ?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+                    :'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+                }
+            </button>
+        </div>
+    </div>`;
+}
+
+function toggleStock(brand,name,btn){
+    const key=brand+'|'+name;
+    const so=JSON.parse(localStorage.getItem(C.SOK)||'{}');
+    if(so[key]==='out'){delete so[key];toast('✅ '+name+' — повернуто в наявність');}
+    else{so[key]='out';toast('⛔ '+name+' — позначено відсутнім');}
+    localStorage.setItem(C.SOK,JSON.stringify(so));
+    renderCat();
+    document.getElementById('an-marked').textContent=Object.keys(so).length;
+}
+
+// ── ORDERS ──
+function loadOrders(){
+    orders=JSON.parse(localStorage.getItem(C.OK)||'[]');
+    renderOrders(); updateBadge();
+}
+function saveOrders(){ localStorage.setItem(C.OK,JSON.stringify(orders)); }
+function refreshOrders(){
+    loadOrders();
+    setStatus('Оновлено о '+new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}));
+}
+window.addEventListener('storage',e=>{
+    if(e.key===C.OK){ loadOrders(); }
+    if(e.key==='vr_new_order'&&e.newValue){
+        try{
+            const o=JSON.parse(e.newValue);
+            if(!orders.find(x=>x.timestamp===o.timestamp)){
+                orders.unshift(o); saveOrders(); renderOrders(); updateBadge();
+                toast('🛍 Нове замовлення від '+(o.contact||'клієнта'));
+            }
+        }catch(e){}
+    }
+});
+
+function renderOrders(){
+    const el=document.getElementById('ordersList');
+    if(!orders.length){
+        el.innerHTML=`<div class="empty">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <p>Замовлень поки немає.<br>Вони з'являться тут після оформлення на сайті.</p>
+        </div>`;
+        return;
+    }
+    el.innerHTML=orders.map((o,i)=>{
+        const ts=o.timestamp?new Date(o.timestamp).toLocaleString('uk-UA',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
+        const isNew=o.status==='new';
+        return`<div class="ocard${isNew?' new':''}">
+            <div class="ohead" onclick="togO(${i})">
+                <div class="onum">#${String(orders.length-i).padStart(3,'0')}</div>
+                <div class="ocont">${o.contact||'—'}</div>
+                <div class="ototal">${o.total||'—'}</div>
+                <div class="otime">${ts}</div>
+                <div class="ost ${isNew?'st-new':'st-done'}">${isNew?'НОВЕ':'ГОТОВО'}</div>
+            </div>
+            <div class="obody" id="ob-${i}">
+                <div class="orow"><b>Отримувач:</b> ${o.recipient||'—'}</div>
+                <div class="orow"><b>Телефон:</b> ${o.phone||'—'}</div>
+                <div class="orow"><b>Доставка:</b> ${(o.delivery||'—').replace(/\n/g,' · ')}</div>
+                ${o.comment?`<div class="orow"><b>Коментар:</b> ${o.comment}</div>`:''}
+                ${o.gift?'<div class="orow">🎁 <b>Подарункове пакування</b></div>':''}
+                <div class="orow" style="white-space:pre-wrap"><b>Склад замовлення:</b>\n${o.order||'—'}</div>
+                <div class="oact">
+                    <button class="obtn ob-tg" onclick="replyTG('${(o.contact||'').replace(/'/g,"\\'")}','${(o.total||'').replace(/'/g,"\\'")}')">💬 Відповісти в TG</button>
+                    <button class="obtn ob-done" onclick="markDone(${i})">${isNew?'✓ Позначити готовим':'↺ Відкрити знову'}</button>
+                    <button class="obtn ob-del" onclick="delOrder(${i})">🗑 Видалити</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function togO(i){ document.getElementById('ob-'+i).classList.toggle('open'); }
+function markDone(i){ orders[i].status=orders[i].status==='new'?'done':'new'; saveOrders(); renderOrders(); updateBadge(); }
+function delOrder(i){ if(!confirm('Видалити замовлення?'))return; orders.splice(i,1); saveOrders(); renderOrders(); updateBadge(); toast('🗑 Видалено'); }
+function clearAllOrders(){ if(!confirm('Очистити всі замовлення?'))return; orders=[]; saveOrders(); renderOrders(); updateBadge(); toast('✅ Очищено'); }
+function updateBadge(){
+    const n=orders.filter(o=>o.status==='new').length;
+    const b=document.getElementById('ordBadge');
+    b.textContent=n; b.classList.toggle('vis',n>0);
+}
+function replyTG(contact,total){
+    const nick=contact.startsWith('@')?contact.slice(1):contact;
+    const msg=encodeURIComponent('Вітаю! Дякуємо за замовлення на суму '+total+'. Підтверджую отримання і зв\'яжусь найближчим часом! 💛');
+    if(!contact.includes('+')) window.open('https://t.me/'+nick+'?text='+msg,'_blank');
+    else window.open('https://t.me/+'+contact.replace(/\D/g,'')+'?text='+msg,'_blank');
+}
+
+// ── REVIEWS ──
+async function loadReviews(){
+    try{
+        const t=await(await fetch(C.RCSV+'&v='+Date.now())).text();
+        reviews=parseCSV(t).slice(1).filter(r=>r[0]&&r[2]);
+        document.getElementById('an-rev').textContent=reviews.length;
+        const sorted=[...reviews].sort((a,b)=>new Date(b[3])-new Date(a[3]));
+        document.getElementById('revList').innerHTML=sorted.length
+            ?sorted.map(r=>{
+                const[name,stars,text,date]=r;
+                const s=parseInt(stars)||5;
+                const ts=date?new Date(date).toLocaleDateString('uk-UA'):'';
+                return`<div class="rcard">
+                    <div class="rhead"><div class="rauthor">${name||'Клієнт'}</div><div class="rstars">${'★'.repeat(s)+'☆'.repeat(5-s)}</div></div>
+                    <div class="rtext">${text}</div>
+                    ${ts?`<div class="rdate">${ts}</div>`:''}
+                </div>`;
+            }).join('')
+            :'<div class="empty"><p>Відгуків поки немає</p></div>';
+    }catch(e){ document.getElementById('revList').innerHTML='<div class="empty"><p>Помилка завантаження відгуків</p></div>'; }
+}
+
+// ── CONTENT MANAGEMENT ──
+const SS_KEY = 'vr_site_settings';
+
+function loadContentForm() {
+    const s = JSON.parse(localStorage.getItem(SS_KEY) || '{}');
+    if (s.heroTitle)    document.getElementById('c-heroTitle').value   = s.heroTitle;
+    if (s.tickerText)   document.getElementById('c-tickerText').value  = s.tickerText;
+    if (s.accentColor) {
+        document.getElementById('c-accentColor').value = s.accentColor;
+        document.getElementById('c-colorPicker').value = s.accentColor;
+    }
+    // Toggles
+    ['showWeather','showQuiz','showMixLab','showWeekItem'].forEach(key => {
+        const btn = document.getElementById('t-' + key);
+        if (btn && s[key] === false) btn.classList.remove('on');
+    });
+}
+
+function tgl(btn, key) {
+    btn.classList.toggle('on');
+}
+
+function previewAccent(color) {
+    document.documentElement.style.setProperty('--gold', color);
+    document.documentElement.style.setProperty('--gold-dim', color + '1a');
+    document.documentElement.style.setProperty('--gold-b', color + '40');
+}
+
+function saveContent() {
+    const s = JSON.parse(localStorage.getItem(SS_KEY) || '{}');
+
+    const heroTitle   = document.getElementById('c-heroTitle').value.trim();
+    const tickerText  = document.getElementById('c-tickerText').value.trim();
+    const accentColor = document.getElementById('c-accentColor').value.trim();
+
+    if (heroTitle)   s.heroTitle   = heroTitle;   else delete s.heroTitle;
+    if (tickerText)  s.tickerText  = tickerText;  else delete s.tickerText;
+    if (accentColor && /^#[0-9a-fA-F]{3,6}$/.test(accentColor)) {
+        s.accentColor = accentColor;
+    } else { delete s.accentColor; }
+
+    ['showWeather','showQuiz','showMixLab','showWeekItem'].forEach(key => {
+        const btn = document.getElementById('t-' + key);
+        s[key] = btn ? btn.classList.contains('on') : true;
+    });
+
+    // Зберігаємо також промо з форми промо
+    const pb = document.getElementById('p-brand')?.value.trim();
+    const pn = document.getElementById('p-name')?.value.trim();
+    if (pb && pn) {
+        s.promoOn      = promoOn;
+        s.promoBrand   = pb;
+        s.promoName    = pn;
+        s.promoImg     = document.getElementById('p-img')?.value.trim()   || '';
+        s.promoVideo   = document.getElementById('p-video')?.value.trim() || '';
+        s.promoBtnText = document.getElementById('p-text')?.value.trim()  || 'НОВИНКА';
+        s.promoLink    = document.getElementById('p-link')?.value.trim()  || '';
+    }
+
+    localStorage.setItem(SS_KEY, JSON.stringify(s));
+    toast('✅ Збережено! Оновіть сторінку сайту щоб побачити зміни');
+}
+
+function resetContent() {
+    if (!confirm('Скинути всі налаштування контенту до стандартних?')) return;
+    const s = JSON.parse(localStorage.getItem(SS_KEY) || '{}');
+    delete s.heroTitle; delete s.tickerText; delete s.accentColor;
+    delete s.showWeather; delete s.showQuiz; delete s.showMixLab; delete s.showWeekItem;
+    localStorage.setItem(SS_KEY, JSON.stringify(s));
+    // Скидаємо форму
+    document.getElementById('c-heroTitle').value   = '';
+    document.getElementById('c-tickerText').value  = '';
+    document.getElementById('c-accentColor').value = '';
+    document.getElementById('c-colorPicker').value = '#c5a059';
+    previewAccent('#c5a059');
+    ['showWeather','showQuiz','showMixLab','showWeekItem'].forEach(key => {
+        document.getElementById('t-' + key)?.classList.add('on');
+    });
+    toast('↺ Скинуто до стандартних');
+}
+
+// ── PROMO ──
+let promoOn=false;
+function togglePromo(){
+    promoOn=!promoOn;
+    document.getElementById('pToggle').classList.toggle('on',promoOn);
+    document.getElementById('pToggleTxt').textContent=promoOn?'ON':'OFF';
+    document.getElementById('pToggleTxt').style.color=promoOn?'var(--gold)':'var(--muted)';
+    document.getElementById('pStatusTxt').textContent=promoOn?'Активний — банер відображається':'Вимкнено';
+}
+function savePromo(){
+    const brand=document.getElementById('p-brand').value.trim();
+    const name=document.getElementById('p-name').value.trim();
+    if(!brand||!name){toast('❌ Вкажіть бренд та назву');return;}
+    const row=[promoOn?'ON':'OFF',brand,name,
+        document.getElementById('p-video').value.trim(),
+        document.getElementById('p-img').value.trim(),
+        document.getElementById('p-link').value.trim(),
+        document.getElementById('p-text').value.trim()||'НОВИНКА'
+    ].join('\t');
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(row)
+            .then(()=>toast('📋 Скопійовано! Вставте в рядок 2 таблиці Promo'))
+            .catch(()=>toast('⚠️ Не вдалось скопіювати — скопіюйте вручну'));
+    } else { toast('⚠️ Скопіюйте вручну з консолі'); console.log(row); }
+}
+
+// ── ANALYTICS ──
+function renderAnalytics(){
+    if(!catalog.length)return;
+    const prices=catalog.map(r=>parseFloat(r[2])).filter(p=>!isNaN(p)&&p>0);
+    const avg=prices.length?Math.round(prices.reduce((a,b)=>a+b,0)/prices.length):0;
+    const minP=prices.length?Math.min(...prices):0;
+    const maxP=prices.length?Math.max(...prices):0;
+    const bottle=catalog.filter(r=>r[11]&&parseInt(r[11])>0).length;
+    const so=JSON.parse(localStorage.getItem(C.SOK)||'{}');
+    document.getElementById('an-avg').textContent=avg;
+    document.getElementById('an-min').textContent=minP;
+    document.getElementById('an-max').textContent=maxP;
+    document.getElementById('an-bottle').textContent=bottle;
+    document.getElementById('an-marked').textContent=Object.keys(so).length;
+
+    // Top-10
+    const top=[...catalog].sort((a,b)=>(parseFloat(b[2])||0)-(parseFloat(a[2])||0)).slice(0,10);
+    document.getElementById('an-top').innerHTML=top.map((item,i)=>`
+        <div class="titem">
+            <div class="trank">${i+1}</div>
+            <img src="${(item[5]||'').replace(/'/g,'%27')}" style="width:32px;height:32px;object-fit:cover;border-radius:4px;flex-shrink:0" onerror="this.src='https://i.postimg.cc/CxkmFFJ3/logo.png'">
+            <div class="tinfo"><div class="tbrand">${item[0]}</div><div class="tname">${item[1]}</div></div>
+            <div class="tprice">${parseFloat(item[2])||0} грн/мл</div>
+        </div>`).join('');
+
+    // Brands breakdown
+    const bc={};
+    catalog.forEach(r=>{if(r[0])bc[r[0]]=(bc[r[0]]||0)+1;});
+    const sorted=Object.entries(bc).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    const maxV=sorted[0]?.[1]||1;
+    document.getElementById('an-brands').innerHTML=sorted.map(([brand,count])=>`
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <div style="font-size:11px;color:var(--muted2);width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${brand}</div>
+            <div style="flex:1;background:var(--s2);border-radius:3px;height:6px;overflow:hidden">
+                <div style="height:100%;width:${Math.round(count/maxV*100)}%;background:var(--gold);border-radius:3px;opacity:.65"></div>
+            </div>
+            <div style="font-size:11px;font-weight:700;color:var(--gold);width:24px;text-align:right">${count}</div>
+        </div>`).join('');
+}
+
+// ── NAV ──
+function go(id){
+    document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+    document.querySelectorAll('.nt').forEach(t=>t.classList.remove('on'));
+    document.getElementById('sec-'+id).classList.add('on');
+    document.getElementById('nt-'+id).classList.add('on');
+    if (id === 'content') loadContentForm();
+    window.scrollTo(0,0);
+}
+
+// ── HELPERS ──
+function setStatus(msg){ document.getElementById('stxt').textContent=msg; }
+let _tt;
+function toast(msg){
+    const el=document.getElementById('atoast');
+    el.textContent=msg; el.classList.add('vis');
+    clearTimeout(_tt); _tt=setTimeout(()=>el.classList.remove('vis'),3200);
+}
+</script>
+</body>
+</html>
