@@ -2598,7 +2598,6 @@
         .cart-floating-btn:active { 
             transform: scale(0.9); 
         }
-
         .cart-floating-btn svg { 
             width: 24px; 
             height: 24px; 
@@ -4713,6 +4712,115 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         .sticky-sort-row .custom-sort-options {
             z-index: 2000 !important;
         }
+
+        /* ═══ GIFT CERTIFICATE SECTION ═══ */
+        .gift-cert-section {
+            margin: 20px 15px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(197,160,89,0.06) 0%, rgba(197,160,89,0.02) 100%);
+            border: 1px solid rgba(197,160,89,0.18);
+            overflow: hidden;
+        }
+        body.dark-theme .gift-cert-section {
+            background: linear-gradient(135deg, rgba(197,160,89,0.08) 0%, rgba(18,18,18,0.95) 100%);
+        }
+        .gift-cert-inner { padding: 22px 18px 20px; }
+        .gift-cert-label {
+            font-size: 9px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 2px; color: var(--gold); display: block; margin-bottom: 6px;
+        }
+        .gift-cert-title {
+            font-family: var(--cinzel); font-size: 22px; font-weight: 800;
+            line-height: 1.15; color: var(--text-dark); margin-bottom: 6px;
+        }
+        .gift-cert-sub {
+            font-size: 12px; color: var(--text-gray); margin-bottom: 18px; line-height: 1.4;
+        }
+        .gift-cert-amounts {
+            display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px;
+        }
+        .gift-cert-amount-chip {
+            padding: 8px 14px; border: 1px solid rgba(197,160,89,0.25); border-radius: 20px;
+            font-size: 12px; font-weight: 700; color: var(--text-dark); cursor: pointer;
+            transition: all 0.2s ease; font-family: var(--sans);
+        }
+        .gift-cert-amount-chip.active-amount {
+            background: var(--gold); color: #fff; border-color: var(--gold);
+        }
+        .gift-cert-amount-chip:active { transform: scale(0.95); }
+
+        /* Картка-превью */
+        .gift-cert-card-preview {
+            background: linear-gradient(135deg, #1a1208 0%, #2e1f06 50%, #1a1208 100%);
+            border-radius: 14px; padding: 22px 20px; margin: 14px 0 18px;
+            position: relative; overflow: hidden; min-height: 120px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+        }
+        .gift-cert-card-preview::before {
+            content: ''; position: absolute; top: -30px; right: -30px;
+            width: 120px; height: 120px; border-radius: 50%;
+            background: rgba(197,160,89,0.12); pointer-events: none;
+        }
+        .cert-preview-logo {
+            font-family: var(--cinzel); font-size: 10px; font-weight: 800;
+            letter-spacing: 3px; color: var(--gold); margin-bottom: 10px;
+        }
+        .cert-preview-label {
+            font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.45); margin-bottom: 8px;
+        }
+        .cert-preview-amount {
+            font-family: var(--cinzel); font-size: 28px; font-weight: 800;
+            color: var(--gold); line-height: 1; margin-bottom: 10px;
+        }
+        .cert-preview-code {
+            font-family: monospace; font-size: 15px; letter-spacing: 4px;
+            color: rgba(255,255,255,0.25); margin-bottom: 8px;
+        }
+        .cert-preview-valid {
+            font-size: 9px; text-transform: uppercase; letter-spacing: 1px;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* Кроки */
+        .gift-cert-steps { margin-bottom: 18px; }
+        .cert-step {
+            display: flex; align-items: flex-start; gap: 10px;
+            font-size: 12px; color: var(--text-dark); line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        .cert-step-num {
+            width: 20px; height: 20px; border-radius: 50%; background: var(--gold);
+            color: #fff; font-size: 10px; font-weight: 800; display: flex;
+            align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+        }
+
+        /* Кнопка */
+        .gift-cert-btn {
+            width: 100%; padding: 14px; background: var(--gold); color: #fff;
+            border: none; border-radius: 10px; font-size: 12px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer;
+            font-family: var(--cinzel); display: flex; align-items: center;
+            justify-content: center; gap: 8px; transition: all 0.2s ease;
+            box-shadow: 0 5px 18px rgba(197,160,89,0.3);
+        }
+        .gift-cert-btn:active { transform: scale(0.98); }
+
+        /* Поле промокоду в кошику */
+        .cert-promo-row {
+            display: flex; gap: 8px; margin: 8px 0 10px;
+        }
+        .cert-promo-input {
+            flex: 1; padding: 10px 12px; border: 1px solid rgba(197,160,89,0.3);
+            border-radius: 8px; font-size: 13px; outline: none;
+            background: transparent; color: var(--text-dark); font-family: var(--sans);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .cert-promo-apply {
+            padding: 10px 14px; background: var(--gold); color: #fff; border: none;
+            border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;
+            font-family: var(--cinzel); white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -5035,7 +5143,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         </div>
 
         <!-- ══ РЯДОК 4: Ноти + Стать + Сезон — один горизонтальний скрол ══ -->
-        <div style="display:flex; gap:6px; padding:0 15px 10px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; align-items:center; background:var(--bg);">
+        <div id="stickyNotesRow" style="display:flex; gap:6px; padding:0 15px 10px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; align-items:center; background:var(--bg);">
             <span style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-gray); opacity:0.5; white-space:nowrap; flex-shrink:0;">Ноти:</span>
             <span class="note-chip" onclick="searchByNote('Ваніль', this)">Ваніль</span>
             <span class="note-chip" onclick="searchByNote('Вишня', this)">Вишня</span>
@@ -5055,7 +5163,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         </div>
 
         <!-- ══ РЯДОК 5: Огляд брендів ══ -->
-        <div class="sticky-brands-row">
+        <div class="sticky-brands-row" id="stickyBrandsRow">
             <div class="brand-slider" id="brandSlider" style="display:none;"></div>
             <button class="brands-gallery-btn" onclick="openBrandGallery()">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -5064,7 +5172,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         </div>
 
         <!-- ══ РЯДОК 6: Табки категорій ══ -->
-        <div class="sticky-tabs-row">
+        <div class="sticky-tabs-row" id="stickyTabsRow">
             <div class="tabs-container">
                 <button class="tab-btn active" onclick="setCategory('all', this)">Усі</button>
                 <button class="tab-btn" onclick="setCategory('new', this)">Новинки</button>
@@ -5089,7 +5197,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     </div>
 
     <div id="catalog"></div>
-
     <div class="recent-section" id="recentSection">
         <span class="recent-title">Нещодавно переглянуті</span>
         <div class="recent-scroll" id="recentScrollContainer"></div>
@@ -5115,6 +5222,58 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             <div id="layeringResult" class="layer-res-box">Оберіть комбінацію</div>
         </div>
     </div>
+
+    <!-- ═══ ПОДАРУНКОВИЙ СЕРТИФІКАТ ═══ -->
+    <div class="gift-cert-section" id="giftCertSection">
+        <div class="gift-cert-inner">
+            <div class="gift-cert-header">
+                <span class="gift-cert-label">Електронний</span>
+                <div class="gift-cert-title">Подарунковий<br>сертифікат</div>
+                <div class="gift-cert-sub">Ідеальний подарунок для поціновувача ароматів</div>
+            </div>
+
+            <!-- Вибір суми -->
+            <div class="gift-cert-amounts">
+                <div class="gift-cert-amount-chip active-amount" onclick="selectCertAmount(500, this)">500 грн</div>
+                <div class="gift-cert-amount-chip" onclick="selectCertAmount(750, this)">750 грн</div>
+                <div class="gift-cert-amount-chip" onclick="selectCertAmount(1000, this)">1000 грн</div>
+                <div class="gift-cert-amount-chip" onclick="selectCertAmount(1500, this)">1500 грн</div>
+                <div class="gift-cert-amount-chip" onclick="selectCertAmount(0, this)" id="certCustomChip">Інша сума</div>
+            </div>
+
+            <!-- Кастомна сума -->
+            <div id="certCustomAmountRow" style="display:none; margin:8px 0;">
+                <input type="number" id="certCustomInput" placeholder="Сума від 500 грн" min="500" step="50"
+                    style="width:100%; box-sizing:border-box; padding:11px 14px; border:1px solid rgba(197,160,89,0.3); border-radius:10px; font-size:14px; outline:none; background:transparent; color:var(--text-dark); font-family:var(--sans);"
+                    oninput="validateCertCustomAmount(this)">
+            </div>
+
+            <!-- Картка-превью -->
+            <div class="gift-cert-card-preview">
+                <div class="cert-preview-logo">VR PERFUMES</div>
+                <div class="cert-preview-label">Подарунковий сертифікат</div>
+                <div class="cert-preview-amount" id="certPreviewAmount">500 грн</div>
+                <div class="cert-preview-code">••••  ••••  ••••</div>
+                <div class="cert-preview-valid">Дійсний 365 днів з дня придбання</div>
+            </div>
+
+            <!-- Як це працює -->
+            <div class="gift-cert-steps">
+                <div class="cert-step"><span class="cert-step-num">1</span><span>Ви купуєте сертифікат — Вікторія надсилає унікальний код на ваш контакт</span></div>
+                <div class="cert-step"><span class="cert-step-num">2</span><span>Ви пересилаєте код отримувачу подарунка</span></div>
+                <div class="cert-step"><span class="cert-step-num">3</span><span>Отримувач вводить код при оформленні замовлення — сума сертифіката знімається з вартості товарів</span></div>
+                <div class="cert-step"><span class="cert-step-num">!</span><span style="color:var(--text-gray);">Доставка оплачується окремо (безкоштовно від 1500 грн)</span></div>
+            </div>
+
+            <button class="gift-cert-btn" onclick="addCertToCart()">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                Додати до кошика
+            </button>
+        </div>
+    </div>
+
+    <!-- Поле для промокоду в кошику (буде вставлено динамічно) -->
+    <div id="certPromoSection" style="display:none;"></div>
 
     <div class="about-section" id="aboutSection">
         <!-- Фото + заголовок -->
@@ -7573,14 +7732,42 @@ function renderGenderBar(value) {
             }
         }
 
-        // Підсумок
+        // Підсумок з урахуванням промокоду
         let finalTotal = total;
         if (cart.length > 0 && giftBox && giftBox.checked) finalTotal += 100;
+
+        // Застосовуємо знижку промокоду
+        let discountAmount = 0;
+        if (window._activePromo && finalTotal > 0) {
+            if (window._activePromo.type === 'percent') {
+                discountAmount = Math.round(finalTotal * window._activePromo.discount / 100);
+            } else {
+                discountAmount = window._activePromo.discount;
+            }
+            discountAmount = Math.min(discountAmount, finalTotal); // не більше суми
+            finalTotal = Math.max(0, finalTotal - discountAmount);
+        }
+
         const totalStr = finalTotal > 0 ? finalTotal + ' грн' : '0 грн';
         const ts1 = document.getElementById('cartTotalSum');
         const ts2 = document.getElementById('cartTotalSum2');
         if (ts1) ts1.innerText = totalStr;
         if (ts2) ts2.innerText = totalStr;
+
+        // Показуємо рядок знижки якщо є промокод
+        let discountRow = document.getElementById('promoDiscountRow');
+        if (discountAmount > 0) {
+            if (!discountRow) {
+                discountRow = document.createElement('div');
+                discountRow.id = 'promoDiscountRow';
+                discountRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--gold);font-weight:700;margin-bottom:4px;';
+                const ts1parent = ts1 ? ts1.closest('.cart-total-row') || ts1.parentNode : null;
+                if (ts1parent) ts1parent.parentNode.insertBefore(discountRow, ts1parent);
+            }
+            discountRow.innerHTML = `<span>Знижка (${window._activePromo.code})</span><span>−${discountAmount} грн</span>`;
+        } else if (discountRow) {
+            discountRow.remove();
+        }
 
         // Чекбокс пакування
         const giftCheck  = document.getElementById('giftWrapCheck');
@@ -7882,7 +8069,10 @@ function renderGenderBar(value) {
             deliveryStr = '🤝 Самовивіз (Хмельницький)';
         }
         const userComment = (document.getElementById('cartComment')?.value || '').trim();
-        const comment = deliveryStr + (recipientName ? '\nОтримувач: ' + recipientName : '') + (recipientPhone ? '\nТелефон: ' + recipientPhone : '') + (userComment ? '\n💬 ' + userComment : '');
+        const promoLine = window._activePromo
+            ? `\n🏷 Промокод: ${window._activePromo.code} (−${window._activePromo.discount}${window._activePromo.type === 'percent' ? '%' : ' грн'})`
+            : '';
+        const comment = deliveryStr + (recipientName ? '\nОтримувач: ' + recipientName : '') + (recipientPhone ? '\nТелефон: ' + recipientPhone : '') + (userComment ? '\n💬 ' + userComment : '') + promoLine;
 
         const payload = { contact, order: orderDetails, total: totalSumText, comment };
 
@@ -7934,6 +8124,7 @@ function renderGenderBar(value) {
 
             setTimeout(() => {
                 cart = []; saveCart();
+                window._activePromo = null; // скидаємо промокод
                 ['cartContact','cartRecipientName','cartRecipientPhone','cartCity','cartBranch','cartUkrCity','cartUkrBranch','cartComment']
                     .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
                 window._npSelectedCityRef = '';
@@ -8017,13 +8208,27 @@ function renderGenderBar(value) {
 
         recognition.start();
     }
+    // Collapse/restore rows below search when search is active
+    function setSearchRowsVisibility(visible) {
+        ['stickySortRow', 'stickyNotesRow', 'stickyBrandsRow', 'stickyTabsRow'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = visible ? '' : 'none';
+        });
+    }
+
     function handleSearchInput() {
         const inputVal = document.getElementById('searchInput').value;
         const resContainer = document.getElementById('searchResults');
         const clearBtn = document.getElementById('clearSearchBtn');
         if (clearBtn) clearBtn.style.display = inputVal ? 'block' : 'none';
         triggerCatalogAnimation();
-        if (!inputVal.trim()) { resContainer.style.display = 'none'; return; }
+        if (!inputVal.trim()) {
+            resContainer.style.display = 'none';
+            setSearchRowsVisibility(true);
+            return;
+        }
+        // Hide sort/notes/brands/tabs rows so dropdown appears directly under search
+        setSearchRowsVisibility(false);
 
         // GA4: search (дебаунс — не спамимо при кожному символі)
         clearTimeout(window._searchTrackTimer);
@@ -8125,7 +8330,7 @@ function renderGenderBar(value) {
     window.addEventListener('scroll', repositionSearchDropdown, { passive: true });
     window.addEventListener('resize', repositionSearchDropdown);
 
-    function clearSearch() { document.getElementById('searchInput').value = ''; handleSearchInput(); document.getElementById('searchResults').style.display = 'none'; document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note')); }
+    function clearSearch() { document.getElementById('searchInput').value = ''; handleSearchInput(); document.getElementById('searchResults').style.display = 'none'; document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note')); setSearchRowsVisibility(true); }
 
     function searchByNote(note, btnElement) {
         document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note'));
@@ -9712,6 +9917,181 @@ updateWeather();
         });
     }
 
+    // ═══ GIFT CERTIFICATE LOGIC ═══
+    let selectedCertAmount = 500;
+
+    function selectCertAmount(amount, el) {
+        document.querySelectorAll('.gift-cert-amount-chip').forEach(c => c.classList.remove('active-amount'));
+        el.classList.add('active-amount');
+        const customRow = document.getElementById('certCustomAmountRow');
+        if (amount === 0) {
+            customRow.style.display = 'block';
+            selectedCertAmount = 0;
+            document.getElementById('certPreviewAmount').textContent = '— грн';
+        } else {
+            customRow.style.display = 'none';
+            selectedCertAmount = amount;
+            document.getElementById('certPreviewAmount').textContent = amount + ' грн';
+        }
+    }
+
+    function validateCertCustomAmount(input) {
+        const val = parseInt(input.value);
+        if (val >= 500) {
+            selectedCertAmount = val;
+            document.getElementById('certPreviewAmount').textContent = val + ' грн';
+        } else {
+            selectedCertAmount = 0;
+            document.getElementById('certPreviewAmount').textContent = '— грн';
+        }
+    }
+
+    function addCertToCart() {
+        if (!selectedCertAmount || selectedCertAmount < 500) {
+            alert('Будь ласка, вкажіть суму сертифіката від 500 грн');
+            return;
+        }
+        cart.push({
+            brand: 'VR PERFUMES',
+            name: 'Подарунковий сертифікат ' + selectedCertAmount + ' грн',
+            volume: 'Електронний',
+            price: selectedCertAmount,
+            priceText: selectedCertAmount + ' грн',
+            img: 'https://i.postimg.cc/CxkmFFJ3/logo.png',
+            isCert: true
+        });
+        updateCartUI();
+        toggleCart();
+        const btn = document.querySelector('.gift-cert-btn');
+        if (btn) {
+            btn.textContent = '✓ Додано до кошика';
+            setTimeout(() => {
+                btn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg> Додати до кошика';
+            }, 2000);
+        }
+    }
+
+    // ═══════════════════════════════════════════════════
+    // ПРОМОКОДИ — автоматична перевірка через Google Sheets
+    // ═══════════════════════════════════════════════════
+    const PROMO_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxwI4YS1nrjizwkUJ4-Eay9iFcFIQB8pW8ehgJNaiVRZiItsMcjfzD4t4MmqfO6AQ42Ag/exec';
+
+    // Стан активного промокоду
+    window._activePromo = null; // { code, discount, type } або null
+
+    // Інжектуємо поле промокоду в крок 2 кошика
+    function injectPromoField() {
+        const comment = document.getElementById('cartComment');
+        if (!comment || document.getElementById('certPromoField')) return;
+        const wrapper = document.createElement('div');
+        wrapper.id = 'certPromoField';
+        wrapper.innerHTML = `
+            <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-gray); margin-bottom:6px; margin-top:10px;">Є промокод або сертифікат?</div>
+            <div class="cert-promo-row">
+                <input type="text" id="certPromoInput" class="cert-promo-input"
+                    placeholder="Введіть код..." maxlength="30"
+                    oninput="this.value=this.value.toUpperCase()"
+                    onkeydown="if(event.key==='Enter'){event.preventDefault();applyCertPromo();}">
+                <button class="cert-promo-apply" id="promoApplyBtn" onclick="applyCertPromo()">
+                    Застосувати
+                </button>
+            </div>
+            <div id="certPromoMsg" style="font-size:11px; margin-bottom:8px; line-height:1.4;"></div>`;
+        comment.parentNode.insertBefore(wrapper, comment);
+    }
+
+    // Основна функція перевірки промокоду
+    async function applyCertPromo() {
+        const input = document.getElementById('certPromoInput');
+        const msg   = document.getElementById('certPromoMsg');
+        const btn   = document.getElementById('promoApplyBtn');
+        if (!input || !msg) return;
+
+        const code = input.value.trim().toUpperCase();
+        if (code.length < 3) {
+            msg.style.color = '#e53935';
+            msg.innerHTML = '❌ Введіть коректний код';
+            return;
+        }
+
+        // Якщо вже застосований — скасовуємо
+        if (window._activePromo && window._activePromo.code === code) {
+            resetPromo();
+            return;
+        }
+
+        // Стан завантаження
+        btn.textContent = '...';
+        btn.disabled = true;
+        msg.style.color = 'var(--text-gray)';
+        msg.innerHTML = '🔍 Перевіряємо код...';
+
+        try {
+            const url = PROMO_WEBAPP_URL + '?action=checkPromo&code=' + encodeURIComponent(code);
+            const resp = await fetch(url);
+            const data = await resp.json();
+
+            if (data.valid) {
+                // Код дійсний
+                window._activePromo = {
+                    code: code,
+                    discount: data.discount,   // число в грн
+                    type: data.type || 'fixed' // 'fixed' | 'percent'
+                };
+                input.disabled = true;
+                btn.textContent = '✕ Скасувати';
+                btn.disabled = false;
+                btn.onclick = resetPromo;
+
+                const discountText = data.type === 'percent'
+                    ? data.discount + '%'
+                    : data.discount + ' грн';
+                msg.style.color = 'var(--gold)';
+                msg.innerHTML = `✅ Код <b>${code}</b> застосовано — знижка <b>${discountText}</b>`;
+
+                updateCartUI(); // перераховує суму з урахуванням знижки
+            } else {
+                window._activePromo = null;
+                btn.textContent = 'Застосувати';
+                btn.disabled = false;
+                msg.style.color = '#e53935';
+                msg.innerHTML = data.reason === 'used'
+                    ? '❌ Цей код вже був використаний'
+                    : data.reason === 'expired'
+                    ? '❌ Термін дії коду закінчився'
+                    : '❌ Код не знайдено або недійсний';
+            }
+        } catch (err) {
+            btn.textContent = 'Застосувати';
+            btn.disabled = false;
+            msg.style.color = '#e53935';
+            msg.innerHTML = '⚠️ Помилка з\'єднання. Спробуйте ще раз';
+        }
+    }
+
+    // Скасування промокоду
+    function resetPromo() {
+        window._activePromo = null;
+        const input = document.getElementById('certPromoInput');
+        const msg   = document.getElementById('certPromoMsg');
+        const btn   = document.getElementById('promoApplyBtn');
+        if (input) { input.value = ''; input.disabled = false; }
+        if (msg)   { msg.innerHTML = ''; }
+        if (btn)   { btn.textContent = 'Застосувати'; btn.disabled = false; btn.onclick = applyCertPromo; }
+        updateCartUI();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('goToCheckoutBtn');
+        if (btn) {
+            const orig = btn.onclick;
+            btn.onclick = function(e) {
+                if (orig) orig.call(this, e);
+                setTimeout(injectPromoField, 150);
+            };
+        }
+    });
+
 </script>
 
     <a href="https://t.me/viktoriia_viktoriia_r" class="floating-tg" id="floatingTg" target="_blank">
@@ -9809,4 +10189,3 @@ updateWeather();
 
 </body>
 </html>
-              
