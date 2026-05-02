@@ -1031,11 +1031,15 @@
             background: #fff;
             box-shadow: 0 8px 32px rgba(0,0,0,0.13); 
             border-bottom: 1px solid rgba(197,160,89,0.15);
-            max-height: 55vh; 
+            max-height: 35vh; 
             overflow-y: auto; 
             z-index: 99999;
             -webkit-overflow-scrolling: touch;
             /* top встановлюється JS-ом динамічно */
+        }
+        /* Враховує клавіатуру на iOS/Android */
+        @supports (height: 100dvh) {
+            .search-dropdown { max-height: 30dvh; }
         }
         body.dark-theme .search-dropdown {
             background: #1a1a1a;
@@ -2594,10 +2598,11 @@
             transition: transform 0.3s; 
             border: 1px solid var(--gold); 
         }
-
+       
         .cart-floating-btn:active { 
             transform: scale(0.9); 
         }
+
         .cart-floating-btn svg { 
             width: 24px; 
             height: 24px; 
@@ -5092,16 +5097,19 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
 
     <div id="stickyControls" class="sticky-active">
 
-        <!-- ══ РЯДОК 1: MIX LAB + MAP + тема ══ -->
+        <!-- ══ РЯДОК 1: MIX LAB + MAP + GIFT + тема ══ -->
         <div class="sticky-compact-bar">
             <button class="lab-shortcut" onclick="document.querySelector('.layering-section').scrollIntoView({behavior:'smooth'})" style="margin-bottom:0; flex-shrink:0;">MIX LAB</button>
             <button class="memory-map-shortcut" onclick="openScentMemoryMap()" style="margin-bottom:0; flex-shrink:0;">
                 <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/></svg>MAP
             </button>
+            <button class="lab-shortcut" onclick="document.getElementById('giftCertSection').scrollIntoView({behavior:'smooth'})" style="margin-bottom:0; flex-shrink:0; background:linear-gradient(135deg,rgba(197,160,89,0.18),rgba(197,160,89,0.08)); border-color:rgba(197,160,89,0.5);">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>GIFT
+            </button>
             <button class="theme-switch" onclick="toggleTheme()" id="themeBtn" style="position:static; flex-shrink:0; margin-left:auto;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
         </div>
 
-        <!-- ══ РЯДОК 2: Пошук на всю ширину ══ -->
+        <!-- ══ РЯДОК 2: Пошук — одразу під compact-bar, результати без розриву ══ -->
         <div class="sticky-search-row">
             <div class="search-wrapper" style="position:relative; width:100%;">
                 <input type="text" id="searchInput" placeholder="Пошук аромату або бренду..." oninput="handleSearchInput()">
@@ -5142,7 +5150,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             </div>
         </div>
 
-        <!-- ══ РЯДОК 4: Ноти + Стать + Сезон — один горизонтальний скрол ══ -->
+        <!-- ══ РЯДОК 4: Ноти + Стать + Сезон ══ -->
         <div id="stickyNotesRow" style="display:flex; gap:6px; padding:0 15px 10px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; align-items:center; background:var(--bg);">
             <span style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-gray); opacity:0.5; white-space:nowrap; flex-shrink:0;">Ноти:</span>
             <span class="note-chip" onclick="searchByNote('Ваніль', this)">Ваніль</span>
@@ -5190,13 +5198,14 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     <div id="brandLoreBox" class="brand-lore-box">
         <div class="brand-lore-title" id="brandLoreTitle"></div>
         <div id="brandLoreText"></div>
-    </div>
+           </div>
 
     <div id="wishlistShareAction" style="display:none; text-align:center; padding: 0 20px 20px;">
         <button onclick="shareWishlist()" style="background:var(--gold); color:#fff; border:none; padding:15px 30px; font-size:12px; text-transform:uppercase; font-weight:800; letter-spacing:1.5px; border-radius:8px; cursor:pointer; box-shadow:0 5px 15px rgba(197,160,89,0.3); width:100%; max-width:400px;">Поділитися моїм Wishlist</button>
     </div>
 
     <div id="catalog"></div>
+
     <div class="recent-section" id="recentSection">
         <span class="recent-title">Нещодавно переглянуті</span>
         <div class="recent-scroll" id="recentScrollContainer"></div>
@@ -7788,8 +7797,8 @@ function renderGenderBar(value) {
     function goToCartStep2() {
         if (cart.length === 0) return;
 
-        // GA4: begin_checkout
-        const total = cart.reduce((s, i) => s + i.price, 0);
+        // GA4: begin_checkout 
+            const total = cart.reduce((s, i) => s + i.price, 0);
         track('begin_checkout', {
             value: total,
             items: cart.map(i => ({ item_id: i.brand + '_' + i.name, item_name: i.name, item_brand: i.brand, item_variant: i.volume, price: i.price, quantity: 1 }))
@@ -8224,11 +8233,8 @@ function renderGenderBar(value) {
         triggerCatalogAnimation();
         if (!inputVal.trim()) {
             resContainer.style.display = 'none';
-            setSearchRowsVisibility(true);
             return;
         }
-        // Hide sort/notes/brands/tabs rows so dropdown appears directly under search
-        setSearchRowsVisibility(false);
 
         // GA4: search (дебаунс — не спамимо при кожному символі)
         clearTimeout(window._searchTrackTimer);
@@ -8330,7 +8336,7 @@ function renderGenderBar(value) {
     window.addEventListener('scroll', repositionSearchDropdown, { passive: true });
     window.addEventListener('resize', repositionSearchDropdown);
 
-    function clearSearch() { document.getElementById('searchInput').value = ''; handleSearchInput(); document.getElementById('searchResults').style.display = 'none'; document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note')); setSearchRowsVisibility(true); }
+    function clearSearch() { document.getElementById('searchInput').value = ''; handleSearchInput(); document.getElementById('searchResults').style.display = 'none'; document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note')); }
 
     function searchByNote(note, btnElement) {
         document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note'));
@@ -10189,3 +10195,4 @@ updateWeather();
 
 </body>
 </html>
+              
