@@ -2592,7 +2592,14 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            box-shad.cart-floating-btn:active { 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); 
+            z-index: 1500; 
+            cursor: pointer; 
+            transition: transform 0.3s; 
+            border: 1px solid var(--gold); 
+        }
+
+        .cart-floating-btn:active { 
             transform: scale(0.9); 
         }
 
@@ -5190,13 +5197,8 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
 
     <div id="brandLoreBox" class="brand-lore-box">
         <div class="brand-lore-title" id="brandLoreTitle"></div>
-        <div id="brandLoreText"></div>ow: 0 10px 25px rgba(0, 0, 0, 0.3); 
-            z-index: 1500; 
-            cursor: pointer; 
-            transition: transform 0.3s; 
-            border: 1px solid var(--gold); 
-        }
-        </div>
+        <div id="brandLoreText"></div>
+    </div>
 
     <div id="wishlistShareAction" style="display:none; text-align:center; padding: 0 20px 20px;">
         <button onclick="shareWishlist()" style="background:var(--gold); color:#fff; border:none; padding:15px 30px; font-size:12px; text-transform:uppercase; font-weight:800; letter-spacing:1.5px; border-radius:8px; cursor:pointer; box-shadow:0 5px 15px rgba(197,160,89,0.3); width:100%; max-width:400px;">Поділитися моїм Wishlist</button>
@@ -10210,4 +10212,4 @@ updateWeather();
 
 </body>
 </html>
-        
+              
