@@ -1023,23 +1023,22 @@
             font-family: var(--serif); 
         }
 
+        /* ══ РЕЗУЛЬТАТИ ПОШУКУ — частина sticky-панелі, завжди прямо під рядком ══ */
         .search-dropdown { 
-            display: none; 
-            position: fixed; 
-            left: 0; 
-            right: 0; 
+            display: none;
+            position: relative;
+            margin: 4px -14px 0;
             background: #fff;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.13); 
-            border-bottom: 1px solid rgba(197,160,89,0.15);
-            /* max-height встановлюється JS-ом динамічно — з урахуванням клавіатури */
-            max-height: 40vh;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12); 
+            border-top: 1px solid rgba(197,160,89,0.15);
+            max-height: 55vh;
             overflow-y: auto; 
-            z-index: 99999;
             -webkit-overflow-scrolling: touch;
-            /* top встановлюється JS-ом динамічно */
+            z-index: 1;
         }
         body.dark-theme .search-dropdown {
             background: #1a1a1a;
+            border-top-color: rgba(255,255,255,0.06);
         }
 
         .search-item { 
@@ -2546,12 +2545,12 @@
             justify-content: center; 
             overflow: hidden; 
         }
-
         .project-circle img { 
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
         }
+
         .project-name { 
             font-family: var(--cinzel); 
             font-size: 11px; 
@@ -5090,7 +5089,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             </div>
         </div>
     </div>
-
     <div id="stickyControls" class="sticky-active">
 
         <!-- ══ РЯДОК 1: MIX LAB + MAP + GIFT + тема ══ -->
@@ -5104,6 +5102,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             </button>
             <button class="theme-switch" onclick="toggleTheme()" id="themeBtn" style="position:static; flex-shrink:0; margin-left:auto;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
         </div>
+
         <!-- ══ РЯДОК 2: Пошук — одразу під compact-bar, результати без розриву ══ -->
         <div class="sticky-search-row">
             <div class="search-wrapper" style="position:relative; width:100%;">
@@ -5115,8 +5114,9 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                     <line x1="8" y1="23" x2="16" y2="23"></line>
                 </svg>
                 <span id="clearSearchBtn" onclick="clearSearch()" style="display:flex;align-items:center;right:10px;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
-                <div id="searchResults" class="search-dropdown"></div>
             </div>
+            <!-- Результати — в sticky-рядку, завжди видимі прямо під полем пошуку -->
+            <div id="searchResults" class="search-dropdown"></div>
         </div>
 
         <!-- ══ РЯДОК 3: Сортування ══ -->
@@ -7631,7 +7631,6 @@ function renderGenderBar(value) {
         const shippingFill = document.getElementById('shippingFill');
         const giftBox = document.getElementById('giftWrapCheckbox');
         const upsellBlock = document.getElementById('cartUpsellBlock');
-
         let total = 0;
 
         // Лічильник у заголовку
@@ -7682,6 +7681,7 @@ function renderGenderBar(value) {
             });
             list.innerHTML = '';
             list.appendChild(frag);
+
             // Прогрес доставки
             if (shippingContainer) shippingContainer.style.display = 'block';
             if (shippingFill) {
@@ -8227,6 +8227,7 @@ function renderGenderBar(value) {
         triggerCatalogAnimation();
         if (!inputVal.trim()) {
             resContainer.style.display = 'none';
+            setSearchRowsVisibility(true); // повертаємо ноти/таби
             return;
         }
 
@@ -8309,55 +8310,11 @@ function renderGenderBar(value) {
             });
         }
         resContainer.style.display = 'block';
-        // Позиціонуємо dropdown точно під полем пошуку (з урахуванням клавіатури)
-        positionDropdownAboveKeyboard();
+        // Ховаємо ноти/бренди/таби — більше місця для результатів
+        setSearchRowsVisibility(false);
     }
 
-    // Розраховує позицію та висоту дропдауну з урахуванням відкритої клавіатури
-    function positionDropdownAboveKeyboard() {
-        const res = document.getElementById('searchResults');
-        if (!res) return;
-        const inputEl = document.getElementById('searchInput');
-        if (!inputEl) return;
-
-        const rect = inputEl.getBoundingClientRect();
-        // visualViewport дає РЕАЛЬНУ видиму зону — враховує висоту клавіатури на Android і iOS
-        const vvHeight = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
-        const vvTop    = (window.visualViewport ? window.visualViewport.offsetTop  : 0);
-
-        // Де закінчується поле пошуку відносно реального вікна
-        const dropdownTop = rect.bottom;
-        // Скільки місця залишилось до нижнього краю видимої зони (над клавіатурою)
-        const availableHeight = (vvTop + vvHeight) - dropdownTop - 6;
-
-        res.style.top       = dropdownTop + 'px';
-        res.style.maxHeight = Math.max(80, availableHeight) + 'px';
-    }
-
-    // Оновлюємо позицію при скролі, ресайзі та зміні visualViewport (відкриття/закриття клавіатури)
-    function repositionSearchDropdown() {
-        const res = document.getElementById('searchResults');
-        if (!res || res.style.display === 'none') return;
-        positionDropdownAboveKeyboard();
-    }
-    window.addEventListener('scroll', repositionSearchDropdown, { passive: true });
-    window.addEventListener('resize', repositionSearchDropdown);
-    // Ключовий listener — спрацьовує саме коли з'являється/зникає клавіатура
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', repositionSearchDropdown);
-        window.visualViewport.addEventListener('scroll', repositionSearchDropdown);
-    }
-    // Затримка після фокусу — клавіатура відкривається ~300ms
-    document.addEventListener('DOMContentLoaded', function() {
-        const si = document.getElementById('searchInput');
-        if (si) {
-            si.addEventListener('focus', function() {
-                setTimeout(repositionSearchDropdown, 350);
-            });
-        }
-    });
-
-    function clearSearch() { document.getElementById('searchInput').value = ''; handleSearchInput(); document.getElementById('searchResults').style.display = 'none'; document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note')); }
+    function clearSearch() { document.getElementById('searchInput').value = ''; document.getElementById('searchResults').style.display = 'none'; setSearchRowsVisibility(true); document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note')); triggerCatalogAnimation(); }
 
     function searchByNote(note, btnElement) {
         document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note'));
