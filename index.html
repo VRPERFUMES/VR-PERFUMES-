@@ -4826,6 +4826,367 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;
             font-family: var(--cinzel); white-space: nowrap;
         }
+
+    /* ═══════════════════════════════════════════════════════════
+       ДЕСКТОПНА ВЕРСІЯ — Premium Minimal
+       Всі стилі тільки для екранів від 992px
+       Мобільна версія не чіпається
+    ═══════════════════════════════════════════════════════════ */
+    @media (min-width: 992px) {
+
+        /* ── Глобальний контейнер ── */
+        body { font-size: 14px; }
+
+        /* Центруємо весь контент, max 1280px */
+        .hero-carousel,
+        #stickyControls,
+        .week-section,
+        .layering-section,
+        .gift-cert-section,
+        .about-section,
+        .reviews-outer,
+        #catalog,
+        .ig-stories-row,
+        .tt-hint {
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Але sticky має бути full-width з обмеженим inner */
+        #stickyControls {
+            max-width: 100%;
+            position: sticky;
+            top: 0;
+        }
+
+        .sticky-inner-wrap {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* ── Sticky блок — елегантний горизонтальний navbar ── */
+        #stickyControls {
+            background: rgba(250,248,244,0.97);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(197,160,89,0.12);
+            box-shadow: 0 1px 20px rgba(0,0,0,0.04);
+        }
+
+        body.dark-theme #stickyControls {
+            background: rgba(12,12,12,0.97);
+        }
+
+        /* Compact bar — один рядок на десктопі */
+        .sticky-compact-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 40px;
+            border-bottom: 1px solid rgba(197,160,89,0.07);
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .lab-shortcut,
+        .memory-map-shortcut {
+            font-size: 9px;
+            letter-spacing: 2px;
+            padding: 6px 14px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .lab-shortcut:hover,
+        .memory-map-shortcut:hover {
+            background: rgba(197,160,89,0.12);
+            border-color: rgba(197,160,89,0.5);
+        }
+
+        /* Пошук на десктопі — компактний у compact bar */
+        .sticky-search-row {
+            padding: 0 40px;
+            max-width: 1280px;
+            margin: 0 auto;
+            border-bottom: 1px solid rgba(197,160,89,0.07);
+        }
+
+        .sticky-search-row input {
+            font-size: 12px;
+            padding: 10px 40px 10px 16px;
+            border-radius: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Сортування */
+        .sticky-sort-row {
+            padding: 0 40px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .custom-sort-header {
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            padding: 8px 14px;
+        }
+
+        /* Ноти */
+        #stickyNotesRow {
+            padding: 6px 40px 8px;
+            max-width: 1280px;
+            margin: 0 auto;
+            gap: 8px;
+        }
+
+        .note-chip, .filter-chip {
+            font-size: 9px;
+            padding: 4px 12px;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .note-chip:hover, .filter-chip:hover {
+            background: rgba(197,160,89,0.1);
+            border-color: rgba(197,160,89,0.5);
+        }
+
+        /* Бренди */
+        .sticky-brands-row {
+            padding: 0 40px 8px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .brands-gallery-btn {
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            padding: 7px 18px;
+            border-radius: 4px;
+        }
+
+        /* Табки */
+        .sticky-tabs-row {
+            padding: 0 40px 10px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .tab-btn {
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            padding: 6px 16px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        /* ── Hero carousel ── */
+        .hero-carousel {
+            height: 520px;
+            border-radius: 0;
+        }
+
+        .hero-slide {
+            border-radius: 0;
+        }
+
+        .hero-content {
+            max-width: 500px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .hero-brand-label { font-size: 11px; letter-spacing: 3px; }
+        .hero-name        { font-size: 42px; line-height: 1.1; }
+        .hero-try-btn     { font-size: 10px; letter-spacing: 2px; padding: 13px 32px; }
+        .hero-price-hint  { font-size: 11px; }
+
+        /* ── Catalog ── */
+        #catalog {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px 24px;
+            padding: 40px 40px;
+        }
+
+        @media (min-width: 1200px) {
+            #catalog {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 36px 20px;
+            }
+        }
+
+        /* Картки — витонченіші на десктопі */
+        .card {
+            min-height: 340px;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(197,160,89,0.12);
+            border-color: rgba(197,160,89,0.3);
+        }
+
+        .card img {
+            aspect-ratio: 3/4;
+            object-fit: cover;
+        }
+
+        .brand  { font-size: 9px; letter-spacing: 1.5px; margin-top: 10px; }
+        .name   { font-size: 12px; margin: 6px 0 8px; min-height: 30px; }
+        .card-price-label { font-size: 12px; }
+        .card-price-per-ml { font-size: 9px; }
+
+        .order-btn {
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            padding: 9px 12px;
+            margin: 0 10px 10px;
+            border-radius: 4px;
+        }
+
+        /* ── Кошик ── */
+        .cart-panel {
+            width: 420px;
+            padding: 0;
+        }
+
+        /* ── Блок тижня ── */
+        .week-section {
+            padding: 60px 40px;
+        }
+
+        /* ── MIX LAB ── */
+        .layering-section {
+            padding: 60px 40px;
+            max-width: 900px;
+        }
+
+        /* ── Подарунковий сертифікат ── */
+        .gift-cert-section {
+            margin: 40px auto;
+            max-width: 900px;
+        }
+
+        .gift-cert-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+            align-items: start;
+        }
+
+        .gift-cert-header  { grid-column: 1; }
+        .gift-cert-amounts { grid-column: 1; }
+        #certCustomAmountRow { grid-column: 1; }
+        .gift-cert-steps   { grid-column: 1; }
+        .gift-cert-btn     { grid-column: 1; }
+        .gift-cert-card-preview { grid-column: 2; grid-row: 1 / 5; align-self: center; }
+
+        .gift-cert-title { font-size: 28px; }
+        .cert-preview-amount { font-size: 36px; }
+
+        /* ── About секція ── */
+        .about-section {
+            padding: 80px 40px;
+            max-width: 800px;
+        }
+
+        /* ── Відгуки ── */
+        .reviews-outer {
+            padding: 60px 40px;
+        }
+
+        /* ── Floating кошик ── */
+        .cart-floating-btn {
+            bottom: 36px;
+            right: 36px;
+            width: 56px;
+            height: 56px;
+        }
+
+        /* ── Пошуковий дропдаун ── */
+        .search-dropdown {
+            max-width: 1280px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 0 0 8px 8px;
+        }
+
+        /* ── Модальне вікно товару ── */
+        .modal-overlay {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-box {
+            max-width: 480px;
+            max-height: 85vh;
+            border-radius: 12px;
+            margin: auto;
+        }
+
+        /* ── Notifications / popups ── */
+        .sale-popup, .purchase-notify {
+            bottom: 36px;
+            left: 36px;
+            max-width: 300px;
+        }
+
+        /* ── Telegram hint ── */
+        .tt-hint { display: none; } /* на десктопі не потрібен */
+
+        /* ── Stories ── */
+        .ig-stories-row {
+            padding: 20px 40px 0;
+        }
+
+        /* ── Тижневий банер ── */
+        .week-perfume-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* ── Скролл-кнопка вверх ── */
+        .scroll-top-btn {
+            bottom: 36px;
+            right: 100px;
+        }
+
+        /* ── Загальні hover для інтерактивних елементів ── */
+        button:not(:disabled) { cursor: pointer; }
+
+        /* ── Темна тема ── */
+        body.dark-theme #stickyControls {
+            border-bottom-color: rgba(197,160,89,0.08);
+        }
+
+        body.dark-theme .card:hover {
+            box-shadow: 0 12px 40px rgba(197,160,89,0.08);
+            border-color: rgba(197,160,89,0.2);
+        }
+    }
+
+    /* ── 1280px+ : трохи більше повітря ── */
+    @media (min-width: 1280px) {
+        .sticky-compact-bar,
+        .sticky-search-row,
+        .sticky-sort-row,
+        #stickyNotesRow,
+        .sticky-brands-row,
+        .sticky-tabs-row { padding-left: 60px; padding-right: 60px; }
+
+        #catalog { padding: 40px 60px; }
+
+        .week-section,
+        .layering-section,
+        .about-section,
+        .reviews-outer { padding-left: 60px; padding-right: 60px; }
+    }
     </style>
 </head>
 <body>
