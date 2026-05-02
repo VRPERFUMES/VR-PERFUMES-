@@ -1041,6 +1041,14 @@
             border-top-color: rgba(255,255,255,0.06);
         }
 
+        /* Ховаємо фільтри/ноти/таби коли активний пошук — через CSS-клас, без JS display */
+        #stickyControls.search-active #stickySortRow,
+        #stickyControls.search-active #stickyNotesRow,
+        #stickyControls.search-active #stickyBrandsRow,
+        #stickyControls.search-active #stickyTabsRow {
+            display: none !important;
+        }
+
         .search-item { 
             display: flex; 
             align-items: center; 
@@ -2531,7 +2539,6 @@
             transition: 0.3s; 
             width: 80px; 
         }
-
         .project-circle { 
             width: 75px; 
             height: 75px; 
@@ -2545,6 +2552,7 @@
             justify-content: center; 
             overflow: hidden; 
         }
+
         .project-circle img { 
             width: 100%; 
             height: 100%; 
@@ -8213,10 +8221,11 @@ function renderGenderBar(value) {
     }
     // Collapse/restore rows below search when search is active
     function setSearchRowsVisibility(visible) {
-        ['stickySortRow', 'stickyNotesRow', 'stickyBrandsRow', 'stickyTabsRow'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.style.display = visible ? '' : 'none';
-        });
+        const ctrl = document.getElementById('stickyControls');
+        if (ctrl) {
+            if (visible) ctrl.classList.remove('search-active');
+            else         ctrl.classList.add('search-active');
+        }
     }
 
     function handleSearchInput() {
