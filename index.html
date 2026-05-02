@@ -11,13 +11,29 @@
     <meta name="apple-mobile-web-app-title" content="VR Perfumes">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/CxkmFFJ3/logo.png">
     <link rel="manifest" href="manifest.json">
-    <title>VR-PERFUMES | Premium Showcase</title>
-    <meta name="description" content="VR-PERFUMES - преміальний парфумерний бар. Розпив оригінальної нішової парфумерії, сети, залишки у флаконах.">
-    <meta property="og:title" content="VR-PERFUMES | Premium Showcase">
-    <meta property="og:description" content="Розпив оригінальної нішової парфумерії від Вікторії.">
+    <title>VR Perfumes | Розпив нішової парфумерії — Хмельницький</title>
+    <meta name="description" content="VR Perfumes — преміальний розпив оригінальної нішової парфумерії. Byredo, Tom Ford, Mancera, Kajal та 500+ брендів. Доставка по Україні. Від 2 мл.">
+    <meta name="keywords" content="розпив парфумів, нішова парфумерія, оригінальна парфумерія, Byredo, Tom Ford, Mancera, Хмельницький, доставка парфумів Україна">
+    <meta name="author" content="VR Perfumes">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vrperfumes.github.io/VR-PERFUMES-/">
+
+    <!-- Open Graph (Facebook, Telegram, Viber) -->
+    <meta property="og:title" content="VR Perfumes | Розпив нішової парфумерії">
+    <meta property="og:description" content="Оригінальна нішова парфумерія на розпив. 500+ ароматів, від 2 мл. Byredo, Tom Ford, Mancera та інші. Доставка по Україні.">
     <meta property="og:image" content="https://i.postimg.cc/CxkmFFJ3/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://vrperfumes.github.io/VR-PERFUMES-/">
+    <meta property="og:locale" content="uk_UA">
+    <meta property="og:site_name" content="VR Perfumes">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="VR Perfumes | Розпив нішової парфумерії">
+    <meta name="twitter:description" content="Оригінальна нішова парфумерія на розпив. 500+ ароматів від 2 мл.">
+    <meta name="twitter:image" content="https://i.postimg.cc/CxkmFFJ3/logo.png">
     
     <link rel="icon" href="https://i.postimg.cc/CxkmFFJ3/logo.png" type="image/png">
 
@@ -5130,13 +5146,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             margin: auto;
         }
 
-        /* ── Notifications / popups ── */
-        .sale-popup, .purchase-notify {
-            bottom: 36px;
-            left: 36px;
-            max-width: 300px;
-        }
-
         /* ── Telegram hint ── */
         .tt-hint { display: none; } /* на десктопі не потрібен */
 
@@ -5186,6 +5195,65 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         .layering-section,
         .about-section,
         .reviews-outer { padding-left: 60px; padding-right: 60px; }
+    }
+    /* ═══ SKELETON LOADING ═══ */
+    .skeleton-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px 15px;
+        padding: 20px;
+    }
+    @media (min-width: 600px)  { .skeleton-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (min-width: 992px)  { .skeleton-grid { grid-template-columns: repeat(4,1fr); gap: 32px 24px; padding: 40px; } }
+    @media (min-width: 1200px) { .skeleton-grid { grid-template-columns: repeat(5,1fr); } }
+
+    .skeleton-card {
+        border-radius: 12px;
+        overflow: hidden;
+        background: rgba(255,255,255,0.7);
+        border: 1px solid rgba(197,160,89,0.08);
+    }
+    body.dark-theme .skeleton-card {
+        background: rgba(26,26,26,0.7);
+    }
+    .skeleton-img {
+        width: 100%;
+        aspect-ratio: 3/4;
+        background: linear-gradient(90deg, #f0ede8 25%, #e8e4dd 50%, #f0ede8 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+    }
+    body.dark-theme .skeleton-img {
+        background: linear-gradient(90deg, #222 25%, #2a2a2a 50%, #222 75%);
+        background-size: 200% 100%;
+    }
+    .skeleton-text {
+        margin: 10px auto 6px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, #f0ede8 25%, #e8e4dd 50%, #f0ede8 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        height: 10px;
+    }
+    body.dark-theme .skeleton-text {
+        background: linear-gradient(90deg, #222 25%, #2a2a2a 50%, #222 75%);
+        background-size: 200% 100%;
+    }
+    .skeleton-btn {
+        margin: 10px 10px 12px;
+        height: 32px;
+        border-radius: 6px;
+        background: linear-gradient(90deg, #f0ede8 25%, #e8e4dd 50%, #f0ede8 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+    }
+    body.dark-theme .skeleton-btn {
+        background: linear-gradient(90deg, #222 25%, #2a2a2a 50%, #222 75%);
+        background-size: 200% 100%;
+    }
+    @keyframes shimmer {
+        0%   { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
     }
     </style>
 </head>
@@ -7233,6 +7301,25 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             carousel.innerHTML = ''; carousel.appendChild(logoSlide);
             container.innerHTML = ''; wContainer.innerHTML = '';
 
+            // Показуємо skeleton поки дані ще не відрендерені
+            function showSkeleton(count = 10) {
+                const skGrid = document.createElement('div');
+                skGrid.className = 'skeleton-grid';
+                skGrid.id = 'skeletonGrid';
+                for (let i = 0; i < count; i++) {
+                    skGrid.innerHTML += `
+                        <div class="skeleton-card">
+                            <div class="skeleton-img"></div>
+                            <div class="skeleton-text" style="width:60%;"></div>
+                            <div class="skeleton-text" style="width:80%;"></div>
+                            <div class="skeleton-text" style="width:40%;"></div>
+                            <div class="skeleton-btn"></div>
+                        </div>`;
+                }
+                container.parentNode.insertBefore(skGrid, container);
+            }
+            showSkeleton(10);
+
             catalogData.sort((a, b) => new Date(b[6]) - new Date(a[6]));
             
             catalogData.forEach((c, index) => {
@@ -7400,6 +7487,10 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 if(!isOutOfStock) div.querySelector('.order-btn').onclick = () => showModal(c);
                 container.appendChild(div);
             });
+
+            // Прибираємо skeleton після рендеру
+            const sk = document.getElementById('skeletonGrid');
+            if (sk) sk.remove();
 
             renderBrandGallery(catalogData); 
             initCarousel(); initSwipe(); init3DEffect(); formatNews(rows[0][10]); renderGeneralReviews(reviewsData.slice(1));
@@ -9571,111 +9662,6 @@ function renderGenderBar(value) {
         }, 30000);
     })();
 
-    // === СОЦІАЛЬНИЙ ДОКАЗ: "Сьогодні купили" сповіщення ===
-    (function initSocialProofToasts() {
-        const names = ['Аліна','Вікторія','Марія','Катерина','Наталія','Юлія','Дарина','Ірина','Оксана','Тетяна','Олена','Анна','Софія','Діана','Поліна'];
-        const cities = ['Києва','Харкова','Одеси','Львова','Дніпра','Запоріжжя','Вінниці','Полтави','Черкас','Хмельницького','Рівного','Луцька','Чернівців','Сум'];
-        // Розширено: і придбала, і поклала в кошик
-        const actions = [
-            'придбала', 'замовила', 'забрала',
-            'поклала в кошик', 'поклала в кошик', 'додала до кошика'
-        ];
-        const times = ['щойно','3 хв тому','7 хв тому','12 хв тому','20 хв тому','пів години тому'];
-        // Вагове розподілення об'єму: 5 мл — найчастіше, 20 мл — рідко
-        const volumes = ['2 мл','2 мл','5 мл','5 мл','5 мл','5 мл','10 мл','20 мл'];
-
-        // Створюємо контейнер
-        const toastContainer = document.createElement('div');
-        toastContainer.id = 'socialToastContainer';
-        Object.assign(toastContainer.style, {
-            position: 'fixed', bottom: '90px', left: '15px',
-            zIndex: '2500', display: 'flex', flexDirection: 'column', gap: '8px',
-            pointerEvents: 'none', maxWidth: '280px'
-        });
-        document.body.appendChild(toastContainer);
-
-        function showToast() {
-            if (globalCatalogData.length === 0) return;
-            const item = globalCatalogData[Math.floor(Math.random() * Math.min(globalCatalogData.length, 20))];
-            if (!item || !item[0] || !item[1]) return;
-
-            const name = names[Math.floor(Math.random() * names.length)];
-            const city = cities[Math.floor(Math.random() * cities.length)];
-            const action = actions[Math.floor(Math.random() * actions.length)];
-            const time = times[Math.floor(Math.random() * times.length)];
-            const vol = volumes[Math.floor(Math.random() * volumes.length)];
-            const img = item[5] ? item[5].replace(/'/g, "%27") : '';
-
-            const toast = document.createElement('div');
-            Object.assign(toast.style, {
-                background: 'rgba(255,255,255,0.97)',
-                backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(197,160,89,0.25)',
-                borderLeft: '3px solid #c5a059',
-                borderRadius: '10px',
-                padding: '10px 12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                opacity: '0',
-                transform: 'translateX(-20px)',
-                transition: 'all 0.4s cubic-bezier(0.22,1,0.36,1)',
-                pointerEvents: 'auto',
-                cursor: 'pointer',
-                maxWidth: '280px',
-            });
-
-            toast.innerHTML = `
-                ${img ? `<img src="${img}" alt="${item[1]}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0;" onerror="this.style.display='none'">` : ''}
-                <div style="flex:1;min-width:0;">
-                    <div style="font-size:11px;font-weight:800;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name} з ${city}</div>
-                    <div style="font-size:10px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${action} ${item[1]} ${vol}</div>
-                    <div style="font-size:9px;color:#c5a059;font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">${time}</div>
-                </div>`;
-
-            // Темна тема
-            if (document.body.classList.contains('dark-theme')) {
-                toast.style.background = 'rgba(26,26,26,0.97)';
-                toast.querySelector('div > div:first-child').style.color = '#f5f5f5';
-                toast.querySelector('div > div:nth-child(2)').style.color = '#aaa';
-            }
-
-            toastContainer.appendChild(toast);
-
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    toast.style.opacity = '1';
-                    toast.style.transform = 'translateX(0)';
-                });
-            });
-
-            toast.addEventListener('click', () => removeToast(toast));
-            setTimeout(() => removeToast(toast), 6000);
-        }
-
-        function removeToast(toast) {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateX(-20px)';
-            setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 400);
-        }
-
-        // Максимум 2 сповіщення за сесію
-        let toastCount = 0;
-        const MAX_TOASTS = 1;
-
-        function maybeShowToast() {
-            if (toastCount >= MAX_TOASTS) return;
-            toastCount++;
-            showToast();
-        }
-
-        // Перший показ через 90 секунд, другий — через 3 хвилини після першого
-        setTimeout(() => {
-            maybeShowToast();
-            setTimeout(() => { maybeShowToast(); }, 180000);
-        }, 90000);
-    })();
     // 1. Хмаринка Вікторії (показуємо завжди для перевірки, без sessionStorage)
     setTimeout(() => {
         const bubble = document.getElementById('tgChatBubble');
