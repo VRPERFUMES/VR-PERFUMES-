@@ -8285,7 +8285,7 @@ function renderGenderBar(value) {
                     <div class="search-item-price">від ${minPriceLabel}</div>`;
 
                 item.onclick = () => { 
-                    showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; triggerCatalogAnimation(); 
+                    showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; setSearchRowsVisibility(true); triggerCatalogAnimation(); 
                 };
                 resContainer.appendChild(item);
             });
@@ -8313,7 +8313,7 @@ function renderGenderBar(value) {
                     <div class="search-item-price" style="color: var(--gold);">від ${minPriceLabel}</div>`;
 
                 item.onclick = () => { 
-                    showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; triggerCatalogAnimation(); 
+                    showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; setSearchRowsVisibility(true); triggerCatalogAnimation(); 
                 };
                 resContainer.appendChild(item);
             });
