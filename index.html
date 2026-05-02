@@ -1023,30 +1023,26 @@
             font-family: var(--serif); 
         }
 
-        /* ══ РЕЗУЛЬТАТИ ПОШУКУ — частина sticky-панелі, завжди прямо під рядком ══ */
         .search-dropdown { 
-            display: none;
-            position: relative;
-            margin: 4px -14px 0;
+            display: none; 
+            position: fixed; 
+            left: 0; 
+            right: 0; 
             background: #fff;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12); 
-            border-top: 1px solid rgba(197,160,89,0.15);
-            max-height: 55vh;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.13); 
+            border-bottom: 1px solid rgba(197,160,89,0.15);
+            max-height: 35vh; 
             overflow-y: auto; 
+            z-index: 99999;
             -webkit-overflow-scrolling: touch;
-            z-index: 1;
+            /* top встановлюється JS-ом динамічно */
+        }
+        /* Враховує клавіатуру на iOS/Android */
+        @supports (height: 100dvh) {
+            .search-dropdown { max-height: 30dvh; }
         }
         body.dark-theme .search-dropdown {
             background: #1a1a1a;
-            border-top-color: rgba(255,255,255,0.06);
-        }
-
-        /* Ховаємо фільтри/ноти/таби коли активний пошук — через CSS-клас, без JS display */
-        #stickyControls.search-active #stickySortRow,
-        #stickyControls.search-active #stickyNotesRow,
-        #stickyControls.search-active #stickyBrandsRow,
-        #stickyControls.search-active #stickyTabsRow {
-            display: none !important;
         }
 
         .search-item { 
@@ -2539,6 +2535,7 @@
             transition: 0.3s; 
             width: 80px; 
         }
+
         .project-circle { 
             width: 75px; 
             height: 75px; 
@@ -2595,14 +2592,7 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); 
-            z-index: 1500; 
-            cursor: pointer; 
-            transition: transform 0.3s; 
-            border: 1px solid var(--gold); 
-        }
-       
-        .cart-floating-btn:active { 
+            box-shad.cart-floating-btn:active { 
             transform: scale(0.9); 
         }
 
@@ -5097,6 +5087,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             </div>
         </div>
     </div>
+
     <div id="stickyControls" class="sticky-active">
 
         <!-- ══ РЯДОК 1: MIX LAB + MAP + GIFT + тема ══ -->
@@ -5122,9 +5113,8 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                     <line x1="8" y1="23" x2="16" y2="23"></line>
                 </svg>
                 <span id="clearSearchBtn" onclick="clearSearch()" style="display:flex;align-items:center;right:10px;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+                <div id="searchResults" class="search-dropdown"></div>
             </div>
-            <!-- Результати — в sticky-рядку, завжди видимі прямо під полем пошуку -->
-            <div id="searchResults" class="search-dropdown"></div>
         </div>
 
         <!-- ══ РЯДОК 3: Сортування ══ -->
@@ -5200,8 +5190,13 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
 
     <div id="brandLoreBox" class="brand-lore-box">
         <div class="brand-lore-title" id="brandLoreTitle"></div>
-        <div id="brandLoreText"></div>
-           </div>
+        <div id="brandLoreText"></div>ow: 0 10px 25px rgba(0, 0, 0, 0.3); 
+            z-index: 1500; 
+            cursor: pointer; 
+            transition: transform 0.3s; 
+            border: 1px solid var(--gold); 
+        }
+        </div>
 
     <div id="wishlistShareAction" style="display:none; text-align:center; padding: 0 20px 20px;">
         <button onclick="shareWishlist()" style="background:var(--gold); color:#fff; border:none; padding:15px 30px; font-size:12px; text-transform:uppercase; font-weight:800; letter-spacing:1.5px; border-radius:8px; cursor:pointer; box-shadow:0 5px 15px rgba(197,160,89,0.3); width:100%; max-width:400px;">Поділитися моїм Wishlist</button>
@@ -7639,6 +7634,7 @@ function renderGenderBar(value) {
         const shippingFill = document.getElementById('shippingFill');
         const giftBox = document.getElementById('giftWrapCheckbox');
         const upsellBlock = document.getElementById('cartUpsellBlock');
+
         let total = 0;
 
         // Лічильник у заголовку
@@ -7799,8 +7795,8 @@ function renderGenderBar(value) {
     function goToCartStep2() {
         if (cart.length === 0) return;
 
-        // GA4: begin_checkout 
-            const total = cart.reduce((s, i) => s + i.price, 0);
+        // GA4: begin_checkout
+        const total = cart.reduce((s, i) => s + i.price, 0);
         track('begin_checkout', {
             value: total,
             items: cart.map(i => ({ item_id: i.brand + '_' + i.name, item_name: i.name, item_brand: i.brand, item_variant: i.volume, price: i.price, quantity: 1 }))
@@ -8221,11 +8217,10 @@ function renderGenderBar(value) {
     }
     // Collapse/restore rows below search when search is active
     function setSearchRowsVisibility(visible) {
-        const ctrl = document.getElementById('stickyControls');
-        if (ctrl) {
-            if (visible) ctrl.classList.remove('search-active');
-            else         ctrl.classList.add('search-active');
-        }
+        ['stickySortRow', 'stickyNotesRow', 'stickyBrandsRow', 'stickyTabsRow'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = visible ? '' : 'none';
+        });
     }
 
     function handleSearchInput() {
@@ -8236,7 +8231,6 @@ function renderGenderBar(value) {
         triggerCatalogAnimation();
         if (!inputVal.trim()) {
             resContainer.style.display = 'none';
-            setSearchRowsVisibility(true); // повертаємо ноти/таби
             return;
         }
 
@@ -8285,7 +8279,7 @@ function renderGenderBar(value) {
                     <div class="search-item-price">від ${minPriceLabel}</div>`;
 
                 item.onclick = () => { 
-                    showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; setSearchRowsVisibility(true); triggerCatalogAnimation(); 
+                    showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; triggerCatalogAnimation(); 
                 };
                 resContainer.appendChild(item);
             });
@@ -8313,17 +8307,34 @@ function renderGenderBar(value) {
                     <div class="search-item-price" style="color: var(--gold);">від ${minPriceLabel}</div>`;
 
                 item.onclick = () => { 
-                    showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; setSearchRowsVisibility(true); triggerCatalogAnimation(); 
+                    showModal(c); resContainer.style.display = 'none'; document.getElementById('searchInput').value = ''; document.getElementById('clearSearchBtn').style.display = 'none'; triggerCatalogAnimation(); 
                 };
                 resContainer.appendChild(item);
             });
         }
         resContainer.style.display = 'block';
-        // Ховаємо ноти/бренди/таби — більше місця для результатів
-        setSearchRowsVisibility(false);
+        // Позиціонуємо dropdown точно під полем пошуку
+        const inputEl = document.getElementById('searchInput');
+        if (inputEl) {
+            const rect = inputEl.getBoundingClientRect();
+            resContainer.style.top = rect.bottom + 'px';
+        }
     }
 
-    function clearSearch() { document.getElementById('searchInput').value = ''; document.getElementById('searchResults').style.display = 'none'; setSearchRowsVisibility(true); document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note')); triggerCatalogAnimation(); }
+    // Оновлюємо позицію dropdown при скролі/ресайзі
+    function repositionSearchDropdown() {
+        const res = document.getElementById('searchResults');
+        if (!res || res.style.display === 'none') return;
+        const inputEl = document.getElementById('searchInput');
+        if (inputEl) {
+            const rect = inputEl.getBoundingClientRect();
+            res.style.top = rect.bottom + 'px';
+        }
+    }
+    window.addEventListener('scroll', repositionSearchDropdown, { passive: true });
+    window.addEventListener('resize', repositionSearchDropdown);
+
+    function clearSearch() { document.getElementById('searchInput').value = ''; handleSearchInput(); document.getElementById('searchResults').style.display = 'none'; document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note')); }
 
     function searchByNote(note, btnElement) {
         document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active-note'));
@@ -10025,11 +10036,25 @@ updateWeather();
             const data = await resp.json();
 
             if (data.valid) {
-                // Код дійсний
+                // Перевіряємо мінімальну суму замовлення
+                const minOrder = data.minOrder || 0;
+                if (minOrder > 0) {
+                    const currentTotal = cart.reduce((s, i) => s + i.price, 0);
+                    if (currentTotal < minOrder) {
+                        btn.textContent = 'Застосувати';
+                        btn.disabled = false;
+                        msg.style.color = '#e53935';
+                        msg.innerHTML = `❌ Код діє від <b>${minOrder} грн</b>. Ваша сума: ${currentTotal} грн`;
+                        return;
+                    }
+                }
+
+                // Все ок — застосовуємо
                 window._activePromo = {
-                    code: code,
-                    discount: data.discount,   // число в грн
-                    type: data.type || 'fixed' // 'fixed' | 'percent'
+                    code:     code,
+                    discount: data.discount,
+                    type:     data.type || 'fixed',
+                    minOrder: minOrder
                 };
                 input.disabled = true;
                 btn.textContent = '✕ Скасувати';
@@ -10039,10 +10064,11 @@ updateWeather();
                 const discountText = data.type === 'percent'
                     ? data.discount + '%'
                     : data.discount + ' грн';
+                const minTxt = minOrder > 0 ? ` (від ${minOrder} грн)` : '';
                 msg.style.color = 'var(--gold)';
-                msg.innerHTML = `✅ Код <b>${code}</b> застосовано — знижка <b>${discountText}</b>`;
+                msg.innerHTML = `✅ Код <b>${code}</b> застосовано — знижка <b>${discountText}</b>${minTxt}`;
 
-                updateCartUI(); // перераховує суму з урахуванням знижки
+                updateCartUI();
             } else {
                 window._activePromo = null;
                 btn.textContent = 'Застосувати';
@@ -10052,6 +10078,8 @@ updateWeather();
                     ? '❌ Цей код вже був використаний'
                     : data.reason === 'expired'
                     ? '❌ Термін дії коду закінчився'
+                    : data.reason === 'limit_reached'
+                    ? '❌ Ліміт використань вичерпано'
                     : '❌ Код не знайдено або недійсний';
             }
         } catch (err) {
@@ -10182,4 +10210,4 @@ updateWeather();
 
 </body>
 </html>
-              
+        
