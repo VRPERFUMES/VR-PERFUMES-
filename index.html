@@ -9994,16 +9994,16 @@ updateWeather();
     }
 
     // Основна функція перевірки промокоду
-    async function applyCertPromo() {
+  async function applyCertPromo() {
         const input = document.getElementById('certPromoInput');
         const msg   = document.getElementById('certPromoMsg');
         const btn   = document.getElementById('promoApplyBtn');
-        if (!input || !msg) return;
+        if (!input || !btn) return;
 
         const code = input.value.trim().toUpperCase();
-        if (code.length < 3) {
+        if (!code) {
             msg.style.color = '#e53935';
-            msg.innerHTML = '❌ Введіть коректний код';
+            msg.innerHTML = '⚠️ Введіть промокод';
             return;
         }
 
@@ -10012,6 +10012,11 @@ updateWeather();
             resetPromo();
             return;
         }
+
+        // Підраховуємо суму кошика БЕЗ знижки (до застосування промокоду)
+        const cartSubtotal = (cart || []).reduce((sum, item) => {
+            return sum + (parseFloat(item.price) || 0);
+        }, 0);
 
         // Стан завантаження
         btn.textContent = '...';
@@ -10025,11 +10030,20 @@ updateWeather();
             const data = await resp.json();
 
             if (data.valid) {
-                // Код дійсний
+                // Перевірка мінімальної суми замовлення
+                if (data.min_order > 0 && cartSubtotal < data.min_order) {
+                    btn.textContent = 'Застосувати';
+                    btn.disabled = false;
+                    msg.style.color = '#e53935';
+                    msg.innerHTML = `❌ Цей промокод діє від <b>${data.min_order} грн</b>. Ваш кошик: <b>${Math.round(cartSubtotal)} грн</b>`;
+                    return;
+                }
+
+                // Код дійсний і сума підходить
                 window._activePromo = {
-                    code: code,
-                    discount: data.discount,   // число в грн
-                    type: data.type || 'fixed' // 'fixed' | 'percent'
+                    code:     code,
+                    discount: data.discount,
+                    type:     data.type || 'fixed'
                 };
                 input.disabled = true;
                 btn.textContent = '✕ Скасувати';
@@ -10042,7 +10056,7 @@ updateWeather();
                 msg.style.color = 'var(--gold)';
                 msg.innerHTML = `✅ Код <b>${code}</b> застосовано — знижка <b>${discountText}</b>`;
 
-                updateCartUI(); // перераховує суму з урахуванням знижки
+                updateCartUI();
             } else {
                 window._activePromo = null;
                 btn.textContent = 'Застосувати';
@@ -10052,6 +10066,12 @@ updateWeather();
                     ? '❌ Цей код вже був використаний'
                     : data.reason === 'expired'
                     ? '❌ Термін дії коду закінчився'
+                    : data.reason === 'limit_reached'
+                    ? '❌ Цей промокод вже вичерпано'
+                    : data.reason === 'not_started'
+                    ? '❌ Промокод ще не активний'
+                    : data.reason === 'inactive'
+                    ? '❌ Промокод тимчасово призупинено'
                     : '❌ Код не знайдено або недійсний';
             }
         } catch (err) {
@@ -10061,28 +10081,6 @@ updateWeather();
             msg.innerHTML = '⚠️ Помилка з\'єднання. Спробуйте ще раз';
         }
     }
-
-    // Скасування промокоду
-    function resetPromo() {
-        window._activePromo = null;
-        const input = document.getElementById('certPromoInput');
-        const msg   = document.getElementById('certPromoMsg');
-        const btn   = document.getElementById('promoApplyBtn');
-        if (input) { input.value = ''; input.disabled = false; }
-        if (msg)   { msg.innerHTML = ''; }
-        if (btn)   { btn.textContent = 'Застосувати'; btn.disabled = false; btn.onclick = applyCertPromo; }
-        updateCartUI();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('goToCheckoutBtn');
-        if (btn) {
-            const orig = btn.onclick;
-            btn.onclick = function(e) {
-                if (orig) orig.call(this, e);
-                setTimeout(injectPromoField, 150);
-            };
-        }
     });
 
 </script>
