@@ -6552,6 +6552,46 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     let isSpeaking = false;
     const synth = window.speechSynthesis;
 
+    // === ГОЛОСИ: завантажуємо одразу при старті сторінки ===
+    // Chrome Android завантажує голоси асинхронно — треба тригернути і чекати
+    let _cachedVoices = [];
+    function _loadVoices() { _cachedVoices = synth ? synth.getVoices() : []; }
+    if (synth) {
+        synth.addEventListener('voiceschanged', _loadVoices);
+        _loadVoices(); // перша спроба — на десктопі одразу готові
+    }
+
+    // Запускає мовлення тільки коли голоси завантажені
+    function _speakWhenReady(utterance) {
+        if (!synth) return;
+        function doSpeak(voices) {
+            const v = voices.find(x => x.lang === 'uk-UA') ||
+                      voices.find(x => x.lang.startsWith('uk')) ||
+                      voices.find(x => x.lang.startsWith('ru')) ||
+                      voices[0] || null;
+            if (v) { utterance.voice = v; utterance.lang = v.lang; }
+            synth.speak(utterance);
+        }
+        const voices = synth.getVoices();
+        if (voices.length > 0) {
+            doSpeak(voices); // вже готові
+        } else {
+            // Чекаємо voiceschanged (Android Chrome)
+            const handler = () => {
+                synth.removeEventListener('voiceschanged', handler);
+                doSpeak(synth.getVoices());
+            };
+            synth.addEventListener('voiceschanged', handler);
+            // Страховка: якщо voiceschanged так і не спрацює — говоримо без голосу
+            setTimeout(() => {
+                if (!synth.speaking && !synth.pending) {
+                    synth.removeEventListener('voiceschanged', handler);
+                    synth.speak(utterance);
+                }
+            }, 3000);
+        }
+    }
+
     // === СЛОВНИК ПРАВИЛЬНОЇ ВИМОВИ БРЕНДІВ ТА АРОМАТІВ ===
     const pronunciationMap = [
         // Бренди
@@ -6659,12 +6699,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     }
 
     function speakDescription() {
-        // === ТИМЧАСОВА ДІАГНОСТИКА (видалити після перевірки) ===
-        if (!window.speechSynthesis) { alert('❌ speechSynthesis не підтримується'); return; }
-        const voices = window.speechSynthesis.getVoices();
-        alert(`🔍 Діагностика:\nГолоси: ${voices.length}\nSpeaking: ${window.speechSynthesis.speaking}\nPending: ${window.speechSynthesis.pending}\npaused: ${window.speechSynthesis.paused}`);
-        // ==============================
-
         if (isSpeaking) {
             synth.cancel();
             handleViraAtmosphere('stop');
@@ -6704,7 +6738,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             }
         };
 
-        synth.speak(utterance);
+        _speakWhenReady(utterance);
     }
 
     function updateVoiceBtn(active) {
@@ -7983,8 +8017,8 @@ function renderGenderBar(value) {
             if (comments) {
                 const u = new SpeechSynthesisUtterance(pickRandom(comments));
                 u.lang = 'uk-UA'; u.rate = 0.88; u.pitch = 1.0;
-                window.speechSynthesis.cancel();
-                window.speechSynthesis.speak(u);
+                synth.cancel();
+                _speakWhenReady(u);
             }
         }
     }
@@ -8002,11 +8036,11 @@ function renderGenderBar(value) {
                 'Оберіть об\'єм нижче, і я підкажу, на який час його вистачить.',
                 'Торкніться будь-якого об\'єму — розкажу про кількість пшиків і тривалість.',
             ]);
-            window.speechSynthesis.cancel();
+            synth.cancel();
             const u = new SpeechSynthesisUtterance(prompt);
             u.lang = 'uk-UA'; u.rate = 0.88; u.pitch = 1.0;
             u.onend = () => {}; 
-            window.speechSynthesis.speak(u);
+            _speakWhenReady(u);
         } else if (!window._volAdvisorActive) {
             window.speechSynthesis && window.speechSynthesis.cancel();
         }
@@ -9055,35 +9089,19 @@ function renderGenderBar(value) {
     }
     
     function speakBrandLore(brandName) {
-        if (!window.speechSynthesis) return;
-        window.speechSynthesis.cancel();
+        if (!synth) return;
+        synth.cancel();
 
         const lore = brandLoreData[brandName] || (typeof buildLoreFallback === 'function' ? buildLoreFallback(brandName) : null);
         if (!lore) return;
 
-        const text = applyPronunciationMap(lore);
-        const utter = new SpeechSynthesisUtterance(text);
+        const utter = new SpeechSynthesisUtterance(applyPronunciationMap(lore));
         utter.rate = 0.88;
         utter.pitch = 1.0;
+        utter.lang = 'uk-UA';
 
-        // Вибираємо кращий голос з пріоритетом uk-UA → ru → будь-який
-        const voices = window.speechSynthesis.getVoices();
-        const ukVoice = voices.find(v => v.lang === 'uk-UA') ||
-                        voices.find(v => v.lang.startsWith('uk')) ||
-                        voices.find(v => v.lang.startsWith('ru')) ||
-                        null;
-        if (ukVoice) {
-            utter.voice = ukVoice;
-            utter.lang = ukVoice.lang;
-        } else {
-            utter.lang = 'uk-UA';
-        }
-
-        // iOS потребує невеликої затримки після cancel()
-        setTimeout(() => window.speechSynthesis.speak(utter), 120);
+        _speakWhenReady(utter);
     }
-
-    let _currentBrandDetailName = '';
 
     function speakBrandLoreFromDetail() {
         const btn = document.getElementById('brandViraBtn');
