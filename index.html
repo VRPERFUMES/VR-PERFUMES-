@@ -6664,6 +6664,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             handleViraAtmosphere('stop');
             isSpeaking = false;
             updateVoiceBtn(false);
+            if (window._viraKeepAlive) { clearInterval(window._viraKeepAlive); window._viraKeepAlive = null; }
             return;
         }
 
@@ -6675,7 +6676,19 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         const speechText = applyPronunciationMap(rawSpeech);
         const utterance = new SpeechSynthesisUtterance(speechText);
         
-        utterance.lang = 'uk-UA';
+        // Явний вибір голосу (uk-UA → uk → ru → будь-який) — без цього Chrome мовчить
+        const voices = synth.getVoices();
+        const ukVoice = voices.find(v => v.lang === 'uk-UA') ||
+                        voices.find(v => v.lang.startsWith('uk')) ||
+                        voices.find(v => v.lang.startsWith('ru')) ||
+                        null;
+        if (ukVoice) {
+            utterance.voice = ukVoice;
+            utterance.lang  = ukVoice.lang;
+        } else {
+            utterance.lang = 'uk-UA';
+        }
+
         utterance.pitch = 1.0; 
         utterance.rate = 0.85; 
 
@@ -6683,8 +6696,16 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             isSpeaking = true; 
             updateVoiceBtn(true); 
             handleViraAtmosphere('start');
+            // Chrome/Android зупиняє синтез після ~15 сек — обхід: pause+resume кожні 10 сек
+            window._viraKeepAlive = setInterval(() => {
+                if (synth.speaking && !synth.paused) {
+                    synth.pause();
+                    synth.resume();
+                }
+            }, 10000);
         };
         utterance.onend = () => { 
+            if (window._viraKeepAlive) { clearInterval(window._viraKeepAlive); window._viraKeepAlive = null; }
             isSpeaking = false; 
             updateVoiceBtn(false); 
             handleViraAtmosphere('stop');
@@ -6697,8 +6718,16 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
                 setTimeout(() => orderBtn.classList.remove('vira-cta-pulse'), 2000);
             }
         };
+        utterance.onerror = () => {
+            if (window._viraKeepAlive) { clearInterval(window._viraKeepAlive); window._viraKeepAlive = null; }
+            isSpeaking = false;
+            updateVoiceBtn(false);
+            handleViraAtmosphere('stop');
+        };
 
-        synth.speak(utterance);
+        // iOS / Chrome потребують невеликої паузи після cancel() перед speak()
+        synth.cancel();
+        setTimeout(() => synth.speak(utterance), 120);
     }
 
     function updateVoiceBtn(active) {
@@ -6721,6 +6750,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         
         if (viraAmbient) handleViraAtmosphere('stop');
         if (isSpeaking) { synth.cancel(); isSpeaking = false; updateVoiceBtn(false); }
+        if (window._viraKeepAlive) { clearInterval(window._viraKeepAlive); window._viraKeepAlive = null; }
 
     }
 
@@ -9072,6 +9102,19 @@ function renderGenderBar(value) {
         } else {
             utter.lang = 'uk-UA';
         }
+
+        // Chrome/Android зупиняє синтез після ~15 сек — обхід: pause+resume кожні 10 сек
+        utter.onstart = () => {
+            window._brandLoreKeepAlive = setInterval(() => {
+                if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+                    window.speechSynthesis.pause();
+                    window.speechSynthesis.resume();
+                }
+            }, 10000);
+        };
+        utter.onend = utter.onerror = () => {
+            if (window._brandLoreKeepAlive) { clearInterval(window._brandLoreKeepAlive); window._brandLoreKeepAlive = null; }
+        };
 
         // iOS потребує невеликої затримки після cancel()
         setTimeout(() => window.speechSynthesis.speak(utter), 120);
