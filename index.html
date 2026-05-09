@@ -6208,18 +6208,64 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         return text;
     }
 
-    function showBrandPage(brandName) {
-        const lore = brandLoreData[brandName] || buildLoreFallback(brandName);
-        const brandItems = globalCatalogData.filter(c => c[0] === brandName).slice(0, 6);
+    // === ШІ-ГЕНЕРАЦІЯ ОПИСУ БРЕНДУ ===
+    async function generateBrandLoreWithAI(brandName) {
+        const items = globalCatalogData.filter(c => c[0] === brandName);
+        const fragranceNames = items.map(c => c[1]).slice(0, 5).join(', ');
 
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 300,
+                messages: [{
+                    role: 'user',
+                    content: `Напиши короткий опис (2-3 речення) парфумерного бренду "${brandName}" українською мовою. ${fragranceNames ? `Відомі аромати: ${fragranceNames}.` : ''} Стиль: елегантний, лаконічний, як у нішевому парфумерному магазині. Тільки сам текст без лапок і форматування.`
+                }]
+            })
+        });
+
+        if (!response.ok) throw new Error('API error');
+        const data = await response.json();
+        return data.content.map(b => b.text || '').join('').trim();
+    }
+
+    async function getBrandLore(brandName) {
+        // 1. Захардкоджені описи
+        if (brandLoreData[brandName]) return brandLoreData[brandName];
+        // 2. Кеш localStorage
+        const cached = localStorage.getItem('vr_lore_' + brandName);
+        if (cached) return cached;
+        // 3. Генерація через ШІ
+        try {
+            const lore = await generateBrandLoreWithAI(brandName);
+            if (lore) localStorage.setItem('vr_lore_' + brandName, lore);
+            return lore || buildLoreFallback(brandName);
+        } catch(e) {
+            return buildLoreFallback(brandName);
+        }
+    }
+
+    async function showBrandPage(brandName) {
+        const loreEl = document.getElementById('brandDetailLore');
         document.getElementById('brandDetailName').textContent = brandName;
-        document.getElementById('brandDetailLore').textContent = lore;
         _currentBrandDetailName = brandName;
 
         // Скидаємо кнопку Віри
         const viraBtn = document.getElementById('brandViraBtn');
         if (viraBtn) viraBtn.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> Послухати про бренд`;
 
+        // Показуємо лоадер якщо бренд не захардкоджений і не в кеші
+        const isCached = brandLoreData[brandName] || localStorage.getItem('vr_lore_' + brandName);
+        if (!isCached) {
+            loreEl.innerHTML = `<span style="color:var(--text-gray);font-style:italic;font-size:13px;">✦ Генерую опис бренду...</span>`;
+        }
+
+        const lore = await getBrandLore(brandName);
+        loreEl.textContent = lore;
+
+        const brandItems = globalCatalogData.filter(c => c[0] === brandName).slice(0, 6);
         const itemsContainer = document.getElementById('brandDetailItems');
         itemsContainer.innerHTML = '';
         brandItems.forEach(item => {
@@ -6552,46 +6598,6 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     let isSpeaking = false;
     const synth = window.speechSynthesis;
 
-    // === ГОЛОСИ: завантажуємо одразу при старті сторінки ===
-    // Chrome Android завантажує голоси асинхронно — треба тригернути і чекати
-    let _cachedVoices = [];
-    function _loadVoices() { _cachedVoices = synth ? synth.getVoices() : []; }
-    if (synth) {
-        synth.addEventListener('voiceschanged', _loadVoices);
-        _loadVoices(); // перша спроба — на десктопі одразу готові
-    }
-
-    // Запускає мовлення тільки коли голоси завантажені
-    function _speakWhenReady(utterance) {
-        if (!synth) return;
-        function doSpeak(voices) {
-            const v = voices.find(x => x.lang === 'uk-UA') ||
-                      voices.find(x => x.lang.startsWith('uk')) ||
-                      voices.find(x => x.lang.startsWith('ru')) ||
-                      voices[0] || null;
-            if (v) { utterance.voice = v; utterance.lang = v.lang; }
-            synth.speak(utterance);
-        }
-        const voices = synth.getVoices();
-        if (voices.length > 0) {
-            doSpeak(voices); // вже готові
-        } else {
-            // Чекаємо voiceschanged (Android Chrome)
-            const handler = () => {
-                synth.removeEventListener('voiceschanged', handler);
-                doSpeak(synth.getVoices());
-            };
-            synth.addEventListener('voiceschanged', handler);
-            // Страховка: якщо voiceschanged так і не спрацює — говоримо без голосу
-            setTimeout(() => {
-                if (!synth.speaking && !synth.pending) {
-                    synth.removeEventListener('voiceschanged', handler);
-                    synth.speak(utterance);
-                }
-            }, 3000);
-        }
-    }
-
     // === СЛОВНИК ПРАВИЛЬНОЇ ВИМОВИ БРЕНДІВ ТА АРОМАТІВ ===
     const pronunciationMap = [
         // Бренди
@@ -6738,7 +6744,7 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
             }
         };
 
-        _speakWhenReady(utterance);
+        synth.speak(utterance);
     }
 
     function updateVoiceBtn(active) {
@@ -8017,8 +8023,8 @@ function renderGenderBar(value) {
             if (comments) {
                 const u = new SpeechSynthesisUtterance(pickRandom(comments));
                 u.lang = 'uk-UA'; u.rate = 0.88; u.pitch = 1.0;
-                synth.cancel();
-                _speakWhenReady(u);
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(u);
             }
         }
     }
@@ -8036,11 +8042,11 @@ function renderGenderBar(value) {
                 'Оберіть об\'єм нижче, і я підкажу, на який час його вистачить.',
                 'Торкніться будь-якого об\'єму — розкажу про кількість пшиків і тривалість.',
             ]);
-            synth.cancel();
+            window.speechSynthesis.cancel();
             const u = new SpeechSynthesisUtterance(prompt);
             u.lang = 'uk-UA'; u.rate = 0.88; u.pitch = 1.0;
             u.onend = () => {}; 
-            _speakWhenReady(u);
+            window.speechSynthesis.speak(u);
         } else if (!window._volAdvisorActive) {
             window.speechSynthesis && window.speechSynthesis.cancel();
         }
@@ -9092,7 +9098,10 @@ function renderGenderBar(value) {
         if (!synth) return;
         synth.cancel();
 
-        const lore = brandLoreData[brandName] || (typeof buildLoreFallback === 'function' ? buildLoreFallback(brandName) : null);
+        // Беремо з кешу (вже згенеровано в showBrandPage)
+        const lore = brandLoreData[brandName] ||
+                     localStorage.getItem('vr_lore_' + brandName) ||
+                     (typeof buildLoreFallback === 'function' ? buildLoreFallback(brandName) : null);
         if (!lore) return;
 
         const utter = new SpeechSynthesisUtterance(applyPronunciationMap(lore));
@@ -9102,6 +9111,8 @@ function renderGenderBar(value) {
 
         _speakWhenReady(utter);
     }
+
+    let _currentBrandDetailName = '';
 
     function speakBrandLoreFromDetail() {
         const btn = document.getElementById('brandViraBtn');
