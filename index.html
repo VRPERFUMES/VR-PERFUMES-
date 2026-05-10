@@ -6208,18 +6208,38 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         return text;
     }
 
-    function showBrandPage(brandName) {
-        const lore = brandLoreData[brandName] || buildLoreFallback(brandName);
-        const brandItems = globalCatalogData.filter(c => c[0] === brandName).slice(0, 6);
+    // === AI ОПИС БРЕНДУ через Google Apps Script ===
+    async function getBrandLore(brandName) {
+        if (brandLoreData[brandName]) return brandLoreData[brandName];
+        const cached = localStorage.getItem('vr_lore_' + brandName);
+        if (cached) return cached;
+        try {
+            const items = (globalCatalogData || []).filter(c => c[0] === brandName).map(c => c[1]).slice(0, 5).join(', ');
+            const res = await fetch('https://script.google.com/macros/s/AKfycbxwI4YS1nrjizwkUJ4-Eay9iFcFIQB8pW8ehgJNaiVRZiItsMcjfzD4t4MmqfO6AQ42Ag/exec?action=brandLore&brand=' + encodeURIComponent(brandName) + '&items=' + encodeURIComponent(items));
+            const data = await res.json();
+            if (data && data.lore) {
+                localStorage.setItem('vr_lore_' + brandName, data.lore);
+                return data.lore;
+            }
+        } catch(e) {}
+        return buildLoreFallback(brandName);
+    }
 
+    async function showBrandPage(brandName) {
+        const loreEl = document.getElementById('brandDetailLore');
         document.getElementById('brandDetailName').textContent = brandName;
-        document.getElementById('brandDetailLore').textContent = lore;
         _currentBrandDetailName = brandName;
 
-        // Скидаємо кнопку Віри
         const viraBtn = document.getElementById('brandViraBtn');
         if (viraBtn) viraBtn.innerHTML = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> Послухати про бренд`;
 
+        const isCached = brandLoreData[brandName] || localStorage.getItem('vr_lore_' + brandName);
+        if (!isCached) loreEl.innerHTML = `<span style="color:var(--text-gray);font-style:italic;font-size:13px;">✦ Генерую опис...</span>`;
+
+        const lore = await getBrandLore(brandName);
+        loreEl.textContent = lore;
+
+        const brandItems = globalCatalogData.filter(c => c[0] === brandName).slice(0, 6);
         const itemsContainer = document.getElementById('brandDetailItems');
         itemsContainer.innerHTML = '';
         brandItems.forEach(item => {
@@ -6552,16 +6572,11 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
     let isSpeaking = false;
     const synth = window.speechSynthesis;
 
-    // === ГОЛОСИ: завантажуємо одразу при старті сторінки ===
-    // Chrome Android завантажує голоси асинхронно — треба тригернути і чекати
+    // Голоси завантажуються асинхронно на Android Chrome — чекаємо voiceschanged
     let _cachedVoices = [];
     function _loadVoices() { _cachedVoices = synth ? synth.getVoices() : []; }
-    if (synth) {
-        synth.addEventListener('voiceschanged', _loadVoices);
-        _loadVoices(); // перша спроба — на десктопі одразу готові
-    }
+    if (synth) { synth.addEventListener('voiceschanged', _loadVoices); _loadVoices(); }
 
-    // Запускає мовлення тільки коли голоси завантажені
     function _speakWhenReady(utterance) {
         if (!synth) return;
         function doSpeak(voices) {
@@ -6574,21 +6589,11 @@ body.dark-theme .brand-gallery-close { color: #ccc; }
         }
         const voices = synth.getVoices();
         if (voices.length > 0) {
-            doSpeak(voices); // вже готові
+            doSpeak(voices);
         } else {
-            // Чекаємо voiceschanged (Android Chrome)
-            const handler = () => {
-                synth.removeEventListener('voiceschanged', handler);
-                doSpeak(synth.getVoices());
-            };
+            const handler = () => { synth.removeEventListener('voiceschanged', handler); doSpeak(synth.getVoices()); };
             synth.addEventListener('voiceschanged', handler);
-            // Страховка: якщо voiceschanged так і не спрацює — говоримо без голосу
-            setTimeout(() => {
-                if (!synth.speaking && !synth.pending) {
-                    synth.removeEventListener('voiceschanged', handler);
-                    synth.speak(utterance);
-                }
-            }, 3000);
+            setTimeout(() => { if (!synth.speaking && !synth.pending) { synth.removeEventListener('voiceschanged', handler); synth.speak(utterance); } }, 3000);
         }
     }
 
@@ -8036,10 +8041,10 @@ function renderGenderBar(value) {
                 'Оберіть об\'єм нижче, і я підкажу, на який час його вистачить.',
                 'Торкніться будь-якого об\'єму — розкажу про кількість пшиків і тривалість.',
             ]);
-            synth.cancel();
+            window.speechSynthesis.cancel();
             const u = new SpeechSynthesisUtterance(prompt);
             u.lang = 'uk-UA'; u.rate = 0.88; u.pitch = 1.0;
-            u.onend = () => {}; 
+            u.onend = () => {};
             _speakWhenReady(u);
         } else if (!window._volAdvisorActive) {
             window.speechSynthesis && window.speechSynthesis.cancel();
@@ -9091,17 +9096,16 @@ function renderGenderBar(value) {
     function speakBrandLore(brandName) {
         if (!synth) return;
         synth.cancel();
-
-        const lore = brandLoreData[brandName] || (typeof buildLoreFallback === 'function' ? buildLoreFallback(brandName) : null);
+        const lore = brandLoreData[brandName] ||
+                     localStorage.getItem('vr_lore_' + brandName) ||
+                     (typeof buildLoreFallback === 'function' ? buildLoreFallback(brandName) : '');
         if (!lore) return;
-
         const utter = new SpeechSynthesisUtterance(applyPronunciationMap(lore));
-        utter.rate = 0.88;
-        utter.pitch = 1.0;
-        utter.lang = 'uk-UA';
-
+        utter.rate = 0.88; utter.pitch = 1.0; utter.lang = 'uk-UA';
         _speakWhenReady(utter);
     }
+
+    let _currentBrandDetailName = '';
 
     function speakBrandLoreFromDetail() {
         const btn = document.getElementById('brandViraBtn');
